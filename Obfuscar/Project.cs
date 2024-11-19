@@ -26,6 +26,7 @@
 
 using Mono.Cecil;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -97,17 +98,23 @@ namespace Obfuscar
                 {
                     if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                     {
-                        keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, vars.GetValue("KeyFilePassword", null));
+                        var lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
+
+                        keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
+                    }
+                    else if (!string.IsNullOrEmpty(lKeyFileName))
+                    {
+                        keyPair = File.ReadAllBytes(lKeyFileName);
                     }
                     else
                     {
-                        keyPair = File.ReadAllBytes(vars.GetValue("KeyFile", null));
+                        keyPair = null;
                     }
                 }
                 catch (Exception ex)
                 {
                     throw new ObfuscarException(
-                        String.Format("Failure loading key file \"{0}\"", vars.GetValue("KeyFile", null)), ex);
+                        String.Format("Failure loading key file \"{0}\"", lKeyFileName), ex);
                 }
 
                 return keyPair;
