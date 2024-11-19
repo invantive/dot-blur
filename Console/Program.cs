@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using Mono.Options;
 
@@ -48,6 +49,21 @@ namespace Obfuscar
 
         private static int Main(string[] args)
         {
+            string versionLabel = "2.2.40.4-INVANTIVE";
+
+            Console.WriteLine();
+            Console.WriteLine($"*** Obfuscar {versionLabel} ***");
+
+            Console.WriteLine();
+            Console.WriteLine("Improvements to 2.2.40-DEFAULT:");
+            Console.WriteLine("* Correct spacing, introduce central constants for variables in project file [ER] (coding-20241119-guido, 1aa890c4fc5c71ab694b1153d1b343078c529025).");
+            Console.WriteLine("* Fix System.NotSupportedException on reading resources [PR] (notsupportedexception-20241119-patrick, 51460ef56996009d56e6b0bdbaba17beaba9211d).");
+            Console.WriteLine("* Sign assemblies using PFX [ER] (signpfx-20241119-patrick, 4988154ac6a6575330a6123f8327bcdaf2431ee8).");
+            Console.WriteLine("* Fix ArgumentNullException on KeyPair when using KeyContainerName on signing [PR] (argumentnullexception-20241119-patrick, f389749e7d0c203435b80b0cafd3532381cf8efd).");
+            Console.WriteLine("* ADD VERSION PRINTING");
+
+            Console.WriteLine();
+
             bool showHelp = false;
             bool showVersion = false;
 
