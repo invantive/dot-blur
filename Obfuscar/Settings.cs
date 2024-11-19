@@ -40,6 +40,7 @@ namespace Obfuscar
         internal const string VariableKeepPublicApi = "KeepPublicApi";
         internal const string VariableKeyContainer = "KeyContainer";
         internal const string VariableKeyFile = "KeyFile";
+        internal const string VariableKeyFilePassword = "KeyFilePassword";
         internal const string VariableLogFile = "LogFile";
         internal const string VariableMarkedOnly = "MarkedOnly";
         internal const string VariableOptimizeMethods = "OptimizeMethods";
