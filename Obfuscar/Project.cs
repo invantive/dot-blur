@@ -230,12 +230,18 @@ namespace Obfuscar
                 {
                     var value = setting.Attribute("value")?.Value;
                     if (!string.IsNullOrEmpty(value))
+                    {
                         project.vars.Add(name, value);
+                    }
                     else
+                    {
                         project.vars.Remove(name);
+                    }
                 }
                 else
+                {
                     throw new ArgumentNullException("name");
+                }
             }
         }
 
@@ -252,13 +258,16 @@ namespace Obfuscar
             Action<XElement, Project> readAction)
         {
             if (parentReader == null)
+            {
                 throw new ArgumentNullException("parentReader");
+            }
 
             if (readAction == null)
+            {
                 throw new ArgumentNullException("readAction");
+            }
 
-            string path =
-                Environment.ExpandEnvironmentVariables(Helper.GetAttribute(parentReader, "path", project.vars));
+            string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(parentReader, "path", project.vars));
             var includeReader = XDocument.Load(path);
             if (includeReader.Root.Name == "Include")
             {
@@ -271,8 +280,7 @@ namespace Obfuscar
             var searchPaths = reader.Elements("AssemblySearchPath");
             foreach (var searchPath in searchPaths)
             {
-                string path =
-                    Environment.ExpandEnvironmentVariables(Helper.GetAttribute(searchPath, "path", project.vars));
+                string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(searchPath, "path", project.vars));
                 project.assemblySearchPaths.Add(path);
             }
         }
@@ -341,7 +349,9 @@ namespace Obfuscar
             public Graph(List<AssemblyInfo> items)
             {
                 foreach (var item in items)
-                    Root.Add(new Node<AssemblyInfo> {Item = item});
+                {
+                    Root.Add(new Node<AssemblyInfo> { Item = item });
+                }
 
                 AddParents(Root);
             }
@@ -382,7 +392,9 @@ namespace Obfuscar
                         {
                             toRemoved.Add(node);
                             if (result.Contains(node.Item))
+                            {
                                 continue;
+                            }
 
                             result.Add(node.Item);
                         }
@@ -394,7 +406,9 @@ namespace Obfuscar
                         foreach (var child in remove.Children)
                         {
                             if (result.Contains(child.Item))
+                            {
                                 continue;
+                            }
 
                             child.Parents.Remove(remove);
                         }
@@ -426,7 +440,9 @@ namespace Obfuscar
             }
 
             if (!Directory.Exists(Settings.InPath))
+            {
                 throw new ObfuscarException(MessageCodes.ofr006, "Path specified by InPath variable must exist:" + Settings.InPath);
+            }
 
             if (!Directory.Exists(Settings.OutPath))
             {
@@ -448,7 +464,9 @@ namespace Obfuscar
             get
             {
                 if (settings == null)
+                {
                     settings = new Settings(vars);
+                }
 
                 return settings;
             }
@@ -508,7 +526,9 @@ namespace Obfuscar
         public TypeDefinition GetTypeDefinition(TypeReference type)
         {
             if (type == null)
+            {
                 return null;
+            }
 
             TypeDefinition typeDef = type as TypeDefinition;
             if (typeDef == null)
@@ -531,14 +551,18 @@ namespace Obfuscar
             X509Certificate2Collection certs = new X509Certificate2Collection();
             certs.Import(pfxFile, password, X509KeyStorageFlags.Exportable);
             if (certs.Count == 0)
+            {
                 throw new ArgumentException("Invalid certificate", nameof(pfxFile));
+            }
 
             //not clear, but we may need to have only one key and that should be the provider https://msdn.microsoft.com/en-us/library/aa730868(vs.80).aspx
 
             foreach (X509Certificate2 cert in certs)
             {
                 if (cert.PrivateKey is RSACryptoServiceProvider provider)
+                {
                     return provider.ExportCspBlob(true);
+                }
             }
 
             throw new ArgumentException("Invalid private key certificate", nameof(pfxFile));

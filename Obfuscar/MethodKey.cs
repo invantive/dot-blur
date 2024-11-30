@@ -73,6 +73,7 @@ namespace Obfuscar
         public bool Matches(MemberReference member)
         {
             MethodReference methodRef = member as MethodReference;
+
             if (methodRef != null)
             {
                 if (TypeKey.Matches(methodRef.DeclaringType))
@@ -86,10 +87,7 @@ namespace Obfuscar
 
         public bool Equals(MethodKey other)
         {
-            return other != null &&
-                   hashCode == other.hashCode &&
-                   (TypeKey == null ? other.TypeKey == null : TypeKey == other.TypeKey) &&
-                   Equals((NameParamSig) other);
+            return other != null && hashCode == other.hashCode && (TypeKey == null ? other.TypeKey == null : TypeKey == other.TypeKey) &&  Equals((NameParamSig) other);
         }
 
         public override bool Equals(object obj)
@@ -142,6 +140,7 @@ namespace Obfuscar
         public int CompareTo(MethodKey other)
         {
             int cmp = CompareTo((NameParamSig) other);
+
             if (cmp == 0)
             {
                 cmp = TypeKey.CompareTo(other.TypeKey);

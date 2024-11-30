@@ -59,7 +59,9 @@ namespace Obfuscar
                         TypeReference argType = genType.GenericArguments[i];
 
                         if (i > 0)
+                        {
                             builder.Append(',');
+                        }
 
                         BuildTypeName(builder, argType);
                     }
@@ -74,7 +76,9 @@ namespace Obfuscar
                         builder.Append("[]");
                     }
                     else
+                    {
                         builder.Append(string.Format("[{1}]{0}", type.FullName, type.GetScopeName()));
+                    }
                 }
             }
         }

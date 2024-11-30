@@ -41,7 +41,9 @@ namespace Obfuscar
         public void AppendTo(Node<T> parent)
         {
             if (parent == null)
+            {
                 return;
+            }
 
             parent.Children.Add(this);
             Parents.Add(parent);
@@ -68,9 +70,13 @@ namespace Obfuscar
             string result;
             var val = reader.Attribute(name);
             if (val == null)
+            {
                 result = string.Empty;
+            }
             else
+            {
                 result = val.Value.Trim();
+            }
 
             return result;
         }
@@ -85,13 +91,19 @@ namespace Obfuscar
             while (true)
             {
                 if (testIdx >= test.Length && patIdx >= pattern.Length)
+                {
                     return true;
+                }
                 if (patIdx >= pattern.Length) // text has still characters but there is no pattern left.
+                {
                     return false;
+                }
                 if (pattern[patIdx] != '*')
                 {
                     if (testIdx >= test.Length || pattern[patIdx] != '?' && pattern[patIdx] != test[testIdx])
+                    {
                         return false;
+                    }
                     testIdx++;
                 }
                 else
@@ -99,9 +111,12 @@ namespace Obfuscar
                     while (!MatchWithWildCards(test, testIdx, pattern, patIdx + 1))
                     {
                         if (test.Length <= testIdx++)
+                        {
                             return false;
+                        }
                     }
                 }
+
                 patIdx++;
             }
         }
@@ -114,9 +129,13 @@ namespace Obfuscar
         public static bool CompareOptionalRegex(string test, string pattern)
         {
             if (pattern.StartsWith("^"))
+            {
                 return Regex.IsMatch(test, pattern);
+            }
             else
+            {
                 return MatchWithWildCards(test, pattern);
+            }
         }
 
         public static object GetAttributePropertyByName(CustomAttribute attr, string name)
@@ -124,8 +143,11 @@ namespace Obfuscar
             foreach (CustomAttributeNamedArgument property in attr.Properties)
             {
                 if (property.Name == name)
+                {
                     return property.Argument.Value;
+                }
             }
+
             return null;
         }
     }

@@ -63,26 +63,11 @@ namespace Obfuscar.Helpers
         {
             foreach (ExceptionHandler exceptionHandler in processor.Body.ExceptionHandlers)
             {
-                ReplaceInstruction(
-                    exceptionHandler.FilterStart,
-                    instruction => exceptionHandler.FilterStart = instruction,
-                    oldToNewStringInstructions);
-                ReplaceInstruction(
-                    exceptionHandler.HandlerStart,
-                    instruction => exceptionHandler.HandlerStart = instruction,
-                    oldToNewStringInstructions);
-                ReplaceInstruction(
-                    exceptionHandler.HandlerEnd,
-                    instruction => exceptionHandler.HandlerEnd = instruction,
-                    oldToNewStringInstructions);
-                ReplaceInstruction(
-                    exceptionHandler.TryStart,
-                    instruction => exceptionHandler.TryStart = instruction,
-                    oldToNewStringInstructions);
-                ReplaceInstruction(
-                    exceptionHandler.TryEnd,
-                    instruction => exceptionHandler.TryEnd = instruction,
-                    oldToNewStringInstructions);
+                ReplaceInstruction(exceptionHandler.FilterStart, instruction => exceptionHandler.FilterStart = instruction, oldToNewStringInstructions);
+                ReplaceInstruction(exceptionHandler.HandlerStart, instruction => exceptionHandler.HandlerStart = instruction, oldToNewStringInstructions);
+                ReplaceInstruction(exceptionHandler.HandlerEnd, instruction => exceptionHandler.HandlerEnd = instruction, oldToNewStringInstructions);
+                ReplaceInstruction(exceptionHandler.TryStart, instruction => exceptionHandler.TryStart = instruction, oldToNewStringInstructions);
+                ReplaceInstruction(exceptionHandler.TryEnd, instruction => exceptionHandler.TryEnd = instruction, oldToNewStringInstructions);
             }
         }
 

@@ -57,6 +57,7 @@ namespace Obfuscar
             if (args.Length == 0)
             {
                 ShowHelp(p);
+
                 return 0;
             }
 
@@ -107,7 +108,10 @@ namespace Obfuscar
                     Console.Error.WriteLine("An error occurred during processing:");
                     Console.Error.WriteLine(e.Message);
                     if (e.InnerException != null)
+                    {
                         Console.Error.WriteLine(e.InnerException.Message);
+                    }
+
                     return 1;
                 }
             }

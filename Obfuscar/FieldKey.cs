@@ -31,6 +31,14 @@ namespace Obfuscar
 {
     class FieldKey
     {
+        public FieldDefinition Field { get; }
+
+        public TypeKey TypeKey { get; }
+
+        public string Type { get; }
+
+        public string Name { get; }
+
         public FieldKey(FieldDefinition field): this(new TypeKey((TypeDefinition) field.DeclaringType), field.FieldType.FullName, field.Name, field)
         {
         }
@@ -47,7 +55,7 @@ namespace Obfuscar
         {
             get 
             { 
-                return Field.Attributes; 
+                return this.Field.Attributes; 
             }
         }
 
@@ -55,26 +63,18 @@ namespace Obfuscar
         {
             get 
             { 
-                return (TypeDefinition) Field.DeclaringType; 
+                return this.Field.DeclaringType; 
             }
         }
-
-        public FieldDefinition Field { get; }
-
-        public TypeKey TypeKey { get; }
-
-        public string Type { get; }
-
-        public string Name { get; }
 
         public virtual bool Matches(MemberReference member)
         {
             FieldReference fieldRef = member as FieldReference;
             if (fieldRef != null)
             {
-                if (TypeKey.Matches(fieldRef.DeclaringType))
+                if (this.TypeKey.Matches(fieldRef.DeclaringType))
                 {
-                    return Type == fieldRef.FieldType.FullName && Name == fieldRef.Name;
+                    return this.Type == fieldRef.FieldType.FullName && this.Name == fieldRef.Name;
                 }
             }
 
@@ -126,12 +126,12 @@ namespace Obfuscar
 
         public override int GetHashCode()
         {
-            return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
+            return this.TypeKey.GetHashCode() ^ this.Type.GetHashCode() ^ this.Name.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format("[{0}]{1} {2}::{3}", TypeKey.Scope, Type, TypeKey.Fullname, Name);
+            return string.Format("[{0}]{1} {2}::{3}", this.TypeKey.Scope, this.Type, this.TypeKey.Fullname, this.Name);
         }
     }
 }

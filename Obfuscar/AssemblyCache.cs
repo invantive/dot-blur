@@ -69,6 +69,7 @@ namespace Obfuscar
             }
 
             AssemblyDefinition assmDef;
+
             try
             {
                 assmDef = Resolve(name);
@@ -106,7 +107,9 @@ namespace Obfuscar
         {
             var path = assembly.GetPortableProfileDirectory();
             if (path != null && Directory.Exists(path))
+            {
                 paths.Add(path);
+            }
 
             base.RegisterAssembly(assembly);
         }

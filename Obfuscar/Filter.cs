@@ -37,12 +37,9 @@ namespace Obfuscar
         private IEnumerable<string> GetFiles(string pattern)
         {
             var lastSeparator = pattern.LastIndexOfAny(directorySeparators);
-            var searchPath = lastSeparator != -1 ?
-                Path.GetFullPath(Path.Combine(path, pattern.Substring(0, lastSeparator))) :
-                path;
-            var filePattern = lastSeparator != -1 ?
-                pattern.Substring(lastSeparator + 1) :
-                pattern;
+            var searchPath = lastSeparator != -1 ? Path.GetFullPath(Path.Combine(path, pattern.Substring(0, lastSeparator))) : path;
+            var filePattern = lastSeparator != -1 ? pattern.Substring(lastSeparator + 1) : pattern;
+
             return Directory.EnumerateFiles(searchPath, filePattern);
         }
 

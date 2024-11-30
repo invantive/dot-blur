@@ -132,8 +132,7 @@ namespace Obfuscar
 
             if (isSerializable.HasValue)
             {
-                if (isSerializable.Value && ((field.FieldAttributes & FieldAttributes.NotSerialized) ==
-                                             FieldAttributes.NotSerialized))
+                if (isSerializable.Value && ((field.FieldAttributes & FieldAttributes.NotSerialized) ==FieldAttributes.NotSerialized))
                 {
                     return false;
                 }

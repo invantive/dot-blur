@@ -93,7 +93,9 @@ namespace Obfuscar
         {
             // optimization for simple case
             if (index < numUniqueChars)
+            {
                 return uniqueChars[index].ToString();
+            }
 
             Stack<char> stack = new Stack<char>();
 

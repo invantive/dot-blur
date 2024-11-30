@@ -10,10 +10,14 @@ namespace Obfuscar.Helpers
         public static bool IsTypePublic(this TypeDefinition type)
         {
             if (type.DeclaringType == null)
+            {
                 return type.IsPublic;
+            }
 
             if (type.IsNestedFamily || type.IsNestedFamilyOrAssembly || type.IsNestedPublic)
+            {
                 return IsTypePublic(type.DeclaringType);
+            }
 
             return false;
         }
@@ -23,10 +27,11 @@ namespace Obfuscar.Helpers
         public static bool IsResourcesType(this TypeDefinition type)
         {
             if (MemoryCache.Default.Contains(type.FullName))
-                return (bool) MemoryCache.Default[type.FullName];
+            {
+                return (bool)MemoryCache.Default[type.FullName];
+            }
 
-            var generated = type.CustomAttributes.FirstOrDefault(attribute =>
-                attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
+            var generated = type.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
             var result = false;
             if (generated == null)
             {
@@ -45,15 +50,18 @@ namespace Obfuscar.Helpers
         private static bool IsFormOrUserControl(this TypeDefinition type)
         {
             if (type == null)
+            {
                 return false;
+            }
 
             if (type.FullName == "System.Windows.Forms.Form" || type.FullName == "System.Windows.Forms.UserControl")
+            {
                 return true;
+            }
 
             if (type.BaseType != null)
             {
-                if (type.BaseType.FullName == "System.Object" &&
-                    type.BaseType.Module.FileName.EndsWith(".winmd", StringComparison.OrdinalIgnoreCase))
+                if (type.BaseType.FullName == "System.Object" && type.BaseType.Module.FileName.EndsWith(".winmd", StringComparison.OrdinalIgnoreCase))
                 {
                     // IMPORTANT: Resolve call below fails for UWP .winmd files.
                     return false;

@@ -13,9 +13,13 @@ namespace Obfuscar.Helpers
         {
             ModuleDefinition module = type.Scope as ModuleDefinition;
             if (module != null)
+            {
                 return module.Assembly.Name.Name;
+            }
             else
+            {
                 return type.Scope.Name;
+            }
         }
 
         public static string GetFullName(this TypeReference type)
@@ -24,16 +28,26 @@ namespace Obfuscar.Helpers
             while (type.IsNested)
             {
                 if (fullName == null)
+                {
                     fullName = type.Name;
+                }
                 else
+                {
                     fullName = type.Name + "/" + fullName;
+                }
+
                 type = type.DeclaringType;
             }
 
             if (fullName == null)
+            {
                 fullName = type.Namespace + "." + type.Name;
+            }
             else
+            {
                 fullName = type.Namespace + "." + type.Name + "/" + fullName;
+            }
+
             return fullName;
         }
     }

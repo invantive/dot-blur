@@ -35,17 +35,25 @@ namespace Obfuscar
         public static bool ListsEqual<T>(IList<T> a, IList<T> b)
         {
             if (a == null)
+            {
                 return b == null;
+            }
             else if (b == null)
+            {
                 return false;
+            }
             else if (a.Count != b.Count)
+            {
                 return false;
+            }
             else
             {
                 for (int i = 0; i < a.Count; i++)
                 {
                     if (!a[i].Equals(b[i]))
+                    {
                         return false;
+                    }
                 }
 
                 // they aren't not equal

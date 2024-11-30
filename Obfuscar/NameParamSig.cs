@@ -69,9 +69,7 @@ namespace Obfuscar
 
         public bool Equals(NameParamSig other)
         {
-            return other != null &&
-                   this.Name == other.Name &&
-                   Equals((ParamSig) other);
+            return other != null && this.Name == other.Name && Equals((ParamSig) other);
         }
 
         public override bool Equals(object obj)

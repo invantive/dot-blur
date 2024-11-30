@@ -15,7 +15,9 @@ namespace Obfuscar.Helpers
                 if (custom.AttributeType.FullName == "System.Runtime.Versioning.TargetFrameworkAttribute")
                 {
                     if (!custom.HasProperties)
+                    {
                         continue;
+                    }
                     var framework = custom.Properties.First(property => property.Name == "FrameworkDisplayName");
                     var content = framework.Argument.Value.ToString();
                     if (!string.Equals(content, ".NET Portable Subset"))

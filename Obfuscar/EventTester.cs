@@ -62,9 +62,13 @@ namespace Obfuscar
                 !MethodTester.CheckMemberVisibility(attrib, typeAttrib, evt.AddMethodAttributes, evt.DeclaringType))
             {
                 if (name != null)
+                {
                     return Helper.CompareOptionalRegex(evt.Name, name);
+                }
                 else
+                {
                     return nameRx.IsMatch(evt.Name);
+                }
             }
 
             return false;

@@ -42,17 +42,26 @@ namespace Obfuscar
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+
             sb.Append(Name);
-            if (External)
+
+            if (this.External)
+            {
                 sb.Append("(ext)");
+            }
             else
+            {
                 sb.Append("(int)");
+            }
+
             sb.Append(": ");
-            foreach (MethodKey k in Methods)
+
+            foreach (MethodKey k in this.Methods)
             {
                 sb.Append(k.ToString());
                 sb.Append(" ");
             }
+
             return sb.ToString();
         }
     }
@@ -78,7 +87,9 @@ namespace Obfuscar
                 foreach (TypeDefinition type in info.GetAllTypeDefinitions())
                 {
                     if (type.FullName == "<Module>")
+                    {
                         continue;
+                    }
 
                     TypeKey typeKey = new TypeKey(type);
 
@@ -93,21 +104,29 @@ namespace Obfuscar
                         MethodGroup group;
                         var left = methods[i];
                         if (!methodGroups.TryGetValue(left, out group))
+                        {
                             group = null;
+                        }
 
                         for (j = i + 1; j < methods.Length; j++)
                         {
                             var right = methods[j];
                             if (!MethodsMatch(left, right))
+                            {
                                 continue;
+                            }
 
                             // found an override
 
                             // see if either method is already in a group
                             if (group != null)
+                            {
                                 group = AddToGroup(group, right);
+                            }
                             else if (methodGroups.TryGetValue(right, out group))
+                            {
                                 group = AddToGroup(group, left);
+                            }
                             else
                             {
                                 group = new MethodGroup();
@@ -119,12 +138,16 @@ namespace Obfuscar
                             // if the group isn't already external, see if it should be
                             Debug.Assert(group != null, "should have a group by now");
                             if (!group.External && !project.Contains(right.TypeKey))
+                            {
                                 group.External = true;
+                            }
                         }
 
                         // if the group isn't already external, see if it should be
                         if (group != null && !group.External && !project.Contains(left.TypeKey))
+                        {
                             group.External = true;
+                        }
 
                         // move on to the next thing that doesn't match
                         i++;
@@ -135,8 +158,7 @@ namespace Obfuscar
 
         static bool MethodsMatch(MethodKey left, MethodKey right)
         {
-            return MethodKey.MethodMatch(left.Method, right.Method)
-                   || MethodKey.MethodMatch(right.Method, left.Method);
+            return MethodKey.MethodMatch(left.Method, right.Method) || MethodKey.MethodMatch(right.Method, left.Method);
         }
 
         public static void GetBaseTypes(Project project, HashSet<TypeKey> baseTypes, TypeDefinition type)
@@ -177,11 +199,15 @@ namespace Obfuscar
 
                 // if it's not in the project, try to get it via the cache
                 if (iface == null)
+                {
                     iface = cache.GetTypeDefinition(ifaceRef.InterfaceType);
+                }
 
                 // search interface
                 if (iface != null)
+                {
                     GetVirtualMethods(cache, methods, iface);
+                }
             }
 
             // check the base type unless it isn't in the project, or we don't have one
@@ -189,34 +215,48 @@ namespace Obfuscar
 
             // if it's not in the project, try to get it via the cache
             if (baseType == null)
+            {
                 baseType = cache.GetTypeDefinition(type.BaseType);
+            }
 
             // search base
             if (baseType != null)
+            {
                 GetVirtualMethods(cache, methods, baseType);
+            }
 
             foreach (MethodDefinition method in type.Methods)
             {
                 if (method.IsVirtual)
+                {
                     methods.Add(new MethodKey(method));
+                }
             }
 
             foreach (PropertyDefinition property in type.Properties)
             {
                 if (property.GetMethod != null && property.GetMethod.IsVirtual)
+                {
                     methods.Add(new MethodKey(property.GetMethod));
+                }
 
                 if (property.SetMethod != null && property.SetMethod.IsVirtual)
+                {
                     methods.Add(new MethodKey(property.SetMethod));
+                }
             }
 
             foreach (EventDefinition @event in type.Events)
             {
                 if (@event.AddMethod != null && @event.AddMethod.IsVirtual)
+                {
                     methods.Add(new MethodKey(@event.AddMethod));
+                }
 
                 if (@event.RemoveMethod != null && @event.RemoveMethod.IsVirtual)
+                {
                     methods.Add(new MethodKey(@event.RemoveMethod));
+                }
             }
         }
 
@@ -246,6 +286,7 @@ namespace Obfuscar
                         methodGroups[mk] = group;
                         group.Methods.Add(mk);
                     }
+
                     return group;
                 }
                 else
@@ -257,6 +298,7 @@ namespace Obfuscar
                         methodGroups[mk] = group2;
                         group2.Methods.Add(mk);
                     }
+
                     return group2;
                 }
             }
@@ -269,9 +311,13 @@ namespace Obfuscar
         {
             MethodGroup group;
             if (methodGroups.TryGetValue(methodKey, out group))
+            {
                 return group;
+            }
             else
+            {
                 return null;
+            }
         }
 
         public bool Inherits(TypeDefinition type, string interfaceFullName)

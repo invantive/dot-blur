@@ -50,14 +50,11 @@ namespace Obfuscar
         private readonly string inherits;
         private readonly bool? isStatic;
 
-        [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification =
-            "Reviewed. Suppression is OK here.")] private readonly bool?
-            isSerializable;
+        [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")] private readonly bool? isSerializable;
 
         public TypeAffectFlags AffectFlags { get; }
 
-        public TypeTester(string name)
-            : this(name, TypeAffectFlags.SkipNone, string.Empty)
+        public TypeTester(string name) : this(name, TypeAffectFlags.SkipNone, string.Empty)
         {
         }
 
@@ -68,9 +65,7 @@ namespace Obfuscar
             this.attrib = attrib.ToLower();
         }
 
-        public TypeTester(string name, TypeAffectFlags skipFlags, string attrib, string inherits, bool? isStatic,
-            bool? isSeriablizable)
-            : this(name, skipFlags, attrib)
+        public TypeTester(string name, TypeAffectFlags skipFlags, string attrib, string inherits, bool? isStatic, bool? isSeriablizable) : this(name, skipFlags, attrib)
         {
             this.inherits = inherits;
             this.isStatic = isStatic;
@@ -84,9 +79,7 @@ namespace Obfuscar
             this.attrib = attrib.ToLower();
         }
 
-        public TypeTester(Regex nameRx, TypeAffectFlags skipFlags, string attrib, string inherits, bool? isStatic,
-            bool? isSeriablizable)
-            : this(nameRx, skipFlags, attrib)
+        public TypeTester(Regex nameRx, TypeAffectFlags skipFlags, string attrib, string inherits, bool? isStatic, bool? isSeriablizable) : this(nameRx, skipFlags, attrib)
         {
             this.inherits = inherits;
             this.isStatic = isStatic;

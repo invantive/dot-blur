@@ -15,7 +15,9 @@ namespace Obfuscar.Helpers
             {
                 var attrFullName = attr.Constructor.DeclaringType.FullName;
                 if (attrFullName == obfuscarObfuscate)
+                {
                     return (bool)(Helper.GetAttributePropertyByName(attr, "ShouldObfuscate") ?? true);
+                }
 
                 if (attrFullName == reflectionObfuscate)
                 {
@@ -23,7 +25,9 @@ namespace Obfuscar.Helpers
                     var rename = !(bool)(Helper.GetAttributePropertyByName(attr, "Exclude") ?? true);
 
                     if (fromMember && !applyToMembers)
+                    {
                         return !rename;
+                    }
 
                     return rename;
                 }
@@ -40,6 +44,7 @@ namespace Obfuscar.Helpers
             {
                 CustomAttribute attr = type.CustomAttributes[i];
                 var attrFullName = attr.Constructor.DeclaringType.FullName;
+
                 if (attrFullName == reflectionObfuscate)
                 {
                     if ((bool)(Helper.GetAttributePropertyByName(attr, "StripAfterObfuscation") ?? true))
