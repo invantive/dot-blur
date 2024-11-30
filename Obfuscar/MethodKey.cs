@@ -37,13 +37,12 @@ namespace Obfuscar
         {
         }
 
-        public MethodKey(TypeKey typeKey, MethodDefinition method)
-            : base(method)
+        public MethodKey(TypeKey typeKey, MethodDefinition method): base(method)
         {
             this.TypeKey = typeKey;
             this.Method = method;
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
         private int CalcHashCode()
@@ -53,12 +52,18 @@ namespace Obfuscar
 
         public MethodAttributes MethodAttributes
         {
-            get { return Method.Attributes; }
+            get
+            { 
+                return Method.Attributes; 
+            }
         }
 
         public TypeDefinition DeclaringType
         {
-            get { return (TypeDefinition) Method.DeclaringType; }
+            get 
+            { 
+                return (TypeDefinition) Method.DeclaringType; 
+            }
         }
 
         public TypeKey TypeKey { get; }
@@ -71,7 +76,9 @@ namespace Obfuscar
             if (methodRef != null)
             {
                 if (TypeKey.Matches(methodRef.DeclaringType))
+                {
                     return MethodMatch(Method, methodRef);
+                }
             }
 
             return false;
@@ -92,22 +99,34 @@ namespace Obfuscar
 
         public static bool operator ==(MethodKey a, MethodKey b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.Equals(b);
+            }
         }
 
         public static bool operator !=(MethodKey a, MethodKey b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return !a.Equals(b);
+            }
         }
 
         public override int GetHashCode()
@@ -124,7 +143,9 @@ namespace Obfuscar
         {
             int cmp = CompareTo((NameParamSig) other);
             if (cmp == 0)
+            {
                 cmp = TypeKey.CompareTo(other.TypeKey);
+            }
             return cmp;
         }
 
@@ -135,17 +156,27 @@ namespace Obfuscar
             //    return false;
 
             if (candidate.Name != method.Name)
+            {
                 return false;
+            }
 
             if (!TypeMatch(candidate.ReturnType, method.ReturnType))
+            {
                 return false;
+            }
 
             if (candidate.Parameters.Count != method.Parameters.Count)
+            {
                 return false;
+            }
 
             for (int i = 0; i < candidate.Parameters.Count; i++)
+            {
                 if (!TypeMatch(candidate.Parameters[i].ParameterType, method.Parameters[i].ParameterType))
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -153,7 +184,9 @@ namespace Obfuscar
         private static bool TypeMatch(IModifierType a, IModifierType b)
         {
             if (!TypeMatch(a.ModifierType, b.ModifierType))
+            {
                 return false;
+            }
 
             return TypeMatch(a.ElementType, b.ElementType);
         }
@@ -161,10 +194,14 @@ namespace Obfuscar
         private static bool TypeMatch(TypeSpecification a, TypeSpecification b)
         {
             if (a is GenericInstanceType)
-                return TypeMatch((GenericInstanceType) a, (GenericInstanceType) b);
+            {
+                return TypeMatch((GenericInstanceType)a, (GenericInstanceType)b);
+            }
 
             if (a is IModifierType)
-                return TypeMatch((IModifierType) a, (IModifierType) b);
+            {
+                return TypeMatch((IModifierType)a, (IModifierType)b);
+            }
 
             return TypeMatch(a.ElementType, b.ElementType);
         }
@@ -172,17 +209,27 @@ namespace Obfuscar
         private static bool TypeMatch(GenericInstanceType a, GenericInstanceType b)
         {
             if (!TypeMatch(a.ElementType, b.ElementType))
+            {
                 return false;
+            }
 
             if (a.GenericArguments.Count != b.GenericArguments.Count)
+            {
                 return false;
+            }
 
             if (a.GenericArguments.Count == 0)
+            {
                 return true;
+            }
 
             for (int i = 0; i < a.GenericArguments.Count; i++)
+            {
                 if (!TypeMatch(a.GenericArguments[i], b.GenericArguments[i]))
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -190,12 +237,16 @@ namespace Obfuscar
         private static bool TypeMatch(TypeReference a, TypeReference b)
         {
             if (a is GenericParameter)
+            {
                 return true;
+            }
 
             if (a is TypeSpecification || b is TypeSpecification)
             {
                 if (a.GetType() != b.GetType())
+                {
                     return false;
+                }
 
                 return TypeMatch((TypeSpecification) a, (TypeSpecification) b);
             }

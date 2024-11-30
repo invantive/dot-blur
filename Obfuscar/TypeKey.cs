@@ -56,14 +56,14 @@ namespace Obfuscar
             GenericInstanceType gi = type as GenericInstanceType;
             type.DeclaringType = type.DeclaringType; // Hack: Update fullname of nested type
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
-                throw new InvalidOperationException(string.Format("Type names do not match: \"{0}\" != \"{1}\"",
-                    this.Fullname, type.ToString()));
+            {
+                throw new ObfuscarException(MessageCodes.ofrxxx, string.Format("Type names do not match: \"{0}\" != \"{1}\"", this.Fullname, type.ToString()));
+            }
 
             this.hashCode = CalcHashCode();
         }
 
-        public TypeKey(string scope, string ns, string name)
-            : this(scope, ns, name, ns + "." + name)
+        public TypeKey(string scope, string ns, string name): this(scope, ns, name, ns + "." + name)
         {
         }
 
@@ -84,7 +84,10 @@ namespace Obfuscar
 
         public TypeDefinition TypeDefinition
         {
-            get { return typeReference as TypeDefinition; }
+            get 
+            { 
+                return typeReference as TypeDefinition; 
+            }
         }
 
         public string Scope { get; }
@@ -100,17 +103,21 @@ namespace Obfuscar
             // Remove generic type parameters and compare full names
             var instanceType = type as GenericInstanceType;
             if (instanceType == null)
+            {
                 type.DeclaringType = type.DeclaringType; // Hack: Update full name
+            }
             string typefullname = type.ToString();
             if (instanceType != null)
+            {
                 typefullname = instanceType.ElementType.ToString();
+            }
             return typefullname == Fullname;
         }
 
         public bool Equals(TypeKey other)
         {
             return other != null &&
-                   hashCode == other.hashCode &&
+                   this.hashCode == other.hashCode &&
                    Scope == other.Scope &&
                    Namespace == other.Namespace &&
                    Name == other.Name &&
@@ -124,27 +131,39 @@ namespace Obfuscar
 
         public static bool operator ==(TypeKey a, TypeKey b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.Equals(b);
+            }
         }
 
         public static bool operator !=(TypeKey a, TypeKey b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return !a.Equals(b);
+            }
         }
 
         public override int GetHashCode()
         {
-            return hashCode;
+            return this.hashCode;
         }
 
         public override string ToString()
@@ -157,7 +176,9 @@ namespace Obfuscar
             // no need to check ns and name...should be in fullname
             int cmp = string.Compare(Scope, other.Scope);
             if (cmp == 0)
+            {
                 cmp = string.Compare(Fullname, other.Fullname);
+            }
             return cmp;
         }
     }

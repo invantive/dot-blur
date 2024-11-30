@@ -39,16 +39,14 @@ namespace Obfuscar
     {
         readonly int hashCode;
 
-        public ParamSig(ParamSig sig)
-            : this((string[]) sig.ParamTypes.Clone())
+        public ParamSig(ParamSig sig): this((string[]) sig.ParamTypes.Clone())
         {
         }
 
         public ParamSig(string[] paramTypes)
         {
             this.ParamTypes = paramTypes;
-
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
         public ParamSig(MethodReference method)
@@ -57,9 +55,11 @@ namespace Obfuscar
 
             int i = 0;
             foreach (ParameterDefinition param in method.Parameters)
+            {
                 ParamTypes[i++] = Helper.GetParameterTypeName(param);
+            }
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
         public ParamSig(MethodDefinition method)
@@ -68,54 +68,70 @@ namespace Obfuscar
 
             int i = 0;
             foreach (ParameterDefinition param in method.Parameters)
+            {
                 ParamTypes[i++] = Helper.GetParameterTypeName(param);
+            }
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
         private int CalcHashCode()
         {
             int hashCode = 0;
             for (int i = 0; i < ParamTypes.Length; i++)
+            {
                 hashCode ^= ParamTypes[i].GetHashCode();
+            }
             return hashCode;
         }
 
         public int Count
         {
-            get { return ParamTypes.Length; }
+            get 
+            { 
+                return ParamTypes.Length; 
+            }
         }
 
         public string this[int index]
         {
-            get { return ParamTypes[index]; }
+            get 
+            { 
+                return ParamTypes[index]; 
+            }
         }
 
         public string[] ParamTypes { get; }
 
         public bool Equals(ParamSig other)
         {
-            return other != null &&
-                   ParamsEqual(ParamTypes, other.ParamTypes);
+            return other != null &&ParamsEqual(ParamTypes, other.ParamTypes);
         }
 
         private static bool ParamsEqual(IList<string> a, IList<string> b)
         {
             if (a == null)
+            {
                 return b == null;
+            }
             else if (b == null)
+            {
                 return false;
+            }
             else if (a.Count != b.Count)
+            {
                 return false;
+            }
             else
             {
                 // kludge...too simplistic...param types match anything
 
                 for (int i = 0; i < a.Count; i++)
                 {
-                    if (!a[i].StartsWith("!") && !b[i].StartsWith("!") &&
-                        !a[i].Equals(b[i]))
+                    if (!a[i].StartsWith("!") && !b[i].StartsWith("!") && !a[i].Equals(b[i]))
+                    {
                         return false;
+                    }
                 }
 
                 // they aren't not equal
@@ -130,37 +146,55 @@ namespace Obfuscar
 
         public static bool operator ==(ParamSig a, ParamSig b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.Equals(b);
+            }
         }
 
         public static bool operator !=(ParamSig a, ParamSig b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return !a.Equals(b);
+            }
         }
 
         public override int GetHashCode()
         {
-            return hashCode;
+            return this.hashCode;
         }
 
         public override string ToString()
         {
             if (ParamTypes.Length == 0)
+            {
                 return "";
+            }
             else if (ParamTypes.Length == 1)
+            {
                 return ParamTypes[0].ToString();
+            }
             else if (ParamTypes.Length == 2)
+            {
                 return ParamTypes[0].ToString() + " " + ParamTypes[1].ToString();
+            }
             else
             {
                 StringBuilder sb = new StringBuilder();
@@ -177,16 +211,22 @@ namespace Obfuscar
         public int CompareTo(ParamSig other)
         {
             if (ParamTypes.Length < other.ParamTypes.Length)
+            {
                 return -1;
+            }
             else if (ParamTypes.Length > other.ParamTypes.Length)
+            {
                 return 1;
+            }
             else
             {
                 for (int i = 0; i < ParamTypes.Length; i++)
                 {
                     int cmp = string.Compare(ParamTypes[i], other.ParamTypes[i]);
                     if (cmp != 0)
+                    {
                         return cmp;
+                    }
                 }
 
                 return 0;

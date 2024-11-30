@@ -43,7 +43,9 @@ namespace Obfuscar
             foreach (IPredicate<T> test in this)
             {
                 if (test.Test(thing, map))
+                {
                     return true;
+                }
             }
 
             return false;

@@ -39,33 +39,30 @@ namespace Obfuscar
     {
         readonly int hashCode;
 
-        public NameParamSig(string name, string[] paramTypes)
-            : base(paramTypes)
+        public NameParamSig(string name, string[] paramTypes): base(paramTypes)
         {
             this.Name = name;
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
-        public NameParamSig(MethodReference method)
-            : base(method)
+        public NameParamSig(MethodReference method): base(method)
         {
-            Name = method.Name;
+            this.Name = method.Name;
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
-        public NameParamSig(MethodDefinition method)
-            : base(method)
+        public NameParamSig(MethodDefinition method): base(method)
         {
-            Name = method.Name;
+            this.Name = method.Name;
 
-            hashCode = CalcHashCode();
+            this.hashCode = CalcHashCode();
         }
 
         private int CalcHashCode()
         {
-            return Name.GetHashCode() ^ base.GetHashCode();
+            return this.Name.GetHashCode() ^ base.GetHashCode();
         }
 
         public string Name { get; }
@@ -73,7 +70,7 @@ namespace Obfuscar
         public bool Equals(NameParamSig other)
         {
             return other != null &&
-                   Name == other.Name &&
+                   this.Name == other.Name &&
                    Equals((ParamSig) other);
         }
 
@@ -84,22 +81,34 @@ namespace Obfuscar
 
         public static bool operator ==(NameParamSig a, NameParamSig b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.Equals(b);
+            }
         }
 
         public static bool operator !=(NameParamSig a, NameParamSig b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return !a.Equals(b);
+            }
         }
 
         public override int GetHashCode()
@@ -116,7 +125,9 @@ namespace Obfuscar
         {
             int cmp = string.Compare(Name, other.Name);
             if (cmp == 0)
-                cmp = CompareTo((ParamSig) other);
+            {
+                cmp = CompareTo((ParamSig)other);
+            }
             return cmp;
         }
     }

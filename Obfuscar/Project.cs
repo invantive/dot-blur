@@ -59,8 +59,7 @@ namespace Obfuscar
         {
             get
             {
-                return vars.GetValue(Settings.VariableExtraFrameworkFolders, "").Split(new char[] {Path.PathSeparator},
-                    StringSplitOptions.RemoveEmptyEntries);
+                return vars.GetValue(Settings.VariableExtraFrameworkFolders, "").Split(new char[] {Path.PathSeparator}, StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
@@ -68,56 +67,72 @@ namespace Obfuscar
         {
             get
             {
-                return
-                    ExtraPaths
+                return ExtraPaths
                         .Concat(assemblySearchPaths)
-                        .Concat(new[] {Settings.InPath});
+                        .Concat(new[] {Settings.InPath})
+                        ;
             }
         }
 
         public string KeyContainerName = null;
         private byte[] keyPair;
         private RSA keyValue;
+        private object keyPairLocker = new object();
 
         public byte[] KeyPair
         {
             get
             {
-                if (keyPair != null)
-                    return keyPair;
-
-                var lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
-                var lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
-
-                if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
-                    return null;
-                if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
-                    throw new ObfuscarException($"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
-
-                try
+                if (this.keyPair == null)
                 {
-                    if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                    lock (this.keyPairLocker)
                     {
-                        var lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
+                        if (this.keyPair == null)
+                        {
+                            var lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
+                            var lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
 
-                        keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
-                    }
-                    else if (!string.IsNullOrEmpty(lKeyFileName))
-                    {
-                        keyPair = File.ReadAllBytes(lKeyFileName);
-                    }
-                    else
-                    {
-                        keyPair = null;
+                            if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
+                            {
+                                Log.OutputLine("No key file and no key container configured. Use no key pair.");
+                                return null;
+                            }
+
+                            if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
+                            }
+
+                            try
+                            {
+                                if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                                {
+                                    var lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
+
+                                    this.keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
+
+                                    Log.OutputLine($"Created key pair from '{lKeyFileName}' with password.");
+                                }
+                                else if (!string.IsNullOrEmpty(lKeyFileName))
+                                {
+                                    Log.OutputLine($"Created key pair from '{lKeyFileName}' with no password.");
+                                    this.keyPair = File.ReadAllBytes(lKeyFileName);
+                                }
+                                else
+                                {
+                                    Log.OutputLine($"Created no key pair from '{lKeyFileName}'.");
+                                    this.keyPair = null;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr007, String.Format("Failure loading key file \"{0}\"", lKeyFileName), ex);
+                            }
+                        }
                     }
                 }
-                catch (Exception ex)
-                {
-                    throw new ObfuscarException(
-                        String.Format("Failure loading key file \"{0}\"", lKeyFileName), ex);
-                }
 
-                return keyPair;
+                return this.keyPair;
             }
         }
 
@@ -131,15 +146,21 @@ namespace Obfuscar
                 }
 
                 if (Type.GetType("System.MonoType") != null)
-                    throw new ObfuscarException("Key containers are not supported for Mono.");
+                {
+                    throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
+                }
 
                 var lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
                 var lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
 
                 if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
+                {
                     return null;
+                }
                 if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
-                    throw new ObfuscarException($"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
+                {
+                    throw new ObfuscarException(MessageCodes.ofr003, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
+                }
 
                 KeyContainerName = lKeyContainerName;
 
@@ -182,7 +203,7 @@ namespace Obfuscar
 
             if (reader.Root.Name != "Obfuscator")
             {
-                throw new ObfuscarException("XML configuration file should have <Obfuscator> root tag.");
+                throw new ObfuscarException(MessageCodes.ofr004, "XML configuration file should have <Obfuscator> root tag.");
             }
 
             FromXmlReadNode(reader.Root, project);
@@ -263,7 +284,9 @@ namespace Obfuscar
             {
                 var file = Helper.GetAttribute(module, "file", project.vars);
                 if (string.IsNullOrWhiteSpace(file))
-                    throw new InvalidOperationException("Need valid file attribute.");
+                {
+                    throw new ObfuscarException(MessageCodes.ofrxxx, "Need valid file attribute.");
+                }
                 ReadModule(file, module, project);
             }
         }
@@ -403,7 +426,7 @@ namespace Obfuscar
             }
 
             if (!Directory.Exists(Settings.InPath))
-                throw new ObfuscarException("Path specified by InPath variable must exist:" + Settings.InPath);
+                throw new ObfuscarException(MessageCodes.ofr006, "Path specified by InPath variable must exist:" + Settings.InPath);
 
             if (!Directory.Exists(Settings.OutPath))
             {
@@ -413,7 +436,7 @@ namespace Obfuscar
                 }
                 catch (IOException e)
                 {
-                    throw new ObfuscarException("Could not create path specified by OutPath:  " + Settings.OutPath, e);
+                    throw new ObfuscarException(MessageCodes.ofr005, "Could not create path specified by OutPath:  " + Settings.OutPath, e);
                 }
             }
         }

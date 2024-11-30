@@ -79,7 +79,9 @@ namespace Obfuscar
         {
             AssemblyInfo info = new AssemblyInfo(project);
 
-            // pull out the file attribute, but don't process anything empty
+            //
+            // Pull out the file attribute, but don't process anything empty.
+            //
             info.LoadAssembly(file);
 
             string isExcluded = Helper.GetAttribute(reader, "Exclude", vars);
@@ -133,8 +135,7 @@ namespace Obfuscar
                 {
                     case "Include":
                         {
-                            Project.ReadIncludeTag(reader, project,
-                                (includeReader, proj) => FromXmlReadNode(includeReader, proj, vars, info));
+                            Project.ReadIncludeTag(reader, project, (includeReader, proj) => FromXmlReadNode(includeReader, proj, vars, info));
                             break;
                         }
                     case "SkipNamespace":
@@ -162,33 +163,41 @@ namespace Obfuscar
 
                         val = Helper.GetAttribute(reader, "skipMethods", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             skipFlags |= TypeAffectFlags.AffectMethod;
+                        }
 
                         val = Helper.GetAttribute(reader, "skipStringHiding", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             skipFlags |= TypeAffectFlags.AffectString;
+                        }
 
                         val = Helper.GetAttribute(reader, "skipFields", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             skipFlags |= TypeAffectFlags.AffectField;
+                        }
 
                         val = Helper.GetAttribute(reader, "skipProperties", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             skipFlags |= TypeAffectFlags.AffectProperty;
+                        }
 
                         val = Helper.GetAttribute(reader, "skipEvents", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             skipFlags |= TypeAffectFlags.AffectEvent;
+                        }
 
                         if (rx != null)
                         {
-                            info.skipTypes.Add(new TypeTester(rx, skipFlags, attrib, inherits, isStatic,
-                                isSerializable));
+                            info.skipTypes.Add(new TypeTester(rx, skipFlags, attrib, inherits, isStatic, isSerializable));
                         }
                         else
                         {
-                            info.skipTypes.Add(new TypeTester(name, skipFlags, attrib, inherits, isStatic,
-                                isSerializable));
+                            info.skipTypes.Add(new TypeTester(name, skipFlags, attrib, inherits, isStatic, isSerializable));
                         }
                         break;
                     case "ForceType":
@@ -196,57 +205,61 @@ namespace Obfuscar
 
                         val = Helper.GetAttribute(reader, "forceMethods", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             forceFlags |= TypeAffectFlags.AffectMethod;
+                        }
 
                         val = Helper.GetAttribute(reader, "forceStringHiding", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             forceFlags |= TypeAffectFlags.AffectString;
+                        }
 
                         val = Helper.GetAttribute(reader, "forceFields", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             forceFlags |= TypeAffectFlags.AffectField;
+                        }
 
                         val = Helper.GetAttribute(reader, "forceProperties", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             forceFlags |= TypeAffectFlags.AffectProperty;
+                        }
 
                         val = Helper.GetAttribute(reader, "forceEvents", vars);
                         if (val.Length > 0 && Convert.ToBoolean(val))
+                        {
                             forceFlags |= TypeAffectFlags.AffectEvent;
+                        }
 
                         if (rx != null)
                         {
-                            info.forceTypes.Add(new TypeTester(rx, forceFlags, attrib, inherits, isStatic,
-                                isSerializable));
+                            info.forceTypes.Add(new TypeTester(rx, forceFlags, attrib, inherits, isStatic, isSerializable));
                         }
                         else
                         {
-                            info.forceTypes.Add(new TypeTester(name, forceFlags, attrib, inherits, isStatic,
-                                isSerializable));
+                            info.forceTypes.Add(new TypeTester(name, forceFlags, attrib, inherits, isStatic, isSerializable));
                         }
                         break;
                     case "SkipMethod":
                         if (rx != null)
                         {
-                            info.skipMethods.Add(new MethodTester(rx, type, attrib, typeattrib, inherits,
-                                isStatic));
+                            info.skipMethods.Add(new MethodTester(rx, type, attrib, typeattrib, inherits, isStatic));
                         }
                         else
                         {
-                            info.skipMethods.Add(new MethodTester(name, type, attrib, typeattrib, inherits,
-                                isStatic));
+                            info.skipMethods.Add(new MethodTester(name, type, attrib, typeattrib, inherits, isStatic));
                         }
                         break;
                     case "ForceMethod":
                         if (rx != null)
                         {
-                            info.forceMethods.Add(
-                                new MethodTester(rx, type, attrib, typeattrib, inherits, isStatic));
+                            info.forceMethods.Add(new MethodTester(rx, type, attrib, typeattrib, inherits, isStatic));
                         }
                         else
                         {
-                            info.forceMethods.Add(new MethodTester(name, type, attrib, typeattrib, inherits,
-                                isStatic));
+                            info.forceMethods.Add(new MethodTester(name, type, attrib, typeattrib, inherits, isStatic));
                         }
                         break;
                     case "SkipStringHiding":
@@ -274,13 +287,11 @@ namespace Obfuscar
 
                         if (rx != null)
                         {
-                            info.skipFields.Add(new FieldTester(rx, type, attrib, typeattrib, inherits, decorator,
-                                isStatic, isSerializable));
+                            info.skipFields.Add(new FieldTester(rx, type, attrib, typeattrib, inherits, decorator, isStatic, isSerializable));
                         }
                         else
                         {
-                            info.skipFields.Add(new FieldTester(name, type, attrib, typeattrib, inherits, decorator,
-                                isStatic, isSerializable));
+                            info.skipFields.Add(new FieldTester(name, type, attrib, typeattrib, inherits, decorator, isStatic, isSerializable));
                         }
                         break;
                     case "ForceField":
@@ -288,13 +299,11 @@ namespace Obfuscar
 
                         if (rx != null)
                         {
-                            info.forceFields.Add(new FieldTester(rx, type, attrib, typeattrib, inherits, decorator1,
-                                isStatic, isSerializable));
+                            info.forceFields.Add(new FieldTester(rx, type, attrib, typeattrib, inherits, decorator1, isStatic, isSerializable));
                         }
                         else
                         {
-                            info.forceFields.Add(new FieldTester(name, type, attrib, typeattrib, inherits,
-                                decorator1, isStatic, isSerializable));
+                            info.forceFields.Add(new FieldTester(name, type, attrib, typeattrib, inherits, decorator1, isStatic, isSerializable));
                         }
                         break;
                     case "SkipProperty":
@@ -365,10 +374,14 @@ namespace Obfuscar
             foreach (TypeReference type in definition.MainModule.GetTypeReferences())
             {
                 if (type.FullName == "<Module>")
+                {
                     continue;
+                }
 
                 if (project.Contains(type))
+                {
                     typerefs.Add(type);
+                }
             }
 
             // Type references in CustomAttributes
@@ -378,13 +391,21 @@ namespace Obfuscar
             {
                 customattributes.AddRange(type.CustomAttributes);
                 foreach (MethodDefinition methoddef in type.Methods)
+                {
                     customattributes.AddRange(methoddef.CustomAttributes);
+                }
                 foreach (FieldDefinition fielddef in type.Fields)
+                {
                     customattributes.AddRange(fielddef.CustomAttributes);
+                }
                 foreach (EventDefinition eventdef in type.Events)
+                {
                     customattributes.AddRange(eventdef.CustomAttributes);
+                }
                 foreach (PropertyDefinition propertydef in type.Properties)
+                {
                     customattributes.AddRange(propertydef.CustomAttributes);
+                }
 
                 foreach (CustomAttribute customattribute in customattributes)
                 {
@@ -397,7 +418,9 @@ namespace Obfuscar
                     foreach (CustomAttributeArgument ca in customattributearguments)
                     {
                         if (ca.Type.FullName == "System.Type" && ca.Value != null)
-                            typerefs.Add((TypeReference) ca.Value);
+                        {
+                            typerefs.Add((TypeReference)ca.Value);
+                        }
                     }
                 }
                 customattributes.Clear();
@@ -412,8 +435,7 @@ namespace Obfuscar
         {
             public readonly List<Node<TypeDefinition>> Root = new List<Node<TypeDefinition>>();
 
-            public readonly Dictionary<string, Node<TypeDefinition>> _map =
-                new Dictionary<string, Node<TypeDefinition>>();
+            public readonly Dictionary<string, Node<TypeDefinition>> _map = new Dictionary<string, Node<TypeDefinition>>();
 
             public Graph(IEnumerable<TypeDefinition> items)
             {
@@ -496,7 +518,9 @@ namespace Obfuscar
                         {
                             toRemove.Add(node);
                             if (result.Contains(node.Item))
+                            {
                                 continue;
+                            }
 
                             result.Add(node.Item);
                         }
@@ -511,7 +535,9 @@ namespace Obfuscar
                             {
                                 toRemove.Add(node);
                                 if (result.Contains(node.Item))
+                                {
                                     continue;
+                                }
 
                                 result.Add(node.Item);
                             }
@@ -536,12 +562,11 @@ namespace Obfuscar
                         Console.Error.WriteLine("Still in pool:");
                         foreach (var node in pool)
                         {
-                            var parents = string.Join(", ",
-                                node.Parents.Select(p => p.Item.FullName + " " + p.Item.Scope.Name));
-                            Console.Error.WriteLine("{0} {1} : [{2}]", node.Item.FullName, node.Item.Scope.Name,
-                                parents);
+                            var parents = string.Join(", ", node.Parents.Select(p => p.Item.FullName + " " + p.Item.Scope.Name));
+                            Console.Error.WriteLine("{0} {1} : [{2}]", node.Item.FullName, node.Item.Scope.Name, parents);
                         }
-                        throw new ObfuscarException("Cannot clean pool");
+
+                        throw new ObfuscarException(MessageCodes.ofr019, "Cannot clean pool");
                     }
 
                     foreach (var remove in toRemove)
@@ -550,7 +575,9 @@ namespace Obfuscar
                         foreach (var child in remove.Children)
                         {
                             if (result.Contains(child.Item))
+                            {
                                 continue;
+                            }
 
                             child.Parents.Remove(remove);
                         }
@@ -581,8 +608,7 @@ namespace Obfuscar
             }
             catch (Exception e)
             {
-                throw new ObfuscarException(string.Format("Failed to get type definitions for {0}", definition.Name),
-                    e);
+                throw new ObfuscarException(MessageCodes.ofr020, string.Format("Failed to get type definitions for {0}", definition.Name), e);
             }
         }
 
@@ -612,8 +638,7 @@ namespace Obfuscar
                             MemberReference memberRef = inst.Operand as MemberReference;
                             if (memberRef != null)
                             {
-                                if (IsOnlyReference(memberRef) ||
-                                    memberRef is FieldReference && !(memberRef is FieldDefinition))
+                                if (IsOnlyReference(memberRef) || memberRef is FieldReference && !(memberRef is FieldDefinition))
                                 {
                                     // FIXME: Figure out why this exists if it is never used.
                                     // int c = memberreferences.Count;
@@ -624,6 +649,7 @@ namespace Obfuscar
                     }
                 }
             }
+
             return memberReferences;
         }
 
@@ -658,8 +684,7 @@ namespace Obfuscar
 
             try
             {
-                bool readSymbols = project.Settings.RegenerateDebugInfo &&
-                                   System.IO.File.Exists(System.IO.Path.ChangeExtension(filename, "pdb"));
+                bool readSymbols = project.Settings.RegenerateDebugInfo && System.IO.File.Exists(System.IO.Path.ChangeExtension(filename, "pdb"));
                 try
                 {
                     definition = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters
@@ -673,7 +698,10 @@ namespace Obfuscar
                 {
                     // If there's a non-matching pdb next to it, this fails, else just try again
                     if (!readSymbols)
+                    {
                         throw;
+                    }
+
                     definition = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters
                     {
                         ReadingMode = ReadingMode.Deferred,
@@ -698,7 +726,10 @@ namespace Obfuscar
                 {
                     // If there's a non-matching pdb next to it, this fails, else just try again
                     if (!readSymbols)
+                    {
                         throw;
+                    }
+
                     definition = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters
                     {
                         ReadingMode = ReadingMode.Immediate,
@@ -711,7 +742,7 @@ namespace Obfuscar
             }
             catch (System.IO.IOException e)
             {
-                throw new ObfuscarException("Unable to find assembly: " + filename, e);
+                throw new ObfuscarException(MessageCodes.ofr020, "Unable to find assembly: " + filename, e);
             }
         }
 
@@ -786,7 +817,9 @@ namespace Obfuscar
             foreach (TypeTester typeTester in skipTypes)
             {
                 if ((typeTester.AffectFlags & flag) > 0 && typeTester.Test(type, map))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -802,14 +835,15 @@ namespace Obfuscar
             foreach (TypeTester typeTester in forceTypes)
             {
                 if ((typeTester.AffectFlags & flag) > 0 && typeTester.Test(type, map))
+                {
                     return true;
+                }
             }
 
             return false;
         }
 
-        public bool ShouldSkip(TypeKey type, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly,
-            out string message)
+        public bool ShouldSkip(TypeKey type, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             var attribute = type.TypeDefinition.MarkedToRename();
             if (attribute != null)
@@ -864,8 +898,7 @@ namespace Obfuscar
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkip(MethodKey method, InheritMap map, bool keepPublicApi, bool hidePrivateApi,
-            bool markedOnly, out string message)
+        public bool ShouldSkip(MethodKey method, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             if (method.Method.IsRuntime)
             {
@@ -879,23 +912,28 @@ namespace Obfuscar
                 {
                     case MethodSemanticsAttributes.Getter:
                     case MethodSemanticsAttributes.Setter:
-                        message = "skipping properties";
-                        return !project.Settings.RenameProperties;
+                        {
+                            message = "skipping properties";
+                            return !project.Settings.RenameProperties;
+                        }
                     case MethodSemanticsAttributes.AddOn:
                     case MethodSemanticsAttributes.RemoveOn:
-                        message = "skipping events";
-                        return !project.Settings.RenameEvents;
+                        {
+                            message = "skipping events";
+                            return !project.Settings.RenameEvents;
+                        }
                     default:
-                        message = "special name";
-                        return true;
+                        {
+                            message = "special name";
+                            return true;
+                        }
                 }
             }
 
             return ShouldSkipParams(method, map, keepPublicApi, hidePrivateApi, markedOnly, out message);
         }
 
-        public bool ShouldSkipParams(MethodKey method, InheritMap map, bool keepPublicApi, bool hidePrivateApi,
-            bool markedOnly, out string message)
+        public bool ShouldSkipParams(MethodKey method, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             var attribute = method.Method.MarkedToRename();
             // skip runtime methods
@@ -942,42 +980,48 @@ namespace Obfuscar
                 return true;
             }
 
-            if (method.Method.IsPublic() && (
-                method.DeclaringType.IsTypePublic() ||
-                map.GetMethodGroup(method)?.Methods.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null
-            ))
+            if (method.Method.IsPublic() && (method.DeclaringType.IsTypePublic() || map.GetMethodGroup(method)?.Methods.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null ))
             {
                 message = "KeepPublicApi option in configuration";
                 return keepPublicApi;
             }
 
             message = "HidePrivateApi option in configuration";
+
             return !hidePrivateApi;
         }
 
         public bool ShouldSkipStringHiding(MethodKey method, InheritMap map, bool projectHideStrings)
         {
-            if (method.DeclaringType.IsResourcesType() &&
-                method.Method.ReturnType.FullName == "System.Resources.ResourceManager")
+            if (method.DeclaringType.IsResourcesType() && method.Method.ReturnType.FullName == "System.Resources.ResourceManager")
+            {
                 return true; // IMPORTANT: avoid hiding resource type name, as it might be renamed later.
+            }
 
             if (ShouldForce(method.TypeKey, TypeAffectFlags.AffectString, map))
+            {
                 return false;
+            }
 
             if (forceStringHiding.IsMatch(method, map))
+            {
                 return false;
+            }
 
             if (ShouldSkip(method.TypeKey, TypeAffectFlags.AffectString, map))
+            {
                 return true;
+            }
 
             if (skipStringHiding.IsMatch(method, map))
+            {
                 return true;
+            }
 
             return !projectHideStrings;
         }
 
-        public bool ShouldSkip(FieldKey field, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly,
-            out string message)
+        public bool ShouldSkip(FieldKey field, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             // skip runtime methods
             if ((field.Field.IsRuntimeSpecialName && field.Field.Name == "value__"))
@@ -1043,11 +1087,11 @@ namespace Obfuscar
             }
 
             message = "HidePrivateApi option in configuration";
+
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkip(PropertyKey prop, InheritMap map, bool keepPublicApi, bool hidePrivateApi,
-            bool markedOnly, out string message)
+        public bool ShouldSkip(PropertyKey prop, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             if (prop.Property.IsRuntimeSpecialName)
             {
@@ -1099,11 +1143,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (prop.Property.IsPublic() && (
-                prop.DeclaringType.IsTypePublic() ||
-                prop.Property.GetMethod != null && map.GetMethodGroup(new MethodKey(prop.Property.GetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null ||
-                prop.Property.SetMethod != null && map.GetMethodGroup(new MethodKey(prop.Property.SetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null
-            ))
+            if (prop.Property.IsPublic() && (prop.DeclaringType.IsTypePublic() || prop.Property.GetMethod != null && map.GetMethodGroup(new MethodKey(prop.Property.GetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || prop.Property.SetMethod != null && map.GetMethodGroup(new MethodKey(prop.Property.SetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null ))
             {
                 message = "KeepPublicApi option in configuration";
                 return keepPublicApi;
@@ -1113,8 +1153,7 @@ namespace Obfuscar
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkip(EventKey evt, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly,
-            out string message)
+        public bool ShouldSkip(EventKey evt, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             // skip runtime special events
             if (evt.Event.IsRuntimeSpecialName)
@@ -1188,8 +1227,9 @@ namespace Obfuscar
         private void CheckLoaded()
         {
             if (definition == null)
-                throw new InvalidOperationException(
-                    "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+            {
+                throw new ObfuscarException(MessageCodes.ofrxxx, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+            }
         }
 
         /// <summary>
@@ -1198,7 +1238,9 @@ namespace Obfuscar
         private void CheckInitialized()
         {
             if (!initialized)
-                throw new InvalidOperationException("Expected that AssemblyInfo.Init would be called before use.");
+            {
+                throw new ObfuscarException(MessageCodes.ofrxxx, "Expected that AssemblyInfo.Init would be called before use.");
+            }
         }
 
         public override string ToString()

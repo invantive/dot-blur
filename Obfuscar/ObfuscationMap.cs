@@ -60,14 +60,13 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return Name + " " + Status + " " + (StatusText ?? "");
+            return this.Name + " " + this.Status + " " + (this.StatusText ?? "");
         }
     }
 
     class ObfuscatedClass : ObfuscatedThing
     {
-        public ObfuscatedClass(string name)
-            : base(name)
+        public ObfuscatedClass(string name): base(name)
         {
         }
 

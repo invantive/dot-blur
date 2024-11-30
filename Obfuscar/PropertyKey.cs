@@ -63,7 +63,9 @@ namespace Obfuscar
             if (propRef != null)
             {
                 if (TypeKey.Matches(propRef.DeclaringType))
+                {
                     return Type == propRef.PropertyType.FullName && Name == propRef.Name;
+                }
             }
 
             return false;
@@ -73,29 +75,43 @@ namespace Obfuscar
         {
             PropertyKey key = obj as PropertyKey;
             if (key == null)
+            {
                 return false;
+            }
 
             return this == key;
         }
 
         public static bool operator ==(PropertyKey a, PropertyKey b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.TypeKey == b.TypeKey && a.Type == b.Type && a.Name == b.Name;
+            }
         }
 
         public static bool operator !=(PropertyKey a, PropertyKey b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return a.TypeKey != b.TypeKey || a.Type != b.Type || a.Name != b.Name;
+            }
         }
 
         public override int GetHashCode()

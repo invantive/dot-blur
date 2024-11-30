@@ -18,7 +18,7 @@ namespace Obfuscar
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentException("message", nameof(path));
+                throw new ObfuscarException(MessageCodes.ofrxxx, "Missing value for path.");
             }
 
             this.path = path;
@@ -48,7 +48,7 @@ namespace Obfuscar
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            throw new ObfuscarException();
         }
     }
 }

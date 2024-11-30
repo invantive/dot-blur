@@ -34,8 +34,7 @@ namespace Obfuscar
     {
         readonly Dictionary<string, string> vars = new Dictionary<string, string>();
 
-        readonly System.Text.RegularExpressions.Regex re =
-            new System.Text.RegularExpressions.Regex(@"\$\(([^)]+)\)");
+        readonly System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"\$\(([^)]+)\)");
 
         public void Add(string name, string value)
         {
@@ -72,9 +71,13 @@ namespace Obfuscar
 
                 variable = m.Groups[1].Value;
                 if (vars.TryGetValue(variable, out replacement))
+                {
                     formatted.Append(this.Replace(replacement));
+                }
                 else
-                    throw new ObfuscarException("Unable to replace variable: " + variable);
+                {
+                    throw new ObfuscarException(MessageCodes.ofr012, "Unable to replace variable: " + variable);
+                }
 
                 lastMatch = m.Index + m.Length;
             }

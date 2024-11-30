@@ -50,13 +50,13 @@ namespace Obfuscar
         public bool Test(string ns, InheritMap map)
         {
             // regex matches
-            if (nameRx != null && !nameRx.IsMatch(ns))
+            if (this.nameRx != null && !this.nameRx.IsMatch(ns))
             {
                 return false;
             }
 
             // name matches
-            if (!string.IsNullOrEmpty(name) && !Helper.CompareOptionalRegex(ns, name))
+            if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(ns, this.name))
             {
                 return false;
             }

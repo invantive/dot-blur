@@ -24,39 +24,38 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
 
 namespace Obfuscar
 {
     /// <summary>
-    /// Attribute used to mark whether a type should be obfuscated.
+    /// Class containing all message codes for detailing exceptions exactly.
     /// </summary>
-    [Obsolete(
-        "Please use ObfuscationAttribute of .NET Framework, http://msdn.microsoft.com/en-us/library/system.reflection.obfuscationattribute(v=vs.110).aspx")]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Enum)]
-    public class ObfuscateAttribute : Attribute
+    [Obfuscation(Exclude = true, ApplyToMembers = true, Feature = "all")] /* Make call stack easier to read and improve obfuscation performance. */
+    public class MessageCodes
     {
-        /// <summary>
-        /// Marks a type to be obfuscated.
-        /// </summary>
-        public ObfuscateAttribute(): this(true)
-        {
-        }
+        public const string ofr001 = "ofr001";
+        public const string ofr002 = "ofr002";
+        public const string ofr003 = "ofr003";
+        public const string ofr004 = "ofr004";
+        public const string ofr005 = "ofr005";
+        public const string ofr006 = "ofr006";
+        public const string ofr007 = "ofr007";
+        public const string ofr008 = "ofr008";
+        public const string ofr009 = "ofr009";
+        public const string ofr010 = "ofr010";
+        public const string ofr011 = "ofr011";
+        public const string ofr012 = "ofr012";
+        public const string ofr013 = "ofr013";
+        public const string ofr014 = "ofr014";
+        public const string ofr015 = "ofr015";
+        public const string ofr016 = "ofr016";
+        public const string ofr017 = "ofr017";
+        public const string ofr018 = "ofr018";
+        public const string ofr019 = "ofr019";
+        public const string ofr020 = "ofr020";
+        public const string ofr021 = "ofr021";
 
-        /// <summary>
-        /// Marks whether a type should be obfuscated.
-        /// </summary>
-        public ObfuscateAttribute(bool shouldObfuscate)
-        {
-            this.ShouldObfuscate = shouldObfuscate;
-        }
-
-        /// <summary>
-        /// Specifies whether the marked type should or should not be obfuscated.  Defaults to
-        /// see <see langref="true"/>.
-        /// </summary>
-        public bool ShouldObfuscate { get; set; }
+        public const string ofrxxx = "ofrxxx";
     }
 }

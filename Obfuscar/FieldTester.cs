@@ -41,8 +41,7 @@ namespace Obfuscar
         private readonly bool? isSerializable;
         private readonly string decorator;
 
-        public FieldTester(string name, string type, string attrib, string typeAttrib, string inherits,
-            string decorator, bool? isStatic, bool? isSerializable)
+        public FieldTester(string name, string type, string attrib, string typeAttrib, string inherits, string decorator, bool? isStatic, bool? isSerializable)
         {
             this.name = name;
             this.type = type;
@@ -54,8 +53,7 @@ namespace Obfuscar
             this.decorator = decorator;
         }
 
-        public FieldTester(Regex nameRx, string type, string attrib, string typeAttrib, string inherits,
-            string decorator, bool? isStatic, bool? isSerializable)
+        public FieldTester(Regex nameRx, string type, string attrib, string typeAttrib, string inherits, string decorator, bool? isStatic, bool? isSerializable)
         {
             this.nameRx = nameRx;
             this.type = type;
@@ -107,8 +105,7 @@ namespace Obfuscar
             }
 
             // It's not very clean to use CheckMethodVisibility() from MethodTester. But we don't want duplicate code either.
-            if (MethodTester.CheckMemberVisibility(attrib, typeAttrib, (MethodAttributes) field.FieldAttributes,
-                field.DeclaringType))
+            if (MethodTester.CheckMemberVisibility(attrib, typeAttrib, (MethodAttributes) field.FieldAttributes, field.DeclaringType))
             {
                 return false;
             }

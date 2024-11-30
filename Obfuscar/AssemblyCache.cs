@@ -38,20 +38,28 @@ namespace Obfuscar
         public AssemblyCache(Project project)
         {
             foreach (var path in project.AllAssemblySearchPaths)
+            {
                 AddSearchDirectory(path);
+            }
 
             foreach (AssemblyInfo info in project.AssemblyList)
+            {
                 AddSearchDirectory(Path.GetDirectoryName(info.FileName));
+            }
         }
 
         public TypeDefinition GetTypeDefinition(TypeReference type)
         {
             if (type == null)
+            {
                 return null;
+            }
 
             TypeDefinition typeDef = type as TypeDefinition;
             if (typeDef != null)
+            {
                 return typeDef;
+            }
 
             AssemblyNameReference name = type.Scope as AssemblyNameReference;
             if (name == null)
@@ -67,22 +75,28 @@ namespace Obfuscar
             }
             catch (FileNotFoundException)
             {
-                throw new ObfuscarException("Unable to resolve dependency: " + name.Name);
+                throw new ObfuscarException(MessageCodes.ofr009, "Unable to resolve dependency: " + name.Name);
             }
 
             string fullName = type.GetFullName();
             typeDef = assmDef.MainModule.GetType(fullName);
             if (typeDef != null)
+            {
                 return typeDef;
+            }
 
             // IMPORTANT: handle type forwarding
             if (!assmDef.MainModule.HasExportedTypes)
+            {
                 return null;
+            }
 
             foreach (var exported in assmDef.MainModule.ExportedTypes)
             {
                 if (exported.FullName == fullName)
+                {
                     return exported.Resolve();
+                }
             }
 
             return null;
@@ -103,11 +117,15 @@ namespace Obfuscar
             if (name.IsRetargetable)
             {
                 foreach (var path in paths)
+                {
                     AddSearchDirectory(path);
+                }
 
                 result = base.Resolve(name, parameters);
                 foreach (var path in paths)
+                {
                     RemoveSearchDirectory(path);
+                }
             }
             else
             {

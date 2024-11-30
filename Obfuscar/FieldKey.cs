@@ -31,8 +31,7 @@ namespace Obfuscar
 {
     class FieldKey
     {
-        public FieldKey(FieldDefinition field)
-            : this(new TypeKey((TypeDefinition) field.DeclaringType), field.FieldType.FullName, field.Name, field)
+        public FieldKey(FieldDefinition field): this(new TypeKey((TypeDefinition) field.DeclaringType), field.FieldType.FullName, field.Name, field)
         {
         }
 
@@ -46,12 +45,18 @@ namespace Obfuscar
 
         public FieldAttributes FieldAttributes
         {
-            get { return Field.Attributes; }
+            get 
+            { 
+                return Field.Attributes; 
+            }
         }
 
         public TypeDefinition DeclaringType
         {
-            get { return (TypeDefinition) Field.DeclaringType; }
+            get 
+            { 
+                return (TypeDefinition) Field.DeclaringType; 
+            }
         }
 
         public FieldDefinition Field { get; }
@@ -68,7 +73,9 @@ namespace Obfuscar
             if (fieldRef != null)
             {
                 if (TypeKey.Matches(fieldRef.DeclaringType))
+                {
                     return Type == fieldRef.FieldType.FullName && Name == fieldRef.Name;
+                }
             }
 
             return false;
@@ -78,29 +85,43 @@ namespace Obfuscar
         {
             FieldKey key = obj as FieldKey;
             if (key == null)
+            {
                 return false;
+            }
 
             return this == key;
         }
 
         public static bool operator ==(FieldKey a, FieldKey b)
         {
-            if ((object) a == null)
-                return (object) b == null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+            else if ((object)b == null)
+            {
                 return false;
+            }
             else
+            {
                 return a.TypeKey == b.TypeKey && a.Type == b.Type && a.Name == b.Name;
+            }
         }
 
         public static bool operator !=(FieldKey a, FieldKey b)
         {
-            if ((object) a == null)
-                return (object) b != null;
-            else if ((object) b == null)
+            if ((object)a == null)
+            {
+                return (object)b != null;
+            }
+            else if ((object)b == null)
+            {
                 return true;
+            }
             else
+            {
                 return a.TypeKey != b.TypeKey || a.Type != b.Type || a.Name != b.Name;
+            }
         }
 
         public override int GetHashCode()

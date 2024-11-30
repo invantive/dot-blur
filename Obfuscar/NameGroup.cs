@@ -43,7 +43,9 @@ namespace Obfuscar
             {
                 name = NameMaker.UniqueName(index++);
                 if (!names.Contains(name))
+                {
                     return name;
+                }
             }
         }
 
@@ -90,7 +92,9 @@ namespace Obfuscar
                 }
 
                 if (!contained)
+                {
                     return name;
+                }
             }
         }
 
@@ -110,12 +114,16 @@ namespace Obfuscar
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+
             foreach (string s in names)
             {
                 if (sb.Length != 0)
+                {
                     sb.Append(",");
+                }
                 sb.Append(s);
             }
+
             return sb.ToString();
         }
     }

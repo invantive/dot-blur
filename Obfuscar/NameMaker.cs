@@ -55,7 +55,9 @@ namespace Obfuscar
             var rnd = new Random();
             var startPoint = rnd.Next(0xAC00, 0xD5D0);
             for (int i = startPoint; i < startPoint + 128; i++)
-                chars.Add((char) i);
+            {
+                chars.Add((char)i);
+            }
 
             ShuffleArray(chars, rnd);
             koreanChars = new string(chars.ToArray());
@@ -99,16 +101,21 @@ namespace Obfuscar
             {
                 stack.Push(uniqueChars[index % numUniqueChars]);
                 if (index < numUniqueChars)
+                {
                     break;
+                }
                 index /= numUniqueChars;
-            } while (true);
+            } 
+            while (true);
 
             StringBuilder builder = new StringBuilder();
             builder.Append(stack.Pop());
             while (stack.Count > 0)
             {
                 if (sep != null)
+                {
                     builder.Append(sep);
+                }
                 builder.Append(stack.Pop());
             }
 

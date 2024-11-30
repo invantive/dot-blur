@@ -52,8 +52,7 @@ namespace Obfuscar
 
             OptionSet p = new OptionSet()
                 .Add("h|?|help", "Print this help information.", delegate (string v) { showHelp = v != null; })
-                .Add("V|version", "Display version number of this application.",
-                    delegate (string v) { showVersion = v != null; });
+                .Add("V|version", "Display version number of this application.", delegate (string v) { showVersion = v != null; });
 
             if (args.Length == 0)
             {
@@ -95,9 +94,8 @@ namespace Obfuscar
             {
                 try
                 {
-                    Console.Write("Loading project {0}...", project);
+                    Log.OutputLine($"Loading project {project}.");
                     Obfuscator obfuscator = new Obfuscator(project);
-                    Console.WriteLine("Done.");
 
                     obfuscator.RunRules();
 
