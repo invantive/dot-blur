@@ -3,18 +3,18 @@
   <PropertyGroup>
     <!-- detection SDK version -->
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>
-    <IsNet60Supported Condition="'$(ParsedSdkVersion)' >= '6.0'">true</IsNet60Supported>
-    <IsNet80Supported Condition="'$(ParsedSdkVersion)' >= '8.0'">true</IsNet80Supported>
-    <IsNet90Supported Condition="'$(ParsedSdkVersion)' >= '9.0'">true</IsNet90Supported>
+    <IsNet60Supported Condition="'$(ParsedSdkVersion)' &gt;= '6.0'">true</IsNet60Supported>
+    <IsNet80Supported Condition="'$(ParsedSdkVersion)' &gt;= '8.0'">true</IsNet80Supported>
+    <IsNet90Supported Condition="'$(ParsedSdkVersion)' &gt;= '9.0'">true</IsNet90Supported>
     <TargetFrameworks Condition="'$(IsNet60Supported)' == 'true'">$(TargetFrameworks);net6.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet80Supported)' == 'true'">$(TargetFrameworks);net8.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet90Supported)' == 'true'">$(TargetFrameworks);net9.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows'">$(TargetFrameworks);net472</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows'">$(TargetFrameworks);net48</TargetFrameworks>
     <AssemblyName>ObfuscarTests</AssemblyName>
     <RootNamespace>ObfuscarTests</RootNamespace>
     <EnableDefaultItems>false</EnableDefaultItems> <!-- Disable automatic inclusion of files -->
     <LangVersion>latest</LangVersion>
-    <OutputType Condition="'$(TargetFramework)'!='net472'">Exe</OutputType>
+    <OutputType Condition="'$(TargetFramework)'!='net48'">Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -69,9 +69,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
-    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+    <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
