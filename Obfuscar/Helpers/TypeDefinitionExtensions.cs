@@ -31,19 +31,22 @@ namespace Obfuscar.Helpers
                 return (bool)MemoryCache.Default[type.FullName];
             }
 
-            var generated = type.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
-            var result = false;
-            if (generated == null)
+            CustomAttribute generatedCustomAttribute = type.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
+
+            bool result = false;
+
+            if (generatedCustomAttribute == null)
             {
                 result = type.IsFormOrUserControl();
             }
             else
             {
-                var name = generated.ConstructorArguments[0].Value.ToString();
+                string name = generatedCustomAttribute.ConstructorArguments[0].Value.ToString();
                 result = name == "System.Resources.Tools.StronglyTypedResourceBuilder";
             }
 
             MemoryCache.Default.Add(type.FullName, result, policy);
+
             return result;
         }
 
@@ -66,11 +69,15 @@ namespace Obfuscar.Helpers
                     // IMPORTANT: Resolve call below fails for UWP .winmd files.
                     return false;
                 }
-
-                return type.BaseType.Resolve().IsFormOrUserControl();
+                else
+                {
+                    return type.BaseType.Resolve().IsFormOrUserControl();
+                }
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
     }
 }

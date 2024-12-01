@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <!-- detection SDK version -->
+    <Nullable>enable</Nullable>
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>
     <IsNet60Supported Condition="'$(ParsedSdkVersion)' &gt;= '6.0'">true</IsNet60Supported>
     <IsNet80Supported Condition="'$(ParsedSdkVersion)' &gt;= '8.0'">true</IsNet80Supported>

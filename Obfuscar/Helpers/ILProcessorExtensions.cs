@@ -72,10 +72,10 @@ namespace Obfuscar.Helpers
         }
 
         private static void ReplaceInstruction
-            ( Instruction instruction
-            , Action<Instruction> setInstruction
-            , Dictionary<Instruction, LdStrInstructionReplacement> oldToNewStringInstructions
-            )
+        ( Instruction instruction
+        , Action<Instruction> setInstruction
+        , Dictionary<Instruction, LdStrInstructionReplacement> oldToNewStringInstructions
+        )
         {
             if (instruction != null && oldToNewStringInstructions.TryGetValue(instruction, out LdStrInstructionReplacement oldToNew))
             {

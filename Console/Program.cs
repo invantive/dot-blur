@@ -26,15 +26,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Forms;
 using Mono.Options;
 
 namespace Obfuscar
 {
+    /// <summary>
+    /// Obfuscar.
+    /// </summary>
     internal static class Program
     {
         private static void ShowHelp(OptionSet optionSet)
@@ -47,6 +46,11 @@ namespace Obfuscar
             optionSet.WriteOptionDescriptions(Console.Out);
         }
 
+        /// <summary>
+        /// Main.
+        /// </summary>
+        /// <param name="args">Arguments.</param>
+        /// <returns>Exit code.</returns>
         private static int Main(string[] args)
         {
             string versionLabel = "2.2.40.4-INVANTIVE";
@@ -107,7 +111,7 @@ namespace Obfuscar
             }
 
             int start = Environment.TickCount;
-            foreach (var project in extra)
+            foreach (string project in extra)
             {
                 try
                 {
@@ -116,15 +120,19 @@ namespace Obfuscar
 
                     obfuscator.RunRules();
 
-                    Console.WriteLine("Completed, {0:f2} secs.", (Environment.TickCount - start) / 1000.0);
+                    Log.OutputLine($"Completed, {(Environment.TickCount - start) / 1000.0:f2} secs.");
                 }
                 catch (ObfuscarException e)
                 {
                     Console.WriteLine();
                     Console.Error.WriteLine("An error occurred during processing:");
                     Console.Error.WriteLine(e.Message);
+
                     if (e.InnerException != null)
+                    {
                         Console.Error.WriteLine(e.InnerException.Message);
+                    }
+
                     return 1;
                 }
             }

@@ -37,42 +37,44 @@ namespace Obfuscar
 
         public AssemblyCache(Project project)
         {
-            foreach (var path in project.AllAssemblySearchPaths)
+            foreach (string path in project.AllAssemblySearchPaths)
             {
-                AddSearchDirectory(path);
+                this.AddSearchDirectory(path);
             }
 
             foreach (AssemblyInfo info in project.AssemblyList)
             {
-                AddSearchDirectory(Path.GetDirectoryName(info.FileName));
+                this.AddSearchDirectory(Path.GetDirectoryName(info.FileName));
             }
         }
 
-        public TypeDefinition GetTypeDefinition(TypeReference type)
+        public TypeDefinition? GetTypeDefinition(TypeReference type)
         {
             if (type == null)
             {
                 return null;
             }
 
-            TypeDefinition typeDef = type as TypeDefinition;
+            TypeDefinition? typeDef = type as TypeDefinition;
+
             if (typeDef != null)
             {
                 return typeDef;
             }
 
-            AssemblyNameReference name = type.Scope as AssemblyNameReference;
+            AssemblyNameReference? name = type.Scope as AssemblyNameReference;
+
             if (name == null)
             {
-                GenericInstanceType gi = type as GenericInstanceType;
-                return gi == null ? null : GetTypeDefinition(gi.ElementType);
+                GenericInstanceType? gi = type as GenericInstanceType;
+                return gi == null ? null : this.GetTypeDefinition(gi.ElementType);
             }
 
             AssemblyDefinition assmDef;
 
             try
             {
-                assmDef = Resolve(name);
+                assmDef = this.Resolve(name);
             }
             catch (FileNotFoundException)
             {
@@ -81,6 +83,7 @@ namespace Obfuscar
 
             string fullName = type.GetFullName();
             typeDef = assmDef.MainModule.GetType(fullName);
+
             if (typeDef != null)
             {
                 return typeDef;
@@ -92,7 +95,7 @@ namespace Obfuscar
                 return null;
             }
 
-            foreach (var exported in assmDef.MainModule.ExportedTypes)
+            foreach (ExportedType exported in assmDef.MainModule.ExportedTypes)
             {
                 if (exported.FullName == fullName)
                 {
@@ -105,10 +108,11 @@ namespace Obfuscar
 
         public new void RegisterAssembly(AssemblyDefinition assembly)
         {
-            var path = assembly.GetPortableProfileDirectory();
-            if (path != null && Directory.Exists(path))
+            string? path = assembly.GetPortableProfileDirectory();
+
+            if (!string.IsNullOrEmpty(path) && path != null && Directory.Exists(path))
             {
-                paths.Add(path);
+                this.paths.Add(path);
             }
 
             base.RegisterAssembly(assembly);
@@ -117,17 +121,25 @@ namespace Obfuscar
         public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
         {
             AssemblyDefinition result;
+
             if (name.IsRetargetable)
             {
-                foreach (var path in paths)
+                foreach (string? path in this.paths)
                 {
-                    AddSearchDirectory(path);
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        this.AddSearchDirectory(path);
+                    }
                 }
 
                 result = base.Resolve(name, parameters);
-                foreach (var path in paths)
+
+                foreach (string? path in this.paths)
                 {
-                    RemoveSearchDirectory(path);
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        this.RemoveSearchDirectory(path);
+                    }
                 }
             }
             else

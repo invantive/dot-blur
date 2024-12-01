@@ -10,7 +10,7 @@ namespace Obfuscar
         /// Write a line of text with line-end to output.
         /// </summary>
         /// <param name="output">Text.</param>
-        public static void OutputLine(string output = null)
+        public static void OutputLine(string? output = null)
         {
             Output(output, true);
         }

@@ -35,7 +35,7 @@ namespace Obfuscar
     {
         public HashSet<MethodKey> Methods { get; } = new HashSet<MethodKey>();
 
-        public string Name { get; set; } = null;
+        public string? Name { get; set; } = null;
 
         public bool External { get; set; } = false;
 
@@ -101,8 +101,9 @@ namespace Obfuscar
                     MethodKey[] methods = GetVirtualMethods(project.Cache, type);
                     while (i < methods.Length)
                     {
-                        MethodGroup group;
+                        MethodGroup? group;
                         var left = methods[i];
+
                         if (!methodGroups.TryGetValue(left, out group))
                         {
                             group = null;
@@ -136,7 +137,11 @@ namespace Obfuscar
                             }
 
                             // if the group isn't already external, see if it should be
-                            Debug.Assert(group != null, "should have a group by now");
+                            if (group == null)
+                            {
+                                throw new ObfuscarException(MessageCodes.ofrxxx, "Missing group.");
+                            }
+
                             if (!group.External && !project.Contains(right.TypeKey))
                             {
                                 group.External = true;
@@ -166,7 +171,7 @@ namespace Obfuscar
             // check the interfaces
             foreach (var ifaceRef in type.Interfaces)
             {
-                TypeDefinition iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
+                TypeDefinition? iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
                 if (iface != null)
                 {
                     GetBaseTypes(project, baseTypes, iface);
@@ -175,7 +180,7 @@ namespace Obfuscar
             }
 
             // check the base type unless it isn't in the project, or we don't have one
-            TypeDefinition baseType = project.GetTypeDefinition(type.BaseType);
+            TypeDefinition? baseType = project.GetTypeDefinition(type.BaseType);
             if (baseType != null && baseType.FullName != "System.Object")
             {
                 GetBaseTypes(project, baseTypes, baseType);
@@ -195,7 +200,7 @@ namespace Obfuscar
             // check the interfaces
             foreach (var ifaceRef in type.Interfaces)
             {
-                TypeDefinition iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
+                TypeDefinition? iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
 
                 // if it's not in the project, try to get it via the cache
                 if (iface == null)
@@ -211,7 +216,7 @@ namespace Obfuscar
             }
 
             // check the base type unless it isn't in the project, or we don't have one
-            TypeDefinition baseType = project.GetTypeDefinition(type.BaseType);
+            TypeDefinition? baseType = project.GetTypeDefinition(type.BaseType);
 
             // if it's not in the project, try to get it via the cache
             if (baseType == null)
@@ -269,18 +274,26 @@ namespace Obfuscar
 
         MethodGroup AddToGroup(MethodGroup group, MethodKey methodKey)
         {
-            // add the method to the group
+            //
+            // Add the method to the group.
+            //
             group.Methods.Add(methodKey);
 
-            // point the method at the group
-            MethodGroup group2;
+            //
+            // Point the method at the group.
+            //
+            MethodGroup? group2;
+
             if (methodGroups.TryGetValue(methodKey, out group2) && group2 != group)
             {
-                // we have a problem; two unrelated groups come together; merge them
+                //
+                // Two unrelated groups come together; merge them.
+                //
                 if (group.Methods.Count > group2.Methods.Count)
                 {
                     group.Name = group.Name ?? group2.Name;
                     group.External = group.External | group2.External;
+
                     foreach (MethodKey mk in group2.Methods)
                     {
                         methodGroups[mk] = group;
@@ -293,6 +306,7 @@ namespace Obfuscar
                 {
                     group2.Name = group2.Name ?? group.Name;
                     group2.External = group2.External | group.External;
+
                     foreach (MethodKey mk in group.Methods)
                     {
                         methodGroups[mk] = group2;
@@ -302,14 +316,15 @@ namespace Obfuscar
                     return group2;
                 }
             }
+
             methodGroups[methodKey] = group;
 
             return group;
         }
 
-        public MethodGroup GetMethodGroup(MethodKey methodKey)
+        public MethodGroup? GetMethodGroup(MethodKey methodKey)
         {
-            MethodGroup group;
+            MethodGroup? group;
             if (methodGroups.TryGetValue(methodKey, out group))
             {
                 return group;
@@ -327,12 +342,11 @@ namespace Obfuscar
                 return true;
             }
 
-
             if (type.BaseType != null)
             {
-                var typeDef = project.Cache.GetTypeDefinition(type.BaseType);
+                TypeDefinition? typeDef = project.Cache.GetTypeDefinition(type.BaseType);
 
-                return Inherits(typeDef, interfaceFullName);
+                return this.Inherits(typeDef, interfaceFullName);
             }
 
             return false;

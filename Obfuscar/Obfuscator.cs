@@ -1176,7 +1176,7 @@ namespace Obfuscar
             }
 
             // skip filtered methods
-            string skiprename;
+            string? skiprename;
             var toDo = info.ShouldSkip(methodKey, Project.InheritMap, Project.Settings.KeepPublicApi, Project.Settings.HidePrivateApi, Project.Settings.MarkedOnly, out skiprename);
             if (!toDo)
             {
@@ -1323,7 +1323,7 @@ namespace Obfuscar
             return nameGroups;
         }
 
-        string GetNewMethodName(Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey, MethodDefinition method)
+        string? GetNewMethodName(Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey, MethodDefinition method)
         {
             ObfuscatedThing t = Mapping.GetMethod(methodKey);
 

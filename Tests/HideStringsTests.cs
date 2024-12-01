@@ -54,7 +54,7 @@ namespace ObfuscarTests
 
             Assert.Equal(5, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
@@ -85,7 +85,7 @@ namespace ObfuscarTests
 
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
@@ -122,7 +122,7 @@ namespace ObfuscarTests
 
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
@@ -159,7 +159,7 @@ namespace ObfuscarTests
 
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
@@ -196,7 +196,7 @@ namespace ObfuscarTests
 
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
@@ -269,7 +269,7 @@ namespace ObfuscarTests
 
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
-            TypeDefinition expected = null;
+            TypeDefinition? expected = null;
             foreach (var type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))

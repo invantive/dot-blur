@@ -74,12 +74,12 @@ namespace Obfuscar
             }
         }
 
-        public string KeyContainerName = null;
-        private byte[] keyPair;
+        public string? KeyContainerName = null;
+        private byte[]? keyPair;
         private RSA keyValue;
         private object keyPairLocker = new object();
 
-        public byte[] KeyPair
+        public byte[]? KeyPair
         {
             get
             {
@@ -136,7 +136,7 @@ namespace Obfuscar
             }
         }
 
-        public RSA KeyValue
+        public RSA? KeyValue
         {
             get
             {
@@ -523,7 +523,7 @@ namespace Obfuscar
             return assemblyMap.ContainsKey(type.Scope);
         }
 
-        public TypeDefinition GetTypeDefinition(TypeReference type)
+        public TypeDefinition? GetTypeDefinition(TypeReference type)
         {
             if (type == null)
             {

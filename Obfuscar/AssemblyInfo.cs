@@ -53,12 +53,18 @@ namespace Obfuscar
         private readonly PredicateCollection<EventKey> forceEvents = new PredicateCollection<EventKey>();
         private readonly PredicateCollection<MethodKey> skipStringHiding = new PredicateCollection<MethodKey>();
         private readonly PredicateCollection<MethodKey> forceStringHiding = new PredicateCollection<MethodKey>();
-        private List<TypeReference> unrenamedTypeReferences;
-        private List<MemberReference> unrenamedReferences;
-        private string filename;
-        private AssemblyDefinition definition;
-        private string name;
+        private List<TypeReference>? unrenamedTypeReferences;
+        private List<MemberReference>? unrenamedReferences;
+        private string? filename;
+        private AssemblyDefinition? definition;
+        private string? name;
         private bool skipEnums;
+
+        public string? OutputFileName 
+        { 
+            get; 
+            set; 
+        }
 
         public bool Exclude { get; set; }
 
@@ -105,7 +111,7 @@ namespace Obfuscar
                 string name = Helper.GetAttribute(reader, "name", vars);
 
                 string rxStr = Helper.GetAttribute(reader, "rx");
-                Regex rx = null;
+                Regex? rx = null;
                 if (!string.IsNullOrEmpty(rxStr))
                 {
                     rx = new Regex(rxStr);
@@ -471,27 +477,27 @@ namespace Obfuscar
 
             public readonly Dictionary<string, Node<TypeDefinition>> _map = new Dictionary<string, Node<TypeDefinition>>();
 
-            public Graph(IEnumerable<TypeDefinition> items)
+            public Graph(IEnumerable<TypeDefinition> typeDefinitions)
             {
-                foreach (var item in items)
+                foreach (TypeDefinition typeDefinition in typeDefinitions)
                 {
-                    var node = new Node<TypeDefinition> {Item = item};
+                    Node<TypeDefinition> node = new Node<TypeDefinition> {Item = typeDefinition};
                     Root.Add(node);
-                    _map.Add(item.FullName, node);
+                    this._map.Add(typeDefinition.FullName, node);
                 }
 
-                AddParents(Root);
+                this.AddParents(Root);
             }
 
             private void AddParents(List<Node<TypeDefinition>> nodes)
             {
                 foreach (var node in nodes)
                 {
-                    Node<TypeDefinition> parent;
-                    var baseType = node.Item.BaseType;
+                    Node<TypeDefinition>? parent;
+                    TypeReference? baseType = node.Item.BaseType;
                     if (baseType != null)
                     {
-                        if (TrySearchNode(baseType, out parent))
+                        if (this.TrySearchNode(baseType, out parent))
                         {
                             node.AppendTo(parent);
                         }
@@ -499,19 +505,19 @@ namespace Obfuscar
 
                     if (node.Item.HasInterfaces)
                     {
-                        foreach (var inter in node.Item.Interfaces)
+                        foreach (InterfaceImplementation? inter in node.Item.Interfaces)
                         {
-                            if (TrySearchNode(inter.InterfaceType, out parent))
+                            if (this.TrySearchNode(inter.InterfaceType, out parent))
                             {
                                 node.AppendTo(parent);
                             }
                         }
                     }
 
-                    var nestedParent = node.Item.DeclaringType;
+                    TypeDefinition? nestedParent = node.Item.DeclaringType;
                     if (nestedParent != null)
                     {
-                        if (TrySearchNode(nestedParent, out parent))
+                        if (this.TrySearchNode(nestedParent, out parent))
                         {
                             node.AppendTo(parent);
                         }
@@ -519,13 +525,15 @@ namespace Obfuscar
                 }
             }
 
-            private bool TrySearchNode(TypeReference baseType, out Node<TypeDefinition> parent)
+            private bool TrySearchNode(TypeReference baseType, out Node<TypeDefinition>? parent)
             {
-                var key = baseType.FullName;
+                string key = baseType.FullName;
+
                 parent = null;
-                if (_map.ContainsKey(key))
+
+                if (this._map.ContainsKey(key))
                 {
-                    parent = _map[key];
+                    parent = this._map[key];
                     if (parent.Item.Scope.Name != baseType.Scope.Name)
                     {
                         parent = null;
@@ -536,8 +544,8 @@ namespace Obfuscar
 
             internal IEnumerable<TypeDefinition> GetOrderedList()
             {
-                var result = new List<TypeDefinition>();
-                CleanPool(Root, result);
+                List<TypeDefinition> result = new List<TypeDefinition>();
+                this.CleanPool(Root, result);
                 return result;
             }
 
@@ -545,8 +553,9 @@ namespace Obfuscar
             {
                 while (pool.Count > 0)
                 {
-                    var toRemove = new List<Node<TypeDefinition>>();
-                    foreach (var node in pool)
+                    List<Node<TypeDefinition>> toRemove = new List<Node<TypeDefinition>>();
+
+                    foreach (Node<TypeDefinition> node in pool)
                     {
                         if (node.Parents.Count == 0)
                         {
@@ -562,8 +571,10 @@ namespace Obfuscar
 
                     if (toRemove.Count == 0)
                     {
-                        // Find the loop one
-                        foreach (var node in pool)
+                        //
+                        // Find the loop one.
+                        //
+                        foreach (Node<TypeDefinition> node in pool)
                         {
                             if (IsLoop(node))
                             {
@@ -579,7 +590,7 @@ namespace Obfuscar
 
                         bool IsLoop(Node<TypeDefinition> node)
                         {
-                            foreach (var nodeParent in node.Parents)
+                            foreach (Node<TypeDefinition> nodeParent in node.Parents)
                             {
                                 if (nodeParent.Parents.Any(n => ReferenceEquals(n, node)))
                                 {
@@ -596,14 +607,14 @@ namespace Obfuscar
                         Console.Error.WriteLine("Still in pool:");
                         foreach (var node in pool)
                         {
-                            var parents = string.Join(", ", node.Parents.Select(p => p.Item.FullName + " " + p.Item.Scope.Name));
+                            string? parents = string.Join(", ", node.Parents.Select(p => p.Item.FullName + " " + p.Item.Scope.Name));
                             Console.Error.WriteLine("{0} {1} : [{2}]", node.Item.FullName, node.Item.Scope.Name, parents);
                         }
 
-                        throw new ObfuscarException(MessageCodes.ofr019, "Cannot clean pool");
+                        throw new ObfuscarException(MessageCodes.ofr019, "Cannot clean pool.");
                     }
 
-                    foreach (var remove in toRemove)
+                    foreach (Node<TypeDefinition> remove in toRemove)
                     {
                         pool.Remove(remove);
                         foreach (var child in remove.Children)
@@ -620,7 +631,7 @@ namespace Obfuscar
             }
         }
 
-        private IEnumerable<TypeDefinition> _cached;
+        private IEnumerable<TypeDefinition>? _cached;
 
         public IEnumerable<TypeDefinition> GetAllTypeDefinitions()
         {
@@ -629,7 +640,7 @@ namespace Obfuscar
                 return _cached;
             }
 
-            if (!definition.MarkedToRename())
+            if (!this.definition.MarkedToRename())
             {
                 return new TypeDefinition[0];
             }
@@ -637,7 +648,8 @@ namespace Obfuscar
             try
             {
                 var result = definition.MainModule.GetAllTypes();
-                var graph = new Graph(result);
+                Graph graph = new Graph(result);
+
                 return _cached = graph.GetOrderedList();
             }
             catch (Exception e)
@@ -648,7 +660,7 @@ namespace Obfuscar
 
         public void InvalidateCache()
         {
-            _cached = null;
+            this._cached = null;
         }
 
         private IEnumerable<MemberReference> getMemberReferences()
@@ -670,7 +682,7 @@ namespace Obfuscar
                     {
                         foreach (Instruction inst in method.Body.Instructions)
                         {
-                            MemberReference memberRef = inst.Operand as MemberReference;
+                            MemberReference? memberRef = inst.Operand as MemberReference;
                             if (memberRef != null)
                             {
                                 if (IsOnlyReference(memberRef) || memberRef is FieldReference && !(memberRef is FieldDefinition))
@@ -781,50 +793,48 @@ namespace Obfuscar
             }
         }
 
-        public string FileName
+        public string? FileName
         {
             get
             {
                 CheckLoaded();
-                return filename;
+                return this.filename;
             }
         }
 
-        public string OutputFileName { get; set; }
-
-        public AssemblyDefinition Definition
+        public AssemblyDefinition? Definition
         {
             get
             {
                 CheckLoaded();
-                return definition;
+                return this.definition;
             }
         }
 
-        public string Name
+        public string? Name
         {
             get
             {
                 CheckLoaded();
-                return name;
+                return this.name;
             }
         }
 
-        public List<MemberReference> UnrenamedReferences
+        public List<MemberReference>? UnrenamedReferences
         {
             get
             {
                 CheckInitialized();
-                return unrenamedReferences;
+                return this.unrenamedReferences;
             }
         }
 
-        public List<TypeReference> UnrenamedTypeReferences
+        public List<TypeReference>? UnrenamedTypeReferences
         {
             get
             {
                 CheckInitialized();
-                return unrenamedTypeReferences;
+                return this.unrenamedTypeReferences;
             }
         }
 
@@ -880,7 +890,7 @@ namespace Obfuscar
 
         public bool ShouldSkip(TypeKey type, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
-            var attribute = type.TypeDefinition.MarkedToRename();
+            bool? attribute = type.TypeDefinition.MarkedToRename();
             if (attribute != null)
             {
                 message = "attribute";
@@ -930,6 +940,7 @@ namespace Obfuscar
             }
 
             message = "HidePrivateApi option in configuration";
+
             return !hidePrivateApi;
         }
 
@@ -1015,7 +1026,9 @@ namespace Obfuscar
                 return true;
             }
 
-            if (method.Method.IsPublic() && (method.DeclaringType.IsTypePublic() || map.GetMethodGroup(method)?.Methods.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null ))
+            if (method.Method.IsPublic() 
+                && (method.DeclaringType.IsTypePublic() || map.GetMethodGroup(method)?.Methods.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
+                )
             {
                 message = "KeepPublicApi option in configuration";
                 return keepPublicApi;
@@ -1242,11 +1255,8 @@ namespace Obfuscar
                 return true;
             }
 
-            if (evt.Event.IsPublic() && (
-                evt.DeclaringType.IsTypePublic() ||
-                evt.Event.AddMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null ||
-                evt.Event.RemoveMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null
-            ))
+            if (evt.Event.IsPublic() 
+                && (evt.DeclaringType.IsTypePublic() || evt.Event.AddMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || evt.Event.RemoveMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null))
             {
                 message = "KeepPublicApi option in configuration";
                 return keepPublicApi;
@@ -1261,7 +1271,7 @@ namespace Obfuscar
         /// </summary>
         private void CheckLoaded()
         {
-            if (definition == null)
+            if (this.definition == null)
             {
                 throw new ObfuscarException(MessageCodes.ofrxxx, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
             }
@@ -1272,15 +1282,15 @@ namespace Obfuscar
         /// </summary>
         private void CheckInitialized()
         {
-            if (!initialized)
+            if (!this.initialized)
             {
                 throw new ObfuscarException(MessageCodes.ofrxxx, "Expected that AssemblyInfo.Init would be called before use.");
             }
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
-            return Name;
+            return this.Name;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace ObfuscarTests
             BuildAssembly(name, suffix, null);
         }
 
-        public static void BuildAssembly(string name, string suffix = null, List<string> references = null, string keyFile = null, bool delaySign = false, bool treatWarningsAsErrors = true)
+        public static void BuildAssembly(string name, string? suffix = null, List<string>? references = null, string? keyFile = null, bool delaySign = false, bool treatWarningsAsErrors = true)
         {
             string dllName = string.IsNullOrEmpty(suffix) ? name : name + suffix;
 

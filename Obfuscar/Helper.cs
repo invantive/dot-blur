@@ -138,7 +138,7 @@ namespace Obfuscar
             }
         }
 
-        public static object GetAttributePropertyByName(CustomAttribute attr, string name)
+        public static object? GetAttributePropertyByName(CustomAttribute attr, string name)
         {
             foreach (CustomAttributeNamedArgument property in attr.Properties)
             {

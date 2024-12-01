@@ -8,11 +8,15 @@ namespace ObfuscarTests
 {
     public class AutoSkipTypeTests
     {
-        MethodDefinition FindByName(TypeDefinition typeDef, string name)
+        MethodDefinition? FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
+            {
                 if (method.Name == name)
+                {
                     return method;
+                }
+            }
 
             Assert.Fail(string.Format("Expected to find method: {0}", name));
             return null; // never here

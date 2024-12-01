@@ -34,11 +34,15 @@ namespace ObfuscarTests
 {
     public class DockPanelSuiteTests
     {
-        static MethodDefinition FindByFullName(TypeDefinition typeDef, string name)
+        static MethodDefinition? FindByFullName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
+            {
                 if (method.FullName == name)
+                {
                     return method;
+                }
+            }
 
             Assert.Fail(string.Format("Expected to find method: {0}", name));
             return null; // never here

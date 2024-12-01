@@ -12,6 +12,7 @@ namespace Obfuscar.Helpers
         public static string GetScopeName(this TypeReference type)
         {
             ModuleDefinition module = type.Scope as ModuleDefinition;
+
             if (module != null)
             {
                 return module.Assembly.Name.Name;
@@ -24,7 +25,7 @@ namespace Obfuscar.Helpers
 
         public static string GetFullName(this TypeReference type)
         {
-            string fullName = null;
+            string? fullName = null;
             while (type.IsNested)
             {
                 if (fullName == null)
