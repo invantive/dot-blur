@@ -77,32 +77,32 @@ namespace ObfuscarTests
 
             string code = File.ReadAllText(Path.Combine(InputPath, name + ".cs"));
             // IMPORTANT: force to C# 10 to avoid extra attributes in assemblies. dotnet/runtime#76032
-            var tree = SyntaxFactory.ParseSyntaxTree(code, new CSharpParseOptions(LanguageVersion.CSharp10));
+            SyntaxTree tree = SyntaxFactory.ParseSyntaxTree(code, new CSharpParseOptions(LanguageVersion.CSharp10));
 
             // Detect the file location for the library that defines the object type
-            var systemRefLocation = typeof(object).GetTypeInfo().Assembly.Location;
+            string systemRefLocation = typeof(object).GetTypeInfo().Assembly.Location;
             // Create a reference to the library
-            var systemReference = MetadataReference.CreateFromFile(systemRefLocation);
+            PortableExecutableReference systemReference = MetadataReference.CreateFromFile(systemRefLocation);
 
-            var dataContractRefLocation = typeof(DataContractAttribute).GetTypeInfo().Assembly.Location;
-            var dataContractReference = MetadataReference.CreateFromFile(dataContractRefLocation);
+            string dataContractRefLocation = typeof(DataContractAttribute).GetTypeInfo().Assembly.Location;
+            PortableExecutableReference dataContractReference = MetadataReference.CreateFromFile(dataContractRefLocation);
 
-            var consoleRefLocation = typeof(Console).GetTypeInfo().Assembly.Location;
-            var consoleReference = MetadataReference.CreateFromFile(consoleRefLocation);
+            string consoleRefLocation = typeof(Console).GetTypeInfo().Assembly.Location;
+            PortableExecutableReference consoleReference = MetadataReference.CreateFromFile(consoleRefLocation);
 
             string? systemRefDirectoryPath = Path.GetDirectoryName(systemRefLocation);
 
             Assert.NotNull(systemRefDirectoryPath);
 
-            var attributeRefLocation = Path.Combine(systemRefDirectoryPath, "System.Runtime.dll");           
-            var attributeReference = MetadataReference.CreateFromFile(attributeRefLocation);
+            string attributeRefLocation = Path.Combine(systemRefDirectoryPath, "System.Runtime.dll");
+            PortableExecutableReference attributeReference = MetadataReference.CreateFromFile(attributeRefLocation);
 
             // Configure compilation options with the key file if provided
-            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
             if (!string.IsNullOrEmpty(keyFile))
             {
-                var fullPath = Path.GetFullPath(keyFile);
+                string fullPath = Path.GetFullPath(keyFile);
                 compilationOptions = compilationOptions.WithCryptoKeyFile(fullPath)
                     .WithStrongNameProvider(new DesktopStrongNameProvider());
                 if (delaySign)
@@ -113,14 +113,14 @@ namespace ObfuscarTests
 
             // A single, immutable invocation to the compiler
             // to produce a library
-            var compilation = CSharpCompilation.Create(dllName)
+            CSharpCompilation compilation = CSharpCompilation.Create(dllName)
               .WithOptions(compilationOptions)
               .AddReferences(systemReference)
               .AddReferences(dataContractReference)
               .AddReferences(consoleReference)
               .AddReferences(attributeReference)
               .AddSyntaxTrees(tree);
-            foreach (var option in references ?? new List<string>())
+            foreach (string option in references ?? new List<string>())
             {
                 compilation = compilation.AddReferences(MetadataReference.CreateFromFile(option));
             }
@@ -136,8 +136,8 @@ namespace ObfuscarTests
 
         public static void BuildAssemblies(params string[] names)
         {
-            var options = new List<string>();
-            foreach (var name in names)
+            List<string> options = new List<string>();
+            foreach (string name in names)
             {
                 BuildAssembly(name, null, options);
                 options.Add(GetAssemblyPath(name));

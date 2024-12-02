@@ -25,7 +25,6 @@
 #endregion
 
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Obfuscar.Helpers;
 using System;
 using System.Collections.Generic;

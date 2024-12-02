@@ -55,7 +55,7 @@ namespace ObfuscarTests
             Assert.Equal(5, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -86,7 +86,7 @@ namespace ObfuscarTests
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -123,7 +123,7 @@ namespace ObfuscarTests
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -160,7 +160,7 @@ namespace ObfuscarTests
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -197,7 +197,7 @@ namespace ObfuscarTests
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -231,8 +231,8 @@ namespace ObfuscarTests
 
             Assert.Equal(4, assmDef.MainModule.Types.Count);
 
-            var expected = new List<TypeDefinition>();
-            foreach (var type in assmDef.MainModule.Types)
+            List<TypeDefinition> expected = new List<TypeDefinition>();
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {
@@ -270,7 +270,7 @@ namespace ObfuscarTests
             Assert.Equal(6, assmDef.MainModule.Types.Count);
 
             TypeDefinition? expected = null;
-            foreach (var type in assmDef.MainModule.Types)
+            foreach (TypeDefinition? type in assmDef.MainModule.Types)
             {
                 if (type.FullName.Contains("PrivateImplementation"))
                 {

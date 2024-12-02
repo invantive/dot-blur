@@ -36,8 +36,8 @@ namespace ObfuscarTests
     {
         public string BuildAndObfuscate()
         {
-            var output = TestHelper.OutputPath;
-            var name = "AssemblyWithCustomAttr";
+            string output = TestHelper.OutputPath;
+            string name = "AssemblyWithCustomAttr";
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
                 @"<Obfuscator>" +
@@ -55,7 +55,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckClassHasAttribute()
         {
-            var output = BuildAndObfuscate();
+            string output = BuildAndObfuscate();
             AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             Assert.Equal(3, assmDef.MainModule.Types.Count); // "Should contain only one type, and <Module>.");
@@ -85,7 +85,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckMethodHasAttribute()
         {
-            var output = BuildAndObfuscate();
+            string output = BuildAndObfuscate();
             AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             bool found = false;

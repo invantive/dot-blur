@@ -9,8 +9,8 @@ namespace ObfuscarTests
         public string BuildAndObfuscate()
         {
             string outputPath = TestHelper.OutputPath;
-            var name = "AssemblyWithCustomAttrTypeArg";
-            var xml = string.Format(
+            string name = "AssemblyWithCustomAttrTypeArg";
+            string xml = string.Format(
                 @"<?xml version='1.0'?>" +
                 @"<Obfuscator>" +
                 @"<Var name='InPath' value='{0}' />" +
@@ -27,8 +27,8 @@ namespace ObfuscarTests
         [Fact]
         public void Check_for_null()
         {
-            var output = BuildAndObfuscate();
-            var assmDef = AssemblyDefinition.ReadAssembly(output);
+            string output = BuildAndObfuscate();
+            AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             Assert.Equal(3, assmDef.MainModule.Types.Count);
         }

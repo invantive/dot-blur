@@ -63,7 +63,7 @@ namespace ObfuscarTests
 
             // explicitly delete AssemblyA
             File.Delete(Path.Combine(TestHelper.InputPath, "AssemblyA.dll"));
-            var exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
+            ObfuscarException exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
             Assert.Equal("Unable to resolve dependency:  AssemblyA", exception.Message);
         }
 
@@ -84,7 +84,7 @@ namespace ObfuscarTests
                     destFileName, true);
             }
 
-            var exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
+            ObfuscarException exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
             Assert.Equal("Unable to resolve dependency:  AssemblyC", exception.Message);
         }
     }

@@ -97,14 +97,14 @@ namespace ObfuscarTests
                 ObfuscatedThing classCEntry = map.GetMethod(new MethodKey(classCmethod1));
                 ObfuscatedThing classDEntry = map.GetMethod(new MethodKey(classDmethod1));
 
-                var classFType = inAssmDef.MainModule.GetType("TestClasses.ClassF");
-                var classFmethod = FindByName(classFType, "Test");
+                TypeDefinition classFType = inAssmDef.MainModule.GetType("TestClasses.ClassF");
+                MethodDefinition classFmethod = FindByName(classFType, "Test");
 
-                var classGType = inAssmDef.MainModule.GetType("TestClasses.ClassG");
-                var classGmethod = FindByName(classGType, "Test");
+                TypeDefinition classGType = inAssmDef.MainModule.GetType("TestClasses.ClassG");
+                MethodDefinition classGmethod = FindByName(classGType, "Test");
 
-                var classFEntry = map.GetMethod(new MethodKey(classFmethod));
-                var classGEntry = map.GetMethod(new MethodKey(classGmethod));
+                ObfuscatedThing classFEntry = map.GetMethod(new MethodKey(classFmethod));
+                ObfuscatedThing classGEntry = map.GetMethod(new MethodKey(classGmethod));
 
                 Assert.True(
                     classAEntry.Status == ObfuscationStatus.Renamed &&
@@ -211,11 +211,11 @@ namespace ObfuscarTests
 
             Assert.NotNull(type);
 
-            var ctor = type.GetConstructor([]);
+            ConstructorInfo? ctor = type.GetConstructor([]);
 
             Assert.NotNull(ctor);
 
-            var instance = ctor.Invoke([]);
+            object instance = ctor.Invoke([]);
             try
             {
                 output = outputPath;
@@ -233,7 +233,7 @@ namespace ObfuscarTests
         {
             Assert.NotNull(output);
 
-            var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
+            string assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
         }
 
@@ -253,9 +253,9 @@ namespace ObfuscarTests
 
             TestHelper.BuildAndObfuscate("AssemblyWithClosedOverrideGeneric", string.Empty, xml);
 
-            var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), outputPath,
+            string assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), outputPath,
                 "AssemblyWithClosedOverrideGeneric.dll");
-            var assembly = Assembly.LoadFile(assemblyPath);
+            Assembly assembly = Assembly.LoadFile(assemblyPath);
             Assert.Equal(5, assembly.GetTypes().Length);
         }
     }

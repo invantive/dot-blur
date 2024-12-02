@@ -187,7 +187,7 @@ namespace Obfuscar
 
         public IEnumerable<(TypeKey key, string statusText)> FindClasses(string name)
         {
-            foreach (var kvp in ClassMap)
+            foreach (KeyValuePair<TypeKey, ObfuscatedClass> kvp in ClassMap)
             {
                 if (kvp.Value.Status == ObfuscationStatus.Renamed)
                 {

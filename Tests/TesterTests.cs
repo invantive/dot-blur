@@ -51,7 +51,7 @@ namespace ObfuscarTests
         public void TestPropertyTester()
         {
             Obfuscar.TypeKey typeKey = new Obfuscar.TypeKey("anything", "ns", "name");
-            var mock = new TypeReference(string.Empty, "type", null, null);
+            TypeReference mock = new TypeReference(string.Empty, "type", null, null);
             Obfuscar.PropertyKey key = new Obfuscar.PropertyKey(typeKey,
                 new PropertyDefinition("property", PropertyAttributes.None, mock)
                 {
@@ -81,7 +81,7 @@ namespace ObfuscarTests
         public void TestMethodTester()
         {
             Obfuscar.TypeKey typeKey = new Obfuscar.TypeKey("anything", "ns", "name");
-            var mock = new TypeReference(string.Empty, "type", null, null);
+            TypeReference mock = new TypeReference(string.Empty, "type", null, null);
             Obfuscar.MethodKey key =
                 new Obfuscar.MethodKey(typeKey, new MethodDefinition("method", MethodAttributes.Public, mock));
 
@@ -108,7 +108,7 @@ namespace ObfuscarTests
         public void TestFieldTester()
         {
             Obfuscar.TypeKey typeKey = new Obfuscar.TypeKey("anything", "ns", "name");
-            var mock = new TypeReference(string.Empty, "type", null, null);
+            TypeReference mock = new TypeReference(string.Empty, "type", null, null);
             Obfuscar.FieldKey key = new Obfuscar.FieldKey(typeKey, "type", "field",
                 new FieldDefinition("field", FieldAttributes.Public, mock)
                 {
@@ -138,7 +138,7 @@ namespace ObfuscarTests
         public void TestEventTester()
         {
             Obfuscar.TypeKey typeKey = new Obfuscar.TypeKey("anything", "ns", "name");
-            var mock = new TypeReference(string.Empty, "type", null, null);
+            TypeReference mock = new TypeReference(string.Empty, "type", null, null);
             Obfuscar.EventKey key = new Obfuscar.EventKey(typeKey, "type", "event",
                 new EventDefinition("event", EventAttributes.None, mock));
 

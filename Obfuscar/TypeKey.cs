@@ -101,7 +101,7 @@ namespace Obfuscar
         public bool Matches(TypeReference type)
         {
             // Remove generic type parameters and compare full names
-            var instanceType = type as GenericInstanceType;
+            GenericInstanceType? instanceType = type as GenericInstanceType;
             if (instanceType == null)
             {
                 type.DeclaringType = type.DeclaringType; // Hack: Update full name
@@ -175,10 +175,12 @@ namespace Obfuscar
         {
             // no need to check ns and name...should be in fullname
             int cmp = string.Compare(Scope, other?.Scope);
+
             if (cmp == 0)
             {
                 cmp = string.Compare(Fullname, other?.Fullname);
             }
+
             return cmp;
         }
     }

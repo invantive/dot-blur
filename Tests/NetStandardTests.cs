@@ -26,7 +26,6 @@
 
 using Mono.Cecil;
 using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace ObfuscarTests
@@ -116,7 +115,7 @@ namespace ObfuscarTests
                     destFileName, true);
             }
 
-            var map = TestHelper.Obfuscate(xml, true).Mapping;
+            Obfuscar.ObfuscationMap map = TestHelper.Obfuscate(xml, true).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(TestHelper.InputPath, "NetStandard20.dll"));

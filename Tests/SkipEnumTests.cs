@@ -222,7 +222,7 @@ namespace ObfuscarTests
                 @"</Module>" +
                 @"</Obfuscator>", TestHelper.InputPath, outputPath, Path.DirectorySeparatorChar);
 
-            var map = TestHelper.BuildAndObfuscate("AssemblyWithEnums", string.Empty, xml).Mapping;
+            ObfuscationMap map = TestHelper.BuildAndObfuscate("AssemblyWithEnums", string.Empty, xml).Mapping;
 
             string[] expected = new string[]
             {
@@ -242,13 +242,13 @@ namespace ObfuscarTests
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(TestHelper.InputPath, assmName));
 
-            var classBType = inAssmDef.MainModule.GetType("TestClasses.Test");
-            var classB = map.GetClass(new TypeKey(classBType));
+            TypeDefinition classBType = inAssmDef.MainModule.GetType("TestClasses.Test");
+            ObfuscatedClass classB = map.GetClass(new TypeKey(classBType));
 
             Assert.True(classB.Status == ObfuscationStatus.Renamed, "Internal class is not renamed");
 
-            var fieldType = classBType.Fields[0];
-            var fieldB = map.GetField(new FieldKey(fieldType));
+            FieldDefinition fieldType = classBType.Fields[0];
+            ObfuscatedThing fieldB = map.GetField(new FieldKey(fieldType));
 
             Assert.True(fieldB.Status == ObfuscationStatus.Renamed, "Fields of internal class is not renamed");
         }

@@ -102,7 +102,7 @@ namespace Obfuscar
 
         private static void FromXmlReadNode(XElement element, Project project, Variables vars, AssemblyInfo info)
         {
-            foreach (var reader in element.Elements())
+            foreach (XElement reader in element.Elements())
             {
                 string name = Helper.GetAttribute(reader, "name", vars);
 
@@ -378,7 +378,7 @@ namespace Obfuscar
                         }
                     case "SkipEnums":
                         {
-                            var skipEnumsValue = Helper.GetAttribute(reader, "value");
+                            string skipEnumsValue = Helper.GetAttribute(reader, "value");
                             info.skipEnums = skipEnumsValue.Length > 0 && Convert.ToBoolean(skipEnumsValue);
                             break;
                         }
@@ -392,7 +392,7 @@ namespace Obfuscar
         internal void Init()
         {
             this.unrenamedReferences = new List<MemberReference>();
-            var items = this.GetMemberReferences();
+            IEnumerable<MemberReference> items = this.GetMemberReferences();
             foreach (MemberReference member in items)
             {
                 // FIXME: Figure out why these exist if they are never used.
@@ -487,7 +487,7 @@ namespace Obfuscar
 
             private void AddParents(List<Node<TypeDefinition>> nodes)
             {
-                foreach (var node in nodes)
+                foreach (Node<TypeDefinition> node in nodes)
                 {
                     TypeReference? baseType = node.Item?.BaseType;
 
@@ -606,7 +606,7 @@ namespace Obfuscar
                     {
                         Console.Error.WriteLine("Still in pool:");
 
-                        foreach (var node in pool)
+                        foreach (Node<TypeDefinition> node in pool)
                         {
                             string? parents = string.Join(", ", node.Parents.Select(p => p.Item?.FullName + " " + p.Item?.Scope.Name));
                             Console.Error.WriteLine("{0} {1} : [{2}]", node.Item?.FullName, node.Item?.Scope.Name, parents);
@@ -648,7 +648,7 @@ namespace Obfuscar
 
             try
             {
-                var result = this.Definition.MainModule.GetAllTypes();
+                IEnumerable<TypeDefinition> result = this.Definition.MainModule.GetAllTypes();
                 Graph graph = new Graph(result);
 
                 return this._cached = graph.GetOrderedList();
@@ -1000,7 +1000,7 @@ namespace Obfuscar
 
         public bool ShouldSkipParams(MethodKey method, InheritMap? map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
-            var attribute = method.Method.MarkedToRename();
+            bool? attribute = method.Method.MarkedToRename();
             // skip runtime methods
             if (attribute != null)
             {
@@ -1008,7 +1008,7 @@ namespace Obfuscar
                 return !attribute.Value;
             }
 
-            var parent = method.DeclaringType.MarkedToRename();
+            bool? parent = method.DeclaringType.MarkedToRename();
             if (parent != null)
             {
                 message = "type attribute";
@@ -1097,14 +1097,14 @@ namespace Obfuscar
                 return true;
             }
 
-            var attribute = field.Field.MarkedToRename();
+            bool? attribute = field.Field.MarkedToRename();
             if (attribute != null)
             {
                 message = "attribute";
                 return !attribute.Value;
             }
 
-            var parent = field.DeclaringType.MarkedToRename();
+            bool? parent = field.DeclaringType.MarkedToRename();
             if (parent != null)
             {
                 message = "type attribute";
@@ -1166,14 +1166,14 @@ namespace Obfuscar
                 return true;
             }
 
-            var attribute = prop.Property.MarkedToRename();
+            bool? attribute = prop.Property.MarkedToRename();
             if (attribute != null)
             {
                 message = "attribute";
                 return !attribute.Value;
             }
 
-            var parent = prop.DeclaringType.MarkedToRename();
+            bool? parent = prop.DeclaringType.MarkedToRename();
             if (parent != null)
             {
                 message = "type attribute";
@@ -1229,7 +1229,7 @@ namespace Obfuscar
                 return true;
             }
 
-            var attribute = evt.Event.MarkedToRename();
+            bool? attribute = evt.Event.MarkedToRename();
             // skip runtime methods
             if (attribute != null)
             {
@@ -1237,7 +1237,7 @@ namespace Obfuscar
                 return !attribute.Value;
             }
 
-            var parent = evt.DeclaringType.MarkedToRename();
+            bool? parent = evt.DeclaringType.MarkedToRename();
             if (parent != null)
             {
                 message = "type attribute";

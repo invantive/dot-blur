@@ -12,13 +12,13 @@ namespace ObfuscarTests
         public void FullPaths()
         {
             // Arrange
-            var sut = new Filter(
+            Filter sut = new Filter(
                 Environment.CurrentDirectory,
                 new[] { Path.Combine(Environment.CurrentDirectory, "*.*") },
                 new string[0]);
 
             // Act
-            var files = sut.ToList();
+            System.Collections.Generic.List<string> files = sut.ToList();
 
             // Assert
             Assert.Equal(
@@ -30,14 +30,14 @@ namespace ObfuscarTests
         public void RelativePaths()
         {
             // Arrange
-            var backAndForthRelativePath = Path.Combine("..", Path.GetFileName(Environment.CurrentDirectory));
-            var sut = new Filter(
+            string backAndForthRelativePath = Path.Combine("..", Path.GetFileName(Environment.CurrentDirectory));
+            Filter sut = new Filter(
                 Environment.CurrentDirectory,
                 new[] { Path.Combine(backAndForthRelativePath, "*.*") },
                 new string[0]);
 
             // Act
-            var files = sut.ToList();
+            System.Collections.Generic.List<string> files = sut.ToList();
 
             // Assert
             Assert.Equal(
@@ -49,17 +49,17 @@ namespace ObfuscarTests
         public void Exclusion()
         {
             // Arrange
-            var expected = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.*").Select(f => Path.GetFullPath(f)).ToList();
-            var backAndForthRelativePath = Path.Combine("..", Path.GetFileName(Environment.CurrentDirectory));
-            var oneFile = expected[0];
+            System.Collections.Generic.List<string> expected = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.*").Select(f => Path.GetFullPath(f)).ToList();
+            string backAndForthRelativePath = Path.Combine("..", Path.GetFileName(Environment.CurrentDirectory));
+            string oneFile = expected[0];
             expected.RemoveAt(0);
-            var sut = new Filter(
+            Filter sut = new Filter(
                 Environment.CurrentDirectory,
                 new[] { Path.Combine(backAndForthRelativePath, "*.*") },
                 new[] { oneFile });
 
             // Act
-            var files = sut.ToList();
+            System.Collections.Generic.List<string> files = sut.ToList();
 
             // Assert
             Assert.Equal(expected, files);

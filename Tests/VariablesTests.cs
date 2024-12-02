@@ -46,7 +46,7 @@ namespace ObfuscarTests
         {
             Variables variables = new Variables();
             variables.Add("Key1", "Value1");
-            var exception = Assert.Throws<ObfuscarException>(() => { variables.Replace("$(Unreplaceable)"); });
+            ObfuscarException exception = Assert.Throws<ObfuscarException>(() => { variables.Replace("$(Unreplaceable)"); });
             Assert.Equal("Unable to replace variable:  Unreplaceable", exception.Message);
         }
     }

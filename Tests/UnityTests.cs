@@ -75,23 +75,23 @@ namespace ObfuscarTests
                     destFileName1, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(TestHelper.InputPath, "Microsoft.Practices.Unity.dll"));
 
             TypeDefinition classAType =
                 inAssmDef.MainModule.GetType("Microsoft.Practices.ObjectBuilder2.PolicyListExtensions");
-            var type = map.GetClass(new TypeKey(classAType));
+            ObfuscatedClass type = map.GetClass(new TypeKey(classAType));
             Assert.True(type.Status == ObfuscationStatus.Renamed, "Type should have been renamed.");
 
-            var method1 = FindByFullName(classAType,
+            MethodDefinition method1 = FindByFullName(classAType,
                 "System.Void Microsoft.Practices.ObjectBuilder2.PolicyListExtensions::Clear(Microsoft.Practices.ObjectBuilder2.IPolicyList,System.Object)");
-            var m1 = map.GetMethod(new MethodKey(method1));
+            ObfuscatedThing m1 = map.GetMethod(new MethodKey(method1));
             Assert.True(m1.Status == ObfuscationStatus.Renamed, "Instance method should have been renamed.");
 
-            var classB = inAssmDef.MainModule.GetType("Microsoft.Practices.ObjectBuilder2.IPolicyList");
-            var typeB = map.GetClass(new TypeKey(classB));
+            TypeDefinition classB = inAssmDef.MainModule.GetType("Microsoft.Practices.ObjectBuilder2.IPolicyList");
+            ObfuscatedClass typeB = map.GetClass(new TypeKey(classB));
 
             AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(outputPath, "Microsoft.Practices.Unity.dll"));
@@ -107,8 +107,8 @@ namespace ObfuscarTests
                 "System.Void " + name + "::" + m1.StatusText + "(" + nameB +
                 ",System.Object)");
             Assert.NotNull(method2);
-            var first = method2.Parameters[0].Name;
-            var second = method2.Parameters[1].Name;
+            string first = method2.Parameters[0].Name;
+            string second = method2.Parameters[1].Name;
             Assert.Equal("", first);
             Assert.Equal("", second);
         }

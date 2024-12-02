@@ -24,7 +24,6 @@
 
 #endregion
 
-using Obfuscar;
 using System;
 using System.IO;
 using Xunit;
@@ -35,7 +34,7 @@ namespace ObfuscarTests
     {
         private void CheckOutPath(string testPath)
         {
-            var full = Environment.ExpandEnvironmentVariables(testPath);
+            string full = Environment.ExpandEnvironmentVariables(testPath);
             Assert.False(Directory.Exists(full), "Need a writeable temp path...wanted to create " + testPath);
 
             try

@@ -110,7 +110,7 @@ namespace ObfuscarTests
                     destFileName, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
             File.Delete(destFileName);
         }
     }

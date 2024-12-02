@@ -49,7 +49,7 @@ namespace ObfuscarTests
 
             // build it with the keyfile option (embeds the public key, and signs the assembly)
             TestHelper.BuildAssembly("AssemblyForSigning", keyFile:Path.Combine(TestHelper.InputPath, @"SigningKey.snk"));
-            var exception = Assert.Throws<ObfuscarException>(() => { TestHelper.Obfuscate(xml); });
+            ObfuscarException exception = Assert.Throws<ObfuscarException>(() => { TestHelper.Obfuscate(xml); });
             Assert.Equal(
                 "Obfuscating a signed assembly would result in an invalid assembly:  AssemblyForSigning; use the KeyFile or KeyContainer property to set a key to use",
                 exception.Message);
@@ -73,8 +73,8 @@ namespace ObfuscarTests
             // build it with the keyfile option (embeds the public key, and signs the assembly)
             TestHelper.BuildAssembly("AssemblyForSigning2", keyFile: Path.Combine(TestHelper.InputPath, @"SigningKey.snk"));
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
-            var assembly = Path.Combine(TestHelper.InputPath, "AssemblyForSigning2.dll");
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
+            string assembly = Path.Combine(TestHelper.InputPath, "AssemblyForSigning2.dll");
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(assembly);
             Assert.True(inAssmDef.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));
 
@@ -111,8 +111,8 @@ namespace ObfuscarTests
                 TestHelper.BuildAssembly("AssemblyForSigning2", keyFile: Path.Combine(TestHelper.InputPath, @"SigningKey.snk"));
 
 
-                var map = TestHelper.Obfuscate(xml).Mapping;
-                var assembly = Path.Combine(TestHelper.InputPath, "AssemblyForSigning2.dll");
+                ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
+                string assembly = Path.Combine(TestHelper.InputPath, "AssemblyForSigning2.dll");
                 AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(assembly);
                 Assert.True(inAssmDef.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));
 
@@ -167,7 +167,7 @@ namespace ObfuscarTests
                 @"</Obfuscator>", TestHelper.InputPath, outputPath, Path.DirectorySeparatorChar);
 
             TestHelper.CleanInput();
-            var assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
+            string assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
 
             // build it with the keyfile option (embeds the public key, and signs the assembly)
             if (!File.Exists(assembly))
@@ -175,7 +175,7 @@ namespace ObfuscarTests
                 File.Copy(Path.Combine(TestHelper.InputPath, @"..", "DelaySigned.dll"), assembly, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(assembly);
             Assert.False(inAssmDef.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));
@@ -201,7 +201,7 @@ namespace ObfuscarTests
                 @"</Obfuscator>", TestHelper.InputPath, outputPath, Path.DirectorySeparatorChar);
 
             TestHelper.CleanInput();
-            var assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
+            string assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
 
             // build it with the keyfile option (embeds the public key, and signs the assembly)
             if (!File.Exists(assembly))
@@ -209,7 +209,7 @@ namespace ObfuscarTests
                 File.Copy(Path.Combine(TestHelper.InputPath, @"..", "DelaySigned.dll"), assembly, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(assembly);
             Assert.False(inAssmDef.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));
@@ -234,7 +234,7 @@ namespace ObfuscarTests
                 @"</Obfuscator>", TestHelper.InputPath, outputPath, Path.DirectorySeparatorChar);
 
             TestHelper.CleanInput();
-            var assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
+            string assembly = Path.Combine(TestHelper.InputPath, "DelaySigned.dll");
 
             // build it with the keyfile option (embeds the public key, and signs the assembly)
             if (!File.Exists(assembly))
@@ -242,7 +242,7 @@ namespace ObfuscarTests
                 File.Copy(Path.Combine(TestHelper.InputPath, @"..", "DelaySigned.dll"), assembly, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(assembly);
             Assert.False(inAssmDef.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));

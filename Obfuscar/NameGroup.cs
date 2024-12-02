@@ -55,7 +55,7 @@ namespace Obfuscar
 
         public void AddAll(IEnumerable<string> range)
         {
-            foreach (var item in range)
+            foreach (string item in range)
             {
                 names.Add(item);
             }

@@ -63,7 +63,7 @@ namespace ObfuscarTests
         {
             checkType(typeDef);
             if (typeDef.HasNestedTypes)
-                foreach (var nested in typeDef.NestedTypes)
+                foreach (TypeDefinition? nested in typeDef.NestedTypes)
                     if (isType(nested))
                         CheckTypeNested(nested, isType, checkType);
         }

@@ -132,7 +132,7 @@ namespace ObfuscarTests
 
         private Assembly? AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), args.Name.Split(',')[0] + ".dll");
+            string assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
         }
     }

@@ -25,7 +25,6 @@
 #endregion
 
 using Obfuscar;
-using System;
 using Xunit;
 
 namespace ObfuscarTests
@@ -76,7 +75,7 @@ namespace ObfuscarTests
                 @"<Obfuscator>" +
                 @"<Module file='{0}\ObfuscarTests.dll' />" +
                 @"</Obfuscator>", BadPath);
-            var exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
+            ObfuscarException exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
             Assert.Equal("Unable to find assembly:  Q:\\Does\\Not\\Exist\\ObfuscarTests.dll", exception.Message);
         }
 

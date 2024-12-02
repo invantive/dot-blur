@@ -24,8 +24,6 @@
 
 #endregion
 
-using Obfuscar;
-using System.IO;
 using Xunit;
 
 namespace ObfuscarTests

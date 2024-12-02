@@ -25,7 +25,6 @@
 #endregion
 
 using Mono.Cecil;
-using System.IO;
 using Xunit;
 
 namespace ObfuscarTests

@@ -57,7 +57,7 @@ namespace ObfuscarTests
                   destFileName, true);
             }
 
-            var map = TestHelper.Obfuscate(xml).Mapping;
+            Obfuscar.ObfuscationMap map = TestHelper.Obfuscate(xml).Mapping;
 
             AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(TestHelper.InputPath, "SharpSnmpLib.Portable.dll"));
@@ -65,7 +65,7 @@ namespace ObfuscarTests
             AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(outputPath, "SharpSnmpLib.Portable.dll"));
 
-            var corlibs = outAssmDef.MainModule.AssemblyReferences.Where(reference => reference.Name == "mscorlib");
+            System.Collections.Generic.IEnumerable<AssemblyNameReference> corlibs = outAssmDef.MainModule.AssemblyReferences.Where(reference => reference.Name == "mscorlib");
             Assert.Single(corlibs);
             Assert.Equal("2.0.5.0", corlibs.First().Version.ToString());
         }

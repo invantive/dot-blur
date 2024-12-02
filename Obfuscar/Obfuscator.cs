@@ -416,18 +416,18 @@ namespace Obfuscar
                 return;
             }
 
-            foreach (var info in this.Project.AssemblyList)
+            foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
                 // loop through the types
-                foreach (var type in info.GetAllTypeDefinitions())
+                foreach (TypeDefinition type in info.GetAllTypeDefinitions())
                 {
                     if (type.FullName == "<Module>")
                     {
                         continue;
                     }
 
-                    var typeKey = new TypeKey(type);
-                    var nameGroups = new Dictionary<string, NameGroup>();
+                    TypeKey typeKey = new TypeKey(type);
+                    Dictionary<string, NameGroup> nameGroups = new Dictionary<string, NameGroup>();
 
                     // Rename field, grouping according to signature.
                     foreach (FieldDefinition field in type.Fields)
@@ -442,7 +442,7 @@ namespace Obfuscar
             AssemblyInfo info)
         {
             string sig = field.FieldType.FullName;
-            var fieldKey = new FieldKey(typeKey, sig, field.Name, field);
+            FieldKey fieldKey = new FieldKey(typeKey, sig, field.Name, field);
             NameGroup nameGroup = GetNameGroup(nameGroups, sig);
 
             // skip filtered fields
@@ -453,7 +453,7 @@ namespace Obfuscar
                 return;
             }
 
-            var newName = this.Project.Settings.ReuseNames ? nameGroup.GetNext() : NameMaker.UniqueName(_uniqueMemberNameIndex++);
+            string newName = this.Project.Settings.ReuseNames ? nameGroup.GetNext() : NameMaker.UniqueName(_uniqueMemberNameIndex++);
 
             RenameField(info, fieldKey, field, newName);
             nameGroup.Add(newName);
@@ -576,8 +576,8 @@ namespace Obfuscar
                 List<Resource> resources = new List<Resource>(library.MainModule.Resources.Count);
                 resources.AddRange(library.MainModule.Resources);
 
-                var xamlFiles = GetXamlDocuments(library, this.Project.Settings.AnalyzeXaml);
-                var namesInXaml = NamesInXaml(xamlFiles);
+                List<BamlDocument> xamlFiles = GetXamlDocuments(library, this.Project.Settings.AnalyzeXaml);
+                HashSet<string> namesInXaml = NamesInXaml(xamlFiles);
 
                 // Save the original names of all types because parent (declaring) types of nested types may be already renamed.
                 // The names are used for the mappings file.
@@ -761,15 +761,15 @@ namespace Obfuscar
 
         private HashSet<string> NamesInXaml(List<BamlDocument> xamlFiles)
         {
-            var result = new HashSet<string>();
+            HashSet<string> result = new HashSet<string>();
             if (xamlFiles.Count == 0)
                 return result;
 
-            foreach (var doc in xamlFiles)
+            foreach (BamlDocument doc in xamlFiles)
             {
                 foreach (BamlRecord child in doc)
                 {
-                    var classAttribute = child as TypeInfoRecord;
+                    TypeInfoRecord? classAttribute = child as TypeInfoRecord;
 
                     if (classAttribute == null)
                     {
@@ -1030,7 +1030,7 @@ namespace Obfuscar
             else if (prop.CustomAttributes.Count > 0)
             {
                 // If a property has custom attributes we don't remove the property but rename it instead.
-                var newName = NameMaker.UniqueName(Project.Settings.ReuseNames ? index++ : _uniqueMemberNameIndex++);
+                string newName = NameMaker.UniqueName(Project.Settings.ReuseNames ? index++ : _uniqueMemberNameIndex++);
                 RenameProperty(info, propKey, prop, newName);
             }
             else
@@ -1134,14 +1134,14 @@ namespace Obfuscar
 
         private void ForceSkip(MethodDefinition method, string skip)
         {
-            var delete = Mapping.GetMethod(new MethodKey(method));
+            ObfuscatedThing delete = Mapping.GetMethod(new MethodKey(method));
             delete.Status = ObfuscationStatus.Skipped;
             delete.StatusText = skip;
         }
 
         public void RenameMethods()
         {
-            var baseSigNames = new Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>>();
+            Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames = new Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>>();
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
                 foreach (TypeDefinition type in info.GetAllTypeDefinitions())
@@ -1249,7 +1249,7 @@ namespace Obfuscar
             }
 
             // skip filtered methods
-            var toDo = info.ShouldSkip(methodKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out string? skiprename);
+            bool toDo = info.ShouldSkip(methodKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out string? skiprename);
             if (!toDo)
             {
                 skiprename = null;
@@ -1347,10 +1347,10 @@ namespace Obfuscar
                 Debug.Assert(!group.External, "Group's external flag should have been handled when the group was created, " + "and all methods in the group should already be marked skipped.");
                 Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
 
-                var message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
-                foreach (var item in group.Methods)
+                StringBuilder message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
+                foreach (MethodKey item in group.Methods)
                 {
-                    var state = Mapping.GetMethod(item);
+                    ObfuscatedThing state = Mapping.GetMethod(item);
                     message.AppendFormat("{0}->{1}:{2}", item, state.Status, state.StatusText).AppendLine();
                 }
 
@@ -1461,7 +1461,7 @@ namespace Obfuscar
                 references.Add(info);
             }
 
-            var generics = new List<GenericInstanceMethod>();
+            List<GenericInstanceMethod> generics = new List<GenericInstanceMethod>();
 
             foreach (AssemblyInfo reference in references)
             {
@@ -1552,17 +1552,17 @@ namespace Obfuscar
 
                     type.CleanAttributes();
 
-                    foreach (var field in type.Fields)
+                    foreach (FieldDefinition? field in type.Fields)
                     {
                         field.CleanAttributes();
                     }
 
-                    foreach (var property in type.Properties)
+                    foreach (PropertyDefinition? property in type.Properties)
                     {
                         property.CleanAttributes();
                     }
 
-                    foreach (var eventItem in type.Events)
+                    foreach (EventDefinition? eventItem in type.Events)
                     {
                         eventItem.CleanAttributes();
                     }
@@ -1586,8 +1586,8 @@ namespace Obfuscar
                     continue;
                 }
 
-                var module = info.Definition.MainModule;
-                var attribute = new TypeReference("System.Runtime.CompilerServices", "SuppressIldasmAttribute", module, module.TypeSystem.CoreLibrary).Resolve();
+                ModuleDefinition module = info.Definition.MainModule;
+                TypeDefinition attribute = new TypeReference("System.Runtime.CompilerServices", "SuppressIldasmAttribute", module, module.TypeSystem.CoreLibrary).Resolve();
                 if (attribute == null || attribute.Module != module.TypeSystem.CoreLibrary)
                 {
                     return;
@@ -1606,7 +1606,7 @@ namespace Obfuscar
                 //
                 // Add one.
                 //
-                var add = module.ImportReference(attribute.GetConstructors().FirstOrDefault(item => !item.HasParameters));
+                MethodReference add = module.ImportReference(attribute.GetConstructors().FirstOrDefault(item => !item.HasParameters));
                 MethodReference constructor = module.ImportReference(add);
                 CustomAttribute attr = new CustomAttribute(constructor);
                 module.CustomAttributes.Add(attr);
