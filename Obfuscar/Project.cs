@@ -584,7 +584,7 @@ namespace Obfuscar
 
             foreach (X509Certificate2 cert in certs)
             {
-                if (cert.GetRSAPrivateKey() is RSACryptoServiceProvider provider)
+                if (cert.PrivateKey is RSACryptoServiceProvider provider)
                 {
                     return provider.ExportCspBlob(true);
                 }

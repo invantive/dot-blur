@@ -210,12 +210,14 @@ namespace Obfuscar
                 try
                 {
                     Debug.Assert(fileName != null, "fileName != null");
+
                     string outName = Path.Combine(outPath, fileName);
+
                     WriterParameters parameters = new WriterParameters();
 
                     if (this.Project.Settings.RegenerateDebugInfo)
                     {
-                        if (IsOnWindows)
+                        if (this.IsOnWindows)
                         {
                             parameters.SymbolWriterProvider = new PortablePdbWriterProvider();
                         }
@@ -237,6 +239,7 @@ namespace Obfuscar
                             try
                             {
                                 parameters.StrongNameKeyBlob = keyPair;
+
                                 info.Definition.Write(outName, parameters);
                                 info.OutputFileName = outName;
 
@@ -247,6 +250,7 @@ namespace Obfuscar
                             catch (Exception ex)
                             {
                                 parameters.StrongNameKeyBlob = null;
+
                                 if (info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
                                 {
                                     info.Definition.MainModule.Attributes ^= ModuleAttributes.StrongNameSigned;
@@ -292,6 +296,7 @@ namespace Obfuscar
                     else
                     {
                         Log.OutputLine($"{fileName} has no public key; save as is.");
+
                         info.Definition.Write(outName, parameters);
                         info.OutputFileName = outName;
                     }
@@ -311,8 +316,11 @@ namespace Obfuscar
                     if (match.Success)
                     {
                         string name = match.Groups["name"].Value;
+
                         Log.Output($"\n{name} might be one of:");
+
                         LogMappings(name);
+
                         Log.Output("\nHint: you might need to add a SkipType for an enum above.");
                     }
                 }

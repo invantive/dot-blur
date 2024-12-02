@@ -655,7 +655,7 @@ namespace Obfuscar
             }
             catch (Exception e)
             {
-                throw new ObfuscarException(MessageCodes.ofr020, string.Format("Failed to get type definitions for {0}", this.Definition.Name), e);
+                throw new ObfuscarException(MessageCodes.ofr020, $"Failed to get type definitions for {this.Definition.Name}", e);
             }
         }
 
