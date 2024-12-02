@@ -138,7 +138,7 @@ namespace Obfuscar
                             // if the group isn't already external, see if it should be
                             if (group == null)
                             {
-                                throw new ObfuscarException(MessageCodes.ofrxxx, "Missing group.");
+                                throw new ObfuscarException(MessageCodes.ofr033, "Missing group.");
                             }
 
                             if (!group.External && !project.Contains(right.TypeKey))

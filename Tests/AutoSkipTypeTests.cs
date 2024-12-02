@@ -57,6 +57,9 @@ namespace ObfuscarTests
             var classAmethod1 = FindByName(classAType, "PrivateMethod");
             var classAmethod2 = FindByName(classAType, "PublicMethod");
 
+            Assert.NotNull(classAmethod1);
+            Assert.NotNull(classAmethod2);
+
             var classAMethod1 = map.GetMethod(new MethodKey(classAmethod1));
             var classAMethod2 = map.GetMethod(new MethodKey(classAmethod2));
 
@@ -121,6 +124,9 @@ namespace ObfuscarTests
             MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
             MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
 
+            Assert.NotNull(classAmethod1);
+            Assert.NotNull(classAmethod2);
+
             ObfuscatedThing classAMethod1 = map.GetMethod(new MethodKey(classAmethod1));
             ObfuscatedThing classAMethod2 = map.GetMethod(new MethodKey(classAmethod2));
 
@@ -130,6 +136,9 @@ namespace ObfuscarTests
             Assert.True(classAMethod2.Status == ObfuscationStatus.Renamed, "pubilc method is not obfuscated.");
 
             var protectedMethod = FindByName(classAType, "ProtectedMethod");
+
+            Assert.NotNull(protectedMethod);
+
             var protectedAfter = map.GetMethod(new MethodKey(protectedMethod));
             Assert.True(protectedAfter.Status == ObfuscationStatus.Renamed, "protected method is not obfuscated.");
         }
@@ -161,6 +170,10 @@ namespace ObfuscarTests
             MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
             MethodDefinition? classAmethod3 = FindByName(classAType, "InternalProtectedMethod");
 
+            Assert.NotNull(classAmethod1);
+            Assert.NotNull(classAmethod2);
+            Assert.NotNull(classAmethod3);
+
             ObfuscatedThing classAMethod1 = map.GetMethod(new MethodKey(classAmethod1));
             ObfuscatedThing classAMethod2 = map.GetMethod(new MethodKey(classAmethod2));
             ObfuscatedThing classAMethod3 = map.GetMethod(new MethodKey(classAmethod3));
@@ -171,6 +184,9 @@ namespace ObfuscarTests
             Assert.True(classAMethod3.Status == ObfuscationStatus.Skipped, "internal protected method is obfuscated.");
 
             var protectedMethod = FindByName(classAType, "ProtectedMethod");
+
+            Assert.NotNull(protectedMethod);
+
             var protectedAfter = map.GetMethod(new MethodKey(protectedMethod));
             Assert.True(protectedAfter.Status == ObfuscationStatus.Skipped, "protected method is obfuscated.");
         }

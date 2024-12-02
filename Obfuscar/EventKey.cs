@@ -30,7 +30,7 @@ namespace Obfuscar
 {
     class EventKey
     {
-        public EventKey(EventDefinition evt): this(new TypeKey((TypeDefinition) evt.DeclaringType), evt)
+        public EventKey(EventDefinition evt): this(new TypeKey(evt.DeclaringType), evt)
         {
         }
 
@@ -52,26 +52,11 @@ namespace Obfuscar
 
         public string Name { get; }
 
-        public MethodAttributes AddMethodAttributes
-        {
-            get 
-            { 
-                return Event.AddMethod != null ? Event.AddMethod.Attributes : 0; 
-            }
-        }
+        public MethodAttributes AddMethodAttributes => this.Event.AddMethod != null ? this.Event.AddMethod.Attributes : 0;
 
-        public TypeDefinition DeclaringType
-        {
-            get 
-            { 
-                return (TypeDefinition) Event.DeclaringType; 
-            }
-        }
+        public TypeDefinition DeclaringType => Event.DeclaringType; 
 
-        public EventDefinition Event 
-        { 
-            get; 
-        }
+        public EventDefinition Event { get; }
 
         public virtual bool Matches(MemberReference member)
         {
@@ -98,13 +83,13 @@ namespace Obfuscar
             return this == key;
         }
 
-        public static bool operator ==(EventKey a, EventKey b)
+        public static bool operator ==(EventKey? a, EventKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -114,13 +99,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(EventKey a, EventKey b)
+        public static bool operator !=(EventKey? a, EventKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -135,7 +120,7 @@ namespace Obfuscar
             return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return string.Format("[{0}]{1} {2}::{3}", TypeKey.Scope, Type, TypeKey.Fullname, Name);
         }

@@ -80,7 +80,7 @@ namespace Obfuscar
             return false;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             FieldKey? key = obj as FieldKey;
             if (key == null)
@@ -91,13 +91,13 @@ namespace Obfuscar
             return this == key;
         }
 
-        public static bool operator ==(FieldKey a, FieldKey b)
+        public static bool operator ==(FieldKey? a, FieldKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -107,13 +107,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(FieldKey a, FieldKey b)
+        public static bool operator !=(FieldKey? a, FieldKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }

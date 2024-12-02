@@ -81,13 +81,13 @@ namespace Obfuscar
             return this == key;
         }
 
-        public static bool operator ==(PropertyKey a, PropertyKey b)
+        public static bool operator ==(PropertyKey? a, PropertyKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -97,13 +97,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(PropertyKey a, PropertyKey b)
+        public static bool operator !=(PropertyKey? a, PropertyKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -118,7 +118,7 @@ namespace Obfuscar
             return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return string.Format("[{0}]{1} {2}::{3}", TypeKey.Scope, Type, TypeKey.Fullname, Name);
         }

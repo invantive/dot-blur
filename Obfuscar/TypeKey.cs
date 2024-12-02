@@ -57,7 +57,7 @@ namespace Obfuscar
             type.DeclaringType = type.DeclaringType; // Hack: Update fullname of nested type
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
             {
-                throw new ObfuscarException(MessageCodes.ofrxxx, string.Format("Type names do not match: \"{0}\" != \"{1}\"", this.Fullname, type.ToString()));
+                throw new ObfuscarException(MessageCodes.ofr035, $"Type names do not match: \"{this.Fullname}\" != \"{type}\"");
             }
 
             this.hashCode = CalcHashCode();
@@ -124,18 +124,18 @@ namespace Obfuscar
                    Fullname == other.Fullname;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is TypeKey ? Equals((TypeKey) obj) : false;
         }
 
-        public static bool operator ==(TypeKey a, TypeKey b)
+        public static bool operator ==(TypeKey? a, TypeKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -145,13 +145,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(TypeKey a, TypeKey b)
+        public static bool operator !=(TypeKey? a, TypeKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -166,7 +166,7 @@ namespace Obfuscar
             return this.hashCode;
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return string.Format("[{0}]{1}", Scope, Fullname);
         }

@@ -52,18 +52,21 @@ namespace Obfuscar
             this.typeAttrib = typeAttrib;
         }
 
-        public bool Test(EventKey evt, InheritMap map)
+        public bool Test(EventKey evt, InheritMap? map)
         {
-            if (Helper.CompareOptionalRegex(evt.TypeKey.Fullname, type) &&
-                !MethodTester.CheckMemberVisibility(attrib, typeAttrib, evt.AddMethodAttributes, evt.DeclaringType))
+            if (Helper.CompareOptionalRegex(evt.TypeKey.Fullname, type) && !MethodTester.CheckMemberVisibility(attrib, typeAttrib, evt.AddMethodAttributes, evt.DeclaringType))
             {
                 if (name != null)
                 {
                     return Helper.CompareOptionalRegex(evt.Name, name);
                 }
-                else
+                else if (nameRx != null)
                 {
                     return nameRx.IsMatch(evt.Name);
+                }
+                else
+                {
+                    throw new ObfuscarException(MessageCodes.ofr028, "Name and name regular expression are not set.");
                 }
             }
 

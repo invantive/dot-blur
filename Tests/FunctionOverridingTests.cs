@@ -223,7 +223,7 @@ namespace ObfuscarTests
             }
         }
 
-        private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+        private Assembly? AssemblyResolve(object? sender, ResolveEventArgs args)
         {
             var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;

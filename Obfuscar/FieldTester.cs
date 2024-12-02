@@ -69,26 +69,29 @@ namespace Obfuscar
         {
             if (!string.IsNullOrEmpty(decorator))
             {
-                var match = false;
+                bool match = false;
 
-                foreach (var typeField in field.TypeKey.TypeDefinition.Fields)
+                if (field.TypeKey.TypeDefinition != null)
                 {
-                    if (typeField.Name != field.Name)
+                    foreach (FieldDefinition typeField in field.TypeKey.TypeDefinition.Fields)
                     {
-                        continue;
-                    }
-
-                    if (!typeField.HasCustomAttributes)
-                    {
-                        return false;
-                    }
-
-                    foreach (var customAttr in typeField.CustomAttributes)
-                    {
-                        if (customAttr.AttributeType.FullName == decorator)
+                        if (typeField.Name != field.Name)
                         {
-                            match = true;
-                            break;
+                            continue;
+                        }
+
+                        if (!typeField.HasCustomAttributes)
+                        {
+                            return false;
+                        }
+
+                        foreach (CustomAttribute customAttr in typeField.CustomAttributes)
+                        {
+                            if (customAttr.AttributeType.FullName == decorator)
+                            {
+                                match = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -149,7 +152,7 @@ namespace Obfuscar
             // finally does method's type inherit?
             if (!string.IsNullOrEmpty(inherits))
             {
-                if (!map.Inherits(field.DeclaringType, inherits))
+                if (map == null || !map.Inherits(field.DeclaringType, inherits))
                 {
                     return false;
                 }

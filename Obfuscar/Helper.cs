@@ -67,7 +67,8 @@ namespace Obfuscar
         public static string GetAttribute(XElement reader, string name)
         {
             string result;
-            var val = reader.Attribute(name);
+            XAttribute? val = reader.Attribute(name);
+
             if (val == null)
             {
                 result = string.Empty;
@@ -85,8 +86,13 @@ namespace Obfuscar
             return vars.Replace(GetAttribute(reader, name));
         }
 
-        private static bool MatchWithWildCards(string test, int testIdx, string pattern, int patIdx)
+        private static bool MatchWithWildCards(string test, int testIdx, string? pattern, int patIdx)
         {
+            if (string.IsNullOrEmpty(pattern))
+            {
+                return true;
+            }
+
             while (true)
             {
                 if (testIdx >= test.Length && patIdx >= pattern.Length)
@@ -120,14 +126,14 @@ namespace Obfuscar
             }
         }
 
-        public static bool MatchWithWildCards(string test, string pattern)
+        public static bool MatchWithWildCards(string test, string? pattern)
         {
             return MatchWithWildCards(test, 0, pattern, 0);
         }
 
         public static bool CompareOptionalRegex(string test, string? pattern)
         {
-            if (pattern.StartsWith("^"))
+            if (!string.IsNullOrEmpty(pattern) && pattern.StartsWith("^"))
             {
                 return Regex.IsMatch(test, pattern);
             }

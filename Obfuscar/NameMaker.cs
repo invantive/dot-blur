@@ -32,7 +32,7 @@ namespace Obfuscar
 {
     static class NameMaker
     {
-        static string? uniqueChars;
+        static string uniqueChars = string.Empty;
         static int numUniqueChars;
         const string defaultChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
@@ -74,22 +74,16 @@ namespace Obfuscar
             }
         }
 
-        public static string UniqueChars
-        {
-            get { return uniqueChars; }            
-        }
+        public static string UniqueChars => uniqueChars;
 
-        public static string KoreanChars
-        {
-            get { return koreanChars; }
-        }
+        public static string KoreanChars => koreanChars;
 
         public static string UniqueName(int index)
         {
             return UniqueName(index, null);
         }
 
-        public static string UniqueName(int index, string sep)
+        public static string UniqueName(int index, string? sep)
         {
             // optimization for simple case
             if (index < numUniqueChars)
@@ -141,7 +135,7 @@ namespace Obfuscar
 
         internal static void DetermineChars(Settings settings)
         {
-            if (!string.IsNullOrWhiteSpace(settings.CustomChars))
+            if (settings.CustomChars != null && !string.IsNullOrWhiteSpace(settings.CustomChars))
             {
                 uniqueChars = settings.CustomChars;
             }

@@ -2,8 +2,12 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <Nullable>annotations</Nullable>
     <TargetFrameworks>net8.0;net48</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework) == 'net8.0'">
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

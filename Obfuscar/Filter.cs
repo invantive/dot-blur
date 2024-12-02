@@ -16,7 +16,7 @@ namespace Obfuscar
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ObfuscarException(MessageCodes.ofrxxx, "Missing value for path.");
+                throw new ObfuscarException(MessageCodes.ofr032, "Missing value for path.");
             }
 
             this.path = path;

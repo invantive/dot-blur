@@ -126,6 +126,24 @@ namespace Obfuscar
                 {
                     Console.WriteLine();
                     Console.Error.WriteLine("An error occurred during processing:");
+
+                    Console.Error.Write(e.MessageCode);
+                    Console.Error.Write(": ");
+
+                    Console.Error.WriteLine(e.Message);
+
+                    if (e.InnerException != null)
+                    {
+                        Console.Error.WriteLine(e.InnerException.Message);
+                    }
+
+                    return 1;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine();
+                    Console.Error.WriteLine("An error occurred during processing:");
+
                     Console.Error.WriteLine(e.Message);
 
                     if (e.InnerException != null)

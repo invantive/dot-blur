@@ -86,7 +86,7 @@ namespace Obfuscar
             this.isSerializable = isSeriablizable;
         }
 
-        public bool Test(TypeKey type, InheritMap map)
+        public bool Test(TypeKey type, InheritMap? map)
         {
             if (!string.IsNullOrEmpty(attrib))
             {

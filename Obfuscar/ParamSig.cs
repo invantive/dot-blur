@@ -138,18 +138,18 @@ namespace Obfuscar
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            return obj is ParamSig ? Equals((ParamSig) obj) : false;
+            return obj is ParamSig ? Equals((ParamSig)obj) : false;
         }
 
-        public static bool operator ==(ParamSig a, ParamSig b)
+        public static bool operator ==(ParamSig? a, ParamSig? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -159,13 +159,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(ParamSig a, ParamSig b)
+        public static bool operator !=(ParamSig? a, ParamSig? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -180,7 +180,7 @@ namespace Obfuscar
             return this.hashCode;
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             if (ParamTypes.Length == 0)
             {

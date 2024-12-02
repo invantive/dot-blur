@@ -31,7 +31,18 @@ namespace Obfuscar.Helpers
                     string[]? parts = customAttribute.ConstructorArguments[0].Value.ToString()?.Split(',');
                     string root = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
-                    return Environment.ExpandEnvironmentVariables(Path.Combine(root, "Reference Assemblies", "Microsoft", "Framework", parts[0], (parts[1].Split('='))[1], "Profile", (parts[2].Split('='))[1]));
+                    return Environment.ExpandEnvironmentVariables
+                        ( Path.Combine
+                            ( root
+                            , "Reference Assemblies"
+                            , "Microsoft"
+                            , "Framework"
+                            , parts[0]
+                            , parts[1].Split('=')[1]
+                            , "Profile"
+                            , parts[2].Split('=')[1]
+                            )
+                        );
                 }
             }
 
@@ -59,6 +70,7 @@ namespace Obfuscar.Helpers
             for (int i = 0; i < assembly.CustomAttributes.Count; i++)
             {
                 CustomAttribute custom = assembly.CustomAttributes[i];
+
                 if (custom.AttributeType.FullName == typeof(ObfuscateAssemblyAttribute).FullName)
                 {
                     if ((Helper.GetAttributePropertyByName(custom, "StripAfterObfuscation") as bool?) ?? true)

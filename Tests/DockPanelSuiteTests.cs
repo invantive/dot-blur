@@ -86,7 +86,7 @@ namespace ObfuscarTests
         }
 
         // TODO: till Mono Cecil support overwriting.         [Fact]
-        public void CheckOverwriting()
+        private void CheckOverwriting()
         {
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +

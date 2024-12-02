@@ -35,8 +35,6 @@ namespace ObfuscarTests
 {
     public class InterfacesTests
     {
-        private string? output;
-
         Obfuscator BuildAndObfuscateAssemblies(string name)
         {
             string xml = string.Format(
@@ -102,7 +100,7 @@ namespace ObfuscarTests
 
         // TODO: have to manually skip the items now.
         // [Fact]
-        public void CheckInterfaces2()
+        private void CheckInterfaces2()
         {
             Obfuscator item = BuildAndObfuscateAssemblies("AssemblyWithInterfaces2");
             ObfuscationMap map = item.Mapping;
@@ -132,9 +130,9 @@ namespace ObfuscarTests
             }
         }
 
-        private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+        private Assembly? AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
+            var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
         }
     }

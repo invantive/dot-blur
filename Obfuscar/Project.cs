@@ -25,11 +25,13 @@
 #endregion
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Obfuscar.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
@@ -66,9 +68,9 @@ namespace Obfuscar
         {
             get
             {
-                return ExtraPaths
+                return (ExtraPaths ?? Enumerable.Empty<string>())
                         .Concat(assemblySearchPaths)
-                        .Concat(new[] {Settings.InPath})
+                        .Concat([Settings.InPath])
                         ;
             }
         }
@@ -88,8 +90,8 @@ namespace Obfuscar
                     {
                         if (this.keyPair == null)
                         {
-                            var lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
-                            var lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
+                            string? lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
+                            string? lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
 
                             if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                             {
@@ -99,14 +101,19 @@ namespace Obfuscar
 
                             if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
+                                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
                             }
 
                             try
                             {
                                 if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                                 {
-                                    var lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
+                                    if (string.IsNullOrEmpty(lKeyFileName))
+                                    {
+                                        throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
+                                    }
+
+                                    string? lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
 
                                     this.keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
 
@@ -135,6 +142,7 @@ namespace Obfuscar
             }
         }
 
+        [SupportedOSPlatform("windows")]
         public RSA? KeyValue
         {
             get
@@ -149,8 +157,8 @@ namespace Obfuscar
                     throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
                 }
 
-                var lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
-                var lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
+                string? lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
+                string? lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
 
                 if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                 {
@@ -200,7 +208,7 @@ namespace Obfuscar
 
             project.vars.Add(Settings.SpecialVariableProjectFileDirectory, string.IsNullOrEmpty(projectFileDirectory) ? "." : projectFileDirectory);
 
-            if (reader.Root.Name != "Obfuscator")
+            if (reader.Root?.Name != "Obfuscator")
             {
                 throw new ObfuscarException(MessageCodes.ofr004, "XML configuration file should have <Obfuscator> root tag.");
             }
@@ -221,13 +229,13 @@ namespace Obfuscar
 
         private static void ReadVariables(XElement reader, Project project)
         {
-            var settings = reader.Elements("Var");
-            foreach (var setting in settings)
+            IEnumerable<XElement> settings = reader.Elements("Var");
+            foreach (XElement setting in settings)
             {
-                var name = setting.Attribute("name")?.Value;
+                string? name = setting.Attribute("name")?.Value;
                 if (!string.IsNullOrEmpty(name))
                 {
-                    var value = setting.Attribute("value")?.Value;
+                    string? value = setting.Attribute("value")?.Value;
                     if (!string.IsNullOrEmpty(value))
                     {
                         project.vars.Add(name, value);
@@ -246,8 +254,8 @@ namespace Obfuscar
 
         private static void ReadIncludeTags(XElement reader, Project project)
         {
-            var includes = reader.Elements("Include");
-            foreach (var include in includes)
+            IEnumerable<XElement> includes = reader.Elements("Include");
+            foreach (XElement include in includes)
             {
                 ReadIncludeTag(include, project, FromXmlReadNode);
             }
@@ -267,8 +275,10 @@ namespace Obfuscar
             }
 
             string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(parentReader, "path", project.vars));
-            var includeReader = XDocument.Load(path);
-            if (includeReader.Root.Name == "Include")
+
+            XDocument includeReader = XDocument.Load(path);
+
+            if (includeReader.Root?.Name == "Include")
             {
                 readAction(includeReader.Root, project);
             }
@@ -276,8 +286,9 @@ namespace Obfuscar
 
         private static void ReadAssemblySearchPath(XElement reader, Project project)
         {
-            var searchPaths = reader.Elements("AssemblySearchPath");
-            foreach (var searchPath in searchPaths)
+            IEnumerable<XElement> searchPaths = reader.Elements("AssemblySearchPath");
+
+            foreach (XElement searchPath in searchPaths)
             {
                 string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(searchPath, "path", project.vars));
                 project.assemblySearchPaths.Add(path);
@@ -286,32 +297,38 @@ namespace Obfuscar
 
         private static void ReadModules(XElement reader, Project project)
         {
-            var modules = reader.Elements("Module");
-            foreach (var module in modules)
+            IEnumerable<XElement> modules = reader.Elements("Module");
+            foreach (XElement module in modules)
             {
-                var file = Helper.GetAttribute(module, "file", project.vars);
+                string file = Helper.GetAttribute(module, "file", project.vars);
+
                 if (string.IsNullOrWhiteSpace(file))
                 {
-                    throw new ObfuscarException(MessageCodes.ofrxxx, "Need valid file attribute.");
+                    throw new ObfuscarException(MessageCodes.ofr034, "Need valid file attribute.");
                 }
+
                 ReadModule(file, module, project);
             }
         }
 
         private static void ReadModuleGroups(XElement reader, Project project)
         {
-            var modules = reader.Elements("Modules");
-            foreach (var module in modules)
+            IEnumerable<XElement> modules = reader.Elements("Modules");
+
+            foreach (XElement module in modules)
             {
-                var includes = ReadModuleGroupPattern("IncludeFiles", module, project);
+                List<string> includes = ReadModuleGroupPattern("IncludeFiles", module, project);
+
                 if (!includes.Any())
                 {
                     continue;
                 }
 
-                var excludes = ReadModuleGroupPattern("ExcludeFiles", module, project);
-                var filter = new Filter(project.Settings.InPath, includes, excludes);
-                foreach (var file in filter)
+                List<string> excludes = ReadModuleGroupPattern("ExcludeFiles", module, project);
+
+                Filter filter = new Filter(project.Settings.InPath, includes, excludes);
+
+                foreach (string file in filter)
                 {
                     ReadModule(file, module, project);
                 }
@@ -328,7 +345,8 @@ namespace Obfuscar
 
         private static void ReadModule(string file, XElement module, Project project)
         {
-            var info = AssemblyInfo.FromXml(project, module, file, project.vars);
+            AssemblyInfo info = AssemblyInfo.FromXml(project, module, file, project.vars);
+
             if (info.Exclude)
             {
                 project.CopyAssemblyList.Add(info);
@@ -347,7 +365,7 @@ namespace Obfuscar
 
             public Graph(List<AssemblyInfo> items)
             {
-                foreach (var item in items)
+                foreach (AssemblyInfo item in items)
                 {
                     Root.Add(new Node<AssemblyInfo> { Item = item });
                 }
@@ -357,25 +375,33 @@ namespace Obfuscar
 
             private static void AddParents(List<Node<AssemblyInfo>> nodes)
             {
-                foreach (var node in nodes)
+                foreach (Node<AssemblyInfo> node in nodes)
                 {
-                    var references = node.Item.References;
-                    foreach (var reference in references)
+                    List<AssemblyInfo>? references = node.Item?.References;
+
+                    if (references != null)
                     {
-                        var parent = SearchNode(reference, nodes);
-                        node.AppendTo(parent);
+                        foreach (AssemblyInfo reference in references)
+                        {
+                            Node<AssemblyInfo>? parent = SearchNode(reference, nodes);
+
+                            if (parent != null)
+                            {
+                                node.AppendTo(parent);
+                            }
+                        }
                     }
                 }
             }
 
-            private static Node<AssemblyInfo> SearchNode(AssemblyInfo baseType, List<Node<AssemblyInfo>> nodes)
+            private static Node<AssemblyInfo>? SearchNode(AssemblyInfo baseType, List<Node<AssemblyInfo>> nodes)
             {
                 return nodes.FirstOrDefault(node => node.Item == baseType);
             }
 
             internal IEnumerable<AssemblyInfo> GetOrderedList()
             {
-                var result = new List<AssemblyInfo>();
+                List<AssemblyInfo> result = new List<AssemblyInfo>();
                 CleanPool(Root, result);
                 return result;
             }
@@ -384,13 +410,13 @@ namespace Obfuscar
             {
                 while (pool.Count > 0)
                 {
-                    var toRemoved = new List<Node<AssemblyInfo>>();
-                    foreach (var node in pool)
+                    List<Node<AssemblyInfo>> toRemoved = new List<Node<AssemblyInfo>>();
+                    foreach (Node<AssemblyInfo> node in pool)
                     {
                         if (node.Parents.Count == 0)
                         {
                             toRemoved.Add(node);
-                            if (result.Contains(node.Item))
+                            if (node.Item == null || result.Contains(node.Item))
                             {
                                 continue;
                             }
@@ -399,12 +425,12 @@ namespace Obfuscar
                         }
                     }
 
-                    foreach (var remove in toRemoved)
+                    foreach (Node<AssemblyInfo> remove in toRemoved)
                     {
                         pool.Remove(remove);
-                        foreach (var child in remove.Children)
+                        foreach (Node<AssemblyInfo> child in remove.Children)
                         {
-                            if (result.Contains(child.Item))
+                            if (child.Item == null || result.Contains(child.Item))
                             {
                                 continue;
                             }
@@ -418,7 +444,7 @@ namespace Obfuscar
 
         private void ReorderAssemblies()
         {
-            var graph = new Graph(AssemblyList);
+            Graph graph = new Graph(AssemblyList);
             AssemblyList.Clear();
             AssemblyList.AddRange(graph.GetOrderedList());
         }
@@ -484,8 +510,7 @@ namespace Obfuscar
                 // the map (and therefore in the project), set up the mappings
                 foreach (AssemblyNameReference nameRef in info.Definition.MainModule.AssemblyReferences)
                 {
-                    AssemblyInfo? reference;
-                    if (assemblyMap.TryGetValue(nameRef.Name, out reference))
+                    if (assemblyMap.TryGetValue(nameRef.Name, out AssemblyInfo? reference))
                     {
                         info.References.Add(reference);
                         reference.ReferencedBy.Add(info);
@@ -534,8 +559,7 @@ namespace Obfuscar
             {
                 string name = type.GetScopeName();
 
-                AssemblyInfo? info;
-                if (assemblyMap.TryGetValue(name, out info))
+                if (assemblyMap.TryGetValue(name, out AssemblyInfo? info))
                 {
                     string fullName = type.Namespace + "." + type.Name;
                     typeDef = info.Definition.MainModule.GetType(fullName);
@@ -545,10 +569,12 @@ namespace Obfuscar
             return typeDef;
         }
 
-        private static byte[] GetStrongNameKeyPairFromPfx(string pfxFile, string password)
+        private static byte[] GetStrongNameKeyPairFromPfx(string pfxFile, string? password)
         {
             X509Certificate2Collection certs = new X509Certificate2Collection();
+
             certs.Import(pfxFile, password, X509KeyStorageFlags.Exportable);
+
             if (certs.Count == 0)
             {
                 throw new ArgumentException("Invalid certificate", nameof(pfxFile));
@@ -558,7 +584,7 @@ namespace Obfuscar
 
             foreach (X509Certificate2 cert in certs)
             {
-                if (cert.PrivateKey is RSACryptoServiceProvider provider)
+                if (cert.GetRSAPrivateKey() is RSACryptoServiceProvider provider)
                 {
                     return provider.ExportCspBlob(true);
                 }
