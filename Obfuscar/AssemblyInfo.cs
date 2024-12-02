@@ -69,7 +69,7 @@ namespace Obfuscar
 
         public bool Exclude { get; set; }
 
-        bool initialized;
+        private bool initialized;
 
         // to create, use FromXml
         private AssemblyInfo(Project project)
@@ -391,16 +391,16 @@ namespace Obfuscar
         /// </summary>
         internal void Init()
         {
-            unrenamedReferences = new List<MemberReference>();
-            var items = getMemberReferences();
+            this.unrenamedReferences = new List<MemberReference>();
+            var items = this.GetMemberReferences();
             foreach (MemberReference member in items)
             {
                 // FIXME: Figure out why these exist if they are never used.
                 // MethodReference mr = member as MethodReference;
                 // FieldReference fr = member as FieldReference;
-                if (project.Contains(member.DeclaringType))
+                if (this.project.Contains(member.DeclaringType))
                 {
-                    unrenamedReferences.Add(member);
+                    this.unrenamedReferences.Add(member);
                 }
             }
 
@@ -412,7 +412,7 @@ namespace Obfuscar
                     continue;
                 }
 
-                if (project.Contains(type))
+                if (this.project.Contains(type))
                 {
                     typerefs.Add(type);
                 }
@@ -421,7 +421,7 @@ namespace Obfuscar
             // Type references in CustomAttributes
             List<CustomAttribute> customattributes = new List<CustomAttribute>();
             customattributes.AddRange(this.Definition.CustomAttributes);
-            foreach (TypeDefinition type in GetAllTypeDefinitions())
+            foreach (TypeDefinition type in this.GetAllTypeDefinitions())
             {
                 customattributes.AddRange(type.CustomAttributes);
                 foreach (MethodDefinition methoddef in type.Methods)
@@ -462,9 +462,9 @@ namespace Obfuscar
                 customattributes.Clear();
             }
 
-            unrenamedTypeReferences = new List<TypeReference>(typerefs);
+            this.unrenamedTypeReferences = new List<TypeReference>(typerefs);
 
-            initialized = true;
+            this.initialized = true;
         }
 
         private class Graph
@@ -478,7 +478,7 @@ namespace Obfuscar
                 foreach (TypeDefinition typeDefinition in typeDefinitions)
                 {
                     Node<TypeDefinition> node = new Node<TypeDefinition> {Item = typeDefinition};
-                    Root.Add(node);
+                    this.Root.Add(node);
                     this._map.Add(typeDefinition.FullName, node);
                 }
 
@@ -636,9 +636,9 @@ namespace Obfuscar
 
         public IEnumerable<TypeDefinition> GetAllTypeDefinitions()
         {
-            if (_cached != null)
+            if (this._cached != null)
             {
-                return _cached;
+                return this._cached;
             }
 
             if (!this.Definition.MarkedToRename())
@@ -651,7 +651,7 @@ namespace Obfuscar
                 var result = this.Definition.MainModule.GetAllTypes();
                 Graph graph = new Graph(result);
 
-                return _cached = graph.GetOrderedList();
+                return this._cached = graph.GetOrderedList();
             }
             catch (Exception e)
             {
@@ -664,7 +664,7 @@ namespace Obfuscar
             this._cached = null;
         }
 
-        private IEnumerable<MemberReference> getMemberReferences()
+        private IEnumerable<MemberReference> GetMemberReferences()
         {
             HashSet<MemberReference> memberReferences = new HashSet<MemberReference>();
             foreach (TypeDefinition type in this.GetAllTypeDefinitions())
@@ -673,7 +673,7 @@ namespace Obfuscar
                 {
                     foreach (MethodReference memberRef in method.Overrides)
                     {
-                        if (IsOnlyReference(memberRef))
+                        if (this.IsOnlyReference(memberRef))
                         {
                             memberReferences.Add(memberRef);
                         }
@@ -686,7 +686,7 @@ namespace Obfuscar
                             MemberReference? memberRef = inst.Operand as MemberReference;
                             if (memberRef != null)
                             {
-                                if (IsOnlyReference(memberRef) || memberRef is FieldReference && !(memberRef is FieldDefinition))
+                                if (this.IsOnlyReference(memberRef) || memberRef is FieldReference && !(memberRef is FieldDefinition))
                                 {
                                     // FIXME: Figure out why this exists if it is never used.
                                     // int c = memberreferences.Count;
@@ -733,14 +733,14 @@ namespace Obfuscar
 
             try
             {
-                bool readSymbols = project.Settings.RegenerateDebugInfo && System.IO.File.Exists(System.IO.Path.ChangeExtension(filename, "pdb"));
+                bool readSymbols = this.project.Settings.RegenerateDebugInfo && System.IO.File.Exists(System.IO.Path.ChangeExtension(filename, "pdb"));
                 try
                 {
                     this.Definition = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters
                     {
                         ReadingMode = ReadingMode.Deferred,
                         ReadSymbols = readSymbols,
-                        AssemblyResolver = project.Cache
+                        AssemblyResolver = this.project.Cache
                     });
                 }
                 catch
@@ -755,7 +755,7 @@ namespace Obfuscar
                     {
                         ReadingMode = ReadingMode.Deferred,
                         ReadSymbols = false,
-                        AssemblyResolver = project.Cache
+                        AssemblyResolver = this.project.Cache
                     });
                 }
 
@@ -770,7 +770,7 @@ namespace Obfuscar
                     {
                         ReadingMode = ReadingMode.Immediate,
                         ReadSymbols = readSymbols,
-                        AssemblyResolver = project.Cache
+                        AssemblyResolver = this.project.Cache
                     });
                 }
                 catch
@@ -785,7 +785,7 @@ namespace Obfuscar
                     {
                         ReadingMode = ReadingMode.Immediate,
                         ReadSymbols = false,
-                        AssemblyResolver = project.Cache
+                        AssemblyResolver = this.project.Cache
                     });
                 }
 
@@ -863,12 +863,12 @@ namespace Obfuscar
 
         private bool ShouldSkip(string ns, InheritMap? map)
         {
-            return skipNamespaces.IsMatch(ns, map);
+            return this.skipNamespaces.IsMatch(ns, map);
         }
 
         private bool ShouldForce(string ns, InheritMap? map)
         {
-            return forceNamespaces.IsMatch(ns, map);
+            return this.forceNamespaces.IsMatch(ns, map);
         }
 
         private bool ShouldSkip(TypeKey type, TypeAffectFlags flag, InheritMap? map)
@@ -878,7 +878,7 @@ namespace Obfuscar
                 return true;
             }
 
-            foreach (TypeTester typeTester in skipTypes)
+            foreach (TypeTester typeTester in this.skipTypes)
             {
                 if ((typeTester.AffectFlags & flag) > 0 && typeTester.Test(type, map))
                 {
@@ -896,7 +896,7 @@ namespace Obfuscar
                 return true;
             }
 
-            foreach (TypeTester typeTester in forceTypes)
+            foreach (TypeTester typeTester in this.forceTypes)
             {
                 if ((typeTester.AffectFlags & flag) > 0 && typeTester.Test(type, map))
                 {
@@ -922,7 +922,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (forceTypes.IsMatch(type, map))
+            if (this.forceTypes.IsMatch(type, map))
             {
                 message = "type rule in configuration";
                 return false;
@@ -934,7 +934,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (skipTypes.IsMatch(type, map))
+            if (this.skipTypes.IsMatch(type, map))
             {
                 message = "type rule in configuration";
                 return true;
@@ -979,13 +979,13 @@ namespace Obfuscar
                     case MethodSemanticsAttributes.Setter:
                         {
                             message = "skipping properties";
-                            return !project.Settings.RenameProperties;
+                            return !this.project.Settings.RenameProperties;
                         }
                     case MethodSemanticsAttributes.AddOn:
                     case MethodSemanticsAttributes.RemoveOn:
                         {
                             message = "skipping events";
-                            return !project.Settings.RenameEvents;
+                            return !this.project.Settings.RenameEvents;
                         }
                     default:
                         {
@@ -1027,7 +1027,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (forceMethods.IsMatch(method, map))
+            if (this.forceMethods.IsMatch(method, map))
             {
                 message = "method rule in configuration";
                 return false;
@@ -1039,7 +1039,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (skipMethods.IsMatch(method, map))
+            if (this.skipMethods.IsMatch(method, map))
             {
                 message = "method rule in configuration";
                 return true;
@@ -1070,7 +1070,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (forceStringHiding.IsMatch(method, map))
+            if (this.forceStringHiding.IsMatch(method, map))
             {
                 return false;
             }
@@ -1080,7 +1080,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (skipStringHiding.IsMatch(method, map))
+            if (this.skipStringHiding.IsMatch(method, map))
             {
                 return true;
             }
@@ -1123,7 +1123,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (forceFields.IsMatch(field, map))
+            if (this.forceFields.IsMatch(field, map))
             {
                 message = "field rule in configuration";
                 return false;
@@ -1135,13 +1135,13 @@ namespace Obfuscar
                 return true;
             }
 
-            if (skipFields.IsMatch(field, map))
+            if (this.skipFields.IsMatch(field, map))
             {
                 message = "field rule in configuration";
                 return true;
             }
 
-            if (skipEnums && field.DeclaringType.IsEnum)
+            if (this.skipEnums && field.DeclaringType.IsEnum)
             {
                 message = "enum rule in configuration";
                 return true;
@@ -1192,7 +1192,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (forceProperties.IsMatch(prop, map))
+            if (this.forceProperties.IsMatch(prop, map))
             {
                 message = "property rule in configuration";
                 return false;
@@ -1204,7 +1204,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (skipProperties.IsMatch(prop, map))
+            if (this.skipProperties.IsMatch(prop, map))
             {
                 message = "property rule in configuration";
                 return true;
@@ -1256,7 +1256,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (forceEvents.IsMatch(evt, map))
+            if (this.forceEvents.IsMatch(evt, map))
             {
                 message = "event rule in configuration";
                 return false;
@@ -1268,7 +1268,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (skipEvents.IsMatch(evt, map))
+            if (this.skipEvents.IsMatch(evt, map))
             {
                 message = "event rule in configuration";
                 return true;
