@@ -42,7 +42,7 @@ namespace Obfuscar
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(Name);
+            sb.Append(this.Name);
 
             if (this.External)
             {
@@ -92,18 +92,18 @@ namespace Obfuscar
 
                     TypeKey typeKey = new TypeKey(type);
 
-                    baseTypes[typeKey] = GetBaseTypes(type);
+                    this.baseTypes[typeKey] = this.GetBaseTypes(type);
 
                     int i = 0;
                     int j;
 
-                    MethodKey[] methods = GetVirtualMethods(project.Cache, type);
+                    MethodKey[] methods = this.GetVirtualMethods(project.Cache, type);
 
                     while (i < methods.Length)
                     {
                         MethodKey left = methods[i];
 
-                        if (!methodGroups.TryGetValue(left, out MethodGroup? group))
+                        if (!this.methodGroups.TryGetValue(left, out MethodGroup? group))
                         {
                             group = null;
                         }
@@ -122,18 +122,18 @@ namespace Obfuscar
                             // see if either method is already in a group
                             if (group != null)
                             {
-                                group = AddToGroup(group, right);
+                                group = this.AddToGroup(group, right);
                             }
-                            else if (methodGroups.TryGetValue(right, out group))
+                            else if (this.methodGroups.TryGetValue(right, out group))
                             {
-                                group = AddToGroup(group, left);
+                                group = this.AddToGroup(group, left);
                             }
                             else
                             {
                                 group = new MethodGroup();
 
-                                group = AddToGroup(group, left);
-                                group = AddToGroup(group, right);
+                                group = this.AddToGroup(group, left);
+                                group = this.AddToGroup(group, right);
                             }
 
                             // if the group isn't already external, see if it should be
@@ -192,7 +192,7 @@ namespace Obfuscar
         TypeKey[] GetBaseTypes(TypeDefinition type)
         {
             HashSet<TypeKey> baseTypes = new HashSet<TypeKey>();
-            GetBaseTypes(project, baseTypes, type);
+            GetBaseTypes(this.project, baseTypes, type);
             return new List<TypeKey>(baseTypes).ToArray();
         }
 
@@ -201,7 +201,7 @@ namespace Obfuscar
             // check the interfaces
             foreach (InterfaceImplementation ifaceRef in type.Interfaces)
             {
-                TypeDefinition? iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
+                TypeDefinition? iface = this.project.GetTypeDefinition(ifaceRef.InterfaceType);
 
                 // if it's not in the project, try to get it via the cache
                 if (iface == null)
@@ -212,12 +212,12 @@ namespace Obfuscar
                 // search interface
                 if (iface != null)
                 {
-                    GetVirtualMethods(cache, methods, iface);
+                    this.GetVirtualMethods(cache, methods, iface);
                 }
             }
 
             // check the base type unless it isn't in the project, or we don't have one
-            TypeDefinition? baseType = project.GetTypeDefinition(type.BaseType);
+            TypeDefinition? baseType = this.project.GetTypeDefinition(type.BaseType);
 
             // if it's not in the project, try to get it via the cache
             if (baseType == null)
@@ -228,7 +228,7 @@ namespace Obfuscar
             // search base
             if (baseType != null)
             {
-                GetVirtualMethods(cache, methods, baseType);
+                this.GetVirtualMethods(cache, methods, baseType);
             }
 
             foreach (MethodDefinition method in type.Methods)
@@ -269,7 +269,7 @@ namespace Obfuscar
         MethodKey[] GetVirtualMethods(AssemblyCache cache, TypeDefinition type)
         {
             HashSet<MethodKey> methods = new HashSet<MethodKey>();
-            GetVirtualMethods(cache, methods, type);
+            this.GetVirtualMethods(cache, methods, type);
             return new List<MethodKey>(methods).ToArray();
         }
 
@@ -283,7 +283,7 @@ namespace Obfuscar
             //
             // Point the method at the group.
             //
-            if (methodGroups.TryGetValue(methodKey, out MethodGroup? group2) && group2 != group)
+            if (this.methodGroups.TryGetValue(methodKey, out MethodGroup? group2) && group2 != group)
             {
                 //
                 // Two unrelated groups come together; merge them.
@@ -295,7 +295,7 @@ namespace Obfuscar
 
                     foreach (MethodKey mk in group2.Methods)
                     {
-                        methodGroups[mk] = group;
+                        this.methodGroups[mk] = group;
                         group.Methods.Add(mk);
                     }
 
@@ -308,7 +308,7 @@ namespace Obfuscar
 
                     foreach (MethodKey mk in group.Methods)
                     {
-                        methodGroups[mk] = group2;
+                        this.methodGroups[mk] = group2;
                         group2.Methods.Add(mk);
                     }
 
@@ -316,14 +316,14 @@ namespace Obfuscar
                 }
             }
 
-            methodGroups[methodKey] = group;
+            this.methodGroups[methodKey] = group;
 
             return group;
         }
 
         public MethodGroup? GetMethodGroup(MethodKey methodKey)
         {
-            if (methodGroups.TryGetValue(methodKey, out MethodGroup? group))
+            if (this.methodGroups.TryGetValue(methodKey, out MethodGroup? group))
             {
                 return group;
             }
@@ -342,7 +342,7 @@ namespace Obfuscar
 
             if (type.BaseType != null)
             {
-                TypeDefinition? typeDef = project.Cache.GetTypeDefinition(type.BaseType);
+                TypeDefinition? typeDef = this.project.Cache.GetTypeDefinition(type.BaseType);
 
                 if (typeDef != null)
                 {
@@ -359,7 +359,7 @@ namespace Obfuscar
 
         public TypeKey[] GetBaseTypes(TypeKey typeKey)
         {
-            return baseTypes[typeKey];
+            return this.baseTypes[typeKey];
         }
     }
 }

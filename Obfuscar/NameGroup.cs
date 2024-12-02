@@ -32,7 +32,7 @@ namespace Obfuscar
 {
     class NameGroup : IEnumerable<string>
     {
-        HashSet<string> names = new HashSet<string>();
+        readonly HashSet<string> names = new HashSet<string>();
 
         public string GetNext()
         {
@@ -41,7 +41,7 @@ namespace Obfuscar
             for (;;)
             {
                 name = NameMaker.UniqueName(index++);
-                if (!names.Contains(name))
+                if (!this.names.Contains(name))
                 {
                     return name;
                 }
@@ -50,25 +50,25 @@ namespace Obfuscar
 
         public bool Contains(string name)
         {
-            return names.Contains(name);
+            return this.names.Contains(name);
         }
 
         public void AddAll(IEnumerable<string> range)
         {
             foreach (string item in range)
             {
-                names.Add(item);
+                this.names.Add(item);
             }
         }
 
         public void Add(string name)
         {
-            names.Add(name);
+            this.names.Add(name);
         }
 
         public void Remove(string name)
         {
-            names.Remove(name);
+            this.names.Remove(name);
         }
 
         public static string GetNext(IEnumerable<NameGroup> groups)
@@ -102,19 +102,19 @@ namespace Obfuscar
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return names.GetEnumerator();
+            return this.names.GetEnumerator();
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            return names.GetEnumerator();
+            return this.names.GetEnumerator();
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string s in names)
+            foreach (string s in this.names)
             {
                 if (sb.Length != 0)
                 {

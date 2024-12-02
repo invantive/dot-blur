@@ -33,7 +33,7 @@ namespace ObfuscarTests
 {
     public class SpecializedGenericsTests
     {
-        Obfuscator BuildAndObfuscateAssemblies()
+        private Obfuscator BuildAndObfuscateAssemblies()
         {
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -48,7 +48,7 @@ namespace ObfuscarTests
             return TestHelper.BuildAndObfuscate("AssemblyWithSpecializedGenerics", string.Empty, xml);
         }
 
-        MethodDefinition FindByName(TypeDefinition typeDef, string name)
+        private MethodDefinition FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.Name == name)
@@ -61,7 +61,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckClassHasAttribute()
         {
-            Obfuscator item = BuildAndObfuscateAssemblies();
+            Obfuscator item = this.BuildAndObfuscateAssemblies();
             ObfuscationMap map = item.Mapping;
 
             string assmName = "AssemblyWithSpecializedGenerics.dll";
@@ -74,10 +74,10 @@ namespace ObfuscarTests
 
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.ClassA`1");
-                MethodDefinition classAmethod2 = FindByName(classAType, "Method2");
+                MethodDefinition classAmethod2 = this.FindByName(classAType, "Method2");
 
                 TypeDefinition classBType = inAssmDef.MainModule.GetType("TestClasses.ClassB");
-                MethodDefinition classBmethod2 = FindByName(classBType, "Method2");
+                MethodDefinition classBmethod2 = this.FindByName(classBType, "Method2");
 
                 ObfuscatedThing classAEntry = map.GetMethod(new MethodKey(classAmethod2));
                 ObfuscatedThing classBEntry = map.GetMethod(new MethodKey(classBmethod2));
@@ -94,10 +94,10 @@ namespace ObfuscarTests
 
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.ClassA`1");
-                MethodDefinition classAmethod2 = FindByName(classAType, "Method3");
+                MethodDefinition classAmethod2 = this.FindByName(classAType, "Method3");
 
                 TypeDefinition classBType = inAssmDef.MainModule.GetType("TestClasses.ClassB");
-                MethodDefinition classBmethod2 = FindByName(classBType, "Method3");
+                MethodDefinition classBmethod2 = this.FindByName(classBType, "Method3");
 
                 ObfuscatedThing classAEntry = map.GetMethod(new MethodKey(classAmethod2));
                 ObfuscatedThing classBEntry = map.GetMethod(new MethodKey(classBmethod2));

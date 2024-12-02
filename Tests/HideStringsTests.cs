@@ -33,7 +33,7 @@ namespace ObfuscarTests
 {
     public class HideStringsTests
     {
-        int TotalStringCount = 10;
+        private readonly int TotalStringCount = 10;
 
         [Fact]
         public void CheckHideStringsClassDoesNotExist()
@@ -98,7 +98,7 @@ namespace ObfuscarTests
 
             Assert.Equal(3, expected.Fields.Count);
 
-            Assert.Equal(TotalStringCount, expected.Methods.Count - 2); // Total strings. 2 methods are not hidden strings.
+            Assert.Equal(this.TotalStringCount, expected.Methods.Count - 2); // Total strings. 2 methods are not hidden strings.
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace ObfuscarTests
 
             Assert.Equal(3, expected.Fields.Count);
 
-            Assert.Equal(TotalStringCount - 2, expected.Methods.Count - 2);
+            Assert.Equal(this.TotalStringCount - 2, expected.Methods.Count - 2);
         }
 
         [Fact]
@@ -283,7 +283,7 @@ namespace ObfuscarTests
             Assert.Equal(3, expected.Fields.Count);
 
             // IMPORTANT: strings in async void methods are actually moved by the compiler to the MoveNext method of the state machine, so cannot be easily skipped by rules.
-            Assert.Equal(TotalStringCount, expected.Methods.Count - 2);
+            Assert.Equal(this.TotalStringCount, expected.Methods.Count - 2);
         }
 
     }

@@ -27,7 +27,7 @@ namespace ObfuscarTests
         [Fact]
         public void Check_for_null()
         {
-            string output = BuildAndObfuscate();
+            string output = this.BuildAndObfuscate();
             AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             Assert.Equal(3, assmDef.MainModule.Types.Count);

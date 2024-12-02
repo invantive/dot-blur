@@ -67,7 +67,7 @@ namespace Obfuscar
 
         public bool Test(FieldKey field, InheritMap? map)
         {
-            if (!string.IsNullOrEmpty(decorator))
+            if (!string.IsNullOrEmpty(this.decorator))
             {
                 bool match = false;
 
@@ -87,7 +87,7 @@ namespace Obfuscar
 
                         foreach (CustomAttribute customAttr in typeField.CustomAttributes)
                         {
-                            if (customAttr.AttributeType.FullName == decorator)
+                            if (customAttr.AttributeType.FullName == this.decorator)
                             {
                                 match = true;
                                 break;
@@ -102,40 +102,40 @@ namespace Obfuscar
                 }
             }
 
-            if (!string.IsNullOrEmpty(type) && !Helper.CompareOptionalRegex(field.TypeKey.Fullname, type))
+            if (!string.IsNullOrEmpty(this.type) && !Helper.CompareOptionalRegex(field.TypeKey.Fullname, this.type))
             {
                 return false;
             }
 
             // It's not very clean to use CheckMethodVisibility() from MethodTester. But we don't want duplicate code either.
-            if (MethodTester.CheckMemberVisibility(attrib, typeAttrib, (MethodAttributes) field.FieldAttributes, field.DeclaringType))
+            if (MethodTester.CheckMemberVisibility(this.attrib, this.typeAttrib, (MethodAttributes) field.FieldAttributes, field.DeclaringType))
             {
                 return false;
             }
 
-            if (nameRx != null && !nameRx.IsMatch(field.Name))
+            if (this.nameRx != null && !this.nameRx.IsMatch(field.Name))
             {
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(name) && !Helper.CompareOptionalRegex(field.Name, name))
+            if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(field.Name, this.name))
             {
                 return false;
             }
 
-            if (isStatic.HasValue)
+            if (this.isStatic.HasValue)
             {
                 bool fieldIsStatic = (field.FieldAttributes & FieldAttributes.Static) == FieldAttributes.Static;
 
-                if (isStatic.Value != fieldIsStatic)
+                if (this.isStatic.Value != fieldIsStatic)
                 {
                     return false;
                 }
             }
 
-            if (isSerializable.HasValue)
+            if (this.isSerializable.HasValue)
             {
-                if (isSerializable.Value && ((field.FieldAttributes & FieldAttributes.NotSerialized) ==FieldAttributes.NotSerialized))
+                if (this.isSerializable.Value && ((field.FieldAttributes & FieldAttributes.NotSerialized) ==FieldAttributes.NotSerialized))
                 {
                     return false;
                 }
@@ -143,16 +143,16 @@ namespace Obfuscar
                 bool fieldIsPublic = (field.FieldAttributes & FieldAttributes.Public) == FieldAttributes.Public;
                 bool parentIsSerializable = field.DeclaringType.IsSerializable;
 
-                if (isSerializable != (fieldIsPublic && parentIsSerializable))
+                if (this.isSerializable != (fieldIsPublic && parentIsSerializable))
                 {
                     return false;
                 }
             }
 
             // finally does method's type inherit?
-            if (!string.IsNullOrEmpty(inherits))
+            if (!string.IsNullOrEmpty(this.inherits))
             {
-                if (map == null || !map.Inherits(field.DeclaringType, inherits))
+                if (map == null || !map.Inherits(field.DeclaringType, this.inherits))
                 {
                     return false;
                 }

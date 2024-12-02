@@ -55,7 +55,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckClassHasAttribute()
         {
-            string output = BuildAndObfuscate();
+            string output = this.BuildAndObfuscate();
             AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             Assert.Equal(3, assmDef.MainModule.Types.Count); // "Should contain only one type, and <Module>.");
@@ -85,7 +85,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckMethodHasAttribute()
         {
-            string output = BuildAndObfuscate();
+            string output = this.BuildAndObfuscate();
             AssemblyDefinition assmDef = AssemblyDefinition.ReadAssembly(output);
 
             bool found = false;

@@ -59,27 +59,27 @@ namespace Obfuscar
 
         public Settings(Variables vars)
         {
-            InPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableInPath, "."));
-            OutPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableOutPath, "."));
-            LogFilePath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableLogFile, ""));
-            MarkedOnly = XmlConvert.ToBoolean(vars.GetValue(VariableMarkedOnly, "false"));
+            this.InPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableInPath, "."));
+            this.OutPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableOutPath, "."));
+            this.LogFilePath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableLogFile, ""));
+            this.MarkedOnly = XmlConvert.ToBoolean(vars.GetValue(VariableMarkedOnly, "false"));
 
-            RenameFields = XmlConvert.ToBoolean(vars.GetValue(VariableRenameFields, "true"));
-            RenameProperties = XmlConvert.ToBoolean(vars.GetValue(VariableRenameProperties, "true"));
-            RenameEvents = XmlConvert.ToBoolean(vars.GetValue(VariableRenameEvents, "true"));
-            KeepPublicApi = XmlConvert.ToBoolean(vars.GetValue(VariableKeepPublicApi, "true"));
-            HidePrivateApi = XmlConvert.ToBoolean(vars.GetValue(VariableHidePrivateApi, "true"));
-            ReuseNames = XmlConvert.ToBoolean(vars.GetValue(VariableReuseNames, "true"));
-            UseUnicodeNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseUnicodeNames, "false"));
-            UseKoreanNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseKoreanNames, "false"));
-            HideStrings = XmlConvert.ToBoolean(vars.GetValue(VariableHideStrings, "true"));
-            Optimize = XmlConvert.ToBoolean(vars.GetValue(VariableOptimizeMethods, "true"));
-            SuppressIldasm = XmlConvert.ToBoolean(vars.GetValue(VariableSuppressIldasm, "true"));
+            this.RenameFields = XmlConvert.ToBoolean(vars.GetValue(VariableRenameFields, "true"));
+            this.RenameProperties = XmlConvert.ToBoolean(vars.GetValue(VariableRenameProperties, "true"));
+            this.RenameEvents = XmlConvert.ToBoolean(vars.GetValue(VariableRenameEvents, "true"));
+            this.KeepPublicApi = XmlConvert.ToBoolean(vars.GetValue(VariableKeepPublicApi, "true"));
+            this.HidePrivateApi = XmlConvert.ToBoolean(vars.GetValue(VariableHidePrivateApi, "true"));
+            this.ReuseNames = XmlConvert.ToBoolean(vars.GetValue(VariableReuseNames, "true"));
+            this.UseUnicodeNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseUnicodeNames, "false"));
+            this.UseKoreanNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseKoreanNames, "false"));
+            this.HideStrings = XmlConvert.ToBoolean(vars.GetValue(VariableHideStrings, "true"));
+            this.Optimize = XmlConvert.ToBoolean(vars.GetValue(VariableOptimizeMethods, "true"));
+            this.SuppressIldasm = XmlConvert.ToBoolean(vars.GetValue(VariableSuppressIldasm, "true"));
 
-            XmlMapping = XmlConvert.ToBoolean(vars.GetValue(VariableXmlMapping, "false"));
-            RegenerateDebugInfo = XmlConvert.ToBoolean(vars.GetValue(VariableRegenerateDebugInfo, "false"));
-            AnalyzeXaml = XmlConvert.ToBoolean(vars.GetValue(VariableAnalyzeXaml, "false"));
-            CustomChars = vars.GetValue(VariableCustomChars, "");
+            this.XmlMapping = XmlConvert.ToBoolean(vars.GetValue(VariableXmlMapping, "false"));
+            this.RegenerateDebugInfo = XmlConvert.ToBoolean(vars.GetValue(VariableRegenerateDebugInfo, "false"));
+            this.AnalyzeXaml = XmlConvert.ToBoolean(vars.GetValue(VariableAnalyzeXaml, "false"));
+            this.CustomChars = vars.GetValue(VariableCustomChars, "");
         }
 
         public bool RegenerateDebugInfo { get; }

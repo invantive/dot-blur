@@ -37,7 +37,7 @@ namespace ObfuscarTests
     {
         private string? output;
 
-        Obfuscator BuildAndObfuscateAssemblies()
+        private Obfuscator BuildAndObfuscateAssemblies()
         {
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -52,7 +52,7 @@ namespace ObfuscarTests
             return TestHelper.BuildAndObfuscate("AssemblyWithOverrides", string.Empty, xml);
         }
 
-        MethodDefinition FindByName(TypeDefinition typeDef, string name)
+        private MethodDefinition FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.Name == name)
@@ -65,7 +65,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckClassHasAttribute()
         {
-            Obfuscator item = BuildAndObfuscateAssemblies();
+            Obfuscator item = this.BuildAndObfuscateAssemblies();
             ObfuscationMap map = item.Mapping;
 
             string assmName = "AssemblyWithOverrides.dll";
@@ -77,18 +77,18 @@ namespace ObfuscarTests
                 Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.ClassA");
-                MethodDefinition classAmethod2 = FindByName(classAType, "Method2");
-                MethodDefinition classAcompare = FindByName(classAType, "CompareTo");
+                MethodDefinition classAmethod2 = this.FindByName(classAType, "Method2");
+                MethodDefinition classAcompare = this.FindByName(classAType, "CompareTo");
 
                 TypeDefinition classBType = inAssmDef.MainModule.GetType("TestClasses.ClassB");
-                MethodDefinition classBmethod2 = FindByName(classBType, "Method2");
-                MethodDefinition classBcompare = FindByName(classBType, "CompareTo");
+                MethodDefinition classBmethod2 = this.FindByName(classBType, "Method2");
+                MethodDefinition classBcompare = this.FindByName(classBType, "CompareTo");
 
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.ClassC");
-                MethodDefinition classCmethod1 = FindByName(classCType, "Method1");
+                MethodDefinition classCmethod1 = this.FindByName(classCType, "Method1");
 
                 TypeDefinition classDType = inAssmDef.MainModule.GetType("TestClasses.ClassD");
-                MethodDefinition classDmethod1 = FindByName(classDType, "Method1");
+                MethodDefinition classDmethod1 = this.FindByName(classDType, "Method1");
 
                 ObfuscatedThing classAEntry = map.GetMethod(new MethodKey(classAmethod2));
                 ObfuscatedThing classACompareEntry = map.GetMethod(new MethodKey(classAcompare));
@@ -98,10 +98,10 @@ namespace ObfuscarTests
                 ObfuscatedThing classDEntry = map.GetMethod(new MethodKey(classDmethod1));
 
                 TypeDefinition classFType = inAssmDef.MainModule.GetType("TestClasses.ClassF");
-                MethodDefinition classFmethod = FindByName(classFType, "Test");
+                MethodDefinition classFmethod = this.FindByName(classFType, "Test");
 
                 TypeDefinition classGType = inAssmDef.MainModule.GetType("TestClasses.ClassG");
-                MethodDefinition classGmethod = FindByName(classGType, "Test");
+                MethodDefinition classGmethod = this.FindByName(classGType, "Test");
 
                 ObfuscatedThing classFEntry = map.GetMethod(new MethodKey(classFmethod));
                 ObfuscatedThing classGEntry = map.GetMethod(new MethodKey(classGmethod));
@@ -133,16 +133,16 @@ namespace ObfuscarTests
 
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.CA");
-                MethodDefinition classAmethod2 = FindByName(classAType, "get_PropA");
+                MethodDefinition classAmethod2 = this.FindByName(classAType, "get_PropA");
 
                 TypeDefinition classBType = inAssmDef.MainModule.GetType("TestClasses.CB");
-                MethodDefinition classBmethod2 = FindByName(classBType, "get_PropB");
+                MethodDefinition classBmethod2 = this.FindByName(classBType, "get_PropB");
 
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.IA");
-                MethodDefinition classCmethod1 = FindByName(classCType, "get_PropA");
+                MethodDefinition classCmethod1 = this.FindByName(classCType, "get_PropA");
 
                 TypeDefinition classDType = inAssmDef.MainModule.GetType("TestClasses.IB");
-                MethodDefinition classDmethod1 = FindByName(classDType, "get_PropB");
+                MethodDefinition classDmethod1 = this.FindByName(classDType, "get_PropB");
 
                 ObfuscatedThing classAEntry = map.GetMethod(new MethodKey(classAmethod2));
                 ObfuscatedThing classBEntry = map.GetMethod(new MethodKey(classBmethod2));
@@ -171,7 +171,7 @@ namespace ObfuscarTests
 
             {
                 TypeDefinition classType = inAssmDef.MainModule.GetType("TestClasses.ClassH");
-                MethodDefinition classMethod = FindByName(classType, "GetObjectData");
+                MethodDefinition classMethod = this.FindByName(classType, "GetObjectData");
 
                 ObfuscatedThing classEntry = map.GetMethod(new MethodKey(classMethod));
 
@@ -218,22 +218,22 @@ namespace ObfuscarTests
             object instance = ctor.Invoke([]);
             try
             {
-                output = outputPath;
-                AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+                this.output = outputPath;
+                AppDomain.CurrentDomain.AssemblyResolve += this.AssemblyResolve;
                 Assert.True(instance.ToString() == "Empty<string, string>=A<B<String, String>>",
                     "Generic override should have been updated");
             }
             finally
             {
-                AppDomain.CurrentDomain.AssemblyResolve -= AssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyResolve -= this.AssemblyResolve;
             }
         }
 
         private Assembly? AssemblyResolve(object? sender, ResolveEventArgs args)
         {
-            Assert.NotNull(output);
+            Assert.NotNull(this.output);
 
-            string assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
+            string assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), this.output, args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
         }
 

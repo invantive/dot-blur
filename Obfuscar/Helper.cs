@@ -45,7 +45,7 @@ namespace Obfuscar
             }
 
             parent.Children.Add(this);
-            Parents.Add(parent);
+            this.Parents.Add(parent);
         }
     }
 

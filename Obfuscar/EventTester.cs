@@ -54,15 +54,15 @@ namespace Obfuscar
 
         public bool Test(EventKey evt, InheritMap? map)
         {
-            if (Helper.CompareOptionalRegex(evt.TypeKey.Fullname, type) && !MethodTester.CheckMemberVisibility(attrib, typeAttrib, evt.AddMethodAttributes, evt.DeclaringType))
+            if (Helper.CompareOptionalRegex(evt.TypeKey.Fullname, this.type) && !MethodTester.CheckMemberVisibility(this.attrib, this.typeAttrib, evt.AddMethodAttributes, evt.DeclaringType))
             {
-                if (name != null)
+                if (this.name != null)
                 {
-                    return Helper.CompareOptionalRegex(evt.Name, name);
+                    return Helper.CompareOptionalRegex(evt.Name, this.name);
                 }
-                else if (nameRx != null)
+                else if (this.nameRx != null)
                 {
-                    return nameRx.IsMatch(evt.Name);
+                    return this.nameRx.IsMatch(evt.Name);
                 }
                 else
                 {

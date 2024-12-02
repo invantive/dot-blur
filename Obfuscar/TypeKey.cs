@@ -46,11 +46,11 @@ namespace Obfuscar
             while (declaringType.DeclaringType != null)
             {
                 declaringType = declaringType.DeclaringType;
-                this.Name = declaringType.Name + "/" + Name;
+                this.Name = declaringType.Name + "/" + this.Name;
             }
             this.Namespace = declaringType.Namespace;
 
-            this.Fullname = !string.IsNullOrEmpty(this.Namespace) && Namespace != type.Namespace ? this.Namespace + "." + Name : Name;
+            this.Fullname = !string.IsNullOrEmpty(this.Namespace) && this.Namespace != type.Namespace ? this.Namespace + "." + this.Name : this.Name;
 
             // Our name should be the same as the Cecil's name. This is important to the Match method.
             GenericInstanceType? gi = type as GenericInstanceType;
@@ -60,7 +60,7 @@ namespace Obfuscar
                 throw new ObfuscarException(MessageCodes.ofr035, $"Type names do not match: \"{this.Fullname}\" != \"{type}\"");
             }
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         public TypeKey(string scope, string ns, string name): this(scope, ns, name, ns + "." + name)
@@ -74,19 +74,19 @@ namespace Obfuscar
             this.Name = name;
             this.Fullname = fullname;
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         private int CalcHashCode()
         {
-            return Scope.GetHashCode() ^ Namespace.GetHashCode() ^ Name.GetHashCode() ^ Fullname.GetHashCode();
+            return this.Scope.GetHashCode() ^ this.Namespace.GetHashCode() ^ this.Name.GetHashCode() ^ this.Fullname.GetHashCode();
         }
 
         public TypeDefinition? TypeDefinition
         {
             get 
             { 
-                return typeReference as TypeDefinition; 
+                return this.typeReference as TypeDefinition; 
             }
         }
 
@@ -111,22 +111,22 @@ namespace Obfuscar
             {
                 typefullname = instanceType.ElementType.ToString();
             }
-            return typefullname == Fullname;
+            return typefullname == this.Fullname;
         }
 
         public bool Equals(TypeKey other)
         {
             return other != null &&
                    this.hashCode == other.hashCode &&
-                   Scope == other.Scope &&
-                   Namespace == other.Namespace &&
-                   Name == other.Name &&
-                   Fullname == other.Fullname;
+                   this.Scope == other.Scope &&
+                   this.Namespace == other.Namespace &&
+                   this.Name == other.Name &&
+                   this.Fullname == other.Fullname;
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is TypeKey ? Equals((TypeKey) obj) : false;
+            return obj is TypeKey ? this.Equals((TypeKey) obj) : false;
         }
 
         public static bool operator ==(TypeKey? a, TypeKey? b)
@@ -168,17 +168,17 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return $"{this.Scope}::{Fullname}";
+            return $"{this.Scope}::{this.Fullname}";
         }
 
         public int CompareTo(TypeKey? other)
         {
             // no need to check ns and name...should be in fullname
-            int cmp = string.Compare(Scope, other?.Scope);
+            int cmp = string.Compare(this.Scope, other?.Scope);
 
             if (cmp == 0)
             {
-                cmp = string.Compare(Fullname, other?.Fullname);
+                cmp = string.Compare(this.Fullname, other?.Fullname);
             }
 
             return cmp;

@@ -88,9 +88,9 @@ namespace Obfuscar
 
         public bool Test(TypeKey type, InheritMap? map)
         {
-            if (!string.IsNullOrEmpty(attrib))
+            if (!string.IsNullOrEmpty(this.attrib))
             {
-                if (string.Equals(attrib, "public", StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(this.attrib, "public", StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (!type.TypeDefinition?.IsTypePublic() ?? false)
                     {
@@ -100,41 +100,41 @@ namespace Obfuscar
                 else
                 {
                     throw new ObfuscarException(MessageCodes.ofr011, string.Format("'{0}' is not valid for the 'attrib' value of the SkipType element. Only 'public' is supported by now.",
-                        attrib));
+                        this.attrib));
                 }
             }
 
             // type's regex matches
-            if (nameRx != null && !nameRx.IsMatch(type.Fullname))
+            if (this.nameRx != null && !this.nameRx.IsMatch(type.Fullname))
             {
                 return false;
             }
 
             // type's name matches
-            if (!string.IsNullOrEmpty(name) && !Helper.CompareOptionalRegex(type.Fullname, name))
+            if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(type.Fullname, this.name))
             {
                 return false;
             }
 
-            if (isSerializable.HasValue)
+            if (this.isSerializable.HasValue)
             {
-                if (isSerializable != type.TypeDefinition?.IsSerializable)
+                if (this.isSerializable != type.TypeDefinition?.IsSerializable)
                 {
                     return false;
                 }
             }
 
-            if (isStatic.HasValue)
+            if (this.isStatic.HasValue)
             {
-                if (isStatic != ((type.TypeDefinition?.IsSealed ?? false) && (type.TypeDefinition?.IsAbstract ?? false)))
+                if (this.isStatic != ((type.TypeDefinition?.IsSealed ?? false) && (type.TypeDefinition?.IsAbstract ?? false)))
                 {
                     return false;
                 }
             }
 
-            if (!string.IsNullOrEmpty(inherits))
+            if (!string.IsNullOrEmpty(this.inherits))
             {
-                if (map != null && type.TypeDefinition != null && !map.Inherits(type.TypeDefinition, inherits))
+                if (map != null && type.TypeDefinition != null && !map.Inherits(type.TypeDefinition, this.inherits))
                 {
                     return false;
                 }

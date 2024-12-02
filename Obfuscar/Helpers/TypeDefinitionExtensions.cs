@@ -22,7 +22,7 @@ namespace Obfuscar.Helpers
             return false;
         }
 
-        private static CacheItemPolicy policy = new CacheItemPolicy {SlidingExpiration = TimeSpan.FromMinutes(5)};
+        private static readonly CacheItemPolicy policy = new CacheItemPolicy {SlidingExpiration = TimeSpan.FromMinutes(5)};
 
         public static bool IsResourcesType(this TypeDefinition type)
         {

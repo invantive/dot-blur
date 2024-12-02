@@ -482,7 +482,7 @@ namespace Obfuscar
                     this._map.Add(typeDefinition.FullName, node);
                 }
 
-                this.AddParents(Root);
+                this.AddParents(this.Root);
             }
 
             private void AddParents(List<Node<TypeDefinition>> nodes)
@@ -543,7 +543,7 @@ namespace Obfuscar
             internal IEnumerable<TypeDefinition> GetOrderedList()
             {
                 List<TypeDefinition> result = new List<TypeDefinition>();
-                this.CleanPool(Root, result);
+                this.CleanPool(this.Root, result);
                 return result;
             }
 
@@ -761,7 +761,7 @@ namespace Obfuscar
 
                 this.Name = this.Definition.Name.Name;
 
-                project.Cache.RegisterAssembly(this.Definition);
+                this.project.Cache.RegisterAssembly(this.Definition);
 
                 // IMPORTANT: read again but with full mode.
                 try
@@ -801,7 +801,7 @@ namespace Obfuscar
         {
             get
             {
-                CheckLoaded();
+                this.CheckLoaded();
                 return this.filename;
             }
         }
@@ -810,7 +810,7 @@ namespace Obfuscar
         {
             get
             {
-                CheckLoaded();
+                this.CheckLoaded();
                 return this.definition;
             }
             set
@@ -825,7 +825,7 @@ namespace Obfuscar
         {
             get
             {
-                CheckLoaded();
+                this.CheckLoaded();
                 return this.name;
             }
             set
@@ -843,7 +843,7 @@ namespace Obfuscar
         {
             get
             {
-                CheckInitialized();
+                this.CheckInitialized();
                 return this.unrenamedReferences;
             }
         }
@@ -852,7 +852,7 @@ namespace Obfuscar
         {
             get
             {
-                CheckInitialized();
+                this.CheckInitialized();
                 return this.unrenamedTypeReferences;
             }
         }
@@ -873,7 +873,7 @@ namespace Obfuscar
 
         private bool ShouldSkip(TypeKey type, TypeAffectFlags flag, InheritMap? map)
         {
-            if (ShouldSkip(type.Namespace, map))
+            if (this.ShouldSkip(type.Namespace, map))
             {
                 return true;
             }
@@ -891,7 +891,7 @@ namespace Obfuscar
 
         private bool ShouldForce(TypeKey type, TypeAffectFlags flag, InheritMap? map)
         {
-            if (ShouldForce(type.Namespace, map))
+            if (this.ShouldForce(type.Namespace, map))
             {
                 return true;
             }
@@ -928,7 +928,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldForce(type.Namespace, map))
+            if (this.ShouldForce(type.Namespace, map))
             {
                 message = "namespace rule in configuration";
                 return false;
@@ -940,13 +940,13 @@ namespace Obfuscar
                 return true;
             }
 
-            if (ShouldSkip(type.Namespace, map))
+            if (this.ShouldSkip(type.Namespace, map))
             {
                 message = "namespace rule in configuration";
                 return true;
             }
 
-            if ((type.TypeDefinition?.IsEnum ?? false) && skipEnums)
+            if ((type.TypeDefinition?.IsEnum ?? false) && this.skipEnums)
             {
                 message = "enum rule in configuration";
                 return true;
@@ -995,7 +995,7 @@ namespace Obfuscar
                 }
             }
 
-            return ShouldSkipParams(method, map, keepPublicApi, hidePrivateApi, markedOnly, out message);
+            return this.ShouldSkipParams(method, map, keepPublicApi, hidePrivateApi, markedOnly, out message);
         }
 
         public bool ShouldSkipParams(MethodKey method, InheritMap? map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
@@ -1021,7 +1021,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (ShouldForce(method.TypeKey, TypeAffectFlags.AffectMethod, map))
+            if (this.ShouldForce(method.TypeKey, TypeAffectFlags.AffectMethod, map))
             {
                 message = "type rule in configuration";
                 return false;
@@ -1033,7 +1033,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldSkip(method.TypeKey, TypeAffectFlags.AffectMethod, map))
+            if (this.ShouldSkip(method.TypeKey, TypeAffectFlags.AffectMethod, map))
             {
                 message = "type rule in configuration";
                 return true;
@@ -1065,7 +1065,7 @@ namespace Obfuscar
                 return true; // IMPORTANT: avoid hiding resource type name, as it might be renamed later.
             }
 
-            if (ShouldForce(method.TypeKey, TypeAffectFlags.AffectString, map))
+            if (this.ShouldForce(method.TypeKey, TypeAffectFlags.AffectString, map))
             {
                 return false;
             }
@@ -1075,7 +1075,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldSkip(method.TypeKey, TypeAffectFlags.AffectString, map))
+            if (this.ShouldSkip(method.TypeKey, TypeAffectFlags.AffectString, map))
             {
                 return true;
             }
@@ -1117,7 +1117,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (ShouldForce(field.TypeKey, TypeAffectFlags.AffectField, map))
+            if (this.ShouldForce(field.TypeKey, TypeAffectFlags.AffectField, map))
             {
                 message = "type rule in configuration";
                 return false;
@@ -1129,7 +1129,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldSkip(field.TypeKey, TypeAffectFlags.AffectField, map))
+            if (this.ShouldSkip(field.TypeKey, TypeAffectFlags.AffectField, map))
             {
                 message = "type rule in configuration";
                 return true;
@@ -1186,7 +1186,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (ShouldForce(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
+            if (this.ShouldForce(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
             {
                 message = "type rule in configuration";
                 return false;
@@ -1198,7 +1198,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldSkip(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
+            if (this.ShouldSkip(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
             {
                 message = "type rule in configuration";
                 return true;
@@ -1250,7 +1250,7 @@ namespace Obfuscar
                 return true;
             }
 
-            if (ShouldForce(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
+            if (this.ShouldForce(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
             {
                 message = "type rule in configuration";
                 return false;
@@ -1262,7 +1262,7 @@ namespace Obfuscar
                 return false;
             }
 
-            if (ShouldSkip(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
+            if (this.ShouldSkip(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
             {
                 message = "type rule in configuration";
                 return true;

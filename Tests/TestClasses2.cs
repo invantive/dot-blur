@@ -35,7 +35,7 @@ namespace ObfuscarTests
     {
         public void Dispose()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         protected virtual void Dispose(bool disp)

@@ -45,41 +45,41 @@ namespace Obfuscar
         public ParamSig(string[] paramTypes)
         {
             this.ParamTypes = paramTypes;
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         public ParamSig(MethodReference method)
         {
-            ParamTypes = new string[method.Parameters.Count];
+            this.ParamTypes = new string[method.Parameters.Count];
 
             int i = 0;
             foreach (ParameterDefinition param in method.Parameters)
             {
-                ParamTypes[i++] = Helper.GetParameterTypeName(param);
+                this.ParamTypes[i++] = Helper.GetParameterTypeName(param);
             }
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         public ParamSig(MethodDefinition method)
         {
-            ParamTypes = new string[method.Parameters.Count];
+            this.ParamTypes = new string[method.Parameters.Count];
 
             int i = 0;
             foreach (ParameterDefinition param in method.Parameters)
             {
-                ParamTypes[i++] = Helper.GetParameterTypeName(param);
+                this.ParamTypes[i++] = Helper.GetParameterTypeName(param);
             }
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         private int CalcHashCode()
         {
             int hashCode = 0;
-            for (int i = 0; i < ParamTypes.Length; i++)
+            for (int i = 0; i < this.ParamTypes.Length; i++)
             {
-                hashCode ^= ParamTypes[i].GetHashCode();
+                hashCode ^= this.ParamTypes[i].GetHashCode();
             }
             return hashCode;
         }
@@ -88,7 +88,7 @@ namespace Obfuscar
         {
             get 
             { 
-                return ParamTypes.Length; 
+                return this.ParamTypes.Length; 
             }
         }
 
@@ -96,7 +96,7 @@ namespace Obfuscar
         {
             get 
             { 
-                return ParamTypes[index]; 
+                return this.ParamTypes[index]; 
             }
         }
 
@@ -104,7 +104,7 @@ namespace Obfuscar
 
         public bool Equals(ParamSig other)
         {
-            return other != null &&ParamsEqual(ParamTypes, other.ParamTypes);
+            return other != null &&ParamsEqual(this.ParamTypes, other.ParamTypes);
         }
 
         private static bool ParamsEqual(IList<string> a, IList<string> b)
@@ -140,7 +140,7 @@ namespace Obfuscar
 
         public override bool Equals(object? obj)
         {
-            return obj is ParamSig ? Equals((ParamSig)obj) : false;
+            return obj is ParamSig ? this.Equals((ParamSig)obj) : false;
         }
 
         public static bool operator ==(ParamSig? a, ParamSig? b)
@@ -182,26 +182,26 @@ namespace Obfuscar
 
         public override string? ToString()
         {
-            if (ParamTypes.Length == 0)
+            if (this.ParamTypes.Length == 0)
             {
                 return "";
             }
-            else if (ParamTypes.Length == 1)
+            else if (this.ParamTypes.Length == 1)
             {
-                return ParamTypes[0].ToString();
+                return this.ParamTypes[0].ToString();
             }
-            else if (ParamTypes.Length == 2)
+            else if (this.ParamTypes.Length == 2)
             {
-                return ParamTypes[0].ToString() + " " + ParamTypes[1].ToString();
+                return this.ParamTypes[0].ToString() + " " + this.ParamTypes[1].ToString();
             }
             else
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append(ParamTypes[0]);
-                for (int i = 1; i < ParamTypes.Length; i++)
+                sb.Append(this.ParamTypes[0]);
+                for (int i = 1; i < this.ParamTypes.Length; i++)
                 {
                     sb.Append(" ");
-                    sb.Append(ParamTypes[i]);
+                    sb.Append(this.ParamTypes[i]);
                 }
                 return sb.ToString();
             }
@@ -214,19 +214,19 @@ namespace Obfuscar
                 return -1;
             }
 
-            if (ParamTypes.Length < other.ParamTypes.Length)
+            if (this.ParamTypes.Length < other.ParamTypes.Length)
             {
                 return -1;
             }
-            else if (ParamTypes.Length > other.ParamTypes.Length)
+            else if (this.ParamTypes.Length > other.ParamTypes.Length)
             {
                 return 1;
             }
             else
             {
-                for (int i = 0; i < ParamTypes.Length; i++)
+                for (int i = 0; i < this.ParamTypes.Length; i++)
                 {
-                    int cmp = string.Compare(ParamTypes[i], other.ParamTypes[i]);
+                    int cmp = string.Compare(this.ParamTypes[i], other.ParamTypes[i]);
                     if (cmp != 0)
                     {
                         return cmp;

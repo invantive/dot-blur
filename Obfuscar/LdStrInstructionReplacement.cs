@@ -7,7 +7,7 @@ namespace Obfuscar
         public LdStrInstructionReplacement(int oldIndex, Instruction newinstruction)
         {
             this.OldIndex = oldIndex;
-            NewInstruction = newinstruction;
+            this.NewInstruction = newinstruction;
         }
 
         public int OldIndex { get; }

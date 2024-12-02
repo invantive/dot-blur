@@ -96,10 +96,10 @@ namespace ObfuscarTests
             AssemblyHelper.CheckAssembly(Path.Combine(outputPath, "SkipVirtualMethodTest1.dll"), 2, expected,
                 notExpected,
                 delegate (TypeDefinition typeDef) { return !typeDef.IsInterface; },
-                CheckType);
+                this.CheckType);
         }
 
-        void CheckType(TypeDefinition typeDef)
+        private void CheckType(TypeDefinition typeDef)
         {
             Assembly assm = Assembly.LoadFile(Path.GetFullPath(typeDef.Module.FileName));
             Type? type = assm.GetType(typeDef.FullName);

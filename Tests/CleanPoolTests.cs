@@ -51,7 +51,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckCleanPool()
         {
-            BuildAndObfuscateAssemblies();
+            this.BuildAndObfuscateAssemblies();
         }
     }
 }

@@ -31,7 +31,7 @@ using Xunit;
 
 namespace ObfuscarTests
 {
-    static class AssemblyHelper
+    internal static class AssemblyHelper
     {
         public static void CheckAssembly(string name, int expectedTypes,
             Predicate<TypeDefinition> isType, Action<TypeDefinition> checkType)

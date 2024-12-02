@@ -14,7 +14,7 @@ namespace ObfuscarTests
             TestHelper.BuildAssemblies("AssemblyA", "AssemblyB");
         }
 
-        static MethodDefinition FindByName(TypeDefinition typeDef, string name)
+        private static MethodDefinition FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.Name == name)

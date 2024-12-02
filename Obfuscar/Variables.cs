@@ -37,19 +37,19 @@ namespace Obfuscar
 
         public void Add(string name, string value)
         {
-            vars[name] = value;
+            this.vars[name] = value;
         }
 
         public void Remove(string name)
         {
-            vars.Remove(name);
+            this.vars.Remove(name);
         }
 
         [return: NotNullIfNotNull(nameof(def))]
         public string? GetValue(string name, string? def)
         {
             string? value;
-            return this.Replace(vars.TryGetValue(name, out value) ? value : def);
+            return this.Replace(this.vars.TryGetValue(name, out value) ? value : def);
         }
 
         [return: NotNullIfNotNull(nameof(str))]
@@ -66,12 +66,12 @@ namespace Obfuscar
 
             string variable;
             string? replacement;
-            foreach (System.Text.RegularExpressions.Match m in re.Matches(str))
+            foreach (System.Text.RegularExpressions.Match m in this.re.Matches(str))
             {
                 formatted.Append(str.Substring(lastMatch, m.Index - lastMatch));
 
                 variable = m.Groups[1].Value;
-                if (vars.TryGetValue(variable, out replacement))
+                if (this.vars.TryGetValue(variable, out replacement))
                 {
                     formatted.Append(this.Replace(replacement));
                 }

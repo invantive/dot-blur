@@ -7,7 +7,7 @@ namespace ObfuscarTests
 {
     public class AutoSkipTypeTests
     {
-        MethodDefinition? FindByName(TypeDefinition typeDef, string name)
+        private MethodDefinition? FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
             {
@@ -54,8 +54,8 @@ namespace ObfuscarTests
 
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.PublicClass");
             ObfuscatedClass classA = map.GetClass(new TypeKey(classAType));
-            MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
-            MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
+            MethodDefinition? classAmethod1 = this.FindByName(classAType, "PrivateMethod");
+            MethodDefinition? classAmethod2 = this.FindByName(classAType, "PublicMethod");
 
             Assert.NotNull(classAmethod1);
             Assert.NotNull(classAmethod2);
@@ -121,8 +121,8 @@ namespace ObfuscarTests
                 Path.Combine(TestHelper.InputPath, assmName));
 
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.PublicClass");
-            MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
-            MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
+            MethodDefinition? classAmethod1 = this.FindByName(classAType, "PrivateMethod");
+            MethodDefinition? classAmethod2 = this.FindByName(classAType, "PublicMethod");
 
             Assert.NotNull(classAmethod1);
             Assert.NotNull(classAmethod2);
@@ -135,7 +135,7 @@ namespace ObfuscarTests
             Assert.True(classAMethod1.Status == ObfuscationStatus.Renamed, "private method is not obfuscated.");
             Assert.True(classAMethod2.Status == ObfuscationStatus.Renamed, "pubilc method is not obfuscated.");
 
-            MethodDefinition? protectedMethod = FindByName(classAType, "ProtectedMethod");
+            MethodDefinition? protectedMethod = this.FindByName(classAType, "ProtectedMethod");
 
             Assert.NotNull(protectedMethod);
 
@@ -166,9 +166,9 @@ namespace ObfuscarTests
                 Path.Combine(TestHelper.InputPath, assmName));
 
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.PublicClass");
-            MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
-            MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
-            MethodDefinition? classAmethod3 = FindByName(classAType, "InternalProtectedMethod");
+            MethodDefinition? classAmethod1 = this.FindByName(classAType, "PrivateMethod");
+            MethodDefinition? classAmethod2 = this.FindByName(classAType, "PublicMethod");
+            MethodDefinition? classAmethod3 = this.FindByName(classAType, "InternalProtectedMethod");
 
             Assert.NotNull(classAmethod1);
             Assert.NotNull(classAmethod2);
@@ -183,7 +183,7 @@ namespace ObfuscarTests
             Assert.True(classAMethod2.Status == ObfuscationStatus.Skipped, "pubilc method is obfuscated.");
             Assert.True(classAMethod3.Status == ObfuscationStatus.Skipped, "internal protected method is obfuscated.");
 
-            MethodDefinition? protectedMethod = FindByName(classAType, "ProtectedMethod");
+            MethodDefinition? protectedMethod = this.FindByName(classAType, "ProtectedMethod");
 
             Assert.NotNull(protectedMethod);
 

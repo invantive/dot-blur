@@ -123,7 +123,7 @@ namespace ObfuscarTests
                 "EventA"
             };
 
-            CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
+            this.CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace ObfuscarTests
                 "EventA"
             };
 
-            CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
+            this.CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace ObfuscarTests
                 "EventA"
             };
 
-            CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
+            this.CheckEvents(Path.Combine(outputPath, "AssemblyWithEvents.dll"), 1, expected, notExpected);
         }
     }
 }

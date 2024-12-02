@@ -54,7 +54,7 @@ namespace Obfuscar
 
         public MethodAttributes AddMethodAttributes => this.Event.AddMethod != null ? this.Event.AddMethod.Attributes : 0;
 
-        public TypeDefinition DeclaringType => Event.DeclaringType; 
+        public TypeDefinition DeclaringType => this.Event.DeclaringType; 
 
         public EventDefinition Event { get; }
 
@@ -63,9 +63,9 @@ namespace Obfuscar
             EventReference? evtRef = member as EventReference;
             if (evtRef != null)
             {
-                if (TypeKey.Matches(evtRef.DeclaringType))
+                if (this.TypeKey.Matches(evtRef.DeclaringType))
                 {
-                    return Type == evtRef.EventType.FullName && Name == evtRef.Name;
+                    return this.Type == evtRef.EventType.FullName && this.Name == evtRef.Name;
                 }
             }
 
@@ -117,7 +117,7 @@ namespace Obfuscar
 
         public override int GetHashCode()
         {
-            return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
+            return this.TypeKey.GetHashCode() ^ this.Type.GetHashCode() ^ this.Name.GetHashCode();
         }
 
         public override string ToString()

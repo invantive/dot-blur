@@ -96,7 +96,7 @@ namespace ObfuscarTests
                 "PropertyA"
             };
 
-            CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
+            this.CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace ObfuscarTests
                 "PropertyA"
             };
 
-            CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
+            this.CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace ObfuscarTests
                 "PropertyA"
             };
 
-            CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
+            this.CheckProperties(Path.Combine(outputPath, "AssemblyWithProperties.dll"), 1, expected, notExpected);
         }
     }
 }

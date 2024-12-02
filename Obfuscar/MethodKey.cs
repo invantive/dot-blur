@@ -42,19 +42,19 @@ namespace Obfuscar
             this.TypeKey = typeKey;
             this.Method = method;
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         private int CalcHashCode()
         {
-            return TypeKey.GetHashCode() ^ base.GetHashCode();
+            return this.TypeKey.GetHashCode() ^ base.GetHashCode();
         }
 
         public MethodAttributes MethodAttributes
         {
             get
             { 
-                return Method.Attributes; 
+                return this.Method.Attributes; 
             }
         }
 
@@ -62,7 +62,7 @@ namespace Obfuscar
         {
             get 
             { 
-                return (TypeDefinition) Method.DeclaringType; 
+                return (TypeDefinition)this.Method.DeclaringType; 
             }
         }
 
@@ -76,9 +76,9 @@ namespace Obfuscar
 
             if (methodRef != null)
             {
-                if (TypeKey.Matches(methodRef.DeclaringType))
+                if (this.TypeKey.Matches(methodRef.DeclaringType))
                 {
-                    return MethodMatch(Method, methodRef);
+                    return MethodMatch(this.Method, methodRef);
                 }
             }
 
@@ -87,12 +87,12 @@ namespace Obfuscar
 
         public bool Equals(MethodKey? other)
         {
-            return other != null && hashCode == other.hashCode && (TypeKey == null ? other.TypeKey == null : TypeKey == other.TypeKey) &&  Equals((NameParamSig) other);
+            return other != null && this.hashCode == other.hashCode && (this.TypeKey == null ? other.TypeKey == null : this.TypeKey == other.TypeKey) && this.Equals((NameParamSig) other);
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is MethodKey ? Equals((MethodKey) obj) : false;
+            return obj is MethodKey ? this.Equals((MethodKey) obj) : false;
         }
 
         public static bool operator ==(MethodKey? a, MethodKey? b)
@@ -129,7 +129,7 @@ namespace Obfuscar
 
         public override int GetHashCode()
         {
-            return hashCode;
+            return this.hashCode;
         }
 
         public override string ToString()
@@ -143,7 +143,7 @@ namespace Obfuscar
 
             if (cmp == 0)
             {
-                cmp = TypeKey.CompareTo(other?.TypeKey);
+                cmp = this.TypeKey.CompareTo(other?.TypeKey);
             }
 
             return cmp;

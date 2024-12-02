@@ -61,12 +61,12 @@ namespace Obfuscar
             "Reviewed. Suppression is OK here.")]
         public Obfuscator(string projfile)
         {
-            Mapping = new ObfuscationMap();
+            this.Mapping = new ObfuscationMap();
 
             try
             {
                 XDocument document = XDocument.Load(projfile);
-                LoadFromReader(document, Path.GetDirectoryName(projfile));
+                this.LoadFromReader(document, Path.GetDirectoryName(projfile));
             }
             catch (IOException e)
             {
@@ -84,8 +84,8 @@ namespace Obfuscar
         /// <param name="reader">The reader.</param>
         private Obfuscator(XDocument reader)
         {
-            Mapping = new ObfuscationMap();
-            LoadFromReader(reader, null);
+            this.Mapping = new ObfuscationMap();
+            this.LoadFromReader(reader, null);
         }
 
         public void RunRules()
@@ -120,10 +120,10 @@ namespace Obfuscar
             this.PostProcessing();
 
             Log.OutputLine("Phase: saving assemblies.");
-            SaveAssemblies();
+            this.SaveAssemblies();
 
             Log.OutputLine("Phase: save mapping file.");
-            SaveMapping();
+            this.SaveMapping();
         }
 
         public static Obfuscator CreateFromXml(string xml)
@@ -137,13 +137,13 @@ namespace Obfuscar
         [MemberNotNull(nameof(Project))]
         private void LoadFromReader(XDocument reader, string? projectFileDirectory)
         {
-            Project = Project.FromXml(reader, projectFileDirectory);
+            this.Project = Project.FromXml(reader, projectFileDirectory);
 
             //
             // Make sure everything looks good.
             //
             this.Project.CheckSettings();
-            NameMaker.DetermineChars(Project.Settings);
+            NameMaker.DetermineChars(this.Project.Settings);
 
             Log.OutputLine("Loading assemblies.");
 
@@ -319,7 +319,7 @@ namespace Obfuscar
 
                         Log.Output($"\n{name} might be one of:");
 
-                        LogMappings(name);
+                        this.LogMappings(name);
 
                         Log.Output("\nHint: you might need to add a SkipType for an enum above.");
                     }
@@ -341,7 +341,7 @@ namespace Obfuscar
 
         private void LogMappings(string name)
         {
-            foreach ((TypeKey key, string statusText) in Mapping.FindClasses(name))
+            foreach ((TypeKey key, string statusText) in this.Mapping.FindClasses(name))
             {
                 Log.Output($"\n{key.Fullname} => {statusText}");
             }
@@ -381,7 +381,7 @@ namespace Obfuscar
         {
             IMapWriter mapWriter = this.Project.Settings.XmlMapping ? new XmlMapWriter(writer) : new TextMapWriter(writer);
 
-            mapWriter.WriteMap(Mapping);
+            mapWriter.WriteMap(this.Mapping);
         }
 
         /// <summary>
@@ -432,7 +432,7 @@ namespace Obfuscar
                     // Rename field, grouping according to signature.
                     foreach (FieldDefinition field in type.Fields)
                     {
-                        ProcessField(field, typeKey, nameGroups, info);
+                        this.ProcessField(field, typeKey, nameGroups, info);
                     }
                 }
             }
@@ -443,19 +443,19 @@ namespace Obfuscar
         {
             string sig = field.FieldType.FullName;
             FieldKey fieldKey = new FieldKey(typeKey, sig, field.Name, field);
-            NameGroup nameGroup = GetNameGroup(nameGroups, sig);
+            NameGroup nameGroup = this.GetNameGroup(nameGroups, sig);
 
             // skip filtered fields
             if (info.ShouldSkip(fieldKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out string skip))
             {
-                Mapping.UpdateField(fieldKey, ObfuscationStatus.Skipped, skip);
+                this.Mapping.UpdateField(fieldKey, ObfuscationStatus.Skipped, skip);
                 nameGroup.Add(fieldKey.Name);
                 return;
             }
 
-            string newName = this.Project.Settings.ReuseNames ? nameGroup.GetNext() : NameMaker.UniqueName(_uniqueMemberNameIndex++);
+            string newName = this.Project.Settings.ReuseNames ? nameGroup.GetNext() : NameMaker.UniqueName(this._uniqueMemberNameIndex++);
 
-            RenameField(info, fieldKey, field, newName);
+            this.RenameField(info, fieldKey, field, newName);
             nameGroup.Add(newName);
         }
 
@@ -490,7 +490,7 @@ namespace Obfuscar
             }
 
             field.Name = newName;
-            Mapping.UpdateField(fieldKey, ObfuscationStatus.Renamed, newName);
+            this.Mapping.UpdateField(fieldKey, ObfuscationStatus.Renamed, newName);
         }
 
         /// <summary>
@@ -515,7 +515,7 @@ namespace Obfuscar
                     //
                     foreach (MethodDefinition method in type.Methods)
                     {
-                        RenameParams(method, info);
+                        this.RenameParams(method, info);
                     }
 
                     //
@@ -576,8 +576,8 @@ namespace Obfuscar
                 List<Resource> resources = new List<Resource>(library.MainModule.Resources.Count);
                 resources.AddRange(library.MainModule.Resources);
 
-                List<BamlDocument> xamlFiles = GetXamlDocuments(library, this.Project.Settings.AnalyzeXaml);
-                HashSet<string> namesInXaml = NamesInXaml(xamlFiles);
+                List<BamlDocument> xamlFiles = this.GetXamlDocuments(library, this.Project.Settings.AnalyzeXaml);
+                HashSet<string> namesInXaml = this.NamesInXaml(xamlFiles);
 
                 // Save the original names of all types because parent (declaring) types of nested types may be already renamed.
                 // The names are used for the mappings file.
@@ -603,7 +603,7 @@ namespace Obfuscar
 
                     if (info.ShouldSkip(unrenamedTypeKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out string skip))
                     {
-                        Mapping.UpdateType(oldTypeKey, ObfuscationStatus.Skipped, skip);
+                        this.Mapping.UpdateType(oldTypeKey, ObfuscationStatus.Skipped, skip);
 
                         // go through the list of resources, remove ones that would be renamed
                         for (int i = 0; i < resources.Count;)
@@ -614,7 +614,7 @@ namespace Obfuscar
                             if (Path.GetFileNameWithoutExtension(resName) == fullName)
                             {
                                 resources.RemoveAt(i);
-                                Mapping.AddResource(resName, ObfuscationStatus.Skipped, skip);
+                                this.Mapping.AddResource(resName, ObfuscationStatus.Skipped, skip);
                             }
                             else
                             {
@@ -627,7 +627,7 @@ namespace Obfuscar
 
                     if (namesInXaml.Contains(type.FullName))
                     {
-                        Mapping.UpdateType(oldTypeKey, ObfuscationStatus.Skipped, "filtered by BAML");
+                        this.Mapping.UpdateType(oldTypeKey, ObfuscationStatus.Skipped, "filtered by BAML");
 
                         // go through the list of resources, remove ones that would be renamed
                         for (int i = 0; i < resources.Count;)
@@ -637,7 +637,7 @@ namespace Obfuscar
                             if (Path.GetFileNameWithoutExtension(resName) == fullName)
                             {
                                 resources.RemoveAt(i);
-                                Mapping.AddResource(resName, ObfuscationStatus.Skipped, "filtered by BAML");
+                                this.Mapping.AddResource(resName, ObfuscationStatus.Skipped, "filtered by BAML");
                             }
                             else
                             {
@@ -664,16 +664,16 @@ namespace Obfuscar
                     }
                     else
                     {
-                        if (Project.Settings.ReuseNames)
+                        if (this.Project.Settings.ReuseNames)
                         {
                             name = NameMaker.UniqueTypeName(typeIndex);
                             ns = NameMaker.UniqueNamespace(typeIndex);
                         }
                         else
                         {
-                            name = NameMaker.UniqueName(_uniqueTypeNameIndex);
-                            ns = NameMaker.UniqueNamespace(_uniqueTypeNameIndex);
-                            _uniqueTypeNameIndex++;
+                            name = NameMaker.UniqueName(this._uniqueTypeNameIndex);
+                            ns = NameMaker.UniqueNamespace(this._uniqueTypeNameIndex);
+                            this._uniqueTypeNameIndex++;
                         }
                     }
 
@@ -691,12 +691,12 @@ namespace Obfuscar
                     typeIndex++;
 
                     this.FixResouceManager(resources, type, fullName, newTypeKey);
-                    RenameType(info, type, oldTypeKey, newTypeKey, unrenamedTypeKey);
+                    this.RenameType(info, type, oldTypeKey, newTypeKey, unrenamedTypeKey);
                 }
 
                 foreach (Resource res in resources)
                 {
-                    Mapping.AddResource(res.Name, ObfuscationStatus.Skipped, "no clear new name");
+                    this.Mapping.AddResource(res.Name, ObfuscationStatus.Skipped, "no clear new name");
                 }
 
                 info.InvalidateCache();
@@ -745,7 +745,7 @@ namespace Obfuscar
                         string newName = newTypeKey.Fullname + suffix;
                         res.Name = newName;
                         resources.RemoveAt(i);
-                        Mapping.AddResource(resName, ObfuscationStatus.Renamed, newName);
+                        this.Mapping.AddResource(resName, ObfuscationStatus.Renamed, newName);
                     }
                     else
                     {
@@ -942,7 +942,7 @@ namespace Obfuscar
 
         private NameGroup GetNameGroup(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, TypeKey typeKey, ParamSig sig)
         {
-            return this.GetNameGroup(GetSigNames(baseSigNames, typeKey), sig);
+            return this.GetNameGroup(this.GetSigNames(baseSigNames, typeKey), sig);
         }
 
         private NameGroup GetNameGroup<TKeyType>(Dictionary<TKeyType, NameGroup> sigNames, TKeyType sig) where TKeyType : notnull
@@ -959,7 +959,7 @@ namespace Obfuscar
         public void RenameProperties()
         {
             // do nothing if it was requested not to rename
-            if (!Project.Settings.RenameProperties)
+            if (!this.Project.Settings.RenameProperties)
             {
                 return;
             }
@@ -980,13 +980,13 @@ namespace Obfuscar
 
                     foreach (PropertyDefinition prop in type.Properties)
                     {
-                        index = ProcessProperty(typeKey, prop, info, type, index, propsToDrop);
+                        index = this.ProcessProperty(typeKey, prop, info, type, index, propsToDrop);
                     }
 
                     foreach (PropertyDefinition prop in propsToDrop)
                     {
                         PropertyKey propKey = new PropertyKey(typeKey, prop);
-                        ObfuscatedThing m = Mapping.GetProperty(propKey);
+                        ObfuscatedThing m = this.Mapping.GetProperty(propKey);
                         m.Update(ObfuscationStatus.Renamed, "dropped");
                         type.Properties.Remove(prop);
                     }
@@ -999,7 +999,7 @@ namespace Obfuscar
             List<PropertyDefinition> propsToDrop)
         {
             PropertyKey propKey = new PropertyKey(typeKey, prop);
-            ObfuscatedThing m = Mapping.GetProperty(propKey);
+            ObfuscatedThing m = this.Mapping.GetProperty(propKey);
 
             string skip;
             // skip filtered props
@@ -1010,12 +1010,12 @@ namespace Obfuscar
                 // make sure get/set get skipped too
                 if (prop.GetMethod != null)
                 {
-                    ForceSkip(prop.GetMethod, "skip by property");
+                    this.ForceSkip(prop.GetMethod, "skip by property");
                 }
 
                 if (prop.SetMethod != null)
                 {
-                    ForceSkip(prop.SetMethod, "skip by property");
+                    this.ForceSkip(prop.SetMethod, "skip by property");
                 }
 
                 return index;
@@ -1030,8 +1030,8 @@ namespace Obfuscar
             else if (prop.CustomAttributes.Count > 0)
             {
                 // If a property has custom attributes we don't remove the property but rename it instead.
-                string newName = NameMaker.UniqueName(Project.Settings.ReuseNames ? index++ : _uniqueMemberNameIndex++);
-                RenameProperty(info, propKey, prop, newName);
+                string newName = NameMaker.UniqueName(this.Project.Settings.ReuseNames ? index++ : this._uniqueMemberNameIndex++);
+                this.RenameProperty(info, propKey, prop, newName);
             }
             else
             {
@@ -1094,13 +1094,13 @@ namespace Obfuscar
                     List<EventDefinition> evtsToDrop = new List<EventDefinition>();
                     foreach (EventDefinition evt in type.Events)
                     {
-                        ProcessEvent(typeKey, evt, info, evtsToDrop);
+                        this.ProcessEvent(typeKey, evt, info, evtsToDrop);
                     }
 
                     foreach (EventDefinition evt in evtsToDrop)
                     {
                         EventKey evtKey = new EventKey(typeKey, evt);
-                        ObfuscatedThing m = Mapping.GetEvent(evtKey);
+                        ObfuscatedThing m = this.Mapping.GetEvent(evtKey);
 
                         m.Update(ObfuscationStatus.Renamed, "dropped");
                         type.Events.Remove(evt);
@@ -1113,7 +1113,7 @@ namespace Obfuscar
             List<EventDefinition> evtsToDrop)
         {
             EventKey evtKey = new EventKey(typeKey, evt);
-            ObfuscatedThing m = Mapping.GetEvent(evtKey);
+            ObfuscatedThing m = this.Mapping.GetEvent(evtKey);
 
             // skip filtered events
             if (info.ShouldSkip(evtKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi,
@@ -1123,8 +1123,8 @@ namespace Obfuscar
                 m.Update(ObfuscationStatus.Skipped, skip);
 
                 // make sure add/remove get skipped too
-                ForceSkip(evt.AddMethod, "skip by event");
-                ForceSkip(evt.RemoveMethod, "skip by event");
+                this.ForceSkip(evt.AddMethod, "skip by event");
+                this.ForceSkip(evt.RemoveMethod, "skip by event");
                 return;
             }
 
@@ -1134,7 +1134,7 @@ namespace Obfuscar
 
         private void ForceSkip(MethodDefinition method, string skip)
         {
-            ObfuscatedThing delete = Mapping.GetMethod(new MethodKey(method));
+            ObfuscatedThing delete = this.Mapping.GetMethod(new MethodKey(method));
             delete.Status = ObfuscationStatus.Skipped;
             delete.StatusText = skip;
         }
@@ -1153,13 +1153,13 @@ namespace Obfuscar
 
                     TypeKey typeKey = new TypeKey(type);
 
-                    Dictionary<ParamSig, NameGroup> sigNames = GetSigNames(baseSigNames, typeKey);
+                    Dictionary<ParamSig, NameGroup> sigNames = this.GetSigNames(baseSigNames, typeKey);
 
                     // first pass.  mark grouped virtual methods to be renamed, and mark some things
                     // to be skipped as neccessary
                     foreach (MethodDefinition method in type.Methods)
                     {
-                        ProcessMethod(typeKey, method, info, baseSigNames);
+                        this.ProcessMethod(typeKey, method, info, baseSigNames);
                     }
 
                     //
@@ -1169,10 +1169,10 @@ namespace Obfuscar
                     {
                         foreach (TypeKey baseType in this.Project.InheritMap.GetBaseTypes(typeKey))
                         {
-                            Dictionary<ParamSig, NameGroup> baseNames = GetSigNames(baseSigNames, baseType);
+                            Dictionary<ParamSig, NameGroup> baseNames = this.GetSigNames(baseSigNames, baseType);
                             foreach (KeyValuePair<ParamSig, NameGroup> pair in baseNames)
                             {
-                                NameGroup nameGroup = GetNameGroup(sigNames, pair.Key);
+                                NameGroup nameGroup = this.GetNameGroup(sigNames, pair.Key);
                                 nameGroup.AddAll(pair.Value);
                             }
                         }
@@ -1187,13 +1187,13 @@ namespace Obfuscar
                     }
 
                     TypeKey typeKey = new TypeKey(type);
-                    Dictionary<ParamSig, NameGroup> sigNames = GetSigNames(baseSigNames, typeKey);
+                    Dictionary<ParamSig, NameGroup> sigNames = this.GetSigNames(baseSigNames, typeKey);
 
                     // second pass...marked virtuals and anything not skipped get renamed
                     foreach (MethodDefinition method in type.Methods)
                     {
                         MethodKey methodKey = new MethodKey(typeKey, method);
-                        ObfuscatedThing m = Mapping.GetMethod(methodKey);
+                        ObfuscatedThing m = this.Mapping.GetMethod(methodKey);
 
                         // if we already decided to skip it, leave it alone
                         if (m.Status == ObfuscationStatus.Skipped)
@@ -1208,9 +1208,9 @@ namespace Obfuscar
                                 case MethodSemanticsAttributes.Getter:
                                 case MethodSemanticsAttributes.Setter:
                                     {
-                                        if (Project.Settings.RenameProperties)
+                                        if (this.Project.Settings.RenameProperties)
                                         {
-                                            RenameMethod(info, sigNames, methodKey, method);
+                                            this.RenameMethod(info, sigNames, methodKey, method);
                                             method.SemanticsAttributes = 0;
                                         }
                                         break;
@@ -1218,9 +1218,9 @@ namespace Obfuscar
                                 case MethodSemanticsAttributes.AddOn:
                                 case MethodSemanticsAttributes.RemoveOn:
                                     {
-                                        if (Project.Settings.RenameEvents)
+                                        if (this.Project.Settings.RenameEvents)
                                         {
-                                            RenameMethod(info, sigNames, methodKey, method);
+                                            this.RenameMethod(info, sigNames, methodKey, method);
                                             method.SemanticsAttributes = 0;
                                         }
                                         break;
@@ -1229,7 +1229,7 @@ namespace Obfuscar
                         }
                         else
                         {
-                            RenameMethod(info, sigNames, methodKey, method);
+                            this.RenameMethod(info, sigNames, methodKey, method);
                         }
                     }
                 }
@@ -1240,7 +1240,7 @@ namespace Obfuscar
             Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames)
         {
             MethodKey methodKey = new MethodKey(typeKey, method);
-            ObfuscatedThing m = Mapping.GetMethod(methodKey);
+            ObfuscatedThing m = this.Mapping.GetMethod(methodKey);
 
             if (m.Status == ObfuscationStatus.Skipped)
             {
@@ -1269,7 +1269,7 @@ namespace Obfuscar
             // if we need to skip the method or we don't yet have a name planned for a method, rename it
             if ((skiprename != null && m.Status != ObfuscationStatus.Skipped) || m.Status == ObfuscationStatus.Unknown)
             {
-                RenameVirtualMethod(baseSigNames, methodKey, method, skiprename);
+                this.RenameVirtualMethod(baseSigNames, methodKey, method, skiprename);
             }
         }
 
@@ -1298,7 +1298,7 @@ namespace Obfuscar
                 ParamSig sig = new ParamSig(method);
 
                 // get name groups for classes in the group
-                NameGroup[] nameGroups = GetNameGroups(baseSigNames, group.Methods, sig);
+                NameGroup[] nameGroups = this.GetNameGroups(baseSigNames, group.Methods, sig);
 
                 if (group.External)
                 {
@@ -1325,11 +1325,11 @@ namespace Obfuscar
                 {
                     if (skipRename == null)
                     {
-                        Mapping.UpdateMethod(m, ObfuscationStatus.WillRename, groupName);
+                        this.Mapping.UpdateMethod(m, ObfuscationStatus.WillRename, groupName);
                     }
                     else
                     {
-                        Mapping.UpdateMethod(m, ObfuscationStatus.Skipped, skipRename);
+                        this.Mapping.UpdateMethod(m, ObfuscationStatus.Skipped, skipRename);
                     }
                 }
 
@@ -1345,12 +1345,12 @@ namespace Obfuscar
 
                 // ReSharper disable once InvocationIsSkipped
                 Debug.Assert(!group.External, "Group's external flag should have been handled when the group was created, " + "and all methods in the group should already be marked skipped.");
-                Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
+                this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
 
                 StringBuilder message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
                 foreach (MethodKey item in group.Methods)
                 {
-                    ObfuscatedThing state = Mapping.GetMethod(item);
+                    ObfuscatedThing state = this.Mapping.GetMethod(item);
                     message.AppendFormat("{0}->{1}:{2}", item, state.Status, state.StatusText).AppendLine();
                 }
 
@@ -1359,7 +1359,7 @@ namespace Obfuscar
             else
             {
                 // ReSharper disable once RedundantAssignment
-                ObfuscatedThing m = Mapping.GetMethod(methodKey);
+                ObfuscatedThing m = this.Mapping.GetMethod(methodKey);
                 // ReSharper disable once InvocationIsSkipped
                 Debug.Assert(m.Status == ObfuscationStatus.Skipped || ((m.Status == ObfuscationStatus.WillRename || m.Status == ObfuscationStatus.Renamed) && m.StatusText == groupName), "If the method isn't skipped, and the group already has a name...method should have one too.");
             }
@@ -1381,7 +1381,7 @@ namespace Obfuscar
             {
                 if (type.TypeDefinition != null)
                 {
-                    InheritMap.GetBaseTypes(Project, parentTypes, type.TypeDefinition);
+                    InheritMap.GetBaseTypes(this.Project, parentTypes, type.TypeDefinition);
                 }
             }
 
@@ -1393,7 +1393,7 @@ namespace Obfuscar
             int i = 0;
             foreach (TypeKey typeKey in typeKeys)
             {
-                NameGroup nameGroup = GetNameGroup(baseSigNames, typeKey, sig);
+                NameGroup nameGroup = this.GetNameGroup(baseSigNames, typeKey, sig);
 
                 nameGroups[i++] = nameGroup;
             }
@@ -1403,7 +1403,7 @@ namespace Obfuscar
 
         private string? GetNewMethodName(Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey, MethodDefinition method)
         {
-            ObfuscatedThing t = Mapping.GetMethod(methodKey);
+            ObfuscatedThing t = this.Mapping.GetMethod(methodKey);
 
             // if it already has a name, return it
             if (t.Status == ObfuscationStatus.Renamed || t.Status == ObfuscationStatus.WillRename)
@@ -1419,7 +1419,7 @@ namespace Obfuscar
 
             // got a new name for the method
             t.Status = ObfuscationStatus.WillRename;
-            t.StatusText = GetNewName(sigNames, method);
+            t.StatusText = this.GetNewName(sigNames, method);
 
             return t.StatusText;
         }
@@ -1429,7 +1429,7 @@ namespace Obfuscar
             // counts are grouping according to signature
             ParamSig sig = new ParamSig(method);
 
-            NameGroup nameGroup = GetNameGroup(sigNames, sig);
+            NameGroup nameGroup = this.GetNameGroup(sigNames, sig);
 
             string newName = nameGroup.GetNext();
 
@@ -1442,11 +1442,11 @@ namespace Obfuscar
         void RenameMethod(AssemblyInfo info, Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey,
             MethodDefinition method)
         {
-            string? newName = GetNewMethodName(sigNames, methodKey, method);
+            string? newName = this.GetNewMethodName(sigNames, methodKey, method);
 
             if (newName != null)
             {
-                RenameMethod(info, methodKey, method, newName);
+                this.RenameMethod(info, methodKey, method, newName);
             }
         }
 
@@ -1505,7 +1505,7 @@ namespace Obfuscar
 
             method.Name = newName;
 
-            Mapping.UpdateMethod(methodKey, ObfuscationStatus.Renamed, newName);
+            this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Renamed, newName);
         }
 
         /// <summary>
@@ -1530,7 +1530,7 @@ namespace Obfuscar
                     // TypeKey typeKey = new TypeKey(type);
                     foreach (MethodDefinition method in type.Methods)
                     {
-                        container.ProcessStrings(method, info, Project);
+                        container.ProcessStrings(method, info, this.Project);
                     }
                 }
 
@@ -1581,7 +1581,7 @@ namespace Obfuscar
                     }
                 }
 
-                if (!Project.Settings.SuppressIldasm)
+                if (!this.Project.Settings.SuppressIldasm)
                 {
                     continue;
                 }

@@ -115,7 +115,7 @@ namespace Obfuscar
 
             if (this.EncodingTypeDefinition == null)
             {
-                isDisabled = true;
+                this.isDisabled = true;
                 return;
             }
 
@@ -157,7 +157,7 @@ namespace Obfuscar
                                               | TypeAttributes.AutoClass
                                               | TypeAttributes.AnsiClass
                                               | TypeAttributes.BeforeFieldInit
-                                            , SystemObjectTypeReference
+                                            , this.SystemObjectTypeReference
                                             );
 
                 // Add struct for constant byte array data
@@ -167,7 +167,7 @@ namespace Obfuscar
                                                   | TypeAttributes.AnsiClass
                                                   | TypeAttributes.Sealed
                                                   | TypeAttributes.NestedPrivate
-                                                , SystemValueTypeTypeReference
+                                                , this.SystemValueTypeTypeReference
                                                 );
                 structType.PackingSize = 1;
                 newType.NestedTypes.Add(structType);
@@ -184,7 +184,7 @@ namespace Obfuscar
                 FieldDefinition dataField = new FieldDefinition
                                                 ( "4"
                                                 , FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly
-                                                , new ArrayType(SystemByteTypeReference)
+                                                , new ArrayType(this.SystemByteTypeReference)
                                                 );
 
                 newType.Fields.Add(dataField);
@@ -193,7 +193,7 @@ namespace Obfuscar
                 FieldDefinition stringArrayField = new FieldDefinition
                                                     ( "5"
                                                     , FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly
-                                                    , new ArrayType(SystemStringTypeReference)
+                                                    , new ArrayType(this.SystemStringTypeReference)
                                                     );
 
                 newType.Fields.Add(stringArrayField);
@@ -202,14 +202,14 @@ namespace Obfuscar
                 MethodDefinition stringGetterMethodDefinition = new MethodDefinition
                                                                     ( "6"
                                                                     , MethodAttributes.Static | MethodAttributes.Private | MethodAttributes.HideBySig
-                                                                    , SystemStringTypeReference
+                                                                    , this.SystemStringTypeReference
                                                                     );
 
-                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
-                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
-                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
+                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(this.SystemIntTypeReference));
+                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(this.SystemIntTypeReference));
+                stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(this.SystemIntTypeReference));
 
-                stringGetterMethodDefinition.Body.Variables.Add(new VariableDefinition(SystemStringTypeReference));
+                stringGetterMethodDefinition.Body.Variables.Add(new VariableDefinition(this.SystemStringTypeReference));
 
                 ILProcessor worker3 = stringGetterMethodDefinition.Body.GetILProcessor();
 
@@ -238,9 +238,9 @@ namespace Obfuscar
                         , structType
                         );
 
-                newDatas.Add(data);
+                this.newDatas.Add(data);
 
-                mostRecentData = data;
+                this.mostRecentData = data;
             }
 
             return data;
@@ -248,13 +248,13 @@ namespace Obfuscar
 
         public void Squeeze()
         {
-            if (!isInitialized)
+            if (!this.isInitialized)
                 return;
 
-            if (isDisabled)
+            if (this.isDisabled)
                 return;
 
-            foreach (StringSqueezeData data in newDatas)
+            foreach (StringSqueezeData data in this.newDatas)
             {
                 //
                 // Now that we know the total size of the byte array, we can update the struct size and store it in the constant field.
@@ -276,24 +276,24 @@ namespace Obfuscar
                                                               | MethodAttributes.HideBySig
                                                               | MethodAttributes.SpecialName
                                                               | MethodAttributes.RTSpecialName
-                                                            , SystemVoidTypeReference
+                                                            , this.SystemVoidTypeReference
                                                             );
 
                 data.NewType.Methods.Add(ctorMethodDefinition);
                 ctorMethodDefinition.Body = new MethodBody(ctorMethodDefinition);
-                ctorMethodDefinition.Body.Variables.Add(new VariableDefinition(SystemIntTypeReference));
+                ctorMethodDefinition.Body.Variables.Add(new VariableDefinition(this.SystemIntTypeReference));
 
                 ILProcessor worker2 = ctorMethodDefinition.Body.GetILProcessor();
                 worker2.Emit(OpCodes.Ldc_I4, data.StringIndex);
-                worker2.Emit(OpCodes.Newarr, SystemStringTypeReference);
+                worker2.Emit(OpCodes.Newarr, this.SystemStringTypeReference);
                 worker2.Emit(OpCodes.Stsfld, data.StringArrayField);
 
 
                 worker2.Emit(OpCodes.Ldc_I4, data.DataBytes.Count);
-                worker2.Emit(OpCodes.Newarr, SystemByteTypeReference);
+                worker2.Emit(OpCodes.Newarr, this.SystemByteTypeReference);
                 worker2.Emit(OpCodes.Dup);
                 worker2.Emit(OpCodes.Ldtoken, data.DataConstantField);
-                worker2.Emit(OpCodes.Call, InitializeArrayMethod);
+                worker2.Emit(OpCodes.Call, this.InitializeArrayMethod);
                 worker2.Emit(OpCodes.Stsfld, data.DataField);
 
                 worker2.Emit(OpCodes.Ldc_I4_0);
@@ -326,7 +326,7 @@ namespace Obfuscar
                 worker2.Emit(OpCodes.Brtrue, label2);
                 worker2.Emit(OpCodes.Ret);
 
-                library.MainModule.Types.Add(data.NewType);
+                this.library.MainModule.Types.Add(data.NewType);
             }
         }
 
@@ -347,9 +347,9 @@ namespace Obfuscar
                 return;
             }
 
-            Initialize();
+            this.Initialize();
 
-            if (isDisabled)
+            if (this.isDisabled)
             {
                 return;
             }
@@ -372,9 +372,9 @@ namespace Obfuscar
                 {
                     string str = (string)instruction.Operand;
 
-                    if (!_methodByString.TryGetValue(str, out MethodDefinition? individualStringMethodDefinition))
+                    if (!this._methodByString.TryGetValue(str, out MethodDefinition? individualStringMethodDefinition))
                     {
-                        StringSqueezeData data = GetNewType();
+                        StringSqueezeData data = this.GetNewType();
 
                         string methodName = NameMaker.UniqueName(data.NameIndex++);
 
@@ -388,7 +388,7 @@ namespace Obfuscar
                         individualStringMethodDefinition = new MethodDefinition
                                                             ( methodName
                                                             , MethodAttributes.Static | MethodAttributes.Public | MethodAttributes.HideBySig
-                                                            , SystemStringTypeReference
+                                                            , this.SystemStringTypeReference
                                                             );
 
                         individualStringMethodDefinition.Body = new MethodBody(individualStringMethodDefinition);
@@ -415,7 +415,7 @@ namespace Obfuscar
                         worker4.Append((Instruction)label20.Operand);
 
                         data.NewType.Methods.Add(individualStringMethodDefinition);
-                        _methodByString.Add(str, individualStringMethodDefinition);
+                        this._methodByString.Add(str, individualStringMethodDefinition);
 
                         if (this.mostRecentData == null)
                         {

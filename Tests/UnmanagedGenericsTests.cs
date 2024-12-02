@@ -33,7 +33,7 @@ namespace ObfuscarTests
 {
     public class UnmanagedGenericsTests
     {
-        Obfuscator BuildAndObfuscateAssemblies()
+        private Obfuscator BuildAndObfuscateAssemblies()
         {
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -50,7 +50,7 @@ namespace ObfuscarTests
             return TestHelper.BuildAndObfuscate("AssemblyWithUnmanagedGenerics", string.Empty, xml);
         }
 
-        MethodDefinition FindByName(TypeDefinition typeDef, string name)
+        private MethodDefinition FindByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.Name == name)
@@ -63,7 +63,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckClassHasAttribute()
         {
-            Obfuscator item = BuildAndObfuscateAssemblies();
+            Obfuscator item = this.BuildAndObfuscateAssemblies();
             ObfuscationMap map = item.Mapping;
 
             string assmName = "AssemblyWithUnmanagedGenerics.dll";
@@ -84,7 +84,7 @@ namespace ObfuscarTests
 
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.Generic`1");
-                MethodDefinition classAmethod2 = FindByName(classAType, "GetEnumerator");
+                MethodDefinition classAmethod2 = this.FindByName(classAType, "GetEnumerator");
 
                 ObfuscatedThing classAEntry = map.GetMethod(new MethodKey(classAmethod2));
 

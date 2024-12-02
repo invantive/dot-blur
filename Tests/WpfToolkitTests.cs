@@ -31,7 +31,7 @@ namespace ObfuscarTests
 {
     public class WpfToolkitTests
     {
-        static MethodDefinition FindByFullName(TypeDefinition typeDef, string name)
+        private static MethodDefinition FindByFullName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.FullName == name)

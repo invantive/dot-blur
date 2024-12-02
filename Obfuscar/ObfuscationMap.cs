@@ -80,10 +80,10 @@ namespace Obfuscar
 
         public ObfuscatedClass GetClass(TypeKey key)
         {
-            if (!ClassMap.TryGetValue(key, out ObfuscatedClass? c))
+            if (!this.ClassMap.TryGetValue(key, out ObfuscatedClass? c))
             {
                 c = new ObfuscatedClass(key.ToString());
-                ClassMap[key] = c;
+                this.ClassMap[key] = c;
             }
 
             return c;
@@ -91,7 +91,7 @@ namespace Obfuscar
 
         public ObfuscatedThing GetField(FieldKey key)
         {
-            ObfuscatedClass c = GetClass(key.TypeKey);
+            ObfuscatedClass c = this.GetClass(key.TypeKey);
 
             if (!c.Fields.TryGetValue(key, out ObfuscatedThing? t))
             {
@@ -104,7 +104,7 @@ namespace Obfuscar
 
         public ObfuscatedThing GetMethod(MethodKey key)
         {
-            ObfuscatedClass c = GetClass(key.TypeKey);
+            ObfuscatedClass c = this.GetClass(key.TypeKey);
 
             if (!c.Methods.TryGetValue(key, out ObfuscatedThing? t))
             {
@@ -117,7 +117,7 @@ namespace Obfuscar
 
         public ObfuscatedThing GetProperty(PropertyKey key)
         {
-            ObfuscatedClass c = GetClass(key.TypeKey);
+            ObfuscatedClass c = this.GetClass(key.TypeKey);
 
             if (!c.Properties.TryGetValue(key, out ObfuscatedThing? t))
             {
@@ -130,7 +130,7 @@ namespace Obfuscar
 
         public ObfuscatedThing GetEvent(EventKey key)
         {
-            ObfuscatedClass c = GetClass(key.TypeKey);
+            ObfuscatedClass c = this.GetClass(key.TypeKey);
 
             if (!c.Events.TryGetValue(key, out ObfuscatedThing? t))
             {
@@ -143,35 +143,35 @@ namespace Obfuscar
 
         public void UpdateType(TypeKey key, ObfuscationStatus status, string text)
         {
-            ObfuscatedClass c = GetClass(key);
+            ObfuscatedClass c = this.GetClass(key);
 
             c.Update(status, text);
         }
 
         public void UpdateField(FieldKey key, ObfuscationStatus status, string text)
         {
-            ObfuscatedThing f = GetField(key);
+            ObfuscatedThing f = this.GetField(key);
 
             f.Update(status, text);
         }
 
         public void UpdateMethod(MethodKey key, ObfuscationStatus status, string text)
         {
-            ObfuscatedThing m = GetMethod(key);
+            ObfuscatedThing m = this.GetMethod(key);
 
             m.Update(status, text);
         }
 
         public void UpdateProperty(PropertyKey key, ObfuscationStatus status, string text)
         {
-            ObfuscatedThing m = GetProperty(key);
+            ObfuscatedThing m = this.GetProperty(key);
 
             m.Update(status, text);
         }
 
         public void UpdateEvent(EventKey key, ObfuscationStatus status, string text)
         {
-            ObfuscatedThing m = GetEvent(key);
+            ObfuscatedThing m = this.GetEvent(key);
 
             m.Update(status, text);
         }
@@ -182,12 +182,12 @@ namespace Obfuscar
 
             r.Update(status, text);
 
-            Resources.Add(r);
+            this.Resources.Add(r);
         }
 
         public IEnumerable<(TypeKey key, string statusText)> FindClasses(string name)
         {
-            foreach (KeyValuePair<TypeKey, ObfuscatedClass> kvp in ClassMap)
+            foreach (KeyValuePair<TypeKey, ObfuscatedClass> kvp in this.ClassMap)
             {
                 if (kvp.Value.Status == ObfuscationStatus.Renamed)
                 {

@@ -40,21 +40,21 @@ namespace Obfuscar
         {
             this.Name = name;
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         public NameParamSig(MethodReference method): base(method)
         {
             this.Name = method.Name;
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         public NameParamSig(MethodDefinition method): base(method)
         {
             this.Name = method.Name;
 
-            this.hashCode = CalcHashCode();
+            this.hashCode = this.CalcHashCode();
         }
 
         private int CalcHashCode()
@@ -66,7 +66,7 @@ namespace Obfuscar
 
         public bool Equals(NameParamSig? other)
         {
-            return other != null && this.Name == other.Name && Equals((ParamSig) other);
+            return other != null && this.Name == other.Name && this.Equals((ParamSig) other);
         }
 
         public override bool Equals(object? obj)
@@ -108,17 +108,17 @@ namespace Obfuscar
 
         public override int GetHashCode()
         {
-            return hashCode;
+            return this.hashCode;
         }
 
         public override string ToString()
         {
-            return $"{this.Name}::{ParamTypes.Length}";
+            return $"{this.Name}::{this.ParamTypes.Length}";
         }
 
         public int CompareTo(NameParamSig? other)
         {
-            int cmp = string.Compare(Name, other?.Name);
+            int cmp = string.Compare(this.Name, other?.Name);
 
             if (cmp == 0)
             {

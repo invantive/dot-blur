@@ -24,18 +24,18 @@ namespace Obfuscar
             this.exclusions = exclusions ?? throw new ArgumentNullException(nameof(exclusions));
         }
 
-        public IEnumerator<string> GetEnumerator() => GetFiles().GetEnumerator();
+        public IEnumerator<string> GetEnumerator() => this.GetFiles().GetEnumerator();
 
         private IEnumerable<string> GetFiles()
         {
-            HashSet<string> excluded = new HashSet<string>(exclusions.SelectMany(GetFiles), StringComparer.Ordinal);
-            return inclusions.SelectMany(GetFiles).Where(file => !excluded.Contains(file));
+            HashSet<string> excluded = new HashSet<string>(this.exclusions.SelectMany(this.GetFiles), StringComparer.Ordinal);
+            return this.inclusions.SelectMany(this.GetFiles).Where(file => !excluded.Contains(file));
         }
 
         private IEnumerable<string> GetFiles(string pattern)
         {
             int lastSeparator = pattern.LastIndexOfAny(directorySeparators);
-            string searchPath = lastSeparator != -1 ? Path.GetFullPath(Path.Combine(path, pattern.Substring(0, lastSeparator))) : path;
+            string searchPath = lastSeparator != -1 ? Path.GetFullPath(Path.Combine(this.path, pattern.Substring(0, lastSeparator))) : this.path;
             string filePattern = lastSeparator != -1 ? pattern.Substring(lastSeparator + 1) : pattern;
 
             return Directory.EnumerateFiles(searchPath, filePattern);

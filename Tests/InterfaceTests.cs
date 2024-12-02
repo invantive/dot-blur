@@ -35,7 +35,7 @@ namespace ObfuscarTests
 {
     public class InterfacesTests
     {
-        Obfuscator BuildAndObfuscateAssemblies(string name)
+        private Obfuscator BuildAndObfuscateAssemblies(string name)
         {
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -50,7 +50,7 @@ namespace ObfuscarTests
             return TestHelper.BuildAndObfuscate(name, string.Empty, xml);
         }
 
-        MethodDefinition FindMethodByName(TypeDefinition typeDef, string name)
+        private MethodDefinition FindMethodByName(TypeDefinition typeDef, string name)
         {
             foreach (MethodDefinition method in typeDef.Methods)
                 if (method.Name == name)
@@ -60,7 +60,7 @@ namespace ObfuscarTests
             return null; // never here
         }
 
-        PropertyDefinition FindPropertyByName(TypeDefinition typeDef, string name)
+        private PropertyDefinition FindPropertyByName(TypeDefinition typeDef, string name)
         {
             foreach (PropertyDefinition property in typeDef.Properties)
                 if (property.Name == name)
@@ -73,7 +73,7 @@ namespace ObfuscarTests
         [Fact]
         public void CheckInterfaces()
         {
-            Obfuscator item = BuildAndObfuscateAssemblies("AssemblyWithInterfaces");
+            Obfuscator item = this.BuildAndObfuscateAssemblies("AssemblyWithInterfaces");
             ObfuscationMap map = item.Mapping;
 
             string assmName = "AssemblyWithInterfaces.dll";
@@ -85,8 +85,8 @@ namespace ObfuscarTests
                 Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.C");
-                MethodDefinition method = FindMethodByName(classCType, "Method");
-                PropertyDefinition property = FindPropertyByName(classCType, "Property");
+                MethodDefinition method = this.FindMethodByName(classCType, "Method");
+                PropertyDefinition property = this.FindPropertyByName(classCType, "Property");
 
                 ObfuscatedThing methodEntry = map.GetMethod(new MethodKey(method));
                 ObfuscatedThing propertyEntry = map.GetProperty(new PropertyKey(new TypeKey(classCType), property));
@@ -102,7 +102,7 @@ namespace ObfuscarTests
         // [Fact]
         private void CheckInterfaces2()
         {
-            Obfuscator item = BuildAndObfuscateAssemblies("AssemblyWithInterfaces2");
+            Obfuscator item = this.BuildAndObfuscateAssemblies("AssemblyWithInterfaces2");
             ObfuscationMap map = item.Mapping;
 
             string assmName = "AssemblyWithInterfaces2.dll";
@@ -114,9 +114,9 @@ namespace ObfuscarTests
                 Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.C");
-                MethodDefinition method = FindMethodByName(classCType, "Method");
-                PropertyDefinition property1 = FindPropertyByName(classCType, "TestClasses.A.Property");
-                PropertyDefinition property2 = FindPropertyByName(classCType, "TestClasses.B.Property");
+                MethodDefinition method = this.FindMethodByName(classCType, "Method");
+                PropertyDefinition property1 = this.FindPropertyByName(classCType, "TestClasses.A.Property");
+                PropertyDefinition property2 = this.FindPropertyByName(classCType, "TestClasses.B.Property");
 
                 ObfuscatedThing methodEntry = map.GetMethod(new MethodKey(method));
                 ObfuscatedThing property1Entry = map.GetProperty(new PropertyKey(new TypeKey(classCType), property1));

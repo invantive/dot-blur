@@ -33,7 +33,7 @@ namespace Obfuscar
 {
     class AssemblyCache : DefaultAssemblyResolver
     {
-        private List<string> paths = new List<string>();
+        private readonly List<string> paths = new List<string>();
 
         public AssemblyCache(Project project)
         {

@@ -79,50 +79,50 @@ namespace Obfuscar
 
         public bool Test(MethodKey method, InheritMap? map)
         {
-            if (key != null)
+            if (this.key != null)
             {
-                return method == key;
+                return method == this.key;
             }
 
             // method name matches type regex?
-            if (!string.IsNullOrEmpty(type) && !Helper.CompareOptionalRegex(method.TypeKey.Fullname, type))
+            if (!string.IsNullOrEmpty(this.type) && !Helper.CompareOptionalRegex(method.TypeKey.Fullname, this.type))
             {
                 return false;
             }
 
             // method visibility matches
-            if (CheckMemberVisibility(this.attrib, typeAttrib, method.MethodAttributes, method.DeclaringType))
+            if (CheckMemberVisibility(this.attrib, this.typeAttrib, method.MethodAttributes, method.DeclaringType))
             {
                 return false;
             }
 
             // method's name matches
-            if (nameRx != null && !nameRx.IsMatch(method.Name))
+            if (this.nameRx != null && !this.nameRx.IsMatch(method.Name))
             {
                 return false;
             }
 
             // method's name matches
-            if (!string.IsNullOrEmpty(name) && !Helper.CompareOptionalRegex(method.Name, name))
+            if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(method.Name, this.name))
             {
                 return false;
             }
 
             // check is method's static flag matches.
-            if (isStatic.HasValue)
+            if (this.isStatic.HasValue)
             {
                 bool methodIsStatic = (method.MethodAttributes & MethodAttributes.Static) == MethodAttributes.Static;
 
-                if (isStatic != methodIsStatic)
+                if (this.isStatic != methodIsStatic)
                 {
                     return false;
                 }
             }
 
             // finally does method's type inherit?
-            if (!string.IsNullOrEmpty(inherits))
+            if (!string.IsNullOrEmpty(this.inherits))
             {
-                if (map != null && !map.Inherits(method.DeclaringType, inherits))
+                if (map != null && !map.Inherits(method.DeclaringType, this.inherits))
                 {
                     return false;
                 }

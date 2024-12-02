@@ -62,7 +62,7 @@ namespace ObfuscarTests
         {
             string testPath = Path.Combine(Path.GetTempPath(), "ObfuscarTestOutPath");
 
-            CheckOutPath(testPath);
+            this.CheckOutPath(testPath);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace ObfuscarTests
         {
             string testPath = Path.Combine("%temp%", "ObfuscarTestOutPath");
 
-            CheckOutPath(testPath);
+            this.CheckOutPath(testPath);
         }
 
         [Fact]

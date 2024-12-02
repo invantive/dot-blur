@@ -36,7 +36,7 @@ using Xunit;
 
 namespace ObfuscarTests
 {
-    static class TestHelper
+    internal static class TestHelper
     {
         public static string InputPath = Path.Combine("..", "..", "..", "Input");
 

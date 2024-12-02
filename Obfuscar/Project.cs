@@ -59,7 +59,7 @@ namespace Obfuscar
         {
             get
             {
-                return vars.GetValue(Settings.VariableExtraFrameworkFolders, "")?.Split([ Path.PathSeparator ], StringSplitOptions.RemoveEmptyEntries);
+                return this.vars.GetValue(Settings.VariableExtraFrameworkFolders, "")?.Split([ Path.PathSeparator ], StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
@@ -67,9 +67,9 @@ namespace Obfuscar
         {
             get
             {
-                return (ExtraPaths ?? Enumerable.Empty<string>())
-                        .Concat(assemblySearchPaths)
-                        .Concat([Settings.InPath])
+                return (this.ExtraPaths ?? Enumerable.Empty<string>())
+                        .Concat(this.assemblySearchPaths)
+                        .Concat([this.Settings.InPath])
                         ;
             }
         }
@@ -77,7 +77,7 @@ namespace Obfuscar
         public string? KeyContainerName = null;
         private byte[]? keyPair;
         private RSA? keyValue;
-        private object keyPairLocker = new object();
+        private readonly object keyPairLocker = new object();
 
         public byte[]? KeyPair
         {
@@ -89,8 +89,8 @@ namespace Obfuscar
                     {
                         if (this.keyPair == null)
                         {
-                            string? lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
-                            string? lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
+                            string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
+                            string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
 
                             if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                             {
@@ -112,7 +112,7 @@ namespace Obfuscar
                                         throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
                                     }
 
-                                    string? lKeyFilePassword = vars.GetValue(Settings.VariableKeyFilePassword, null);
+                                    string? lKeyFilePassword = this.vars.GetValue(Settings.VariableKeyFilePassword, null);
 
                                     this.keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
 
@@ -146,9 +146,9 @@ namespace Obfuscar
         {
             get
             {
-                if (keyValue != null)
+                if (this.keyValue != null)
                 {
-                    return keyValue;
+                    return this.keyValue;
                 }
 
                 if (Type.GetType("System.MonoType") != null)
@@ -156,8 +156,8 @@ namespace Obfuscar
                     throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
                 }
 
-                string? lKeyFileName = vars.GetValue(Settings.VariableKeyFile, null);
-                string? lKeyContainerName = vars.GetValue(Settings.VariableKeyContainer, null);
+                string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
+                string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
 
                 if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                 {
@@ -168,15 +168,15 @@ namespace Obfuscar
                     throw new ObfuscarException(MessageCodes.ofr003, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
                 }
 
-                KeyContainerName = lKeyContainerName;
+                this.KeyContainerName = lKeyContainerName;
 
-                if (KeyContainerName != null)
+                if (this.KeyContainerName != null)
                 {
                     CspParameters cp = new CspParameters();
-                    cp.KeyContainerName = KeyContainerName;
+                    cp.KeyContainerName = this.KeyContainerName;
 
-                    keyValue = new RSACryptoServiceProvider(cp);
-                    return keyValue;
+                    this.keyValue = new RSACryptoServiceProvider(cp);
+                    return this.keyValue;
                 }
                 else
                 {
@@ -191,14 +191,14 @@ namespace Obfuscar
         {
             get
             {
-                if (m_cache == null)
+                if (this.m_cache == null)
                 {
-                    m_cache = new AssemblyCache(this);
+                    this.m_cache = new AssemblyCache(this);
                 }
 
-                return m_cache;
+                return this.m_cache;
             }
-            set { m_cache = value; }
+            set { this.m_cache = value; }
         }
 
         public static Project FromXml(XDocument reader, string? projectFileDirectory)
@@ -366,10 +366,10 @@ namespace Obfuscar
             {
                 foreach (AssemblyInfo item in items)
                 {
-                    Root.Add(new Node<AssemblyInfo> { Item = item });
+                    this.Root.Add(new Node<AssemblyInfo> { Item = item });
                 }
 
-                AddParents(Root);
+                AddParents(this.Root);
             }
 
             private static void AddParents(List<Node<AssemblyInfo>> nodes)
@@ -401,7 +401,7 @@ namespace Obfuscar
             internal IEnumerable<AssemblyInfo> GetOrderedList()
             {
                 List<AssemblyInfo> result = new List<AssemblyInfo>();
-                CleanPool(Root, result);
+                this.CleanPool(this.Root, result);
                 return result;
             }
 
@@ -443,9 +443,9 @@ namespace Obfuscar
 
         private void ReorderAssemblies()
         {
-            Graph graph = new Graph(AssemblyList);
-            AssemblyList.Clear();
-            AssemblyList.AddRange(graph.GetOrderedList());
+            Graph graph = new Graph(this.AssemblyList);
+            this.AssemblyList.Clear();
+            this.AssemblyList.AddRange(graph.GetOrderedList());
         }
 
         /// <summary>
@@ -453,30 +453,30 @@ namespace Obfuscar
         /// </summary>
         public void CheckSettings()
         {
-            for (int i = 0; i < assemblySearchPaths.Count; i++)
+            for (int i = 0; i < this.assemblySearchPaths.Count; i++)
             {
-                string assemblySearchPath = assemblySearchPaths[i];
+                string assemblySearchPath = this.assemblySearchPaths[i];
                 if (!Directory.Exists(assemblySearchPath))
                 {
                     //throw new ObfuscarException($"Path specified by AssemblySearchPath must exist:{assemblySearchPath}");
-                    assemblySearchPaths.Remove(assemblySearchPath);
+                    this.assemblySearchPaths.Remove(assemblySearchPath);
                 }
             }
 
-            if (!Directory.Exists(Settings.InPath))
+            if (!Directory.Exists(this.Settings.InPath))
             {
-                throw new ObfuscarException(MessageCodes.ofr006, "Path specified by InPath variable must exist:" + Settings.InPath);
+                throw new ObfuscarException(MessageCodes.ofr006, "Path specified by InPath variable must exist:" + this.Settings.InPath);
             }
 
-            if (!Directory.Exists(Settings.OutPath))
+            if (!Directory.Exists(this.Settings.OutPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(Settings.OutPath);
+                    Directory.CreateDirectory(this.Settings.OutPath);
                 }
                 catch (IOException e)
                 {
-                    throw new ObfuscarException(MessageCodes.ofr005, "Could not create path specified by OutPath:  " + Settings.OutPath, e);
+                    throw new ObfuscarException(MessageCodes.ofr005, "Could not create path specified by OutPath:  " + this.Settings.OutPath, e);
                 }
             }
         }
@@ -487,19 +487,19 @@ namespace Obfuscar
         {
             get
             {
-                if (settings == null)
+                if (this.settings == null)
                 {
-                    settings = new Settings(vars);
+                    this.settings = new Settings(this.vars);
                 }
 
-                return settings;
+                return this.settings;
             }
         }
 
         public void LoadAssemblies()
         {
             // build reference tree
-            foreach (AssemblyInfo info in AssemblyList)
+            foreach (AssemblyInfo info in this.AssemblyList)
             {
                 // add self reference...makes things easier later, when
                 // we need to go through the member references
@@ -509,7 +509,7 @@ namespace Obfuscar
                 // the map (and therefore in the project), set up the mappings
                 foreach (AssemblyNameReference nameRef in info.Definition.MainModule.AssemblyReferences)
                 {
-                    if (assemblyMap.TryGetValue(nameRef.Name, out AssemblyInfo? reference))
+                    if (this.assemblyMap.TryGetValue(nameRef.Name, out AssemblyInfo? reference))
                     {
                         info.References.Add(reference);
                         reference.ReferencedBy.Add(info);
@@ -518,14 +518,14 @@ namespace Obfuscar
             }
 
             // make each assembly's list of member refs
-            foreach (AssemblyInfo info in AssemblyList)
+            foreach (AssemblyInfo info in this.AssemblyList)
             {
                 info.Init();
             }
 
             // build inheritance map
-            InheritMap = new InheritMap(this);
-            ReorderAssemblies();
+            this.InheritMap = new InheritMap(this);
+            this.ReorderAssemblies();
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace Obfuscar
         {
             string name = type.GetScopeName();
 
-            return assemblyMap.ContainsKey(name);
+            return this.assemblyMap.ContainsKey(name);
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace Obfuscar
         /// </summary>
         internal bool Contains(TypeKey type)
         {
-            return assemblyMap.ContainsKey(type.Scope);
+            return this.assemblyMap.ContainsKey(type.Scope);
         }
 
         public TypeDefinition? GetTypeDefinition(TypeReference type)
@@ -558,7 +558,7 @@ namespace Obfuscar
             {
                 string name = type.GetScopeName();
 
-                if (assemblyMap.TryGetValue(name, out AssemblyInfo? info))
+                if (this.assemblyMap.TryGetValue(name, out AssemblyInfo? info))
                 {
                     string fullName = type.Namespace + "." + type.Name;
                     typeDef = info.Definition.MainModule.GetType(fullName);

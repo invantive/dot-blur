@@ -46,12 +46,12 @@ namespace Obfuscar
 
         public MethodAttributes GetterMethodAttributes
         {
-            get { return Property.GetMethod != null ? Property.GetMethod.Attributes : 0; }
+            get { return this.Property.GetMethod != null ? this.Property.GetMethod.Attributes : 0; }
         }
 
         public TypeDefinition DeclaringType
         {
-            get { return (TypeDefinition) Property.DeclaringType; }
+            get { return (TypeDefinition)this.Property.DeclaringType; }
         }
 
         public PropertyDefinition Property { get; }
@@ -61,9 +61,9 @@ namespace Obfuscar
             PropertyReference? propRef = member as PropertyReference;
             if (propRef != null)
             {
-                if (TypeKey.Matches(propRef.DeclaringType))
+                if (this.TypeKey.Matches(propRef.DeclaringType))
                 {
-                    return Type == propRef.PropertyType.FullName && Name == propRef.Name;
+                    return this.Type == propRef.PropertyType.FullName && this.Name == propRef.Name;
                 }
             }
 
@@ -115,7 +115,7 @@ namespace Obfuscar
 
         public override int GetHashCode()
         {
-            return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
+            return this.TypeKey.GetHashCode() ^ this.Type.GetHashCode() ^ this.Name.GetHashCode();
         }
 
         public override string ToString()

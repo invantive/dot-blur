@@ -9,7 +9,7 @@ namespace System.Diagnostics.CodeAnalysis
         /// <param name="parameterName">
         /// The associated parameter name.  The output will be non-null if the argument to the parameter specified is non-null.
         /// </param>
-        public NotNullIfNotNullAttribute(string parameterName) => ParameterName = parameterName;
+        public NotNullIfNotNullAttribute(string parameterName) => this.ParameterName = parameterName;
 
         /// <summary>Gets the associated parameter name.</summary>
         public string ParameterName { get; }
@@ -23,13 +23,13 @@ namespace System.Diagnostics.CodeAnalysis
         /// <param name="member">
         /// The field or property member that is promised to be not-null.
         /// </param>
-        public MemberNotNullAttribute(string member) => Members = new[] { member };
+        public MemberNotNullAttribute(string member) => this.Members = new[] { member };
 
         /// <summary>Initializes the attribute with the list of field and property members.</summary>
         /// <param name="members">
         /// The list of field and property members that are promised to be not-null.
         /// </param>
-        public MemberNotNullAttribute(params string[] members) => Members = members;
+        public MemberNotNullAttribute(params string[] members) => this.Members = members;
 
         /// <summary>Gets field or property member names.</summary>
         public string[] Members { get; }
@@ -43,7 +43,7 @@ namespace System.Diagnostics.CodeAnalysis
         /// <param name="returnValue">
         /// The return value condition. If the method returns this value, the associated parameter will not be null.
         /// </param>
-        public NotNullWhenAttribute(bool returnValue) => ReturnValue = returnValue;
+        public NotNullWhenAttribute(bool returnValue) => this.ReturnValue = returnValue;
 
         /// <summary>Gets the return value condition.</summary>
         public bool ReturnValue { get; }
@@ -56,7 +56,7 @@ namespace System.Runtime.Versioning
     {
         private protected OSPlatformAttribute(string platformName)
         {
-            PlatformName = platformName;
+            this.PlatformName = platformName;
         }
 
         public string PlatformName { get; }
