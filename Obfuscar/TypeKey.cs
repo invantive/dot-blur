@@ -168,7 +168,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return string.Format("[{0}]{1}", Scope, Fullname);
+            return $"{this.Scope}::{Fullname}";
         }
 
         public int CompareTo(TypeKey? other)

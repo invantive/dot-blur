@@ -308,8 +308,8 @@ namespace Obfuscar
                         throw;
                     }
 
-                    Log.Output(string.Format("\nFailed to save {0}", fileName));
-                    Log.Output(string.Format("\n{0}: {1}", e.GetType().Name, e.Message));
+                    Log.Output($"\nFailed to save {fileName}");
+                    Log.Output($"\n{e.GetType().Name}: {e.Message}");
 
                     Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
 
@@ -925,7 +925,7 @@ namespace Obfuscar
             type.Namespace = newTypeKey.Namespace;
             type.Name = newTypeKey.Name;
 
-            Mapping.UpdateType(unrenamedTypeKey, ObfuscationStatus.Renamed, string.Format("[{0}]{1}", newTypeKey.Scope, type));
+            this.Mapping.UpdateType(unrenamedTypeKey, ObfuscationStatus.Renamed, $"[{newTypeKey.Scope}]{type}");
         }
 
         private Dictionary<ParamSig, NameGroup> GetSigNames(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, TypeKey typeKey)

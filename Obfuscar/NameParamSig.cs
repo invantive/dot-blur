@@ -113,7 +113,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return string.Format("{0}[{1}]", Name, ParamTypes.Length);
+            return $"{this.Name}::{ParamTypes.Length}";
         }
 
         public int CompareTo(NameParamSig? other)

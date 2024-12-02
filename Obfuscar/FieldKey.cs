@@ -130,7 +130,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return string.Format("[{0}]{1} {2}::{3}", this.TypeKey.Scope, this.Type, this.TypeKey.Fullname, this.Name);
+            return $"[{this.TypeKey.Scope}]{this.Type} {this.TypeKey.Fullname}::{this.Name}";
         }
     }
 }

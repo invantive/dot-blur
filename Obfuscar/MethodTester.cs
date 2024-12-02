@@ -144,8 +144,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr010, string.Format("'{0}' is not valid for the 'typeattrib' value of skip elements. Only 'public' is supported by now.",
-                        typeAttribute));
+                    throw new ObfuscarException(MessageCodes.ofr010, $"'{typeAttribute}' is not valid for the 'typeattrib' value of skip elements. Only 'public' is supported by now.");
                 }
             }
 
@@ -169,14 +168,18 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr013, string.Format("'{0}' is not valid for the 'attrib' value of skip elements. Only 'public' and 'protected' are supported by now.", attribute));
+                    throw new ObfuscarException(MessageCodes.ofr013, $"'{attribute}' is not valid for the 'attrib' value of skip elements. Only 'public' and 'protected' are supported by now.");
                 }
 
+                //
                 // attrib value given, but the member is not public/protected. We signal that the Skip* rule should be ignored. The member is obfuscated in any case.
+                //
                 return false;
             }
 
+            //
             // No attrib value given: The Skip* rule is processed normally.
+            //
             return false;
         }
     }

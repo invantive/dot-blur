@@ -134,7 +134,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            return string.Format("{0}::{1}", TypeKey, base.ToString());
+            return $"{this.TypeKey}::{base.ToString()}";
         }
 
         public int CompareTo(MethodKey? other)
@@ -145,6 +145,7 @@ namespace Obfuscar
             {
                 cmp = TypeKey.CompareTo(other?.TypeKey);
             }
+
             return cmp;
         }
 
