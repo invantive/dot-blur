@@ -32,7 +32,7 @@ namespace Obfuscar
 {
     static class NameMaker
     {
-        static string uniqueChars;
+        static string? uniqueChars;
         static int numUniqueChars;
         const string defaultChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 

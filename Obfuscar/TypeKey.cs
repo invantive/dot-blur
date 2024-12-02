@@ -24,15 +24,15 @@
 
 #endregion
 
-using System;
 using Mono.Cecil;
 using Obfuscar.Helpers;
+using System;
 
 namespace Obfuscar
 {
     class TypeKey : IComparable<TypeKey>
     {
-        readonly TypeReference typeReference;
+        readonly TypeReference? typeReference;
         readonly int hashCode;
 
         public TypeKey(TypeReference type)
@@ -82,7 +82,7 @@ namespace Obfuscar
             return Scope.GetHashCode() ^ Namespace.GetHashCode() ^ Name.GetHashCode() ^ Fullname.GetHashCode();
         }
 
-        public TypeDefinition TypeDefinition
+        public TypeDefinition? TypeDefinition
         {
             get 
             { 
@@ -171,13 +171,13 @@ namespace Obfuscar
             return string.Format("[{0}]{1}", Scope, Fullname);
         }
 
-        public int CompareTo(TypeKey other)
+        public int CompareTo(TypeKey? other)
         {
             // no need to check ns and name...should be in fullname
-            int cmp = string.Compare(Scope, other.Scope);
+            int cmp = string.Compare(Scope, other?.Scope);
             if (cmp == 0)
             {
-                cmp = string.Compare(Fullname, other.Fullname);
+                cmp = string.Compare(Fullname, other?.Fullname);
             }
             return cmp;
         }

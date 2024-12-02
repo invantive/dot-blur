@@ -118,6 +118,6 @@ namespace Obfuscar
 
         public bool AnalyzeXaml { get; }
 
-        public string CustomChars { get; }
+        public string? CustomChars { get; }
     }
 }

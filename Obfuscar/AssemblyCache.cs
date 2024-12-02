@@ -24,10 +24,10 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.IO;
 using Mono.Cecil;
 using Obfuscar.Helpers;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Obfuscar
 {

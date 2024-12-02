@@ -12,7 +12,7 @@ namespace Obfuscar
         /// <summary>
         /// Message code.
         /// </summary>
-        public object MessageCode { get; private set; }
+        public string MessageCode { get; private set; }
 
         /// <summary>
         /// Creates a <see cref="ObfuscarException"/>.
@@ -48,8 +48,10 @@ namespace Obfuscar
         /// </summary>
         /// <param name="info">Info</param>
         /// <param name="context">Context</param>
+        [Obsolete]
         protected ObfuscarException(SerializationInfo info, StreamingContext context): base(info, context)
         {
+            this.MessageCode = MessageCodes.ofr022;
         }
 #endif
     }

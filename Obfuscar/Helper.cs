@@ -24,10 +24,9 @@
 
 #endregion
 
-using System;
-using System.Text.RegularExpressions;
 using Mono.Cecil;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Obfuscar
@@ -36,7 +35,7 @@ namespace Obfuscar
     {
         public List<Node<T>> Parents = new List<Node<T>>();
         public List<Node<T>> Children = new List<Node<T>>();
-        public T Item;
+        public T? Item;
 
         public void AppendTo(Node<T> parent)
         {
@@ -126,7 +125,7 @@ namespace Obfuscar
             return MatchWithWildCards(test, 0, pattern, 0);
         }
 
-        public static bool CompareOptionalRegex(string test, string pattern)
+        public static bool CompareOptionalRegex(string test, string? pattern)
         {
             if (pattern.StartsWith("^"))
             {

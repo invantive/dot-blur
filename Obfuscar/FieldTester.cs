@@ -24,15 +24,15 @@
 
 #endregion
 
-using System.Text.RegularExpressions;
 using Mono.Cecil;
+using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
     class FieldTester : IPredicate<FieldKey>
     {
-        private readonly string name;
-        private readonly Regex nameRx;
+        private readonly string? name;
+        private readonly Regex? nameRx;
         private readonly string type;
         private readonly string attrib;
         private readonly string typeAttrib;
@@ -65,7 +65,7 @@ namespace Obfuscar
             this.decorator = decorator;
         }
 
-        public bool Test(FieldKey field, InheritMap map)
+        public bool Test(FieldKey field, InheritMap? map)
         {
             if (!string.IsNullOrEmpty(decorator))
             {

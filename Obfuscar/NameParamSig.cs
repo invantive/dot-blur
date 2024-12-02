@@ -24,11 +24,8 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Mono.Cecil;
-using Mono.Cecil.Metadata;
+using System;
 
 namespace Obfuscar
 {
@@ -119,12 +116,12 @@ namespace Obfuscar
             return string.Format("{0}[{1}]", Name, ParamTypes.Length);
         }
 
-        public int CompareTo(NameParamSig other)
+        public int CompareTo(NameParamSig? other)
         {
-            int cmp = string.Compare(Name, other.Name);
+            int cmp = string.Compare(Name, other?.Name);
             if (cmp == 0)
             {
-                cmp = CompareTo((ParamSig)other);
+                cmp = base.CompareTo(other);
             }
             return cmp;
         }

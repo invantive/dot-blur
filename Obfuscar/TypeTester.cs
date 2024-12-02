@@ -24,10 +24,10 @@
 
 #endregion
 
+using Obfuscar.Helpers;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using Obfuscar.Helpers;
 
 namespace Obfuscar
 {
@@ -44,10 +44,10 @@ namespace Obfuscar
 
     class TypeTester : IPredicate<TypeKey>
     {
-        private readonly string name;
-        private readonly Regex nameRx;
+        private readonly string? name;
+        private readonly Regex? nameRx;
         private readonly string attrib;
-        private readonly string inherits;
+        private readonly string? inherits;
         private readonly bool? isStatic;
 
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")] private readonly bool? isSerializable;

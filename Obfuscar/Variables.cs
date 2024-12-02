@@ -24,9 +24,8 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Obfuscar
 {
@@ -46,13 +45,15 @@ namespace Obfuscar
             vars.Remove(name);
         }
 
-        public string GetValue(string name, string def)
+        [return: NotNullIfNotNull(nameof(def))]
+        public string? GetValue(string name, string? def)
         {
-            string value;
+            string? value;
             return this.Replace(vars.TryGetValue(name, out value) ? value : def);
         }
 
-        public string Replace(string str)
+        [return: NotNullIfNotNull(nameof(str))]
+        public string? Replace(string? str)
         {
             if (string.IsNullOrEmpty(str))
             {
@@ -64,7 +65,7 @@ namespace Obfuscar
             int lastMatch = 0;
 
             string variable;
-            string replacement;
+            string? replacement;
             foreach (System.Text.RegularExpressions.Match m in re.Matches(str))
             {
                 formatted.Append(str.Substring(lastMatch, m.Index - lastMatch));

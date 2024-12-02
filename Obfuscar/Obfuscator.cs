@@ -24,6 +24,11 @@
 
 #endregion
 
+using ILSpy.BamlDecompiler.Baml;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
+using Obfuscar.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,11 +41,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
-using ILSpy.BamlDecompiler.Baml;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Rocks;
-using Obfuscar.Helpers;
 
 namespace Obfuscar
 {
@@ -132,9 +132,9 @@ namespace Obfuscar
             return new Obfuscator(document);
         }
 
-        internal Project Project { get; set; }
+        internal Project? Project { get; set; }
 
-        private void LoadFromReader(XDocument reader, string projectFileDirectory)
+        private void LoadFromReader(XDocument reader, string? projectFileDirectory)
         {
             Project = Project.FromXml(reader, projectFileDirectory);
 
@@ -1534,17 +1534,17 @@ namespace Obfuscar
             /// </summary>
             private class StringSqueezeData
             {
-                public TypeDefinition NewType { get; set; }
+                public TypeDefinition? NewType { get; set; }
 
-                public TypeDefinition StructType { get; set; }
+                public TypeDefinition? StructType { get; set; }
 
-                public FieldDefinition DataConstantField { get; set; }
+                public FieldDefinition? DataConstantField { get; set; }
 
-                public FieldDefinition DataField { get; set; }
+                public FieldDefinition? DataField { get; set; }
 
-                public FieldDefinition StringArrayField { get; set; }
+                public FieldDefinition? StringArrayField { get; set; }
 
-                public MethodDefinition StringGetterMethodDefinition { get; set; }
+                public MethodDefinition? StringGetterMethodDefinition { get; set; }
 
                 public int NameIndex { get; set; }
 
@@ -1554,25 +1554,25 @@ namespace Obfuscar
                 public List<byte> DataBytes { get; } = new List<byte>();
             }
 
-            private TypeReference SystemStringTypeReference { get; set; }
+            private TypeReference? SystemStringTypeReference { get; set; }
 
-            private TypeReference SystemVoidTypeReference { get; set; }
+            private TypeReference? SystemVoidTypeReference { get; set; }
 
-            private TypeReference SystemByteTypeReference { get; set; }
+            private TypeReference? SystemByteTypeReference { get; set; }
 
-            private TypeReference SystemIntTypeReference { get; set; }
+            private TypeReference? SystemIntTypeReference { get; set; }
 
-            private TypeReference SystemObjectTypeReference { get; set; }
+            private TypeReference? SystemObjectTypeReference { get; set; }
 
-            private TypeReference SystemValueTypeTypeReference { get; set; }
+            private TypeReference? SystemValueTypeTypeReference { get; set; }
 
-            private MethodReference InitializeArrayMethod { get; set; }
+            private MethodReference? InitializeArrayMethod { get; set; }
 
-            private TypeDefinition EncodingTypeDefinition { get; set; }
+            private TypeDefinition? EncodingTypeDefinition { get; set; }
 
             private readonly List<StringSqueezeData> newDatas = new List<StringSqueezeData>();
 
-            private StringSqueezeData mostRecentData;
+            private StringSqueezeData? mostRecentData;
 
             private readonly Dictionary<string, MethodDefinition> _methodByString =
                 new Dictionary<string, MethodDefinition>();

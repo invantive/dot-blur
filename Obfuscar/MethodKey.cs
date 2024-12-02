@@ -24,8 +24,8 @@
 
 #endregion
 
-using System;
 using Mono.Cecil;
+using System;
 
 namespace Obfuscar
 {
@@ -72,7 +72,7 @@ namespace Obfuscar
 
         public bool Matches(MemberReference member)
         {
-            MethodReference methodRef = member as MethodReference;
+            MethodReference? methodRef = member as MethodReference;
 
             if (methodRef != null)
             {
@@ -85,23 +85,23 @@ namespace Obfuscar
             return false;
         }
 
-        public bool Equals(MethodKey other)
+        public bool Equals(MethodKey? other)
         {
             return other != null && hashCode == other.hashCode && (TypeKey == null ? other.TypeKey == null : TypeKey == other.TypeKey) &&  Equals((NameParamSig) other);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is MethodKey ? Equals((MethodKey) obj) : false;
         }
 
-        public static bool operator ==(MethodKey a, MethodKey b)
+        public static bool operator ==(MethodKey? a, MethodKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -111,13 +111,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(MethodKey a, MethodKey b)
+        public static bool operator !=(MethodKey? a, MethodKey? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -137,13 +137,13 @@ namespace Obfuscar
             return string.Format("{0}::{1}", TypeKey, base.ToString());
         }
 
-        public int CompareTo(MethodKey other)
+        public int CompareTo(MethodKey? other)
         {
-            int cmp = CompareTo((NameParamSig) other);
+            int cmp = base.CompareTo(other);
 
             if (cmp == 0)
             {
-                cmp = TypeKey.CompareTo(other.TypeKey);
+                cmp = TypeKey.CompareTo(other?.TypeKey);
             }
             return cmp;
         }

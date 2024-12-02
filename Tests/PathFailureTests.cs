@@ -24,9 +24,8 @@
 
 #endregion
 
-using System;
-using Mono.CompilerServices.SymbolWriter;
 using Obfuscar;
+using System;
 using Xunit;
 
 namespace ObfuscarTests

@@ -24,8 +24,8 @@
 
 #endregion
 
-using System.IO;
 using Mono.Cecil;
+using System.IO;
 using System.Linq;
 using Xunit;
 

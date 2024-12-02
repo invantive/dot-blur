@@ -25,10 +25,7 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Obfuscar
 {
@@ -56,7 +53,7 @@ namespace Obfuscar
         }
 
         public ObfuscationStatus Status = ObfuscationStatus.Unknown;
-        public string StatusText;
+        public string? StatusText;
 
         public override string ToString()
         {

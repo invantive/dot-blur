@@ -24,11 +24,10 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Mono.Cecil;
 using Obfuscar;
+using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace ObfuscarTests

@@ -25,15 +25,14 @@
 #endregion
 
 using Mono.Cecil;
+using Obfuscar.Helpers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using Obfuscar.Helpers;
-using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace Obfuscar
 {
@@ -46,7 +45,7 @@ namespace Obfuscar
         private readonly Variables vars = new Variables();
         private readonly List<string> assemblySearchPaths = new List<string>();
 
-        Settings settings;
+        Settings? settings;
 
         // FIXME: Figure out why this exists if it is never used.
         //private RSA keyvalue;
@@ -55,11 +54,11 @@ namespace Obfuscar
         {
         }
 
-        public IEnumerable<string> ExtraPaths
+        public IEnumerable<string>? ExtraPaths
         {
             get
             {
-                return vars.GetValue(Settings.VariableExtraFrameworkFolders, "").Split(new char[] {Path.PathSeparator}, StringSplitOptions.RemoveEmptyEntries);
+                return vars.GetValue(Settings.VariableExtraFrameworkFolders, "")?.Split([ Path.PathSeparator ], StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
@@ -76,7 +75,7 @@ namespace Obfuscar
 
         public string? KeyContainerName = null;
         private byte[]? keyPair;
-        private RSA keyValue;
+        private RSA? keyValue;
         private object keyPairLocker = new object();
 
         public byte[]? KeyPair
@@ -179,7 +178,7 @@ namespace Obfuscar
             }
         }
 
-        AssemblyCache m_cache;
+        AssemblyCache? m_cache;
 
         internal AssemblyCache Cache
         {
@@ -195,7 +194,7 @@ namespace Obfuscar
             set { m_cache = value; }
         }
 
-        public static Project FromXml(XDocument reader, string projectFileDirectory)
+        public static Project FromXml(XDocument reader, string? projectFileDirectory)
         {
             Project project = new Project();
 
@@ -457,7 +456,7 @@ namespace Obfuscar
             }
         }
 
-        internal InheritMap InheritMap { get; private set; }
+        internal InheritMap? InheritMap { get; private set; }
 
         internal Settings Settings
         {
