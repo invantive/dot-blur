@@ -201,15 +201,21 @@ namespace ObfuscarTests
                 @"</Obfuscator>", TestHelper.InputPath, outputPath, Path.DirectorySeparatorChar);
 
             Obfuscator obfuscator =
-                TestHelper.BuildAndObfuscate(new[] {"AssemblyWithGenericOverrides", "AssemblyWithGenericOverrides2"},
+                TestHelper.BuildAndObfuscate([ "AssemblyWithGenericOverrides", "AssemblyWithGenericOverrides2" ],
                     xml);
 
-            var assembly2Path = Path.Combine(Directory.GetCurrentDirectory(), outputPath,
+            string assembly2Path = Path.Combine(Directory.GetCurrentDirectory(), outputPath,
                 "AssemblyWithGenericOverrides2.dll");
-            var assembly2 = Assembly.LoadFile(assembly2Path);
-            var type = assembly2.GetType("TestClasses.Test");
-            var ctor = type.GetConstructor(new Type[0]);
-            var instance = ctor.Invoke(new object[0]);
+            Assembly? assembly2 = Assembly.LoadFile(assembly2Path);
+            Type? type = assembly2.GetType("TestClasses.Test");
+
+            Assert.NotNull(type);
+
+            var ctor = type.GetConstructor([]);
+
+            Assert.NotNull(ctor);
+
+            var instance = ctor.Invoke([]);
             try
             {
                 output = outputPath;
@@ -225,6 +231,8 @@ namespace ObfuscarTests
 
         private Assembly? AssemblyResolve(object? sender, ResolveEventArgs args)
         {
+            Assert.NotNull(output);
+
             var assemblyPath = Path.Combine(Directory.GetCurrentDirectory(), output, args.Name.Split(',')[0] + ".dll");
             return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
         }

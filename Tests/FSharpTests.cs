@@ -25,8 +25,6 @@
 #endregion
 
 using Mono.Cecil;
-using Obfuscar;
-using System.IO;
 using Xunit;
 
 namespace ObfuscarTests
@@ -47,9 +45,10 @@ namespace ObfuscarTests
         public void CheckGeneric()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -108,6 +107,7 @@ namespace ObfuscarTests
                 Assert.True(m1.Status == ObfuscationStatus.Skipped, "Instance method should have been skipped.");
                 Assert.Equal("external base class or interface", m1.StatusText);
             }
+#endif
         }
     }
 }

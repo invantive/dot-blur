@@ -209,6 +209,11 @@ namespace Obfuscar
 
         public int CompareTo(ParamSig? other)
         {
+            if (other == null)
+            {
+                return -1;
+            }
+
             if (ParamTypes.Length < other.ParamTypes.Length)
             {
                 return -1;

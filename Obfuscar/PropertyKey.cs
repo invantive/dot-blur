@@ -118,7 +118,7 @@ namespace Obfuscar
             return TypeKey.GetHashCode() ^ Type.GetHashCode() ^ Name.GetHashCode();
         }
 
-        public override string? ToString()
+        public override string ToString()
         {
             return string.Format("[{0}]{1} {2}::{3}", TypeKey.Scope, Type, TypeKey.Fullname, Name);
         }

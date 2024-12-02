@@ -19,17 +19,26 @@ namespace Obfuscar.Helpers
                         continue;
                     }
 
-                    var framework = customAttribute.Properties.First(property => property.Name == "FrameworkDisplayName");
+                    Mono.Cecil.CustomAttributeNamedArgument framework = customAttribute.Properties.First(property => property.Name == "FrameworkDisplayName");
 
-                    string? content = framework.Argument.Value.ToString();
+                    string? content = framework.Argument.Value?.ToString();
 
                     if (!string.Equals(content, ".NET Portable Subset"))
                     {
                         return null;
                     }
 
-                    string[]? parts = customAttribute.ConstructorArguments[0].Value.ToString()?.Split(',');
+                    string[]? parts = customAttribute.ConstructorArguments[0].Value?.ToString()?.Split(',');
                     string root = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+                    if (parts == null)
+                    {
+                        throw new ObfuscarException(MessageCodes.ofr037, "Missing parts.");
+                    }
+
+                    string? p1 = parts[0];
+                    string? p2 = parts[1].Split('=')[1];
+                    string? p3 = parts[2].Split('=')[1];
 
                     return Environment.ExpandEnvironmentVariables
                         ( Path.Combine
@@ -37,10 +46,10 @@ namespace Obfuscar.Helpers
                             , "Reference Assemblies"
                             , "Microsoft"
                             , "Framework"
-                            , parts[0]
-                            , parts[1].Split('=')[1]
+                            , p1
+                            , p2
                             , "Profile"
-                            , parts[2].Split('=')[1]
+                            , p3
                             )
                         );
                 }

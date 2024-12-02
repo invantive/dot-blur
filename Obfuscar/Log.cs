@@ -20,9 +20,9 @@ namespace Obfuscar
         /// </summary>
         /// <param name="output">Text.</param>
         /// <param name="addNewLine">Whether to append a new line.</param>
-        public static void Output(string output, bool addNewLine = false)
+        public static void Output(string? output, bool addNewLine = false)
         {
-            string line;
+            string? line;
 
             if (isAtNewLine || addNewLine)
             {
@@ -36,13 +36,13 @@ namespace Obfuscar
                 else
                 {
                     line = String.Concat(dateTxt, ": ", output);
-                    isAtNewLine = output.EndsWith("\n");
+                    isAtNewLine = output?.EndsWith("\n") ?? false;
                 }
             }
             else
             {
                 line = output;
-                isAtNewLine = output.EndsWith("\n");
+                isAtNewLine = output?.EndsWith("\n") ?? false;
             }
 
             Console.Write(line);

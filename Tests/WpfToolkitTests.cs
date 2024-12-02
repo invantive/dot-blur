@@ -47,9 +47,10 @@ namespace ObfuscarTests
         public void CheckGeneric()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
                 @"<Obfuscator>" +
@@ -94,6 +95,7 @@ namespace ObfuscarTests
             var type2 = map.GetClass(new TypeKey(classBType));
             Assert.True(type2.Status == ObfuscationStatus.Skipped, "chart type should have been skipped");
             Assert.Equal("filtered by BAML", type2.StatusText);
+#endif
         }
     }
 }

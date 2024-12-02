@@ -106,6 +106,8 @@ namespace ObfuscarTests
             Assembly assm = Assembly.LoadFile(Path.GetFullPath(typeDef.Module.FileName));
             Type? type = assm.GetType(typeDef.FullName);
 
+            Assert.NotNull(type);
+
             object? obj = Activator.CreateInstance(type);
 
             object? result = type.InvokeMember("Method1",

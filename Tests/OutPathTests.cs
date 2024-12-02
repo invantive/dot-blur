@@ -78,17 +78,19 @@ namespace ObfuscarTests
         public void CheckInvalidOutPath()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string testPath = Path.Combine(PathFailureTests.BadPath, "ObfuscarTestOutPath");
-            Type t = Type.GetType("Mono.Runtime");
+            Type? t = Type.GetType("Mono.Runtime");
             if (t != null)
                 return;
 
             var exception = Assert.Throws<ObfuscarException>(() => { CheckOutPath(testPath); });
             Assert.Equal("Could not create path specified by OutPath:  Q:\\Does\\Not\\Exist\\ObfuscarTestOutPath",
                 exception.Message);
+#endif
         }
     }
 }

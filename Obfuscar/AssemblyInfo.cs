@@ -963,7 +963,7 @@ namespace Obfuscar
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkip(MethodKey method, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
+        public bool ShouldSkip(MethodKey method, InheritMap? map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             if (method.Method.IsRuntime)
             {
@@ -1058,7 +1058,7 @@ namespace Obfuscar
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkipStringHiding(MethodKey method, InheritMap map, bool projectHideStrings)
+        public bool ShouldSkipStringHiding(MethodKey method, InheritMap? map, bool projectHideStrings)
         {
             if (method.DeclaringType.IsResourcesType() && method.Method.ReturnType.FullName == "System.Resources.ResourceManager")
             {
@@ -1220,7 +1220,7 @@ namespace Obfuscar
             return !hidePrivateApi;
         }
 
-        public bool ShouldSkip(EventKey evt, InheritMap map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
+        public bool ShouldSkip(EventKey evt, InheritMap? map, bool keepPublicApi, bool hidePrivateApi, bool markedOnly, out string message)
         {
             // skip runtime special events
             if (evt.Event.IsRuntimeSpecialName)
@@ -1275,7 +1275,7 @@ namespace Obfuscar
             }
 
             if (evt.Event.IsPublic() 
-                && (evt.DeclaringType.IsTypePublic() || evt.Event.AddMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || evt.Event.RemoveMethod != null && map.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null))
+                && (evt.DeclaringType.IsTypePublic() || evt.Event.AddMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || evt.Event.RemoveMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null))
             {
                 message = "KeepPublicApi option in configuration";
                 return keepPublicApi;

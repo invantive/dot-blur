@@ -36,9 +36,10 @@ namespace ObfuscarTests
         public void CheckCannotObfuscateSigned()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -63,15 +64,17 @@ namespace ObfuscarTests
 
             Assert.False(obfuscator.Project.Settings.Optimize);
             Assert.Equal("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz", NameMaker.UniqueChars);
+#endif
         }
 
         [Fact]
         public void CheckUnicodeNames()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -105,15 +108,17 @@ namespace ObfuscarTests
                             "\u2061\u2062\u2063\u2064\u206A\u206B\u206C\u206D\u206E\u206F" +
                             "\u3000";
             Assert.Equal(unicodeChars, NameMaker.UniqueChars);
+#endif
         }
 
         [Fact]
         public void CheckKoreanNames()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -139,15 +144,17 @@ namespace ObfuscarTests
 
             Assert.False(obfuscator.Project.Settings.Optimize);
             Assert.Equal(NameMaker.KoreanChars, NameMaker.UniqueChars);
+#endif
         }
 
         [Fact]
         public void CheckCustomNames()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -173,6 +180,7 @@ namespace ObfuscarTests
 
             Assert.False(obfuscator.Project.Settings.Optimize);
             Assert.Equal("abcdefghijklmn", NameMaker.UniqueChars);
+#endif
         }
     }
 }

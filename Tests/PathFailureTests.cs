@@ -38,30 +38,34 @@ namespace ObfuscarTests
         public void CheckBadPathIsBad()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
-            Type t = Type.GetType("Mono.Runtime");
+            //
+#else
+            Type? t = Type.GetType("Mono.Runtime");
             if (t != null)
                 return;
 
             // if badPath exists, the other tests here are no good
             Assert.False(System.IO.Directory.Exists(BadPath), "Didn't expect BadPath to exist.");
+#endif
         }
 
         [Fact]
         public void CheckBadProjectPath()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
-            Type t = Type.GetType("Mono.Runtime");
+            //
+#else
+            Type? t = Type.GetType("Mono.Runtime");
             if (t != null)
                 return;
 
             var exception = Assert.Throws<ObfuscarException>(() => { new Obfuscator(BadPath); });
             Assert.Equal("Unable to read specified project file:  Q:\\Does\\Not\\Exist", exception.Message);
+#endif
         }
 
         [Fact]
@@ -80,10 +84,11 @@ namespace ObfuscarTests
         public void CheckBadInPath()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
-            Type t = Type.GetType("Mono.Runtime");
+            //
+#else
+            Type? t = Type.GetType("Mono.Runtime");
             if (t != null)
                 return;
 
@@ -94,6 +99,7 @@ namespace ObfuscarTests
                 @"</Obfuscator>", BadPath);
             var exception = Assert.Throws<ObfuscarException>(() => { Obfuscator.CreateFromXml(xml); });
             Assert.Equal("Path specified by InPath variable must exist:Q:\\Does\\Not\\Exist", exception.Message);
+#endif
         }
     }
 }

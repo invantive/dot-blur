@@ -51,9 +51,10 @@ namespace ObfuscarTests
         public void CheckGeneric()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
                 @"<Obfuscator>" +
@@ -83,6 +84,7 @@ namespace ObfuscarTests
                 "WeifenLuo.WinFormsUI.Docking.AutoHideStripBase/TabCollection/<System.Collections.Generic.IEnumerable<WeifenLuo.WinFormsUI.Docking.AutoHideStripBase.Tab>.GetEnumerator>d__0");
             var type = map.GetClass(new TypeKey(classAType));
             Assert.True(type.Status == ObfuscationStatus.Renamed, "Type should have been renamed.");
+#endif
         }
 
         // TODO: till Mono Cecil support overwriting.         [Fact]

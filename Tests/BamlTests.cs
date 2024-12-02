@@ -37,9 +37,10 @@ namespace ObfuscarTests
         public void CheckCannotObfuscateSigned()
         {
 #if NETCOREAPP
-            // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+            // IMPORANT: this is not not applicable for .NET Core.
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -73,6 +74,7 @@ namespace ObfuscarTests
             var obfuscated = map.GetClass(new TypeKey(classAType));
             Assert.True(ObfuscationStatus.Skipped == obfuscated.Status, "WpfApplication1.MainWindow should have been skipped");
             Assert.Equal("filtered by BAML", obfuscated.StatusText);
+#endif
         }
     }
 }

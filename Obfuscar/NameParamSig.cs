@@ -64,23 +64,23 @@ namespace Obfuscar
 
         public string Name { get; }
 
-        public bool Equals(NameParamSig other)
+        public bool Equals(NameParamSig? other)
         {
             return other != null && this.Name == other.Name && Equals((ParamSig) other);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            return obj is NameParamSig ? Equals((NameParamSig) obj) : false;
+            return obj is NameParamSig ns ? this.Equals(ns) : false;
         }
 
-        public static bool operator ==(NameParamSig a, NameParamSig b)
+        public static bool operator ==(NameParamSig? a, NameParamSig? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b == null;
+                return (object?)b == null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return false;
             }
@@ -90,13 +90,13 @@ namespace Obfuscar
             }
         }
 
-        public static bool operator !=(NameParamSig a, NameParamSig b)
+        public static bool operator !=(NameParamSig? a, NameParamSig? b)
         {
-            if ((object)a == null)
+            if ((object?)a == null)
             {
-                return (object)b != null;
+                return (object?)b != null;
             }
-            else if ((object)b == null)
+            else if ((object?)b == null)
             {
                 return true;
             }
@@ -119,10 +119,12 @@ namespace Obfuscar
         public int CompareTo(NameParamSig? other)
         {
             int cmp = string.Compare(Name, other?.Name);
+
             if (cmp == 0)
             {
                 cmp = base.CompareTo(other);
             }
+
             return cmp;
         }
     }

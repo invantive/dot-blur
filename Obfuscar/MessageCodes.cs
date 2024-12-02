@@ -69,11 +69,19 @@ namespace Obfuscar
         public const string ofr033 = "ofr033";
         public const string ofr034 = "ofr034";
         public const string ofr035 = "ofr035";
-        //public const string ofr036 = "ofr036";
-        //public const string ofr037 = "ofr037";
-        //public const string ofr038 = "ofr038";
-        //public const string ofr039 = "ofr039";
-
-        public const string ofrxxx = "ofrxxx";
+        public const string ofr036 = "ofr036";
+        public const string ofr037 = "ofr037";
+        public const string ofr038 = "ofr038";
+        public const string ofr039 = "ofr039";
+        //public const string ofr040 = "ofr040";
+        //public const string ofr041 = "ofr041";
+        //public const string ofr042 = "ofr042";
+        //public const string ofr043 = "ofr043";
+        //public const string ofr044 = "ofr044";
+        //public const string ofr045 = "ofr045";
+        //public const string ofr046 = "ofr046";
+        //public const string ofr047 = "ofr047";
+        //public const string ofr048 = "ofr048";
+        //public const string ofr049 = "ofr049";
     }
 }

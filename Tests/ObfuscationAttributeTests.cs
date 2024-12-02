@@ -196,8 +196,14 @@ namespace ObfuscarTests
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.TestEnum");
             ObfuscatedThing classA = map.GetClass(new TypeKey(classAType));
             var field = classAType.Fields.FirstOrDefault(item => item.Name == "Default");
+
+            Assert.NotNull(field);
+
             var f1 = map.GetField(new FieldKey(field));
             var field2 = classAType.Fields.FirstOrDefault(item => item.Name == "Test");
+
+            Assert.NotNull(field2);
+
             var f2 = map.GetField(new FieldKey(field2));
             Assert.True(classA.Status == ObfuscationStatus.Skipped, "Public enum shouldn't have been obfuscated.");
             Assert.True(f1.Status == ObfuscationStatus.Skipped, "Public enum field should not be obfuscated");
@@ -278,7 +284,7 @@ namespace ObfuscarTests
 
             AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(outputPath, assmName));
-            TypeDefinition renamed = outAssmDef.MainModule.GetType(classB.StatusText.Substring(assmName.Length - 4 + 2));
+            TypeDefinition renamed = outAssmDef.MainModule.GetType(classB.StatusText?.Substring(assmName.Length - 4 + 2));
             Assert.False(renamed.HasCustomAttributes, "Obfuscation attribute must not exist");
 
             TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.InternalClass2");

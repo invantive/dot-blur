@@ -34,9 +34,9 @@ namespace Obfuscar
         private readonly Regex? nameRx;
         private readonly string type;
         private readonly string attrib;
-        private readonly string typeAttrib;
+        private readonly string? typeAttrib;
 
-        public PropertyTester(string name, string type, string attrib, string typeAttrib)
+        public PropertyTester(string name, string type, string attrib, string? typeAttrib)
         {
             this.name = name;
             this.type = type;
@@ -44,7 +44,7 @@ namespace Obfuscar
             this.typeAttrib = typeAttrib;
         }
 
-        public PropertyTester(Regex nameRx, string type, string attrib, string typeAttrib)
+        public PropertyTester(Regex nameRx, string type, string attrib, string? typeAttrib)
         {
             this.nameRx = nameRx;
             this.type = type;
@@ -60,9 +60,13 @@ namespace Obfuscar
                 {
                     return Helper.CompareOptionalRegex(prop.Name, name);
                 }
-                else
+                else if (nameRx != null)
                 {
                     return nameRx.IsMatch(prop.Name);
+                }
+                else
+                {
+                    throw new ObfuscarException(MessageCodes.ofr036, "Name and name regular expression are not set.");
                 }
             }
 

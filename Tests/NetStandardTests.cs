@@ -37,9 +37,10 @@ namespace ObfuscarTests
         public void CheckNetStandard()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: Hit a Mono Cecil resolution dead loop.
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -61,7 +62,6 @@ namespace ObfuscarTests
                 File.Copy(Path.Combine(TestHelper.InputPath, @"..", "SharpSnmpLib.NetStandard.dll"),
                     destFileName, true);
             }
-
 
             string destFileName1 = Path.Combine(TestHelper.InputPath, "System.ComponentModel.TypeConverter.dll");
             if (!File.Exists(destFileName1))
@@ -85,6 +85,7 @@ namespace ObfuscarTests
                 outAssmDef.MainModule.AssemblyReferences.Where(reference => reference.Name == "System.Runtime");
             Assert.Single(runtime);
             Assert.Equal("4.0.20.0", runtime.First().Version.ToString());
+#endif
         }
 
         [Fact]

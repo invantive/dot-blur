@@ -602,6 +602,7 @@ namespace Obfuscar
                         {
                             Resource res = resources[i];
                             string resName = res.Name;
+
                             if (Path.GetFileNameWithoutExtension(resName) == fullName)
                             {
                                 resources.RemoveAt(i);
@@ -644,7 +645,14 @@ namespace Obfuscar
                     if (type.IsNested)
                     {
                         ns = "";
-                        name = NameMaker.UniqueNestedTypeName(type.DeclaringType.NestedTypes.IndexOf(type));
+                        if (type.DeclaringType != null)
+                        {
+                            name = NameMaker.UniqueNestedTypeName(type.DeclaringType.NestedTypes.IndexOf(type));
+                        }
+                        else
+                        {
+                            name = string.Empty;
+                        }
                     }
                     else
                     {
@@ -679,7 +687,9 @@ namespace Obfuscar
                 }
 
                 foreach (Resource res in resources)
+                {
                     Mapping.AddResource(res.Name, ObfuscationStatus.Skipped, "no clear new name");
+                }
 
                 info.InvalidateCache();
             }
@@ -752,7 +762,13 @@ namespace Obfuscar
                 foreach (BamlRecord child in doc)
                 {
                     var classAttribute = child as TypeInfoRecord;
+
                     if (classAttribute == null)
+                    {
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(classAttribute.TypeFullName))
                     {
                         continue;
                     }
@@ -1023,33 +1039,36 @@ namespace Obfuscar
             // find references, rename them, then rename the property itself
             foreach (AssemblyInfo reference in info.ReferencedBy)
             {
-                for (int i = 0; i < reference.UnrenamedReferences.Count;)
+                if (reference.UnrenamedReferences != null)
                 {
-                    PropertyReference? member = reference.UnrenamedReferences[i] as PropertyReference;
-                    if (member != null)
+                    for (int i = 0; i < reference.UnrenamedReferences.Count;)
                     {
-                        if (propertyKey.Matches(member))
+                        PropertyReference? member = reference.UnrenamedReferences[i] as PropertyReference;
+                        if (member != null)
                         {
-                            member.Name = newName;
-                            reference.UnrenamedReferences.RemoveAt(i);
+                            if (propertyKey.Matches(member))
+                            {
+                                member.Name = newName;
+                                reference.UnrenamedReferences.RemoveAt(i);
 
-                            // since we removed one, continue without the increment
-                            continue;
+                                // since we removed one, continue without the increment
+                                continue;
+                            }
                         }
-                    }
 
-                    i++;
+                        i++;
+                    }
                 }
             }
 
             property.Name = newName;
-            Mapping.UpdateProperty(propertyKey, ObfuscationStatus.Renamed, newName);
+            this.Mapping.UpdateProperty(propertyKey, ObfuscationStatus.Renamed, newName);
         }
 
         public void RenameEvents()
         {
             // do nothing if it was requested not to rename
-            if (!Project.Settings.RenameEvents)
+            if (!this.Project.Settings.RenameEvents)
             {
                 return;
             }
@@ -1088,11 +1107,10 @@ namespace Obfuscar
             EventKey evtKey = new EventKey(typeKey, evt);
             ObfuscatedThing m = Mapping.GetEvent(evtKey);
 
-            string skip;
             // skip filtered events
             if (info.ShouldSkip(evtKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi,
                 this.Project.Settings.HidePrivateApi,
-                this.Project.Settings.MarkedOnly, out skip))
+                this.Project.Settings.MarkedOnly, out string skip))
             {
                 m.Update(ObfuscationStatus.Skipped, skip);
 
@@ -1136,14 +1154,19 @@ namespace Obfuscar
                         ProcessMethod(typeKey, method, info, baseSigNames);
                     }
 
+                    //
                     // update name groups, so new names don't step on inherited ones
-                    foreach (TypeKey baseType in this.Project.InheritMap.GetBaseTypes(typeKey))
+                    //
+                    if (this.Project.InheritMap != null)
                     {
-                        Dictionary<ParamSig, NameGroup> baseNames = GetSigNames(baseSigNames, baseType);
-                        foreach (KeyValuePair<ParamSig, NameGroup> pair in baseNames)
+                        foreach (TypeKey baseType in this.Project.InheritMap.GetBaseTypes(typeKey))
                         {
-                            NameGroup nameGroup = GetNameGroup(sigNames, pair.Key);
-                            nameGroup.AddAll(pair.Value);
+                            Dictionary<ParamSig, NameGroup> baseNames = GetSigNames(baseSigNames, baseType);
+                            foreach (KeyValuePair<ParamSig, NameGroup> pair in baseNames)
+                            {
+                                NameGroup nameGroup = GetNameGroup(sigNames, pair.Key);
+                                nameGroup.AddAll(pair.Value);
+                            }
                         }
                     }
                 }
@@ -1218,8 +1241,7 @@ namespace Obfuscar
             }
 
             // skip filtered methods
-            string? skiprename;
-            var toDo = info.ShouldSkip(methodKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out skiprename);
+            var toDo = info.ShouldSkip(methodKey, this.Project.InheritMap, this.Project.Settings.KeepPublicApi, this.Project.Settings.HidePrivateApi, this.Project.Settings.MarkedOnly, out string? skiprename);
             if (!toDo)
             {
                 skiprename = null;
@@ -1243,21 +1265,23 @@ namespace Obfuscar
             }
         }
 
-        private void RenameVirtualMethod(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, MethodKey methodKey, MethodDefinition method, string skipRename)
+        private void RenameVirtualMethod(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, MethodKey methodKey, MethodDefinition method, string? skipRename)
         {
             // if method is in a group, look for group key
-            MethodGroup? group = this.Project.InheritMap.GetMethodGroup(methodKey);
+            MethodGroup? group = this.Project.InheritMap?.GetMethodGroup(methodKey);
+
             if (group == null)
             {
                 if (skipRename != null)
                 {
-                    Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
+                    this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
                 }
 
                 return;
             }
 
             string? groupName = group.Name;
+
             if (groupName == null)
             {
                 // group is not yet named
@@ -1266,9 +1290,9 @@ namespace Obfuscar
                 ParamSig sig = new ParamSig(method);
 
                 // get name groups for classes in the group
-                NameGroup[] nameGroups = GetNameGroups(baseSigNames, @group.Methods, sig);
+                NameGroup[] nameGroups = GetNameGroups(baseSigNames, group.Methods, sig);
 
-                if (@group.External)
+                if (group.External)
                 {
                     skipRename = "external base class or interface";
                 }
@@ -1286,10 +1310,10 @@ namespace Obfuscar
                     groupName = NameGroup.GetNext(nameGroups);
                 }
 
-                @group.Name = groupName;
+                group.Name = groupName;
 
                 // set up methods to be renamed
-                foreach (MethodKey m in @group.Methods)
+                foreach (MethodKey m in group.Methods)
                 {
                     if (skipRename == null)
                     {
@@ -1312,11 +1336,11 @@ namespace Obfuscar
                 // group is named, so we need to un-name it
 
                 // ReSharper disable once InvocationIsSkipped
-                Debug.Assert(!@group.External, "Group's external flag should have been handled when the group was created, " + "and all methods in the group should already be marked skipped.");
+                Debug.Assert(!group.External, "Group's external flag should have been handled when the group was created, " + "and all methods in the group should already be marked skipped.");
                 Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
 
                 var message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
-                foreach (var item in @group.Methods)
+                foreach (var item in group.Methods)
                 {
                     var state = Mapping.GetMethod(item);
                     message.AppendFormat("{0}->{1}:{2}", item, state.Status, state.StatusText).AppendLine();
@@ -1344,9 +1368,13 @@ namespace Obfuscar
             }
 
             HashSet<TypeKey> parentTypes = new HashSet<TypeKey>();
+
             foreach (TypeKey type in typeKeys)
             {
-                InheritMap.GetBaseTypes(Project, parentTypes, type.TypeDefinition);
+                if (type.TypeDefinition != null)
+                {
+                    InheritMap.GetBaseTypes(Project, parentTypes, type.TypeDefinition);
+                }
             }
 
             typeKeys.UnionWith(parentTypes);
@@ -1365,7 +1393,7 @@ namespace Obfuscar
             return nameGroups;
         }
 
-        string? GetNewMethodName(Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey, MethodDefinition method)
+        private string? GetNewMethodName(Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey, MethodDefinition method)
         {
             ObfuscatedThing t = Mapping.GetMethod(methodKey);
 
@@ -1408,14 +1436,18 @@ namespace Obfuscar
         {
             string? newName = GetNewMethodName(sigNames, methodKey, method);
 
-            RenameMethod(info, methodKey, method, newName);
+            if (newName != null)
+            {
+                RenameMethod(info, methodKey, method, newName);
+            }
         }
 
         void RenameMethod(AssemblyInfo info, MethodKey methodKey, MethodDefinition method, string newName)
         {
             // find references, rename them, then rename the method itself
-            var references = new List<AssemblyInfo>();
+            List<AssemblyInfo> references = new List<AssemblyInfo>();
             references.AddRange(info.ReferencedBy);
+
             if (!references.Contains(info))
             {
                 references.Add(info);
@@ -1425,35 +1457,40 @@ namespace Obfuscar
 
             foreach (AssemblyInfo reference in references)
             {
-                for (int i = 0; i < reference.UnrenamedReferences.Count;)
+                if (reference.UnrenamedReferences != null)
                 {
-                    MethodReference? member = reference.UnrenamedReferences[i] as MethodReference;
-                    if (member != null)
+                    for (int i = 0; i < reference.UnrenamedReferences.Count;)
                     {
-                        if (methodKey.Matches(member))
+                        MethodReference? member = reference.UnrenamedReferences[i] as MethodReference;
+
+                        if (member != null)
                         {
-                            var generic = member as GenericInstanceMethod;
-                            if (generic == null)
+                            if (methodKey.Matches(member))
                             {
-                                member.Name = newName;
-                            }
-                            else
-                            {
-                                generics.Add(generic);
-                            }
+                                GenericInstanceMethod? generic = member as GenericInstanceMethod;
 
-                            reference.UnrenamedReferences.RemoveAt(i);
+                                if (generic == null)
+                                {
+                                    member.Name = newName;
+                                }
+                                else
+                                {
+                                    generics.Add(generic);
+                                }
 
-                            // since we removed one, continue without the increment
-                            continue;
+                                reference.UnrenamedReferences.RemoveAt(i);
+
+                                // since we removed one, continue without the increment
+                                continue;
+                            }
                         }
-                    }
 
-                    i++;
+                        i++;
+                    }
                 }
             }
 
-            foreach (var generic in generics)
+            foreach (GenericInstanceMethod generic in generics)
             {
                 generic.ElementMethod.Name = newName;
             }
@@ -1566,355 +1603,6 @@ namespace Obfuscar
                 CustomAttribute attr = new CustomAttribute(constructor);
                 module.CustomAttributes.Add(attr);
                 module.Assembly.CustomAttributes.Add(attr);
-            }
-        }
-
-        private class StringSqueeze
-        {
-            /// <summary>
-            /// Store the class to generate so we can generate it later on.
-            /// </summary>
-            private class StringSqueezeData
-            {
-                public TypeDefinition? NewType { get; set; }
-
-                public TypeDefinition? StructType { get; set; }
-
-                public FieldDefinition? DataConstantField { get; set; }
-
-                public FieldDefinition? DataField { get; set; }
-
-                public FieldDefinition? StringArrayField { get; set; }
-
-                public MethodDefinition? StringGetterMethodDefinition { get; set; }
-
-                public int NameIndex { get; set; }
-
-                public int StringIndex { get; set; }
-
-                // Array of bytes receiving the obfuscated strings in UTF8 format.
-                public List<byte> DataBytes { get; } = new List<byte>();
-            }
-
-            private TypeReference? SystemStringTypeReference { get; set; }
-
-            private TypeReference? SystemVoidTypeReference { get; set; }
-
-            private TypeReference? SystemByteTypeReference { get; set; }
-
-            private TypeReference? SystemIntTypeReference { get; set; }
-
-            private TypeReference? SystemObjectTypeReference { get; set; }
-
-            private TypeReference? SystemValueTypeTypeReference { get; set; }
-
-            private MethodReference? InitializeArrayMethod { get; set; }
-
-            private TypeDefinition? EncodingTypeDefinition { get; set; }
-
-            private readonly List<StringSqueezeData> newDatas = new List<StringSqueezeData>();
-
-            private StringSqueezeData? mostRecentData;
-
-            private readonly Dictionary<string, MethodDefinition> _methodByString =
-                new Dictionary<string, MethodDefinition>();
-
-            private readonly AssemblyDefinition _library;
-            private bool _initialized;
-            private bool _disabled;
-
-            public StringSqueeze(AssemblyDefinition library)
-            {
-                _library = library;
-            }
-
-            private void Initialize()
-            {
-                if (_initialized)
-                    return;
-
-                _initialized = true;
-                var library = _library;
-
-                // We get the most used type references
-                SystemVoidTypeReference = library.MainModule.TypeSystem.Void;
-                SystemStringTypeReference = library.MainModule.TypeSystem.String;
-                SystemByteTypeReference = library.MainModule.TypeSystem.Byte;
-                SystemIntTypeReference = library.MainModule.TypeSystem.Int32;
-                SystemObjectTypeReference = library.MainModule.TypeSystem.Object;
-                SystemValueTypeTypeReference = new TypeReference("System", "ValueType", library.MainModule,
-                    library.MainModule.TypeSystem.CoreLibrary);
-
-                EncodingTypeDefinition = new TypeReference("System.Text", "Encoding", library.MainModule,
-                    library.MainModule.TypeSystem.CoreLibrary).Resolve();
-                if (EncodingTypeDefinition == null)
-                {
-                    _disabled = true;
-                    return;
-                }
-
-                // IMPORTANT: this runtime helpers resolution must be after encoding resolution. 
-                var runtimeHelpers = new TypeReference("System.Runtime.CompilerServices", "RuntimeHelpers",
-                    library.MainModule, library.MainModule.TypeSystem.CoreLibrary).Resolve();
-                InitializeArrayMethod = library.MainModule.ImportReference(
-                    runtimeHelpers.Methods.FirstOrDefault(method => method.Name == "InitializeArray"));
-            }
-
-            private StringSqueezeData GetNewType()
-            {
-                StringSqueezeData data;
-
-                if (mostRecentData != null && mostRecentData.StringIndex < 65_000 /* maximum number of methods per class allowed by the CLR */)
-                {
-                    data = mostRecentData;
-                }
-                else
-                {
-                    var library = _library;
-
-                    var encodingGetUtf8Method =
-                        library.MainModule.ImportReference(EncodingTypeDefinition.Methods.FirstOrDefault(method => method.Name == "get_UTF8"));
-                    var encodingGetStringMethod = library.MainModule.ImportReference(EncodingTypeDefinition.Methods.FirstOrDefault(method =>
-                        method.FullName ==
-                        "System.String System.Text.Encoding::GetString(System.Byte[],System.Int32,System.Int32)"));
-
-                    // New static class with a method for each unique string we substitute.
-                    string guid = Guid.NewGuid().ToString().ToUpper();
-
-                    TypeDefinition newType = new TypeDefinition(
-                        "<PrivateImplementationDetails>{" + guid + "}",
-                        Guid.NewGuid().ToString().ToUpper(),
-                        TypeAttributes.BeforeFieldInit | TypeAttributes.AutoClass | TypeAttributes.AnsiClass |
-                        TypeAttributes.BeforeFieldInit, SystemObjectTypeReference);
-
-                    // Add struct for constant byte array data
-                    TypeDefinition structType = new TypeDefinition("1{" + guid + "}", "2",
-                        TypeAttributes.ExplicitLayout | TypeAttributes.AnsiClass | TypeAttributes.Sealed |
-                        TypeAttributes.NestedPrivate, SystemValueTypeTypeReference);
-                    structType.PackingSize = 1;
-                    newType.NestedTypes.Add(structType);
-
-                    // Add field with constant string data
-                    FieldDefinition dataConstantField = new FieldDefinition("3",
-                        FieldAttributes.HasFieldRVA | FieldAttributes.Private | FieldAttributes.Static |
-                        FieldAttributes.Assembly, structType);
-                    newType.Fields.Add(dataConstantField);
-
-                    // Add data field where constructor copies the data to
-                    FieldDefinition dataField = new FieldDefinition("4",
-                        FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly,
-                        new ArrayType(SystemByteTypeReference));
-                    newType.Fields.Add(dataField);
-
-                    // Add string array of deobfuscated strings
-                    FieldDefinition stringArrayField = new FieldDefinition("5",
-                        FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly,
-                        new ArrayType(SystemStringTypeReference));
-                    newType.Fields.Add(stringArrayField);
-
-                    // Add method to extract a string from the byte array. It is called by the indiviual string getter methods we add later to the class.
-                    MethodDefinition stringGetterMethodDefinition = new MethodDefinition("6",
-                        MethodAttributes.Static | MethodAttributes.Private | MethodAttributes.HideBySig,
-                        SystemStringTypeReference);
-                    stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
-                    stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
-                    stringGetterMethodDefinition.Parameters.Add(new ParameterDefinition(SystemIntTypeReference));
-                    stringGetterMethodDefinition.Body.Variables.Add(new VariableDefinition(SystemStringTypeReference));
-                    ILProcessor worker3 = stringGetterMethodDefinition.Body.GetILProcessor();
-
-                    worker3.Emit(OpCodes.Call, encodingGetUtf8Method);
-                    worker3.Emit(OpCodes.Ldsfld, dataField);
-                    worker3.Emit(OpCodes.Ldarg_1);
-                    worker3.Emit(OpCodes.Ldarg_2);
-                    worker3.Emit(OpCodes.Callvirt, encodingGetStringMethod);
-                    worker3.Emit(OpCodes.Stloc_0);
-
-                    worker3.Emit(OpCodes.Ldsfld, stringArrayField);
-                    worker3.Emit(OpCodes.Ldarg_0);
-                    worker3.Emit(OpCodes.Ldloc_0);
-                    worker3.Emit(OpCodes.Stelem_Ref);
-
-                    worker3.Emit(OpCodes.Ldloc_0);
-                    worker3.Emit(OpCodes.Ret);
-                    newType.Methods.Add(stringGetterMethodDefinition);
-
-                    data = new StringSqueezeData()
-                            { NewType = newType
-                            , DataConstantField = dataConstantField
-                            , DataField = dataField
-                            , StringArrayField = stringArrayField
-                            , StringGetterMethodDefinition = stringGetterMethodDefinition
-                            , StructType = structType
-                            };
-
-                    newDatas.Add(data);
-
-                    mostRecentData = data;
-                }
-
-                return data;
-            }
-
-            public void Squeeze()
-            {
-                if (!_initialized)
-                    return;
-
-                if (_disabled)
-                    return;
-
-                foreach (StringSqueezeData data in newDatas)
-                {
-                    // Now that we know the total size of the byte array, we can update the struct size and store it in the constant field
-                    data.StructType.ClassSize = data.DataBytes.Count;
-                    for (int i = 0; i < data.DataBytes.Count; i++)
-                        data.DataBytes[i] = (byte) (data.DataBytes[i] ^ (byte) i ^ 0xAA);
-                    data.DataConstantField.InitialValue = data.DataBytes.ToArray();
-
-                    // Add static constructor which initializes the dataField from the constant data field
-                    MethodDefinition ctorMethodDefinition = new MethodDefinition(".cctor",
-                        MethodAttributes.Static | MethodAttributes.Private | MethodAttributes.HideBySig |
-                        MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, SystemVoidTypeReference);
-                    data.NewType.Methods.Add(ctorMethodDefinition);
-                    ctorMethodDefinition.Body = new MethodBody(ctorMethodDefinition);
-                    ctorMethodDefinition.Body.Variables.Add(new VariableDefinition(SystemIntTypeReference));
-
-                    ILProcessor worker2 = ctorMethodDefinition.Body.GetILProcessor();
-                    worker2.Emit(OpCodes.Ldc_I4, data.StringIndex);
-                    worker2.Emit(OpCodes.Newarr, SystemStringTypeReference);
-                    worker2.Emit(OpCodes.Stsfld, data.StringArrayField);
-
-
-                    worker2.Emit(OpCodes.Ldc_I4, data.DataBytes.Count);
-                    worker2.Emit(OpCodes.Newarr, SystemByteTypeReference);
-                    worker2.Emit(OpCodes.Dup);
-                    worker2.Emit(OpCodes.Ldtoken, data.DataConstantField);
-                    worker2.Emit(OpCodes.Call, InitializeArrayMethod);
-                    worker2.Emit(OpCodes.Stsfld, data.DataField);
-
-                    worker2.Emit(OpCodes.Ldc_I4_0);
-                    worker2.Emit(OpCodes.Stloc_0);
-
-                    Instruction backlabel1 = worker2.Create(OpCodes.Br_S, ctorMethodDefinition.Body.Instructions[0]);
-                    worker2.Append(backlabel1);
-                    Instruction label2 = worker2.Create(OpCodes.Ldsfld, data.DataField);
-                    worker2.Append(label2);
-                    worker2.Emit(OpCodes.Ldloc_0);
-                    worker2.Emit(OpCodes.Ldsfld, data.DataField);
-                    worker2.Emit(OpCodes.Ldloc_0);
-                    worker2.Emit(OpCodes.Ldelem_U1);
-                    worker2.Emit(OpCodes.Ldloc_0);
-                    worker2.Emit(OpCodes.Xor);
-                    worker2.Emit(OpCodes.Ldc_I4, 0xAA);
-                    worker2.Emit(OpCodes.Xor);
-                    worker2.Emit(OpCodes.Conv_U1);
-                    worker2.Emit(OpCodes.Stelem_I1);
-                    worker2.Emit(OpCodes.Ldloc_0);
-                    worker2.Emit(OpCodes.Ldc_I4_1);
-                    worker2.Emit(OpCodes.Add);
-                    worker2.Emit(OpCodes.Stloc_0);
-                    backlabel1.Operand = worker2.Create(OpCodes.Ldloc_0);
-                    worker2.Append((Instruction) backlabel1.Operand);
-                    worker2.Emit(OpCodes.Ldsfld, data.DataField);
-                    worker2.Emit(OpCodes.Ldlen);
-                    worker2.Emit(OpCodes.Conv_I4);
-                    worker2.Emit(OpCodes.Clt);
-                    worker2.Emit(OpCodes.Brtrue, label2);
-                    worker2.Emit(OpCodes.Ret);
-
-                    _library.MainModule.Types.Add(data.NewType);
-                }
-            }
-
-            public void ProcessStrings(MethodDefinition method,
-                AssemblyInfo info,
-                Project project)
-            {
-                if (info.ShouldSkipStringHiding(new MethodKey(method), project.InheritMap,
-                        project.Settings.HideStrings) || method.Body == null)
-                    return;
-
-                Initialize();
-
-                if (_disabled)
-                    return;
-
-                // Unroll short form instructions so they can be auto-fixed by Cecil
-                // automatically when instructions are inserted/replaced
-                method.Body.SimplifyMacros();
-                ILProcessor worker = method.Body.GetILProcessor();
-
-                //
-                // Make a dictionary of all instructions to replace and their replacement.
-                //
-                Dictionary <Instruction, LdStrInstructionReplacement> oldToNewStringInstructions = new Dictionary<Instruction, LdStrInstructionReplacement>();
-
-                for (int index = 0; index < method.Body.Instructions.Count; index++)
-                {
-                    Instruction instruction = method.Body.Instructions[index];
-
-                    if (instruction.OpCode == OpCodes.Ldstr)
-                    {
-                        string str = (string)instruction.Operand;
-                        MethodDefinition? individualStringMethodDefinition;
-                        if (!_methodByString.TryGetValue(str, out individualStringMethodDefinition))
-                        {
-                            StringSqueezeData data = GetNewType();
-
-                            string methodName = NameMaker.UniqueName(data.NameIndex++);
-
-                            // Add the string to the data array
-                            byte[] stringBytes = Encoding.UTF8.GetBytes(str);
-                            int start = data.DataBytes.Count;
-                            data.DataBytes.AddRange(stringBytes);
-                            int count = data.DataBytes.Count - start;
-
-                            // Add a method for this string to our new class
-                            individualStringMethodDefinition = new MethodDefinition(
-                                methodName,
-                                MethodAttributes.Static | MethodAttributes.Public | MethodAttributes.HideBySig,
-                                SystemStringTypeReference);
-                            individualStringMethodDefinition.Body = new MethodBody(individualStringMethodDefinition);
-                            ILProcessor worker4 = individualStringMethodDefinition.Body.GetILProcessor();
-
-                            worker4.Emit(OpCodes.Ldsfld, data.StringArrayField);
-                            worker4.Emit(OpCodes.Ldc_I4, data.StringIndex);
-                            worker4.Emit(OpCodes.Ldelem_Ref);
-                            worker4.Emit(OpCodes.Dup);
-                            Instruction label20 = worker4.Create(
-                                OpCodes.Brtrue_S,
-                                data.StringGetterMethodDefinition.Body.Instructions[0]);
-                            worker4.Append(label20);
-                            worker4.Emit(OpCodes.Pop);
-                            worker4.Emit(OpCodes.Ldc_I4, data.StringIndex);
-                            worker4.Emit(OpCodes.Ldc_I4, start);
-                            worker4.Emit(OpCodes.Ldc_I4, count);
-                            worker4.Emit(OpCodes.Call, data.StringGetterMethodDefinition);
-
-                            label20.Operand = worker4.Create(OpCodes.Ret);
-                            worker4.Append((Instruction)label20.Operand);
-
-                            data.NewType.Methods.Add(individualStringMethodDefinition);
-                            _methodByString.Add(str, individualStringMethodDefinition);
-
-                            mostRecentData.StringIndex++;
-                        }
-
-                        // Replace Ldstr with Call
-
-                        Instruction newinstruction = worker.Create(OpCodes.Call, individualStringMethodDefinition);
-
-                        oldToNewStringInstructions.Add(instruction, new LdStrInstructionReplacement(index, newinstruction));
-                    }
-                }
-
-                worker.ReplaceAndFixReferences(method.Body, oldToNewStringInstructions);
-
-                // Optimize method back
-                if (project.Settings.Optimize)
-                {
-                    method.Body.Optimize();
-                }
             }
         }
     }

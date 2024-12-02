@@ -48,7 +48,18 @@ namespace Obfuscar
             {
                 for (int i = 0; i < a.Count; i++)
                 {
-                    if (!a[i].Equals(b[i]))
+                    T ta = a[i];
+                    T tb = b[i];
+
+                    if (ta == null && tb == null)
+                    {
+                        continue;
+                    }
+                    else if (ta == null || tb == null)
+                    {
+                        return false;
+                    }
+                    else if (!ta.Equals(tb))
                     {
                         return false;
                     }

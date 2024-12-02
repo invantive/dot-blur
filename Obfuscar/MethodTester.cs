@@ -122,7 +122,7 @@ namespace Obfuscar
             // finally does method's type inherit?
             if (!string.IsNullOrEmpty(inherits))
             {
-                if (!map.Inherits(method.DeclaringType, inherits))
+                if (map != null && !map.Inherits(method.DeclaringType, inherits))
                 {
                     return false;
                 }
@@ -131,7 +131,7 @@ namespace Obfuscar
             return true;
         }
 
-        static public bool CheckMemberVisibility(string attribute, string typeAttribute, MethodAttributes methodAttributes, TypeDefinition declaringType)
+        static public bool CheckMemberVisibility(string? attribute, string? typeAttribute, MethodAttributes methodAttributes, TypeDefinition declaringType)
         {
             if (!string.IsNullOrEmpty(typeAttribute))
             {

@@ -98,19 +98,20 @@ namespace Obfuscar
                     int j;
 
                     MethodKey[] methods = GetVirtualMethods(project.Cache, type);
+
                     while (i < methods.Length)
                     {
-                        MethodGroup? group;
-                        var left = methods[i];
+                        MethodKey left = methods[i];
 
-                        if (!methodGroups.TryGetValue(left, out group))
+                        if (!methodGroups.TryGetValue(left, out MethodGroup? group))
                         {
                             group = null;
                         }
 
                         for (j = i + 1; j < methods.Length; j++)
                         {
-                            var right = methods[j];
+                            MethodKey right = methods[j];
+
                             if (!MethodsMatch(left, right))
                             {
                                 continue;
@@ -168,9 +169,10 @@ namespace Obfuscar
         public static void GetBaseTypes(Project project, HashSet<TypeKey> baseTypes, TypeDefinition type)
         {
             // check the interfaces
-            foreach (var ifaceRef in type.Interfaces)
+            foreach (InterfaceImplementation ifaceRef in type.Interfaces)
             {
                 TypeDefinition? iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
+
                 if (iface != null)
                 {
                     GetBaseTypes(project, baseTypes, iface);
@@ -197,7 +199,7 @@ namespace Obfuscar
         void GetVirtualMethods(AssemblyCache cache, HashSet<MethodKey> methods, TypeDefinition type)
         {
             // check the interfaces
-            foreach (var ifaceRef in type.Interfaces)
+            foreach (InterfaceImplementation ifaceRef in type.Interfaces)
             {
                 TypeDefinition? iface = project.GetTypeDefinition(ifaceRef.InterfaceType);
 
@@ -281,9 +283,7 @@ namespace Obfuscar
             //
             // Point the method at the group.
             //
-            MethodGroup? group2;
-
-            if (methodGroups.TryGetValue(methodKey, out group2) && group2 != group)
+            if (methodGroups.TryGetValue(methodKey, out MethodGroup? group2) && group2 != group)
             {
                 //
                 // Two unrelated groups come together; merge them.
@@ -323,8 +323,7 @@ namespace Obfuscar
 
         public MethodGroup? GetMethodGroup(MethodKey methodKey)
         {
-            MethodGroup? group;
-            if (methodGroups.TryGetValue(methodKey, out group))
+            if (methodGroups.TryGetValue(methodKey, out MethodGroup? group))
             {
                 return group;
             }
@@ -345,7 +344,14 @@ namespace Obfuscar
             {
                 TypeDefinition? typeDef = project.Cache.GetTypeDefinition(type.BaseType);
 
-                return this.Inherits(typeDef, interfaceFullName);
+                if (typeDef != null)
+                {
+                    return this.Inherits(typeDef, interfaceFullName);
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             return false;

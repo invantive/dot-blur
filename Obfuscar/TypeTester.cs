@@ -92,7 +92,7 @@ namespace Obfuscar
             {
                 if (string.Equals(attrib, "public", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (!type.TypeDefinition.IsTypePublic())
+                    if (!type.TypeDefinition?.IsTypePublic() ?? false)
                     {
                         return false;
                     }
@@ -118,7 +118,7 @@ namespace Obfuscar
 
             if (isSerializable.HasValue)
             {
-                if (isSerializable != type.TypeDefinition.IsSerializable)
+                if (isSerializable != type.TypeDefinition?.IsSerializable)
                 {
                     return false;
                 }
@@ -126,7 +126,7 @@ namespace Obfuscar
 
             if (isStatic.HasValue)
             {
-                if (isStatic != (type.TypeDefinition.IsSealed && type.TypeDefinition.IsAbstract))
+                if (isStatic != ((type.TypeDefinition?.IsSealed ?? false) && (type.TypeDefinition?.IsAbstract ?? false)))
                 {
                     return false;
                 }
@@ -134,7 +134,7 @@ namespace Obfuscar
 
             if (!string.IsNullOrEmpty(inherits))
             {
-                if (!map.Inherits(type.TypeDefinition, inherits))
+                if (map != null && type.TypeDefinition != null && !map.Inherits(type.TypeDefinition, inherits))
                 {
                     return false;
                 }

@@ -64,8 +64,7 @@ namespace Obfuscar
     class ObfuscatedClass : ObfuscatedThing
     {
         public ObfuscatedClass(string name): base(name)
-        {
-        }
+        { }
 
         public Dictionary<MethodKey, ObfuscatedThing> Methods = new Dictionary<MethodKey, ObfuscatedThing>();
         public Dictionary<FieldKey, ObfuscatedThing> Fields = new Dictionary<FieldKey, ObfuscatedThing>();
@@ -81,9 +80,7 @@ namespace Obfuscar
 
         public ObfuscatedClass GetClass(TypeKey key)
         {
-            ObfuscatedClass? c;
-
-            if (!ClassMap.TryGetValue(key, out c))
+            if (!ClassMap.TryGetValue(key, out ObfuscatedClass? c))
             {
                 c = new ObfuscatedClass(key.ToString());
                 ClassMap[key] = c;
@@ -96,8 +93,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing? t;
-            if (!c.Fields.TryGetValue(key, out t))
+            if (!c.Fields.TryGetValue(key, out ObfuscatedThing? t))
             {
                 t = new ObfuscatedThing(key.ToString());
                 c.Fields[key] = t;
@@ -110,8 +106,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing? t;
-            if (!c.Methods.TryGetValue(key, out t))
+            if (!c.Methods.TryGetValue(key, out ObfuscatedThing? t))
             {
                 t = new ObfuscatedThing(key.ToString());
                 c.Methods[key] = t;
@@ -124,8 +119,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing? t;
-            if (!c.Properties.TryGetValue(key, out t))
+            if (!c.Properties.TryGetValue(key, out ObfuscatedThing? t))
             {
                 t = new ObfuscatedThing(key.ToString());
                 c.Properties[key] = t;
@@ -138,8 +132,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing? t;
-            if (!c.Events.TryGetValue(key, out t))
+            if (!c.Events.TryGetValue(key, out ObfuscatedThing? t))
             {
                 t = new ObfuscatedThing(key.ToString());
                 c.Events[key] = t;

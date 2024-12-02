@@ -46,9 +46,10 @@ namespace ObfuscarTests
         public void CheckGeneric()
         {
 #if NETCOREAPP
+            //
             // IMPORANT: this is not not applicable for .NET Core
-            return;
-#endif
+            //
+#else
             string outputPath = TestHelper.OutputPath;
             string xml = string.Format(
                 @"<?xml version='1.0'?>" +
@@ -85,6 +86,7 @@ namespace ObfuscarTests
                 item.Name == "WindowsFormsApplication1.Form1.resources");
             Assert.DoesNotContain(outAssmDef.MainModule.Resources, item =>
                 item.Name == "WindowsFormsApplication1.UserControl1.resources");
+#endif
         }
     }
 }

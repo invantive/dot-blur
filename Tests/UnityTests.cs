@@ -96,10 +96,15 @@ namespace ObfuscarTests
             AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
                 Path.Combine(outputPath, "Microsoft.Practices.Unity.dll"));
 
-            var name = type.StatusText.Substring(27);
-            var obfuscated = outAssmDef.MainModule.GetType(name);
-            var method2 = FindByFullName(obfuscated,
-                "System.Void " + name + "::" + m1.StatusText + "(" + typeB.StatusText.Substring(27) +
+            string? name = type.StatusText?.Substring(27);
+
+            Assert.NotNull(name);
+
+            string? nameB = typeB.StatusText?.Substring(27);
+
+            TypeDefinition obfuscated = outAssmDef.MainModule.GetType(name);
+            MethodDefinition? method2 = FindByFullName(obfuscated,
+                "System.Void " + name + "::" + m1.StatusText + "(" + nameB +
                 ",System.Object)");
             Assert.NotNull(method2);
             var first = method2.Parameters[0].Name;

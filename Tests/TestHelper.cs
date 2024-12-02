@@ -90,7 +90,11 @@ namespace ObfuscarTests
             var consoleRefLocation = typeof(Console).GetTypeInfo().Assembly.Location;
             var consoleReference = MetadataReference.CreateFromFile(consoleRefLocation);
 
-            var attributeRefLocation = Path.Combine(Path.GetDirectoryName(systemRefLocation), "System.Runtime.dll");           
+            string? systemRefDirectoryPath = Path.GetDirectoryName(systemRefLocation);
+
+            Assert.NotNull(systemRefDirectoryPath);
+
+            var attributeRefLocation = Path.Combine(systemRefDirectoryPath, "System.Runtime.dll");           
             var attributeReference = MetadataReference.CreateFromFile(attributeRefLocation);
 
             // Configure compilation options with the key file if provided
