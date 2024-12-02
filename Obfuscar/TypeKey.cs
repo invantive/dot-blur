@@ -53,7 +53,7 @@ namespace Obfuscar
             this.Fullname = !string.IsNullOrEmpty(this.Namespace) && Namespace != type.Namespace ? this.Namespace + "." + Name : Name;
 
             // Our name should be the same as the Cecil's name. This is important to the Match method.
-            GenericInstanceType gi = type as GenericInstanceType;
+            GenericInstanceType? gi = type as GenericInstanceType;
             type.DeclaringType = type.DeclaringType; // Hack: Update fullname of nested type
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
             {

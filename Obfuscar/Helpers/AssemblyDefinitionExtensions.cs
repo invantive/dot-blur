@@ -21,14 +21,14 @@ namespace Obfuscar.Helpers
 
                     var framework = customAttribute.Properties.First(property => property.Name == "FrameworkDisplayName");
 
-                    string content = framework.Argument.Value.ToString();
+                    string? content = framework.Argument.Value.ToString();
 
                     if (!string.Equals(content, ".NET Portable Subset"))
                     {
                         return null;
                     }
 
-                    string[] parts = customAttribute.ConstructorArguments[0].Value.ToString().Split(',');
+                    string[]? parts = customAttribute.ConstructorArguments[0].Value.ToString()?.Split(',');
                     string root = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
                     return Environment.ExpandEnvironmentVariables(Path.Combine(root, "Reference Assemblies", "Microsoft", "Framework", parts[0], (parts[1].Split('='))[1], "Profile", (parts[2].Split('='))[1]));

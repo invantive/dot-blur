@@ -102,11 +102,11 @@ namespace ObfuscarTests
         void CheckType(TypeDefinition typeDef)
         {
             Assembly assm = Assembly.LoadFile(Path.GetFullPath(typeDef.Module.FileName));
-            Type type = assm.GetType(typeDef.FullName);
+            Type? type = assm.GetType(typeDef.FullName);
 
-            object obj = Activator.CreateInstance(type);
+            object? obj = Activator.CreateInstance(type);
 
-            object result = type.InvokeMember("Method1",
+            object? result = type.InvokeMember("Method1",
                 BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, obj, null);
             Assert.IsType<string>(result); // "Method1 returns a string.");
 

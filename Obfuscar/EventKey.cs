@@ -75,7 +75,7 @@ namespace Obfuscar
 
         public virtual bool Matches(MemberReference member)
         {
-            EventReference evtRef = member as EventReference;
+            EventReference? evtRef = member as EventReference;
             if (evtRef != null)
             {
                 if (TypeKey.Matches(evtRef.DeclaringType))
@@ -87,9 +87,9 @@ namespace Obfuscar
             return false;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            EventKey key = obj as EventKey;
+            EventKey? key = obj as EventKey;
             if (key == null)
             {
                 return false;

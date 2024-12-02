@@ -484,7 +484,7 @@ namespace Obfuscar
                 // the map (and therefore in the project), set up the mappings
                 foreach (AssemblyNameReference nameRef in info.Definition.MainModule.AssemblyReferences)
                 {
-                    AssemblyInfo reference;
+                    AssemblyInfo? reference;
                     if (assemblyMap.TryGetValue(nameRef.Name, out reference))
                     {
                         info.References.Add(reference);
@@ -529,12 +529,12 @@ namespace Obfuscar
                 return null;
             }
 
-            TypeDefinition typeDef = type as TypeDefinition;
+            TypeDefinition? typeDef = type as TypeDefinition;
             if (typeDef == null)
             {
                 string name = type.GetScopeName();
 
-                AssemblyInfo info;
+                AssemblyInfo? info;
                 if (assemblyMap.TryGetValue(name, out info))
                 {
                     string fullName = type.Namespace + "." + type.Name;

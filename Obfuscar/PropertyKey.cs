@@ -58,7 +58,7 @@ namespace Obfuscar
 
         public virtual bool Matches(MemberReference member)
         {
-            PropertyReference propRef = member as PropertyReference;
+            PropertyReference? propRef = member as PropertyReference;
             if (propRef != null)
             {
                 if (TypeKey.Matches(propRef.DeclaringType))
@@ -70,9 +70,9 @@ namespace Obfuscar
             return false;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            PropertyKey key = obj as PropertyKey;
+            PropertyKey? key = obj as PropertyKey;
             if (key == null)
             {
                 return false;

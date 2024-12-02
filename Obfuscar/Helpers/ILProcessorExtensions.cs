@@ -40,7 +40,7 @@ namespace Obfuscar.Helpers
 
             if (bodyInstruction.Operand is Instruction instructionOperand)
             {
-                if (oldToNewStringInstructions.TryGetValue(instructionOperand, out LdStrInstructionReplacement oldToNew))
+                if (oldToNewStringInstructions.TryGetValue(instructionOperand, out LdStrInstructionReplacement? oldToNew))
                 {
                     bodyInstruction.Operand = oldToNew.NewInstruction;
                 }
@@ -49,7 +49,7 @@ namespace Obfuscar.Helpers
             {
                 for (int i = 0; i < instructionArrayOperand.Length; i++)
                 {
-                    if (oldToNewStringInstructions.TryGetValue(instructionArrayOperand[i], out LdStrInstructionReplacement oldToNew))
+                    if (oldToNewStringInstructions.TryGetValue(instructionArrayOperand[i], out LdStrInstructionReplacement? oldToNew))
                     {
                         instructionArrayOperand[i] = oldToNew.NewInstruction;
                     }
@@ -77,7 +77,7 @@ namespace Obfuscar.Helpers
         , Dictionary<Instruction, LdStrInstructionReplacement> oldToNewStringInstructions
         )
         {
-            if (instruction != null && oldToNewStringInstructions.TryGetValue(instruction, out LdStrInstructionReplacement oldToNew))
+            if (instruction != null && oldToNewStringInstructions.TryGetValue(instruction, out LdStrInstructionReplacement? oldToNew))
             {
                 setInstruction(oldToNew.NewInstruction);
             }

@@ -11,7 +11,7 @@ namespace Obfuscar.Helpers
         /// </summary>
         public static string GetScopeName(this TypeReference type)
         {
-            ModuleDefinition module = type.Scope as ModuleDefinition;
+            ModuleDefinition? module = type.Scope as ModuleDefinition;
 
             if (module != null)
             {

@@ -42,14 +42,14 @@ namespace Obfuscar
         /// <param name="type">Type whose name is to be built.</param>
         static void BuildTypeName(StringBuilder builder, TypeReference type)
         {
-            GenericParameter genParam = type as GenericParameter;
+            GenericParameter? genParam = type as GenericParameter;
             if (genParam != null)
             {
                 builder.AppendFormat("!{0}", genParam.Position);
             }
             else
             {
-                GenericInstanceType genType = type as GenericInstanceType;
+                GenericInstanceType? genType = type as GenericInstanceType;
                 if (genType != null)
                 {
                     builder.AppendFormat("[{2}]{0}.{1}<", genType.Namespace, genType.Name, type.GetScopeName());
@@ -68,7 +68,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    ArrayType arrType = type as ArrayType;
+                    ArrayType? arrType = type as ArrayType;
                     if (arrType != null)
                     {
                         BuildTypeName(builder, arrType.ElementType);
@@ -90,7 +90,7 @@ namespace Obfuscar
         {
             lock (nameCache)
             {
-                string name;
+                string? name;
                 if (!nameCache.TryGetValue(type, out name))
                 {
                     StringBuilder builder = new StringBuilder();

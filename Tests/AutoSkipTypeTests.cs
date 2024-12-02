@@ -118,8 +118,8 @@ namespace ObfuscarTests
                 Path.Combine(TestHelper.InputPath, assmName));
 
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.PublicClass");
-            MethodDefinition classAmethod1 = FindByName(classAType, "PrivateMethod");
-            MethodDefinition classAmethod2 = FindByName(classAType, "PublicMethod");
+            MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
+            MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
 
             ObfuscatedThing classAMethod1 = map.GetMethod(new MethodKey(classAmethod1));
             ObfuscatedThing classAMethod2 = map.GetMethod(new MethodKey(classAmethod2));
@@ -157,9 +157,9 @@ namespace ObfuscarTests
                 Path.Combine(TestHelper.InputPath, assmName));
 
             TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.PublicClass");
-            MethodDefinition classAmethod1 = FindByName(classAType, "PrivateMethod");
-            MethodDefinition classAmethod2 = FindByName(classAType, "PublicMethod");
-            MethodDefinition classAmethod3 = FindByName(classAType, "InternalProtectedMethod");
+            MethodDefinition? classAmethod1 = FindByName(classAType, "PrivateMethod");
+            MethodDefinition? classAmethod2 = FindByName(classAType, "PublicMethod");
+            MethodDefinition? classAmethod3 = FindByName(classAType, "InternalProtectedMethod");
 
             ObfuscatedThing classAMethod1 = map.GetMethod(new MethodKey(classAmethod1));
             ObfuscatedThing classAMethod2 = map.GetMethod(new MethodKey(classAmethod2));
