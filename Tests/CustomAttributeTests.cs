@@ -24,12 +24,11 @@
 
 #endregion
 
-using System;
+using Mono.Cecil;
+using Obfuscar;
 using System.IO;
 using System.Linq;
-using Mono.Cecil;
 using Xunit;
-using Obfuscar;
 
 namespace ObfuscarTests
 {

@@ -24,6 +24,11 @@
 
 #endregion
 
+using ILSpy.BamlDecompiler.Baml;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
+using Obfuscar.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,11 +41,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
-using ILSpy.BamlDecompiler.Baml;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Rocks;
-using Obfuscar.Helpers;
 
 namespace Obfuscar
 {
@@ -132,9 +132,9 @@ namespace Obfuscar
             return new Obfuscator(document);
         }
 
-        internal Project Project { get; set; }
+        internal Project? Project { get; set; }
 
-        private void LoadFromReader(XDocument reader, string projectFileDirectory)
+        private void LoadFromReader(XDocument reader, string? projectFileDirectory)
         {
             Project = Project.FromXml(reader, projectFileDirectory);
 
@@ -193,7 +193,7 @@ namespace Obfuscar
             //
             foreach (AssemblyInfo info in Project.AssemblyList)
             {
-                string fileName = Path.GetFileName(info.FileName);
+                string? fileName = Path.GetFileName(info.FileName);
 
                 try
                 {
@@ -299,7 +299,7 @@ namespace Obfuscar
             get 
             {
                 // https://stackoverflow.com/a/38795621/11182
-                string windir = Environment.GetEnvironmentVariable("windir");
+                string? windir = Environment.GetEnvironmentVariable("windir");
                 return !string.IsNullOrEmpty(windir) && windir.Contains(@"\") && Directory.Exists(windir);
             }
         }
@@ -325,7 +325,7 @@ namespace Obfuscar
                 logPath = Project.Settings.LogFilePath;
             }
 
-            string lPath = Path.GetDirectoryName(logPath);
+            string? lPath = Path.GetDirectoryName(logPath);
             if (!string.IsNullOrEmpty(lPath) && !Directory.Exists(lPath))
             {
                 Directory.CreateDirectory(lPath);
@@ -430,7 +430,7 @@ namespace Obfuscar
             {
                 for (int i = 0; i < reference.UnrenamedReferences.Count;)
                 {
-                    FieldReference member = reference.UnrenamedReferences[i] as FieldReference;
+                    FieldReference? member = reference.UnrenamedReferences[i] as FieldReference;
                     if (member != null)
                     {
                         if (fieldKey.Matches(member))
@@ -530,7 +530,7 @@ namespace Obfuscar
             //var typerenamemap = new Dictionary<string, string> (); // For patching the parameters of typeof(xx) attribute constructors
             foreach (AssemblyInfo info in Project.AssemblyList)
             {
-                AssemblyDefinition library = info.Definition;
+                AssemblyDefinition? library = info.Definition;
 
                 // make a list of the resources that can be renamed
                 List<Resource> resources = new List<Resource>(library.MainModule.Resources.Count);
@@ -863,7 +863,7 @@ namespace Obfuscar
 
         private Dictionary<ParamSig, NameGroup> GetSigNames(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, TypeKey typeKey)
         {
-            Dictionary<ParamSig, NameGroup> sigNames;
+            Dictionary<ParamSig, NameGroup>? sigNames;
             if (!baseSigNames.TryGetValue(typeKey, out sigNames))
             {
                 sigNames = new Dictionary<ParamSig, NameGroup>();
@@ -880,7 +880,7 @@ namespace Obfuscar
 
         private NameGroup GetNameGroup<TKeyType>(Dictionary<TKeyType, NameGroup> sigNames, TKeyType sig)
         {
-            NameGroup nameGroup;
+            NameGroup? nameGroup;
             if (!sigNames.TryGetValue(sig, out nameGroup))
             {
                 nameGroup = new NameGroup();
@@ -983,7 +983,7 @@ namespace Obfuscar
             {
                 for (int i = 0; i < reference.UnrenamedReferences.Count;)
                 {
-                    PropertyReference member = reference.UnrenamedReferences[i] as PropertyReference;
+                    PropertyReference? member = reference.UnrenamedReferences[i] as PropertyReference;
                     if (member != null)
                     {
                         if (propertyKey.Matches(member))
@@ -1204,7 +1204,7 @@ namespace Obfuscar
         private void RenameVirtualMethod(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, MethodKey methodKey, MethodDefinition method, string skipRename)
         {
             // if method is in a group, look for group key
-            MethodGroup group = Project.InheritMap.GetMethodGroup(methodKey);
+            MethodGroup? group = Project.InheritMap.GetMethodGroup(methodKey);
             if (group == null)
             {
                 if (skipRename != null)
@@ -1215,7 +1215,7 @@ namespace Obfuscar
                 return;
             }
 
-            string groupName = @group.Name;
+            string? groupName = group.Name;
             if (groupName == null)
             {
                 // group is not yet named
@@ -1364,7 +1364,7 @@ namespace Obfuscar
         void RenameMethod(AssemblyInfo info, Dictionary<ParamSig, NameGroup> sigNames, MethodKey methodKey,
             MethodDefinition method)
         {
-            string newName = GetNewMethodName(sigNames, methodKey, method);
+            string? newName = GetNewMethodName(sigNames, methodKey, method);
 
             RenameMethod(info, methodKey, method, newName);
         }
@@ -1385,7 +1385,7 @@ namespace Obfuscar
             {
                 for (int i = 0; i < reference.UnrenamedReferences.Count;)
                 {
-                    MethodReference member = reference.UnrenamedReferences[i] as MethodReference;
+                    MethodReference? member = reference.UnrenamedReferences[i] as MethodReference;
                     if (member != null)
                     {
                         if (methodKey.Matches(member))
@@ -1428,7 +1428,7 @@ namespace Obfuscar
         {
             foreach (AssemblyInfo info in Project.AssemblyList)
             {
-                AssemblyDefinition library = info.Definition;
+                AssemblyDefinition? library = info.Definition;
                 StringSqueeze container = new StringSqueeze(library);
 
                 // Look for all string load operations and replace them with calls to indiviual methods in our new class
@@ -1506,7 +1506,7 @@ namespace Obfuscar
                     return;
                 }
 
-                CustomAttribute found = module.CustomAttributes.FirstOrDefault(existing => existing.Constructor.DeclaringType.FullName == attribute.FullName);
+                CustomAttribute? found = module.CustomAttributes.FirstOrDefault(existing => existing.Constructor.DeclaringType.FullName == attribute.FullName);
 
                 //
                 // Only add if it's not there already.
@@ -1534,17 +1534,17 @@ namespace Obfuscar
             /// </summary>
             private class StringSqueezeData
             {
-                public TypeDefinition NewType { get; set; }
+                public TypeDefinition? NewType { get; set; }
 
-                public TypeDefinition StructType { get; set; }
+                public TypeDefinition? StructType { get; set; }
 
-                public FieldDefinition DataConstantField { get; set; }
+                public FieldDefinition? DataConstantField { get; set; }
 
-                public FieldDefinition DataField { get; set; }
+                public FieldDefinition? DataField { get; set; }
 
-                public FieldDefinition StringArrayField { get; set; }
+                public FieldDefinition? StringArrayField { get; set; }
 
-                public MethodDefinition StringGetterMethodDefinition { get; set; }
+                public MethodDefinition? StringGetterMethodDefinition { get; set; }
 
                 public int NameIndex { get; set; }
 
@@ -1554,25 +1554,25 @@ namespace Obfuscar
                 public List<byte> DataBytes { get; } = new List<byte>();
             }
 
-            private TypeReference SystemStringTypeReference { get; set; }
+            private TypeReference? SystemStringTypeReference { get; set; }
 
-            private TypeReference SystemVoidTypeReference { get; set; }
+            private TypeReference? SystemVoidTypeReference { get; set; }
 
-            private TypeReference SystemByteTypeReference { get; set; }
+            private TypeReference? SystemByteTypeReference { get; set; }
 
-            private TypeReference SystemIntTypeReference { get; set; }
+            private TypeReference? SystemIntTypeReference { get; set; }
 
-            private TypeReference SystemObjectTypeReference { get; set; }
+            private TypeReference? SystemObjectTypeReference { get; set; }
 
-            private TypeReference SystemValueTypeTypeReference { get; set; }
+            private TypeReference? SystemValueTypeTypeReference { get; set; }
 
-            private MethodReference InitializeArrayMethod { get; set; }
+            private MethodReference? InitializeArrayMethod { get; set; }
 
-            private TypeDefinition EncodingTypeDefinition { get; set; }
+            private TypeDefinition? EncodingTypeDefinition { get; set; }
 
             private readonly List<StringSqueezeData> newDatas = new List<StringSqueezeData>();
 
-            private StringSqueezeData mostRecentData;
+            private StringSqueezeData? mostRecentData;
 
             private readonly Dictionary<string, MethodDefinition> _methodByString =
                 new Dictionary<string, MethodDefinition>();
@@ -1814,7 +1814,7 @@ namespace Obfuscar
                     if (instruction.OpCode == OpCodes.Ldstr)
                     {
                         string str = (string)instruction.Operand;
-                        MethodDefinition individualStringMethodDefinition;
+                        MethodDefinition? individualStringMethodDefinition;
                         if (!_methodByString.TryGetValue(str, out individualStringMethodDefinition))
                         {
                             StringSqueezeData data = GetNewType();

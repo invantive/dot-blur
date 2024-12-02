@@ -25,10 +25,7 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Obfuscar
 {
@@ -56,7 +53,7 @@ namespace Obfuscar
         }
 
         public ObfuscationStatus Status = ObfuscationStatus.Unknown;
-        public string StatusText;
+        public string? StatusText;
 
         public override string ToString()
         {
@@ -84,7 +81,7 @@ namespace Obfuscar
 
         public ObfuscatedClass GetClass(TypeKey key)
         {
-            ObfuscatedClass c;
+            ObfuscatedClass? c;
 
             if (!ClassMap.TryGetValue(key, out c))
             {
@@ -99,7 +96,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing t;
+            ObfuscatedThing? t;
             if (!c.Fields.TryGetValue(key, out t))
             {
                 t = new ObfuscatedThing(key.ToString());
@@ -113,7 +110,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing t;
+            ObfuscatedThing? t;
             if (!c.Methods.TryGetValue(key, out t))
             {
                 t = new ObfuscatedThing(key.ToString());
@@ -127,7 +124,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing t;
+            ObfuscatedThing? t;
             if (!c.Properties.TryGetValue(key, out t))
             {
                 t = new ObfuscatedThing(key.ToString());
@@ -141,7 +138,7 @@ namespace Obfuscar
         {
             ObfuscatedClass c = GetClass(key.TypeKey);
 
-            ObfuscatedThing t;
+            ObfuscatedThing? t;
             if (!c.Events.TryGetValue(key, out t))
             {
                 t = new ObfuscatedThing(key.ToString());

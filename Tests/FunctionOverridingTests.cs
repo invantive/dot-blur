@@ -24,18 +24,18 @@
 
 #endregion
 
-using System;
-using System.IO;
 using Mono.Cecil;
 using Obfuscar;
-using Xunit;
+using System;
+using System.IO;
 using System.Reflection;
+using Xunit;
 
 namespace ObfuscarTests
 {
     public class FunctionOverridingTests
     {
-        private string output;
+        private string? output;
 
         Obfuscator BuildAndObfuscateAssemblies()
         {

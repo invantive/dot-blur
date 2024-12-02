@@ -31,7 +31,7 @@ namespace Obfuscar.Helpers
                 return (bool)MemoryCache.Default[type.FullName];
             }
 
-            CustomAttribute generatedCustomAttribute = type.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
+            CustomAttribute? generatedCustomAttribute = type.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.FullName == "System.CodeDom.Compiler.GeneratedCodeAttribute");
 
             bool result = false;
 
@@ -41,7 +41,7 @@ namespace Obfuscar.Helpers
             }
             else
             {
-                string name = generatedCustomAttribute.ConstructorArguments[0].Value.ToString();
+                string? name = generatedCustomAttribute.ConstructorArguments[0].Value.ToString();
                 result = name == "System.Resources.Tools.StronglyTypedResourceBuilder";
             }
 

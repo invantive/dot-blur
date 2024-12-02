@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Mono.Cecil;
 using System.IO;
-using Mono.Cecil;
 using Xunit;
 
 namespace ObfuscarTests

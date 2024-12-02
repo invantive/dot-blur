@@ -24,15 +24,15 @@
 
 #endregion
 
-using System;
 using Mono.Cecil;
 using Obfuscar.Helpers;
+using System;
 
 namespace Obfuscar
 {
     class TypeKey : IComparable<TypeKey>
     {
-        readonly TypeReference typeReference;
+        readonly TypeReference? typeReference;
         readonly int hashCode;
 
         public TypeKey(TypeReference type)
@@ -53,7 +53,7 @@ namespace Obfuscar
             this.Fullname = !string.IsNullOrEmpty(this.Namespace) && Namespace != type.Namespace ? this.Namespace + "." + Name : Name;
 
             // Our name should be the same as the Cecil's name. This is important to the Match method.
-            GenericInstanceType gi = type as GenericInstanceType;
+            GenericInstanceType? gi = type as GenericInstanceType;
             type.DeclaringType = type.DeclaringType; // Hack: Update fullname of nested type
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
             {
@@ -82,7 +82,7 @@ namespace Obfuscar
             return Scope.GetHashCode() ^ Namespace.GetHashCode() ^ Name.GetHashCode() ^ Fullname.GetHashCode();
         }
 
-        public TypeDefinition TypeDefinition
+        public TypeDefinition? TypeDefinition
         {
             get 
             { 
@@ -171,13 +171,13 @@ namespace Obfuscar
             return string.Format("[{0}]{1}", Scope, Fullname);
         }
 
-        public int CompareTo(TypeKey other)
+        public int CompareTo(TypeKey? other)
         {
             // no need to check ns and name...should be in fullname
-            int cmp = string.Compare(Scope, other.Scope);
+            int cmp = string.Compare(Scope, other?.Scope);
             if (cmp == 0)
             {
-                cmp = string.Compare(Fullname, other.Fullname);
+                cmp = string.Compare(Fullname, other?.Fullname);
             }
             return cmp;
         }

@@ -7,9 +7,9 @@ namespace Obfuscar.Helpers
         public static bool? MarkedToRename(this IMemberDefinition type, bool fromMember = false)
         {
 #pragma warning disable 618
-            string obfuscarObfuscate = typeof(ObfuscateAttribute).FullName;
+            string? obfuscarObfuscate = typeof(ObfuscateAttribute).FullName;
 #pragma warning restore 618
-            string reflectionObfuscate = typeof(System.Reflection.ObfuscationAttribute).FullName;
+            string? reflectionObfuscate = typeof(System.Reflection.ObfuscationAttribute).FullName;
 
             foreach (CustomAttribute customAttribute in type.CustomAttributes)
             {
@@ -41,7 +41,7 @@ namespace Obfuscar.Helpers
 
         public static void CleanAttributes(this IMemberDefinition type)
         {
-            string reflectionObfuscate = typeof(System.Reflection.ObfuscationAttribute).FullName;
+            string? reflectionObfuscate = typeof(System.Reflection.ObfuscationAttribute).FullName;
 
             for (int i = 0; i < type.CustomAttributes.Count; i++)
             {

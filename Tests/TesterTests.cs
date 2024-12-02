@@ -24,8 +24,8 @@
 
 #endregion
 
-using System.Text.RegularExpressions;
 using Mono.Cecil;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace ObfuscarTests

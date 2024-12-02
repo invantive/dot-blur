@@ -24,18 +24,14 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-using Mono.Cecil;
 
 namespace Obfuscar
 {
     class NamespaceTester : IPredicate<string>
     {
-        private readonly string name;
-        private readonly Regex nameRx;
+        private readonly string? name;
+        private readonly Regex? nameRx;
 
         public NamespaceTester(string name)
         {
@@ -47,7 +43,7 @@ namespace Obfuscar
             this.nameRx = nameRx;
         }
 
-        public bool Test(string ns, InheritMap map)
+        public bool Test(string ns, InheritMap? map)
         {
             // regex matches
             if (this.nameRx != null && !this.nameRx.IsMatch(ns))

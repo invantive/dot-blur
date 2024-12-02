@@ -24,11 +24,10 @@
 
 #endregion
 
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mono.Cecil;
-using Mono.Cecil.Metadata;
 
 namespace Obfuscar
 {
@@ -208,7 +207,7 @@ namespace Obfuscar
             }
         }
 
-        public int CompareTo(ParamSig other)
+        public int CompareTo(ParamSig? other)
         {
             if (ParamTypes.Length < other.ParamTypes.Length)
             {

@@ -24,18 +24,14 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-using Mono.Cecil;
 
 namespace Obfuscar
 {
     class PropertyTester : IPredicate<PropertyKey>
     {
-        private readonly string name;
-        private readonly Regex nameRx;
+        private readonly string? name;
+        private readonly Regex? nameRx;
         private readonly string type;
         private readonly string attrib;
         private readonly string typeAttrib;

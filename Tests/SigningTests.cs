@@ -24,10 +24,10 @@
 
 #endregion
 
-using System;
-using System.IO;
 using Mono.Cecil;
 using Obfuscar;
+using System;
+using System.IO;
 using Xunit;
 
 namespace ObfuscarTests

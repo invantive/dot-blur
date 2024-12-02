@@ -24,22 +24,22 @@
 
 #endregion
 
-using System;
-using System.Text.RegularExpressions;
 using Mono.Cecil;
 using Obfuscar.Helpers;
+using System;
+using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
     class MethodTester : IPredicate<MethodKey>
     {
-        private readonly MethodKey key;
-        private readonly string name;
-        private readonly Regex nameRx;
-        private readonly string type;
-        private readonly string attrib;
-        private readonly string typeAttrib;
-        private readonly string inherits;
+        private readonly MethodKey? key;
+        private readonly string? name;
+        private readonly Regex? nameRx;
+        private readonly string? type;
+        private readonly string? attrib;
+        private readonly string? typeAttrib;
+        private readonly string? inherits;
         private readonly bool? isStatic;
 
         public MethodTester(MethodKey key)
@@ -77,7 +77,7 @@ namespace Obfuscar
             this.isStatic = isStatic;
         }
 
-        public bool Test(MethodKey method, InheritMap map)
+        public bool Test(MethodKey method, InheritMap? map)
         {
             if (key != null)
             {
