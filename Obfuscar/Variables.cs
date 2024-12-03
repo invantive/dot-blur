@@ -77,7 +77,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr012, "Unable to replace variable: " + variable);
+                    throw new ObfuscarException(MessageCodes.dbr012, "Unable to replace variable: " + variable);
                 }
 
                 lastMatch = m.Index + m.Length;

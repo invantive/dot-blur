@@ -32,11 +32,17 @@ namespace Obfuscar
     /// </summary>
     public static partial class TranslationKeys
     {
+        public const string db_con_fork_obfuscar = nameof(db_con_fork_obfuscar);
         public const string db_con_title_par2 = nameof(db_con_title_par2);
         public const string db_display_version = nameof(db_display_version);
+        public const string db_error_processing_colon = nameof(db_error_processing_colon);
+        public const string db_fork_obfuscar = nameof(db_fork_obfuscar);
         public const string db_gt_title_par2 = nameof(db_gt_title_par2);
         public const string db_help_info = nameof(db_help_info);
+        public const string db_hint_colon_par1 = nameof(db_hint_colon_par1);
+        public const string db_inner_exception_par1 = nameof(db_inner_exception_par1);
         public const string db_loading_pjt_par1 = nameof(db_loading_pjt_par1);
+        public const string db_options_colon = nameof(db_options_colon);
     }
 }
 #pragma warning restore 1591

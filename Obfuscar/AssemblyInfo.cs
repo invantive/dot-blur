@@ -612,7 +612,7 @@ namespace Obfuscar
                             Console.Error.WriteLine("{0} {1} : [{2}]", node.Item?.FullName, node.Item?.Scope.Name, parents);
                         }
 
-                        throw new ObfuscarException(MessageCodes.ofr019, "Cannot clean pool.");
+                        throw new ObfuscarException(MessageCodes.dbr019, "Cannot clean pool.");
                     }
 
                     foreach (Node<TypeDefinition> remove in toRemove)
@@ -655,7 +655,7 @@ namespace Obfuscar
             }
             catch (Exception e)
             {
-                throw new ObfuscarException(MessageCodes.ofr020, $"Failed to get type definitions for {this.Definition.Name}", e);
+                throw new ObfuscarException(MessageCodes.dbr020, $"Failed to get type definitions for {this.Definition.Name}", innerException: e);
             }
         }
 
@@ -793,7 +793,7 @@ namespace Obfuscar
             }
             catch (System.IO.IOException e)
             {
-                throw new ObfuscarException(MessageCodes.ofr020, "Unable to find assembly: " + filename, e);
+                throw new ObfuscarException(MessageCodes.dbr020, "Unable to find assembly: " + filename, innerException: e);
             }
         }
 
@@ -832,7 +832,7 @@ namespace Obfuscar
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ObfuscarException(MessageCodes.ofr027, "Expected name to have a value.");
+                    throw new ObfuscarException(MessageCodes.dbr027, "Expected name to have a value.");
                 }
 
                 this.name = value;
@@ -1294,12 +1294,12 @@ namespace Obfuscar
         {
             if (this.definition == null)
             {
-                throw new ObfuscarException(MessageCodes.ofr029, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr029, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
             }
 
             if (string.IsNullOrEmpty(this.name))
             {
-                throw new ObfuscarException(MessageCodes.ofr030, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr030, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
             }
         }
 
@@ -1310,7 +1310,7 @@ namespace Obfuscar
         {
             if (!this.initialized)
             {
-                throw new ObfuscarException(MessageCodes.ofr031, "Expected that AssemblyInfo.Init would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr031, "Expected that AssemblyInfo.Init would be called before use.");
             }
         }
 

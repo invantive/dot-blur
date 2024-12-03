@@ -41,7 +41,7 @@ namespace Obfuscar.Helpers
 
                     if (parts == null)
                     {
-                        throw new ObfuscarException(MessageCodes.ofr037, "Missing parts.");
+                        throw new ObfuscarException(MessageCodes.dbr037, "Missing parts.");
                     }
 
                     string? p1 = parts[0];

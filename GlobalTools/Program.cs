@@ -38,11 +38,12 @@ namespace Obfuscar
     {
         private static void ShowHelp(OptionSet optionSet)
         {
-            Console.WriteLine("DotBlur is a specific fork of Obfuscar (https://www.obfuscar.com)");
-            Console.WriteLine("(C) 2007-2024, Ryan Williams and other contributors.");
+            Console.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_fork_obfuscar));
+            Console.WriteLine(string.Format("(C) 2007-{0}, Ryan Williams and other contributors.", DateTime.UtcNow.Year));
             Console.WriteLine();
             Console.WriteLine("dotblur [Options] [project_file] [project_file]");
-            Console.WriteLine("Options:");
+            Console.WriteLine();
+            Console.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_options_colon));
             optionSet.WriteOptionDescriptions(Console.Out);
         }
 
@@ -122,12 +123,35 @@ namespace Obfuscar
                 catch (ObfuscarException e)
                 {
                     Console.WriteLine();
-                    Console.Error.WriteLine("An error occurred during processing:");
+                    Console.Error.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
+
+                    Console.Error.Write(e.MessageCode);
+                    Console.Error.Write(": ");
+
+                    Console.Error.WriteLine(e.Message);
+
+                    if (!string.IsNullOrEmpty(e.Hint))
+                    {
+                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_hint_colon_par1), e.Hint));
+                    }
+
+                    if (e.InnerException != null)
+                    {
+                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
+                    }
+
+                    return 1;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine();
+                    Console.Error.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
+
                     Console.Error.WriteLine(e.Message);
 
                     if (e.InnerException != null)
                     {
-                        Console.Error.WriteLine(e.InnerException.Message);
+                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
                     return 1;

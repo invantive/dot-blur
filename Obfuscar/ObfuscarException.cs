@@ -18,32 +18,30 @@ namespace Obfuscar
         public string MessageCode { get; private set; }
 
         /// <summary>
+        /// Hint.
+        /// </summary>
+        public string? Hint { get; private set; }
+
+        /// <summary>
         /// Creates a <see cref="ObfuscarException"/>.
         /// </summary>
         public ObfuscarException()
         {
-            this.MessageCode = MessageCodes.ofr001;
-        }
-
-        /// <summary>
-        /// Creates a <see cref="ObfuscarException"/> instance with a specific <see cref="string"/>.
-        /// </summary>
-        /// <param name="messageCode">Code.</param>
-        /// <param name="message">Message</param>
-        public ObfuscarException(string messageCode, string message) : base(message)
-        {
-            this.MessageCode = messageCode;
+            this.MessageCode = MessageCodes.dbr001;
+            this.Hint = null;
         }
 
         /// <summary>
         /// Creates a <see cref="ObfuscarException"/> instance with a specific <see cref="string"/> and an <see cref="Exception"/>.
         /// </summary>
         /// <param name="messageCode">The message code.</param>
-        /// <param name="message">Message</param>
-        /// <param name="inner">Inner exception</param>
-        public ObfuscarException(string messageCode, string message, Exception inner): base(message, inner)
+        /// <param name="message">Message.</param>
+        /// <param name="hint">Hint.</param>
+        /// <param name="innerException">Inner exception</param>
+        public ObfuscarException(string messageCode, string message, string? hint = null, Exception? innerException = null): base(message, innerException)
         {
             this.MessageCode = messageCode;
+            this.Hint = hint;
         }
 
 #if !CF
@@ -55,7 +53,7 @@ namespace Obfuscar
         [Obsolete]
         protected ObfuscarException(SerializationInfo info, StreamingContext context): base(info, context)
         {
-            this.MessageCode = MessageCodes.ofr022;
+            this.MessageCode = MessageCodes.dbr022;
         }
 #endif
     }

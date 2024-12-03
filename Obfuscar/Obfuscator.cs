@@ -73,11 +73,11 @@ namespace Obfuscar
             }
             catch (IOException e)
             {
-                throw new ObfuscarException(MessageCodes.ofr014, "Unable to read specified project file: " + projfile, e);
+                throw new ObfuscarException(MessageCodes.dbr014, "Unable to read specified project file: " + projfile, innerException: e);
             }
             catch (System.Xml.XmlException e)
             {
-                throw new ObfuscarException(MessageCodes.ofr018, $"{projfile} is not a valid XML file", e);
+                throw new ObfuscarException(MessageCodes.dbr018, $"{projfile} is not a valid XML file", innerException: e);
             }
         }
 
@@ -224,7 +224,7 @@ namespace Obfuscar
             {
                 if (info.Definition == null)
                 {
-                    throw new ObfuscarException(MessageCodes.ofr026, "Definition is missing.");
+                    throw new ObfuscarException(MessageCodes.dbr026, "Definition is missing.");
                 }
 
                 string? fileName = Path.GetFileName(info.FileName);
@@ -310,7 +310,7 @@ namespace Obfuscar
                         }
                         else
                         {
-                            throw new ObfuscarException(MessageCodes.ofr015, $"Obfuscating a signed assembly would result in an invalid assembly: {info.Name}; use the KeyFile or KeyContainer property to set a key to use.");
+                            throw new ObfuscarException(MessageCodes.dbr015, $"Obfuscating a signed assembly would result in an invalid assembly: {info.Name}; use the KeyFile or KeyContainer property to set a key to use.");
                         }
 
                         if (this.Project.Settings.SignAssembly)
@@ -319,12 +319,12 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(signToolExePath))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr040, $"Could not sign assembly since signtool.exe could not be located.");
+                                throw new ObfuscarException(MessageCodes.dbr040, $"Could not sign assembly since signtool.exe could not be located.");
                             }
 
                             if (!File.Exists(signToolExePath))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr041, $"Could not sign assembly since signtool.exe could not be found on the specified location '{signToolExePath}'.");
+                                throw new ObfuscarException(MessageCodes.dbr041, $"Could not sign assembly since signtool.exe could not be found on the specified location '{signToolExePath}'.");
                             }
 
                             string? keyFileName = this.Project.KeyFileName;
@@ -332,12 +332,12 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(keyFileName))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr044, $"Could not sign assembly since the key file name is not set.");
+                                throw new ObfuscarException(MessageCodes.dbr044, $"Could not sign assembly since the key file name is not set.");
                             }
 
                             if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
+                                throw new ObfuscarException(MessageCodes.dbr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
                             }
 
                             Log.OutputLine($"Start signing '{fileName}' using sign tool '{signToolExePath}'.");
@@ -367,7 +367,7 @@ namespace Obfuscar
 
                             if (signProcess == null)
                             {
-                                throw new ObfuscarException(MessageCodes.ofr042, $"Could not start sign process using since signtool.exe. No process.");
+                                throw new ObfuscarException(MessageCodes.dbr042, $"Could not start sign process using since signtool.exe. No process.");
                             }
 
                             StringBuilder signProcessResult = new StringBuilder();
@@ -385,7 +385,7 @@ namespace Obfuscar
 
                             if (!signProcess.WaitForExit(SignTimeOutMs))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
+                                throw new ObfuscarException(MessageCodes.dbr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
                             }
 
                             Log.OutputLine($"'{fileName}' was signed.");
@@ -873,7 +873,7 @@ namespace Obfuscar
                     }
                     else
                     {
-                        throw new ObfuscarException(MessageCodes.ofr023, "Full name is missing.");
+                        throw new ObfuscarException(MessageCodes.dbr023, "Full name is missing.");
                     }
                 }
                 else
@@ -1487,7 +1487,7 @@ namespace Obfuscar
                     message.AppendFormat("{0}->{1}:{2}", item, state.Status, state.StatusText).AppendLine();
                 }
 
-                throw new ObfuscarException(MessageCodes.ofr016, message.ToString());
+                throw new ObfuscarException(MessageCodes.dbr016, message.ToString());
             }
             else
             {

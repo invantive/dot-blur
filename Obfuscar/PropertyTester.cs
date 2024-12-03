@@ -66,7 +66,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr036, "Name and name regular expression are not set.");
+                    throw new ObfuscarException(MessageCodes.dbr036, "Name and name regular expression are not set.");
                 }
             }
 

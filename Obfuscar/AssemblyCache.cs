@@ -78,7 +78,7 @@ namespace Obfuscar
             }
             catch (FileNotFoundException)
             {
-                throw new ObfuscarException(MessageCodes.ofr009, "Unable to resolve dependency: " + name.Name);
+                throw new ObfuscarException(MessageCodes.dbr009, "Unable to resolve dependency: " + name.Name);
             }
 
             string fullName = type.GetFullName();

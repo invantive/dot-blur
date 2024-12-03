@@ -91,7 +91,7 @@ namespace Obfuscar
 
             if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyContainerName))
             {
-                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
+                throw new ObfuscarException(MessageCodes.dbr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
             }
 
             //
@@ -114,7 +114,7 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(keyFileName))
                             {
-                                throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
+                                throw new ObfuscarException(MessageCodes.dbr024, $"'{Settings.VariableKeyFile}' is not set.");
                             }
 
                             keyPair = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
@@ -136,7 +136,7 @@ namespace Obfuscar
                     }
                     catch (Exception ex)
                     {
-                        throw new ObfuscarException(MessageCodes.ofr007, $"Failure loading key file \"{keyFileName}\"", ex);
+                        throw new ObfuscarException(MessageCodes.dbr007, $"Failure loading key file \"{keyFileName}\"", innerException: ex);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace Obfuscar
             {
                 if (Type.GetType("System.MonoType") != null)
                 {
-                    throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
+                    throw new ObfuscarException(MessageCodes.dbr008, "Key containers are not supported for Mono.");
                 }
 
                 if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
@@ -214,7 +214,7 @@ namespace Obfuscar
 
             if (reader.Root?.Name != "Obfuscator")
             {
-                throw new ObfuscarException(MessageCodes.ofr004, "XML configuration file should have <Obfuscator> root tag.");
+                throw new ObfuscarException(MessageCodes.dbr004, "XML configuration file should have <Obfuscator> root tag.", $"Please correct the contents of '{projectFileDirectory}'.");
             }
 
             FromXmlReadNode(reader.Root, project);
@@ -318,7 +318,7 @@ namespace Obfuscar
 
                 if (string.IsNullOrWhiteSpace(file))
                 {
-                    throw new ObfuscarException(MessageCodes.ofr034, "Need valid file attribute.");
+                    throw new ObfuscarException(MessageCodes.dbr034, "Need valid file attribute.");
                 }
 
                 ReadModule(file, module, project);
@@ -481,7 +481,7 @@ namespace Obfuscar
 
             if (!Directory.Exists(this.Settings.InPath))
             {
-                throw new ObfuscarException(MessageCodes.ofr006, "Path specified by InPath variable must exist:" + this.Settings.InPath);
+                throw new ObfuscarException(MessageCodes.dbr006, "Path specified by InPath variable must exist:" + this.Settings.InPath);
             }
 
             if (!Directory.Exists(this.Settings.OutPath))
@@ -492,7 +492,7 @@ namespace Obfuscar
                 }
                 catch (IOException e)
                 {
-                    throw new ObfuscarException(MessageCodes.ofr005, "Could not create path specified by OutPath:  " + this.Settings.OutPath, e);
+                    throw new ObfuscarException(MessageCodes.dbr005, "Could not create path specified by OutPath:  " + this.Settings.OutPath, innerException: e);
                 }
             }
         }

@@ -144,7 +144,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr010, $"'{typeAttribute}' is not valid for the 'typeattrib' value of skip elements. Only 'public' is supported by now.");
+                    throw new ObfuscarException(MessageCodes.dbr010, $"'{typeAttribute}' is not valid for the 'typeattrib' value of skip elements. Only 'public' is supported by now.");
                 }
             }
 
@@ -168,7 +168,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.ofr013, $"'{attribute}' is not valid for the 'attrib' value of skip elements. Only 'public' and 'protected' are supported by now.");
+                    throw new ObfuscarException(MessageCodes.dbr013, $"'{attribute}' is not valid for the 'attrib' value of skip elements. Only 'public' and 'protected' are supported by now.");
                 }
 
                 //
