@@ -35,12 +35,12 @@ namespace Obfuscar
 
                 if (addNewLine)
                 {
-                    line = String.Concat(dateTxt, ": ", messageCode, output, "\n");
+                    line = String.Concat(dateTxt, ": ", messageCode, " ", output, "\n");
                     isAtNewLine = true;
                 }
                 else
                 {
-                    line = String.Concat(dateTxt, ": ", messageCode, output);
+                    line = String.Concat(dateTxt, ": ", messageCode, " ", output);
                     isAtNewLine = output?.EndsWith("\n") ?? false;
                 }
             }

@@ -57,27 +57,27 @@ namespace Obfuscar
         private int _uniqueMemberNameIndex;
 
         /// <summary>
-        /// Creates an obfuscator initialized from a project file.
+        /// Creates an obfuscator initialized from a project filename/path.
         /// </summary>
-        /// <param name="projfile">Path to project file.</param>
+        /// <param name="projectFileNamePath">Path to project file.</param>
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification =
             "Reviewed. Suppression is OK here.")]
-        public Obfuscator(string projfile)
+        public Obfuscator(string projectFileNamePath)
         {
             this.Mapping = new ObfuscationMap();
 
             try
             {
-                XDocument document = XDocument.Load(projfile);
-                this.LoadFromReader(document, projfile);
+                XDocument document = XDocument.Load(projectFileNamePath);
+                this.LoadFromReader(document, projectFileNamePath);
             }
             catch (IOException e)
             {
-                throw new ObfuscarException(MessageCodes.dbr014, "Unable to read specified project file: " + projfile, innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr014, "Unable to read specified project file: " + projectFileNamePath, innerException: e);
             }
             catch (System.Xml.XmlException e)
             {
-                throw new ObfuscarException(MessageCodes.dbr018, $"{projfile} is not a valid XML file", innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr018, $"{projectFileNamePath} is not a valid XML file", innerException: e);
             }
         }
 
@@ -111,25 +111,25 @@ namespace Obfuscar
                 Log.OutputLine(MessageCodes.dbr053, "Phase: NOT hiding strings.");
             }
 
-            Log.Output(MessageCodes.dbr047, "Phase: rename fields.");
+            Log.OutputLine(MessageCodes.dbr047, "Phase: rename fields.");
             this.RenameFields();
 
-            Log.Output(MessageCodes.dbr048, "Phase: rename parameters.");
+            Log.OutputLine(MessageCodes.dbr048, "Phase: rename parameters.");
             this.RenameParams();
 
-            Log.Output(MessageCodes.dbr049, "Phase: rename properties.");
+            Log.OutputLine(MessageCodes.dbr049, "Phase: rename properties.");
             this.RenameProperties();
 
-            Log.Output(MessageCodes.dbr050, "Phase: rename events.");
+            Log.OutputLine(MessageCodes.dbr050, "Phase: rename events.");
             this.RenameEvents();
 
-            Log.Output(MessageCodes.dbr051, "Phase: rename methods.");
+            Log.OutputLine(MessageCodes.dbr051, "Phase: rename methods.");
             this.RenameMethods();
 
-            Log.Output(MessageCodes.dbr054, "Phase: rename types.");
+            Log.OutputLine(MessageCodes.dbr054, "Phase: rename types.");
             this.RenameTypes();
 
-            Log.Output(MessageCodes.dbr055, "Phase: post processing.");
+            Log.OutputLine(MessageCodes.dbr055, "Phase: post processing.");
             this.PostProcessing();
 
             Log.OutputLine(MessageCodes.dbr056, "Phase: saving assemblies.");
@@ -167,11 +167,11 @@ namespace Obfuscar
 
             Log.OutputLine(MessageCodes.dbr116, "Loading assemblies.");
 
-            Log.Output(MessageCodes.dbr059, "Extra framework folders: ");
+            Log.OutputLine(MessageCodes.dbr059, "Extra framework folders: ");
 
             foreach (string extraPath in this.Project.ExtraPaths ?? [])
             {
-                Log.Output(MessageCodes.dbr058, extraPath + ", ");
+                Log.OutputLine(MessageCodes.dbr058, extraPath + ", ");
             }
 
             Log.OutputLine(MessageCodes.dbr060, null);
@@ -193,7 +193,10 @@ namespace Obfuscar
             {
                 string? fileName = Path.GetFileName(copyInfo.FileName);
 
-                Debug.Assert(fileName != null, "fileName != null");
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    throw new ObfuscarException(MessageCodes.dbr141, "Missing file name.");
+                }
 
                 string outName = Path.Combine(outPath, fileName);
                 copyInfo.Definition.Write(outName);
@@ -215,7 +218,9 @@ namespace Obfuscar
                 }
             }
 
-            Log.OutputLine(MessageCodes.dbr122, $"There are {this.Project.AssemblyList.Count:N0} assemblies in the project to save.");
+            int assemblyCount = this.Project.AssemblyList.Count;
+
+            Log.OutputLine(MessageCodes.dbr122, $"There are {assemblyCount:N0} assemblies in the project to save.");
 
             //
             // Save the modified assemblies.
@@ -231,7 +236,10 @@ namespace Obfuscar
 
                 try
                 {
-                    Debug.Assert(fileName != null, "fileName != null");
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        throw new ObfuscarException(MessageCodes.dbr142, "Missing file name.");
+                    }
 
                     string outName = Path.Combine(outPath, fileName);
 
@@ -376,7 +384,14 @@ namespace Obfuscar
                             {
                                 string? line = signProcess.StandardOutput.ReadLine();
 
-                                signProcessResult.AppendLine(line);
+                                signProcessResult.AppendLine(string.Concat("stdout:", line));
+                            }
+
+                            while (!signProcess.StandardError.EndOfStream)
+                            {
+                                string? line = signProcess.StandardError.ReadLine();
+
+                                signProcessResult.AppendLine(string.Concat("stderr:", line));
                             }
 
                             Log.OutputLine(MessageCodes.dbr125, signProcessResult.ToString());
@@ -388,7 +403,16 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.dbr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
                             }
 
-                            Log.OutputLine(MessageCodes.dbr123, $"'{fileName}' was signed.");
+                            int exitCode = signProcess.ExitCode;
+
+                            if (exitCode == 0)
+                            {
+                                Log.OutputLine(MessageCodes.dbr123, $"'{fileName}' was signed.");
+                            }
+                            else
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr145, $"'{fileName}' was NOT signed due to error code {exitCode}.");
+                            }
                         }
                     }
                     else
@@ -406,8 +430,8 @@ namespace Obfuscar
                         throw;
                     }
 
-                    Log.Output(MessageCodes.dbr061, $"\nFailed to save {fileName}");
-                    Log.Output(MessageCodes.dbr062, $"\n{e.GetType().Name}: {e.Message}");
+                    Log.OutputLine(MessageCodes.dbr061, $"Failed to save {fileName}");
+                    Log.OutputLine(MessageCodes.dbr062, $"{e.GetType().Name}: {e.Message}");
 
                     Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
 
@@ -864,7 +888,6 @@ namespace Obfuscar
 
                     if (!string.IsNullOrEmpty(fullName))
                     {
-                        // ReSharper disable once PossibleNullReferenceException
                         string suffix = resName.Substring(fullName.Length);
                         string newName = newTypeKey.Fullname + suffix;
                         res.Name = newName;
@@ -1425,12 +1448,16 @@ namespace Obfuscar
 
             if (groupName == null)
             {
-                // group is not yet named
-
-                // counts are grouping according to signature
+                //
+                // Group is not yet named.
+                //
+                // Counts are grouping according to signature.
+                //
                 ParamSig sig = new ParamSig(method);
 
-                // get name groups for classes in the group
+                //
+                // Get name groups for classes in the group.
+                //
                 NameGroup[] nameGroups = this.GetNameGroups(baseSigNames, group.Methods, sig);
 
                 if (group.External)
@@ -1438,16 +1465,19 @@ namespace Obfuscar
                     skipRename = "external base class or interface";
                 }
 
-                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (skipRename != null)
                 {
-                    // for an external group, we can't rename.  just use the method
-                    // name as group name
+                    //
+                    // For an external group, we can't rename. Just use the method
+                    // name as group name.
+                    //
                     groupName = method.Name;
                 }
                 else
                 {
-                    // for an internal group, get next unused name
+                    //
+                    // For an internal group, get next unused name.
+                    //
                     groupName = NameGroup.GetNext(nameGroups);
                 }
 
@@ -1466,7 +1496,9 @@ namespace Obfuscar
                     }
                 }
 
-                // make sure the classes' name groups are updated
+                //
+                // Make sure the classes' name groups are updated.
+                //
                 foreach (NameGroup t in nameGroups)
                 {
                     t.Add(groupName);
@@ -1474,10 +1506,14 @@ namespace Obfuscar
             }
             else if (skipRename != null)
             {
-                // group is named, so we need to un-name it
+                //
+                // Group is named, so we need to un-name it.
+                //
+                if (group.External)
+                {
+                    throw new ObfuscarException(MessageCodes.dbr143, "Group's external flag should have been handled when the group was created, \" + \"and all methods in the group should already be marked skipped.");
+                }
 
-                // ReSharper disable once InvocationIsSkipped
-                Debug.Assert(!group.External, "Group's external flag should have been handled when the group was created, " + "and all methods in the group should already be marked skipped.");
                 this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
 
                 StringBuilder message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
@@ -1491,10 +1527,11 @@ namespace Obfuscar
             }
             else
             {
-                // ReSharper disable once RedundantAssignment
                 ObfuscatedThing m = this.Mapping.GetMethod(methodKey);
-                // ReSharper disable once InvocationIsSkipped
-                Debug.Assert(m.Status == ObfuscationStatus.Skipped || ((m.Status == ObfuscationStatus.WillRename || m.Status == ObfuscationStatus.Renamed) && m.StatusText == groupName), "If the method isn't skipped, and the group already has a name...method should have one too.");
+                if (!(m.Status == ObfuscationStatus.Skipped || ((m.Status == ObfuscationStatus.WillRename || m.Status == ObfuscationStatus.Renamed) && m.StatusText == groupName)))
+                {
+                    throw new ObfuscarException(MessageCodes.dbr144, "If the method isn't skipped, and the group already has a name...method should have one too.");
+                }
             }
         }
 

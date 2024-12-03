@@ -34,6 +34,12 @@ namespace Obfuscar
     {
         public const string db_con_fork_obfuscar = nameof(db_con_fork_obfuscar);
         public const string db_con_title_par2 = nameof(db_con_title_par2);
+        public const string db_dbr071_par1 = nameof(db_dbr071_par1);
+        public const string db_dbr082_par1 = nameof(db_dbr082_par1);
+        public const string db_dbr130_par1 = nameof(db_dbr130_par1);
+        public const string db_dbr131_par1 = nameof(db_dbr131_par1);
+        public const string db_dbr132_par1 = nameof(db_dbr132_par1);
+        public const string db_dbr133_par1 = nameof(db_dbr133_par1);
         public const string db_display_version = nameof(db_display_version);
         public const string db_error_processing_colon = nameof(db_error_processing_colon);
         public const string db_fork_obfuscar = nameof(db_fork_obfuscar);

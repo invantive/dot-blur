@@ -153,12 +153,15 @@ namespace Obfuscar
             }
 
             numUniqueChars = uniqueChars.Length;
-            string lUnicode = uniqueChars;
-            for (int i = 0; i < lUnicode.Length; i++)
+            string unicode = uniqueChars;
+            for (int i = 0; i < unicode.Length; i++)
             {
-                for (int j = i + 1; j < lUnicode.Length; j++)
+                for (int j = i + 1; j < unicode.Length; j++)
                 {
-                    System.Diagnostics.Debug.Assert(lUnicode[i] != lUnicode[j], "Duplicate Char");
+                    if (unicode[i] == unicode[j])
+                    {
+                        throw new ObfuscarException(MessageCodes.dbr140, "Duplicate character.");
+                    }
                 }
             }
         }

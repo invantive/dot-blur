@@ -78,10 +78,11 @@ namespace Obfuscar
                 return 0;
             }
 
-            List<string> extra;
+            List<string> projectParameters;
+
             try
             {
-                extra = p.Parse(args);
+                projectParameters = p.Parse(args);
             }
             catch (OptionException ex)
             {
@@ -101,23 +102,24 @@ namespace Obfuscar
                 return 0;
             }
 
-            if (extra.Count < 1)
+            if (projectParameters.Count < 1)
             {
                 ShowHelp(p);
                 return 1;
             }
 
-            int start = Environment.TickCount;
-            foreach (string project in extra)
+            DateTime startUtc = DateTime.UtcNow;
+
+            foreach (string projectFileNamePath in projectParameters)
             {
                 try
                 {
-                    Log.OutputLine(MessageCodes.dbr072, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_loading_pjt_par1), project));
-                    Obfuscator obfuscator = new Obfuscator(project);
+                    Log.OutputLine(MessageCodes.dbr072, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_loading_pjt_par1), projectFileNamePath));
+                    Obfuscator obfuscator = new Obfuscator(projectFileNamePath);
 
                     obfuscator.RunRules();
 
-                    Log.OutputLine(MessageCodes.dbr071, $"Completed, {(Environment.TickCount - start) / 1000.0:f2} secs.");
+                    Log.OutputLine(MessageCodes.dbr071, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr071_par1), (DateTime.UtcNow - startUtc).TotalSeconds));
                 }
                 catch (ObfuscarException e)
                 {
@@ -136,7 +138,9 @@ namespace Obfuscar
                         Log.OutputLine(MessageCodes.dbr075, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
-                    return 1;
+                    Log.OutputLine(MessageCodes.dbr130, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr130_par1), (DateTime.UtcNow - startUtc).TotalSeconds));
+
+                    return 2;
                 }
                 catch (Exception e)
                 {
@@ -150,7 +154,9 @@ namespace Obfuscar
                         Log.OutputLine(MessageCodes.dbr078, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
-                    return 1;
+                    Log.OutputLine(MessageCodes.dbr132, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr132_par1), (DateTime.UtcNow - startUtc).TotalSeconds));
+
+                    return 3;
                 }
             }
 

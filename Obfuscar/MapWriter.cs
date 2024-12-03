@@ -104,10 +104,13 @@ namespace Obfuscar
             {
                 this.writer.WriteLine("{0} -> {1}", classInfo.Name, classInfo.StatusText);
             }
+            else if (classInfo.Status == ObfuscationStatus.Skipped)
+            {
+                this.writer.WriteLine("{0} skipped:  {1}", classInfo.Name, classInfo.StatusText);
+            }
             else
             {
-                Debug.Assert(classInfo.Status == ObfuscationStatus.Skipped, "Status is expected to be either Renamed or Skipped.");
-                this.writer.WriteLine("{0} skipped:  {1}", classInfo.Name, classInfo.StatusText);
+                throw new ObfuscarException(MessageCodes.dbr135, "Status is expected to be either Renamed or Skipped.");
             }
 
             this.writer.WriteLine("{");
@@ -250,11 +253,13 @@ namespace Obfuscar
             {
                 this.writer.WriteLine(" ) -> {0}", info.StatusText);
             }
+            else if (info.Status == ObfuscationStatus.Skipped)
+            {
+                this.writer.WriteLine(" ) skipped:  {0}", info.StatusText);
+            }
             else
             {
-                Debug.Assert(info.Status == ObfuscationStatus.Skipped, "Status is expected to be either Renamed or Skipped.");
-
-                this.writer.WriteLine(" ) skipped:  {0}", info.StatusText);
+                throw new ObfuscarException(MessageCodes.dbr136, "Status is expected to be either Renamed or Skipped.");
             }
         }
 
@@ -264,11 +269,13 @@ namespace Obfuscar
             {
                 writer.WriteLine("\t{0} {1} -> {2}", key.Type, info.Name, info.StatusText);
             }
+            else if (info.Status == ObfuscationStatus.Skipped)
+            {
+                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+            }
             else
             {
-                Debug.Assert(info.Status == ObfuscationStatus.Skipped, "Status is expected to be either Renamed or Skipped.");
-
-                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+                throw new ObfuscarException(MessageCodes.dbr137, "Status is expected to be either Renamed or Skipped.");
             }
         }
 
@@ -278,10 +285,13 @@ namespace Obfuscar
             {
                 writer.WriteLine("\t{0} {1} -> {2}", key.Type, info.Name, info.StatusText);
             }
+            else if (info.Status == ObfuscationStatus.Skipped)
+            {
+                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+            }
             else
             {
-                Debug.Assert(info.Status == ObfuscationStatus.Skipped, "Status is expected to be either Renamed or Skipped.");
-                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+                throw new ObfuscarException(MessageCodes.dbr134, "Status is expected to be either Renamed or Skipped.");
             }
         }
 
@@ -291,11 +301,13 @@ namespace Obfuscar
             {
                 writer.WriteLine("\t{0} {1} -> {2}", key.Type, info.Name, info.StatusText);
             }
+            else if(info.Status == ObfuscationStatus.Skipped)
+            {
+                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+            }
             else
             {
-                Debug.Assert(info.Status == ObfuscationStatus.Skipped,"Status is expected to be either Renamed or Skipped.");
-
-                writer.WriteLine("\t{0} {1} skipped:  {2}", key.Type, info.Name, info.StatusText);
+                throw new ObfuscarException(MessageCodes.dbr138, "Status is expected to be either Renamed or Skipped.");
             }
         }
 
@@ -381,16 +393,19 @@ namespace Obfuscar
         {
             if (classInfo.Status != ObfuscationStatus.Renamed)
             {
-                Debug.Assert(classInfo.Status == ObfuscationStatus.Skipped, "Status is expected to be either Renamed or Skipped.");
                 this.writer.WriteStartElement("skippedClass");
                 this.writer.WriteAttributeString("name", classInfo.Name);
                 this.writer.WriteAttributeString("reason", classInfo.StatusText);
             }
-            else
+            else if (classInfo.Status == ObfuscationStatus.Skipped)
             {
                 this.writer.WriteStartElement("renamedClass");
                 this.writer.WriteAttributeString("oldName", classInfo.Name);
                 this.writer.WriteAttributeString("newName", classInfo.StatusText);
+            }
+            else
+            {
+                throw new ObfuscarException(MessageCodes.dbr139, "Status is expected to be either Renamed or Skipped.");
             }
 
             int numRenamed = 0;
