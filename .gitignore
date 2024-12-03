@@ -44,3 +44,6 @@ T4MVC.cs
 nuget.exe
 /Baml/Baml.xml
 /Obfuscar/Obfuscar.xml
+/Console/Obfuscar.xml
+/GlobalTools/GlobalTools.xml
+/Tests/ObfuscarTests.xml

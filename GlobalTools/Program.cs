@@ -56,8 +56,10 @@ namespace Obfuscar
             string originalObfuscarBaseVersion = "2.2.40";
             string dotBlurPatchLevel = "6";
 
+            string fullVersion = string.Concat(originalObfuscarBaseVersion, ".", dotBlurPatchLevel);
+
             Console.WriteLine();
-            Console.WriteLine($"*** DotBlur Global Tool ({originalObfuscarBaseVersion}.{dotBlurPatchLevel}) on {DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")} (UTC) ***");
+            Console.WriteLine($"*** DotBlur Global Tool ({fullVersion}) on {DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")} (UTC) ***");
             Console.WriteLine();
 
             bool showHelp = false;
@@ -93,7 +95,7 @@ namespace Obfuscar
 
             if (showVersion)
             {
-                Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
+                Console.WriteLine(fullVersion);
                 return 0;
             }
 
