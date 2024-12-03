@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
-    <PackageIcon>Potion-icon.png</PackageIcon>
+    <PackageIcon>DotBlur-128.png</PackageIcon>
     <PackageId>DotBlur.GlobalTool</PackageId>
     <PackageLicense>MIT</PackageLicense>
     <PackageOutputPath>..</PackageOutputPath>
@@ -35,7 +35,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Potion-icon.png" Pack="true" PackagePath="" />
+    <None Include="..\DotBlur-128.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

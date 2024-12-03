@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <ApplicationIcon>..\Raindropmemory-Legendora-Potion.ico</ApplicationIcon>
+    <ApplicationIcon>..\DotBlur.ico</ApplicationIcon>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
     <LangVersion>latest</LangVersion>
