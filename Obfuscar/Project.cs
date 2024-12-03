@@ -72,8 +72,6 @@ namespace Obfuscar
 
         private void Initialize()
         {
-            this.Settings = new Settings(this.vars);
-
             string? keyFileName = this.Settings.KeyFile;
             string? keyFilePassword = this.Settings.KeyFilePassword;
             string? keyContainerName = this.Settings.KeyContainer;
@@ -211,6 +209,12 @@ namespace Obfuscar
         private static void FromXmlReadNode(XElement reader, Project project)
         {
             ReadVariables(reader, project);
+
+            //
+            // Initialize settings as soons as possible.
+            //
+            project.Settings = new Settings(project.vars);
+
             ReadIncludeTags(reader, project);
             ReadAssemblySearchPath(reader, project);
             ReadModules(reader, project);
