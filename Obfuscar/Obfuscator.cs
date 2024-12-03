@@ -325,7 +325,7 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(fileDigestAlgorithm))
                             {
-                                fileDigestAlgorithm = "SHA256";
+                                fileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
                             }
 
                             if (string.IsNullOrEmpty(timeStampServerUrl))
@@ -415,14 +415,17 @@ namespace Obfuscar
 
                 string windows10SdkFolder = Path.Combine(programFilesX86Folder, @"Windows Kits\10\bin");
 
-                string[] windows10SdkVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
+                string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
 
-                string? highestWindows10SdkVersionFolder = windows10SdkVersionFolders.OrderByDescending(x => x).FirstOrDefault();
 
-                if (!string.IsNullOrEmpty(highestWindows10SdkVersionFolder))
-                {
-                    path = Path.Combine(highestWindows10SdkVersionFolder, "x64", "signtool.exe");
-                }
+
+                string? highestWindows10KitSignToolExe = windows10KitVersionFolders.Select(p => Path.Combine(p, "x64", "signtool.exe"))
+                                                                                   .Where(File.Exists)
+                                                                                   .OrderByDescending(x => x)
+                                                                                   .FirstOrDefault()
+                                                                                   ;
+
+                path = highestWindows10KitSignToolExe;
             }
 
             return path;
@@ -1673,7 +1676,7 @@ namespace Obfuscar
                     foreach (MethodDefinition method in type.Methods)
                     {
                         method.CleanAttributes();
-                        if (method.HasBody && this.Project.Settings.Optimize)
+                        if (method.HasBody && this.Project.Settings.OptimizeMethods)
                         {
                             method.Body.Optimize();
                         }
