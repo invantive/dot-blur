@@ -47,11 +47,6 @@ namespace Obfuscar
         private readonly Variables vars = new Variables();
         private readonly List<string> assemblySearchPaths = new List<string>();
 
-        private Settings? settings;
-
-        // FIXME: Figure out why this exists if it is never used.
-        //private RSA keyvalue;
-        // don't create.  call FromXml.
         private Project()
         {
         }
@@ -77,17 +72,13 @@ namespace Obfuscar
 
         private void Initialize()
         {
+            this.Settings = new Settings(this.vars);
+
             string? keyFileName = this.Settings.KeyFile;
             string? keyFilePassword = this.Settings.KeyFilePassword;
             string? keyContainerName = this.Settings.KeyContainer;
             string? signingFileDigestAlgorithm = this.Settings.SigningFileDigestAlgorithm;
             string? signingTimeStampServerUrl = this.Settings.SigningTimeStampServerUrl;
-
-            this.KeyFileName = keyFileName;
-            this.KeyFilePassword = keyFilePassword;
-            this.KeyContainerName = keyContainerName;
-            this.SigningFileDigestAlgorithm = signingFileDigestAlgorithm;
-            this.SigningTimeStampServerUrl = signingTimeStampServerUrl;
 
             if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyContainerName))
             {
@@ -174,16 +165,6 @@ namespace Obfuscar
                 }
             }
         }
-
-        public string? SigningFileDigestAlgorithm { get; private set; }
-
-        public string? SigningTimeStampServerUrl { get; private set; }
-
-        public string? KeyFileName { get; private set; }
-
-        public string? KeyFilePassword { get; private set; }
-
-        public string? KeyContainerName { get; private set; }
 
         public byte[]? KeyPair { get; private set; }
 
@@ -499,17 +480,20 @@ namespace Obfuscar
 
         internal InheritMap? InheritMap { get; private set; }
 
+        private Settings? settings;
+
         internal Settings Settings
         {
             get
             {
                 if (this.settings == null)
                 {
-                    this.settings = new Settings(this.vars);
+                    throw new ObfuscarException(MessageCodes.dbr046, "Settings not yet initialized.");
                 }
 
                 return this.settings;
             }
+            private set => this.settings = value;
         }
 
         public void LoadAssemblies()

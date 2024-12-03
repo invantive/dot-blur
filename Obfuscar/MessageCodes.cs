@@ -80,6 +80,7 @@ namespace Obfuscar
         public const string dbr043 = "dbr043";
         public const string dbr044 = "dbr044";
         public const string dbr045 = "dbr045";
+        public const string dbr046 = "dbr046";
     }
 }
 

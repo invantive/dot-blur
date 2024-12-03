@@ -254,6 +254,12 @@ namespace Obfuscar
                         //
                         // Source assembly was strong-name signed.
                         //
+                        string? keyFileName = this.Project.Settings.KeyFile;
+                        string? keyFilePassword = this.Project.Settings.KeyFilePassword;
+                        string? keyContainerName = this.Project.Settings.KeyContainer;
+                        string? signingFileDigestAlgorithm = this.Project.Settings.SigningFileDigestAlgorithm;
+                        string? signingTimeStampServerUrl = this.Project.Settings.SigningTimeStampServerUrl;
+
                         byte[]? keyPair = this.Project.KeyPair;
 
                         if (keyPair != null)
@@ -286,16 +292,16 @@ namespace Obfuscar
                                 Log.OutputLine($"{fileName} not saved using project keypair to '{outName}' due to {ex}.");
                             }
                         }
-                        else if (!string.IsNullOrEmpty(this.Project.KeyContainerName))
+                        else if (!string.IsNullOrEmpty(keyContainerName))
                         {
                             //
                             // Config file contains key container name.
                             //
                             info.Definition.Write(outName, parameters);
 
-                            MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, this.Project.KeyContainerName);
+                            MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, keyContainerName);
 
-                            Log.OutputLine($"{fileName} signed as '{outName}' using container '{this.Project.KeyContainerName}'.");
+                            Log.OutputLine($"{fileName} signed as '{outName}' using container '{keyContainerName}'.");
                         }
                         else if (!info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
                         {
@@ -327,9 +333,6 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.dbr041, $"Could not sign assembly since signtool.exe could not be found on the specified location '{signToolExePath}'.");
                             }
 
-                            string? keyFileName = this.Project.KeyFileName;
-                            string? keyFilePassword = this.Project.KeyFilePassword;
-
                             if (string.IsNullOrEmpty(keyFileName))
                             {
                                 throw new ObfuscarException(MessageCodes.dbr044, $"Could not sign assembly since the key file name is not set.");
@@ -342,20 +345,17 @@ namespace Obfuscar
 
                             Log.OutputLine($"Start signing '{fileName}' using sign tool '{signToolExePath}'.");
 
-                            string? fileDigestAlgorithm = this.Project.SigningFileDigestAlgorithm;
-                            string? timeStampServerUrl = this.Project.SigningTimeStampServerUrl;
-
-                            if (string.IsNullOrEmpty(fileDigestAlgorithm))
+                            if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
                             {
-                                fileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
+                                signingFileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
                             }
 
-                            if (string.IsNullOrEmpty(timeStampServerUrl))
+                            if (string.IsNullOrEmpty(signingTimeStampServerUrl))
                             {
-                                timeStampServerUrl = "http://timestamp.digicert.com";
+                                signingTimeStampServerUrl = "http://timestamp.digicert.com";
                             }
 
-                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {fileDigestAlgorithm} /t {timeStampServerUrl} \"{outName}\"";
+                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {signingFileDigestAlgorithm} /t {signingTimeStampServerUrl} \"{outName}\"";
 
                             ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArguments)
                                                         { UseShellExecute = false
