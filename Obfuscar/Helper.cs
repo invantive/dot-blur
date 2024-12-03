@@ -31,24 +31,6 @@ using System.Xml.Linq;
 
 namespace Obfuscar
 {
-    internal class Node<T>
-    {
-        public List<Node<T>> Parents = new List<Node<T>>();
-        public List<Node<T>> Children = new List<Node<T>>();
-        public T? Item;
-
-        public void AppendTo(Node<T> parent)
-        {
-            if (parent == null)
-            {
-                return;
-            }
-
-            parent.Children.Add(this);
-            this.Parents.Add(parent);
-        }
-    }
-
     internal static class Helper
     {
         public static void Noop()

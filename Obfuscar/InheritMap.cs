@@ -30,41 +30,6 @@ using System.Text;
 
 namespace Obfuscar
 {
-    internal class MethodGroup
-    {
-        public HashSet<MethodKey> Methods { get; } = new HashSet<MethodKey>();
-
-        public string? Name { get; set; } = null;
-
-        public bool External { get; set; } = false;
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(this.Name);
-
-            if (this.External)
-            {
-                sb.Append("(ext)");
-            }
-            else
-            {
-                sb.Append("(int)");
-            }
-
-            sb.Append(": ");
-
-            foreach (MethodKey k in this.Methods)
-            {
-                sb.Append(k.ToString());
-                sb.Append(" ");
-            }
-
-            return sb.ToString();
-        }
-    }
-
     internal class InheritMap
     {
         private readonly Project project;
