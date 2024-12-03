@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -74,117 +75,107 @@ namespace Obfuscar
             }
         }
 
-        public string? KeyContainerName = null;
-        private byte[]? keyPair;
-        private RSA? keyValue;
-        private readonly object keyPairLocker = new object();
-
-        public byte[]? KeyPair
+        private void Initialize()
         {
-            get
+            string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
+            string? lKeyFilePassword = this.vars.GetValue(Settings.VariableKeyFilePassword, null);
+
+            string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
+
+            this.KeyContainerName = lKeyContainerName;
+
+            if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
             {
-                if (this.keyPair == null)
+                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
+            }
+
+            //
+            // Initialize key pair.
+            //
+            {
+                if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                 {
-                    lock (this.keyPairLocker)
+                    Log.OutputLine("No key file and no key container configured. Use no key pair.");
+                }
+                else
+                {
+                    try
                     {
-                        if (this.keyPair == null)
+                        byte[]? kp;
+
+                        if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                         {
-                            string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
-                            string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
+                            Log.OutputLine($"Create key pair from '{lKeyFileName}' with password.");
 
-                            if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
+                            if (string.IsNullOrEmpty(lKeyFileName))
                             {
-                                Log.OutputLine("No key file and no key container configured. Use no key pair.");
-                                return null;
+                                throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
                             }
 
-                            if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
-                            {
-                                throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
-                            }
-
-                            try
-                            {
-                                if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
-                                {
-                                    if (string.IsNullOrEmpty(lKeyFileName))
-                                    {
-                                        throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
-                                    }
-
-                                    string? lKeyFilePassword = this.vars.GetValue(Settings.VariableKeyFilePassword, null);
-
-                                    this.keyPair = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
-
-                                    Log.OutputLine($"Created key pair from '{lKeyFileName}' with password.");
-                                }
-                                else if (!string.IsNullOrEmpty(lKeyFileName))
-                                {
-                                    Log.OutputLine($"Created key pair from '{lKeyFileName}' with no password.");
-                                    this.keyPair = File.ReadAllBytes(lKeyFileName);
-                                }
-                                else
-                                {
-                                    Log.OutputLine($"Created no key pair from '{lKeyFileName}'.");
-                                    this.keyPair = null;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new ObfuscarException(MessageCodes.ofr007, String.Format("Failure loading key file \"{0}\"", lKeyFileName), ex);
-                            }
+                            kp = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
                         }
+                        else if (!string.IsNullOrEmpty(lKeyFileName))
+                        {
+                            Log.OutputLine($"Create key pair from '{lKeyFileName}' with no password.");
+
+                            kp = File.ReadAllBytes(lKeyFileName);
+                        }
+                        else
+                        {
+                            Log.OutputLine($"Create no key pair from '{lKeyFileName}'.");
+
+                            kp = null;
+                        }
+
+                        this.KeyPair = kp;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ObfuscarException(MessageCodes.ofr007, $"Failure loading key file \"{lKeyFileName}\"", ex);
                     }
                 }
-
-                return this.keyPair;
             }
-        }
 
-        [SupportedOSPlatform("windows")]
-        public RSA? KeyValue
-        {
-            get
+            //
+            // Initialize key value.
+            // This is only supported on Windows.
+            //
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                if (this.keyValue != null)
-                {
-                    return this.keyValue;
-                }
-
                 if (Type.GetType("System.MonoType") != null)
                 {
                     throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
                 }
 
-                string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
-                string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
-
                 if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
                 {
-                    return null;
-                }
-                if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
-                {
-                    throw new ObfuscarException(MessageCodes.ofr003, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables cann't be setted together.");
-                }
-
-                this.KeyContainerName = lKeyContainerName;
-
-                if (this.KeyContainerName != null)
-                {
-                    CspParameters cp = new CspParameters();
-                    cp.KeyContainerName = this.KeyContainerName;
-
-                    this.keyValue = new RSACryptoServiceProvider(cp);
-                    return this.keyValue;
+                    Log.OutputLine("No key file and no key container configured. Use no RSA key value.");
                 }
                 else
                 {
-                    return null;
+                    if (!string.IsNullOrEmpty(lKeyContainerName))
+                    {
+                        Log.OutputLine($"Create RSA key value from '{lKeyContainerName}'.");
+
+                        CspParameters cp = new CspParameters();
+                        cp.KeyContainerName = lKeyContainerName;
+
+                        this.KeyValue = new RSACryptoServiceProvider(cp);
+                    }
+                    else
+                    {
+                        Log.OutputLine($"Create no RSA key value from '{lKeyContainerName}'.");
+                    }
                 }
             }
         }
 
+        public string? KeyContainerName { get; private set; }
+
+        public byte[]? KeyPair { get; private set; }
+
+        [SupportedOSPlatform("windows")]
+        public RSA? KeyValue { get; private set; }
         AssemblyCache? m_cache;
 
         internal AssemblyCache Cache
@@ -198,7 +189,7 @@ namespace Obfuscar
 
                 return this.m_cache;
             }
-            set { this.m_cache = value; }
+            set => this.m_cache = value;
         }
 
         public static Project FromXml(XDocument reader, string? projectFileDirectory)
@@ -213,6 +204,11 @@ namespace Obfuscar
             }
 
             FromXmlReadNode(reader.Root, project);
+
+            //
+            // Set up for use.
+            //
+            project.Initialize();
 
             return project;
         }
@@ -229,12 +225,15 @@ namespace Obfuscar
         private static void ReadVariables(XElement reader, Project project)
         {
             IEnumerable<XElement> settings = reader.Elements("Var");
+
             foreach (XElement setting in settings)
             {
                 string? name = setting.Attribute("name")?.Value;
+
                 if (!string.IsNullOrEmpty(name))
                 {
                     string? value = setting.Attribute("value")?.Value;
+
                     if (!string.IsNullOrEmpty(value))
                     {
                         project.vars.Add(name, value);
@@ -254,6 +253,7 @@ namespace Obfuscar
         private static void ReadIncludeTags(XElement reader, Project project)
         {
             IEnumerable<XElement> includes = reader.Elements("Include");
+
             foreach (XElement include in includes)
             {
                 ReadIncludeTag(include, project, FromXmlReadNode);
@@ -297,6 +297,7 @@ namespace Obfuscar
         private static void ReadModules(XElement reader, Project project)
         {
             IEnumerable<XElement> modules = reader.Elements("Module");
+
             foreach (XElement module in modules)
             {
                 string file = Helper.GetAttribute(module, "file", project.vars);
@@ -410,6 +411,7 @@ namespace Obfuscar
                 while (pool.Count > 0)
                 {
                     List<Node<AssemblyInfo>> toRemoved = new List<Node<AssemblyInfo>>();
+
                     foreach (Node<AssemblyInfo> node in pool)
                     {
                         if (node.Parents.Count == 0)
@@ -525,6 +527,7 @@ namespace Obfuscar
 
             // build inheritance map
             this.InheritMap = new InheritMap(this);
+
             this.ReorderAssemblies();
         }
 
@@ -554,6 +557,7 @@ namespace Obfuscar
             }
 
             TypeDefinition? typeDef = type as TypeDefinition;
+
             if (typeDef == null)
             {
                 string name = type.GetScopeName();
@@ -561,6 +565,7 @@ namespace Obfuscar
                 if (this.assemblyMap.TryGetValue(name, out AssemblyInfo? info))
                 {
                     string fullName = type.Namespace + "." + type.Name;
+
                     typeDef = info.Definition.MainModule.GetType(fullName);
                 }
             }
@@ -583,6 +588,7 @@ namespace Obfuscar
 
             foreach (X509Certificate2 cert in certs)
             {
+#pragma warning disable SYSLIB0028
                 if (cert.PrivateKey is RSACryptoServiceProvider provider)
                 {
                     return provider.ExportCspBlob(true);

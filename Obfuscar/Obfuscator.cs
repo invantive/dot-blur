@@ -244,8 +244,6 @@ namespace Obfuscar
                                 info.OutputFileName = outName;
 
                                 Log.OutputLine($"{fileName} save using project keypair to '{outName}'.");
-
-                                //MsNetSigner.SignAssemblyFromRsaKey(outName, xxxx);
                             }
                             catch (Exception ex)
                             {
@@ -290,7 +288,7 @@ namespace Obfuscar
                         }
                         else
                         {
-                            throw new ObfuscarException(MessageCodes.ofr015, $"Obfuscating a signed assembly would result in an invalid assembly:  {info.Name}; use the KeyFile or KeyContainer property to set a key to use");
+                            throw new ObfuscarException(MessageCodes.ofr015, $"Obfuscating a signed assembly would result in an invalid assembly: {info.Name}; use the KeyFile or KeyContainer property to set a key to use.");
                         }
                     }
                     else

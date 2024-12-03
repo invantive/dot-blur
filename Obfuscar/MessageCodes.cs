@@ -58,7 +58,7 @@ namespace Obfuscar
         public const string ofr022 = "ofr022";
         public const string ofr023 = "ofr023";
         public const string ofr024 = "ofr024";
-        public const string ofr025 = "ofr025";
+        //public const string ofr025 = "ofr025";
         public const string ofr026 = "ofr026";
         public const string ofr027 = "ofr027";
         public const string ofr028 = "ofr028";

@@ -40,13 +40,5 @@ namespace Obfuscar
                 throw new ObfuscarException(MessageCodes.ofr017, "Unable to sign assembly using key from key container - " + keyname);
             }
         }
-
-        public static void SignAssemblyFromRsaKey(string assemblyname, byte[] rsaKey)
-        {
-            if (!StrongNameSignatureGeneration(assemblyname, null, rsaKey, 0, IntPtr.Zero, out _))
-            {
-                throw new ObfuscarException(MessageCodes.ofr025, "Unable to sign assembly using RSA key.");
-            }
-        }
     }
 }
