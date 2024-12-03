@@ -94,15 +94,22 @@ namespace Obfuscar
         /// <summary>
         /// Run rules.
         /// </summary>
-        public void RunRules()
+        public void RunRules(bool hideStrings = true)
         {
             //
             // The SemanticAttributes of MethodDefinitions have to be loaded before any fields,properties or events are removed
             //
             this.LoadMethodSemantics();
 
-            Log.OutputLine("Phase: hide strings.");
-            this.HideStrings();
+            if (hideStrings)
+            {
+                Log.OutputLine("Phase: hide strings.");
+                this.HideStrings();
+            }
+            else
+            {
+                Log.OutputLine("Phase: NOT hiding strings.");
+            }
 
             Log.Output("Phase: rename fields.");
             this.RenameFields();
@@ -140,6 +147,7 @@ namespace Obfuscar
         public static Obfuscator CreateFromXml(string xml)
         {
             XDocument document = XDocument.Load(new StringReader(xml));
+
             return new Obfuscator(document);
         }
 
@@ -154,6 +162,7 @@ namespace Obfuscar
             // Make sure everything looks good.
             //
             this.Project.CheckSettings();
+
             NameMaker.DetermineChars(this.Project.Settings);
 
             Log.OutputLine("Loading assemblies.");
@@ -173,7 +182,7 @@ namespace Obfuscar
         /// <summary>
         /// Saves changes made to assemblies to the output path.
         /// </summary>
-        public void SaveAssemblies(bool throwException = true)
+        private void SaveAssemblies(bool throwException = true)
         {
             string outPath = this.Project.Settings.OutPath;
 
@@ -183,7 +192,9 @@ namespace Obfuscar
             foreach (AssemblyInfo copyInfo in this.Project.CopyAssemblyList)
             {
                 string? fileName = Path.GetFileName(copyInfo.FileName);
+
                 Debug.Assert(fileName != null, "fileName != null");
+
                 string outName = Path.Combine(outPath, fileName);
                 copyInfo.Definition.Write(outName);
             }
@@ -522,7 +533,7 @@ namespace Obfuscar
         /// <summary>
         /// Renames fields in the project.
         /// </summary>
-        public void RenameFields()
+        private void RenameFields()
         {
             if (!this.Project.Settings.RenameFields)
             {
@@ -609,7 +620,7 @@ namespace Obfuscar
         /// <summary>
         /// Renames constructor, method, and generic parameters.
         /// </summary>
-        public void RenameParams()
+        private void RenameParams()
         {
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
@@ -678,7 +689,7 @@ namespace Obfuscar
         /// <summary>
         /// Renames types and resources in the project.
         /// </summary>
-        public void RenameTypes()
+        private void RenameTypes()
         {
             //var typerenamemap = new Dictionary<string, string> (); // For patching the parameters of typeof(xx) attribute constructors
             foreach (AssemblyInfo info in this.Project.AssemblyList)
@@ -1072,7 +1083,7 @@ namespace Obfuscar
         /// <summary>
         /// Rename properties.
         /// </summary>
-        public void RenameProperties()
+        private void RenameProperties()
         {
             // do nothing if it was requested not to rename
             if (!this.Project.Settings.RenameProperties)
@@ -1192,7 +1203,7 @@ namespace Obfuscar
         /// <summary>
         /// Rename events.
         /// </summary>
-        public void RenameEvents()
+        private void RenameEvents()
         {
             // do nothing if it was requested not to rename
             if (!this.Project.Settings.RenameEvents)
@@ -1261,7 +1272,7 @@ namespace Obfuscar
         /// <summary>
         /// Rename methods.
         /// </summary>
-        public void RenameMethods()
+        private void RenameMethods()
         {
             Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames = new Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>>();
             foreach (AssemblyInfo info in this.Project.AssemblyList)
@@ -1633,7 +1644,7 @@ namespace Obfuscar
         /// <summary>
         /// Encoded strings using an auto-generated class.
         /// </summary>
-        internal void HideStrings()
+        private void HideStrings()
         {
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
@@ -1663,7 +1674,7 @@ namespace Obfuscar
         /// <summary>
         /// Do post processing actions.
         /// </summary>
-        public void PostProcessing()
+        private void PostProcessing()
         {
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
