@@ -332,10 +332,11 @@ namespace Obfuscar
 
         private static List<string> ReadModuleGroupPattern(string name, XElement module, Project project)
         {
-            return (from i in module.Elements(name)
-                    let value = project.vars.Replace(i.Value)
-                    where !string.IsNullOrWhiteSpace(value)
-                    select value).ToList();
+            return module.Elements(name)
+                         .Select(e => project.vars.Replace(e.Value))
+                         .Where(s => !string.IsNullOrWhiteSpace(s))
+                         .ToList()
+                         ;
         }
 
         private static void ReadModule(string file, XElement module, Project project)
