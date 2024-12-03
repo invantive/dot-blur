@@ -31,29 +31,33 @@ namespace Obfuscar
 {
     class Settings
     {
-        internal const string VariableAnalyzeXaml = "AnalyzeXaml";
-        internal const string VariableCustomChars = "CustomChars";
-        internal const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
-        internal const string VariableHidePrivateApi = "HidePrivateApi";
-        internal const string VariableHideStrings = "HideStrings";
-        internal const string VariableInPath = "InPath";
-        internal const string VariableKeepPublicApi = "KeepPublicApi";
+        private const string VariableAnalyzeXaml = "AnalyzeXaml";
+        private const string VariableCustomChars = "CustomChars";
+        private const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
+        private const string VariableHidePrivateApi = "HidePrivateApi";
+        private const string VariableHideStrings = "HideStrings";
+        private const string VariableInPath = "InPath";
+        private const string VariableKeepPublicApi = "KeepPublicApi";
         internal const string VariableKeyContainer = "KeyContainer";
         internal const string VariableKeyFile = "KeyFile";
-        internal const string VariableKeyFilePassword = "KeyFilePassword";
-        internal const string VariableLogFile = "LogFile";
-        internal const string VariableMarkedOnly = "MarkedOnly";
-        internal const string VariableOptimizeMethods = "OptimizeMethods";
-        internal const string VariableOutPath = "OutPath";
-        internal const string VariableRegenerateDebugInfo = "RegenerateDebugInfo";
-        internal const string VariableRenameEvents = "RenameEvents";
-        internal const string VariableRenameFields = "RenameFields";
-        internal const string VariableRenameProperties = "RenameProperties";
-        internal const string VariableReuseNames = "ReuseNames";
-        internal const string VariableSuppressIldasm = "SuppressIldasm";
-        internal const string VariableUseKoreanNames = "UseKoreanNames";
-        internal const string VariableUseUnicodeNames = "UseUnicodeNames";
-        internal const string VariableXmlMapping = "XmlMapping";
+        private const string VariableKeyFilePassword = "KeyFilePassword";
+        private const string VariableLogFile = "LogFile";
+        private const string VariableMarkedOnly = "MarkedOnly";
+        private const string VariableOptimizeMethods = "OptimizeMethods";
+        private const string VariableOutPath = "OutPath";
+        private const string VariableRegenerateDebugInfo = "RegenerateDebugInfo";
+        private const string VariableRenameEvents = "RenameEvents";
+        private const string VariableRenameFields = "RenameFields";
+        private const string VariableRenameProperties = "RenameProperties";
+        private const string VariableReuseNames = "ReuseNames";
+        private const string VariableSuppressIldasm = "SuppressIldasm";
+        private const string VariableUseKoreanNames = "UseKoreanNames";
+        private const string VariableUseUnicodeNames = "UseUnicodeNames";
+        private const string VariableXmlMapping = "XmlMapping";
+        private const string VariableSignToolExe = "SignToolExe";
+        private const string VariableSignAssembly = "SignAssembly";
+        private const string VariableSigningFileDigestAlgorithm = "SigningFileDigestAlgorithm";
+        private const string VariableSigningTimeStampServerUrl = "SigningTimeStampServerUrl";
 
         internal const string SpecialVariableProjectFileDirectory = "ProjectFileDirectory";
 
@@ -80,6 +84,14 @@ namespace Obfuscar
             this.RegenerateDebugInfo = XmlConvert.ToBoolean(vars.GetValue(VariableRegenerateDebugInfo, "false"));
             this.AnalyzeXaml = XmlConvert.ToBoolean(vars.GetValue(VariableAnalyzeXaml, "false"));
             this.CustomChars = vars.GetValue(VariableCustomChars, "");
+            this.ExtraFrameworkFolders = vars.GetValue(VariableExtraFrameworkFolders, null);
+            this.KeyContainer = vars.GetValue(VariableKeyContainer, null);
+            this.KeyFile = vars.GetValue(VariableKeyFile, null);
+            this.KeyFilePassword = vars.GetValue(VariableKeyFilePassword, null);
+            this.SignToolExe = vars.GetValue(VariableSignToolExe, null);
+            this.SignAssembly = XmlConvert.ToBoolean(vars.GetValue(VariableSignAssembly, "false"));
+            this.SigningFileDigestAlgorithm = vars.GetValue(VariableSigningFileDigestAlgorithm, null);
+            this.SigningTimeStampServerUrl = vars.GetValue(VariableSigningTimeStampServerUrl, null);
         }
 
         public bool RegenerateDebugInfo { get; }
@@ -118,6 +130,22 @@ namespace Obfuscar
 
         public bool AnalyzeXaml { get; }
 
-        public string? CustomChars { get; }
+        public string CustomChars { get; }
+
+        public string? ExtraFrameworkFolders { get; }
+
+        public string? KeyContainer { get; }
+
+        public string? KeyFile { get; }
+
+        public string? KeyFilePassword { get; }
+
+        public string? SignToolExe { get; }
+
+        public bool SignAssembly { get; }
+
+        public string? SigningFileDigestAlgorithm { get; }
+
+        public string? SigningTimeStampServerUrl { get; }
     }
 }

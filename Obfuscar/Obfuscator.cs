@@ -132,7 +132,7 @@ namespace Obfuscar
             return new Obfuscator(document);
         }
 
-        internal Project Project { get; set; }
+        internal Project Project { get; private set; }
 
         [MemberNotNull(nameof(Project))]
         private void LoadFromReader(XDocument reader, string? projectFileDirectory)
@@ -230,7 +230,7 @@ namespace Obfuscar
                     if (info.Definition.Name.HasPublicKey)
                     {
                         //
-                        // Source assembly was signed.
+                        // Source assembly was strong-name signed.
                         //
                         byte[]? keyPair = this.Project.KeyPair;
 
@@ -271,7 +271,7 @@ namespace Obfuscar
                             //
                             info.Definition.Write(outName, parameters);
 
-                            MsNetSigner.SignAssemblyFromKeyContainer(outName, this.Project.KeyContainerName);
+                            MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, this.Project.KeyContainerName);
 
                             Log.OutputLine($"{fileName} signed as '{outName}' using container '{this.Project.KeyContainerName}'.");
                         }
@@ -290,10 +290,88 @@ namespace Obfuscar
                         {
                             throw new ObfuscarException(MessageCodes.ofr015, $"Obfuscating a signed assembly would result in an invalid assembly: {info.Name}; use the KeyFile or KeyContainer property to set a key to use.");
                         }
+
+                        if (this.Project.Settings.SignAssembly)
+                        {
+                            string? signToolExePath = this.DetermineSignToolExePath();
+
+                            if (string.IsNullOrEmpty(signToolExePath))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr040, $"Could not sign assembly since signtool.exe could not be located.");
+                            }
+
+                            if (!File.Exists(signToolExePath))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr041, $"Could not sign assembly since signtool.exe could not be found on the specified location '{signToolExePath}'.");
+                            }
+
+                            string? keyFileName = this.Project.KeyFileName;
+                            string? keyFilePassword = this.Project.KeyFilePassword;
+
+                            if (string.IsNullOrEmpty(keyFileName))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr044, $"Could not sign assembly since the key file name is not set.");
+                            }
+
+                            if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
+                            }
+
+                            Log.OutputLine($"Start signing '{fileName}' using sign tool '{signToolExePath}'.");
+
+                            string? fileDigestAlgorithm = this.Project.SigningFileDigestAlgorithm;
+                            string? timeStampServerUrl = this.Project.SigningTimeStampServerUrl;
+
+                            if (string.IsNullOrEmpty(fileDigestAlgorithm))
+                            {
+                                fileDigestAlgorithm = "SHA256";
+                            }
+
+                            if (string.IsNullOrEmpty(timeStampServerUrl))
+                            {
+                                timeStampServerUrl = "http://timestamp.digicert.com";
+                            }
+
+                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {fileDigestAlgorithm} /t {timeStampServerUrl} \"{outName}\"";
+
+                            ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArguments)
+                                                        { UseShellExecute = false
+                                                        , RedirectStandardOutput = true
+                                                        , CreateNoWindow = true
+                                                        };
+
+                            Process? signProcess = Process.Start(psi);
+
+                            if (signProcess == null)
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr042, $"Could not start sign process using since signtool.exe. No process.");
+                            }
+
+                            StringBuilder signProcessResult = new StringBuilder();
+
+                            while (!signProcess.StandardOutput.EndOfStream)
+                            {
+                                string? line = signProcess.StandardOutput.ReadLine();
+
+                                signProcessResult.AppendLine(line);
+                            }
+
+                            Log.OutputLine(signProcessResult.ToString());
+
+                            const int SignTimeOutMs = 60_000;
+
+                            if (!signProcess.WaitForExit(SignTimeOutMs))
+                            {
+                                throw new ObfuscarException(MessageCodes.ofr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
+                            }
+
+                            Log.OutputLine($"'{fileName}' was signed.");
+                        }
                     }
                     else
                     {
-                        Log.OutputLine($"{fileName} has no public key; save as is.");
+                        Log.OutputLine($"'{fileName}' has no public key; save as is.");
 
                         info.Definition.Write(outName, parameters);
                         info.OutputFileName = outName;
@@ -325,6 +403,29 @@ namespace Obfuscar
             }
 
             TypeNameCache.nameCache.Clear();
+        }
+
+        private string? DetermineSignToolExePath()
+        {
+            string? path = this.Project.Settings.SignToolExe;
+
+            if (string.IsNullOrEmpty(path))
+            {
+                string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+                string windows10SdkFolder = Path.Combine(programFilesX86Folder, @"Windows Kits\10\bin");
+
+                string[] windows10SdkVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
+
+                string? highestWindows10SdkVersionFolder = windows10SdkVersionFolders.OrderByDescending(x => x).FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(highestWindows10SdkVersionFolder))
+                {
+                    path = Path.Combine(highestWindows10SdkVersionFolder, "x64", "signtool.exe");
+                }
+            }
+
+            return path;
         }
 
         private bool IsOnWindows 

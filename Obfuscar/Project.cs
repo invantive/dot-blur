@@ -60,7 +60,7 @@ namespace Obfuscar
         {
             get
             {
-                return this.vars.GetValue(Settings.VariableExtraFrameworkFolders, "")?.Split([ Path.PathSeparator ], StringSplitOptions.RemoveEmptyEntries);
+                return this.Settings.ExtraFrameworkFolders?.Split([ Path.PathSeparator ], StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
@@ -77,14 +77,19 @@ namespace Obfuscar
 
         private void Initialize()
         {
-            string? lKeyFileName = this.vars.GetValue(Settings.VariableKeyFile, null);
-            string? lKeyFilePassword = this.vars.GetValue(Settings.VariableKeyFilePassword, null);
+            string? keyFileName = this.Settings.KeyFile;
+            string? keyFilePassword = this.Settings.KeyFilePassword;
+            string? keyContainerName = this.Settings.KeyContainer;
+            string? signingFileDigestAlgorithm = this.Settings.SigningFileDigestAlgorithm;
+            string? signingTimeStampServerUrl = this.Settings.SigningTimeStampServerUrl;
 
-            string? lKeyContainerName = this.vars.GetValue(Settings.VariableKeyContainer, null);
+            this.KeyFileName = keyFileName;
+            this.KeyFilePassword = keyFilePassword;
+            this.KeyContainerName = keyContainerName;
+            this.SigningFileDigestAlgorithm = signingFileDigestAlgorithm;
+            this.SigningTimeStampServerUrl = signingTimeStampServerUrl;
 
-            this.KeyContainerName = lKeyContainerName;
-
-            if (!string.IsNullOrEmpty(lKeyFileName) && !string.IsNullOrEmpty(lKeyContainerName))
+            if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyContainerName))
             {
                 throw new ObfuscarException(MessageCodes.ofr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
             }
@@ -93,7 +98,7 @@ namespace Obfuscar
             // Initialize key pair.
             //
             {
-                if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
+                if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
                 {
                     Log.OutputLine("No key file and no key container configured. Use no key pair.");
                 }
@@ -103,26 +108,26 @@ namespace Obfuscar
                     {
                         byte[]? kp;
 
-                        if (Path.GetExtension(lKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                        if (Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                         {
-                            Log.OutputLine($"Create key pair from '{lKeyFileName}' with password.");
+                            Log.OutputLine($"Create key pair from '{keyFileName}' with password.");
 
-                            if (string.IsNullOrEmpty(lKeyFileName))
+                            if (string.IsNullOrEmpty(keyFileName))
                             {
                                 throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
                             }
 
-                            kp = GetStrongNameKeyPairFromPfx(lKeyFileName, lKeyFilePassword);
+                            kp = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
                         }
-                        else if (!string.IsNullOrEmpty(lKeyFileName))
+                        else if (!string.IsNullOrEmpty(keyFileName))
                         {
-                            Log.OutputLine($"Create key pair from '{lKeyFileName}' with no password.");
+                            Log.OutputLine($"Create key pair from '{keyFileName}' with no password.");
 
-                            kp = File.ReadAllBytes(lKeyFileName);
+                            kp = File.ReadAllBytes(keyFileName);
                         }
                         else
                         {
-                            Log.OutputLine($"Create no key pair from '{lKeyFileName}'.");
+                            Log.OutputLine($"Create no key pair from '{keyFileName}'.");
 
                             kp = null;
                         }
@@ -131,7 +136,7 @@ namespace Obfuscar
                     }
                     catch (Exception ex)
                     {
-                        throw new ObfuscarException(MessageCodes.ofr007, $"Failure loading key file \"{lKeyFileName}\"", ex);
+                        throw new ObfuscarException(MessageCodes.ofr007, $"Failure loading key file \"{keyFileName}\"", ex);
                     }
                 }
             }
@@ -147,28 +152,36 @@ namespace Obfuscar
                     throw new ObfuscarException(MessageCodes.ofr008, "Key containers are not supported for Mono.");
                 }
 
-                if (string.IsNullOrEmpty(lKeyFileName) && string.IsNullOrEmpty(lKeyContainerName))
+                if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
                 {
                     Log.OutputLine("No key file and no key container configured. Use no RSA key value.");
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(lKeyContainerName))
+                    if (!string.IsNullOrEmpty(keyContainerName))
                     {
-                        Log.OutputLine($"Create RSA key value from '{lKeyContainerName}'.");
+                        Log.OutputLine($"Create RSA key value from '{keyContainerName}'.");
 
                         CspParameters cp = new CspParameters();
-                        cp.KeyContainerName = lKeyContainerName;
+                        cp.KeyContainerName = keyContainerName;
 
                         this.KeyValue = new RSACryptoServiceProvider(cp);
                     }
                     else
                     {
-                        Log.OutputLine($"Create no RSA key value from '{lKeyContainerName}'.");
+                        Log.OutputLine($"Create no RSA key value from '{keyContainerName}'.");
                     }
                 }
             }
         }
+
+        public string? SigningFileDigestAlgorithm { get; private set; }
+
+        public string? SigningTimeStampServerUrl { get; private set; }
+
+        public string? KeyFileName { get; private set; }
+
+        public string? KeyFilePassword { get; private set; }
 
         public string? KeyContainerName { get; private set; }
 
@@ -176,7 +189,8 @@ namespace Obfuscar
 
         [SupportedOSPlatform("windows")]
         public RSA? KeyValue { get; private set; }
-        AssemblyCache? m_cache;
+
+        private AssemblyCache? m_cache;
 
         internal AssemblyCache Cache
         {

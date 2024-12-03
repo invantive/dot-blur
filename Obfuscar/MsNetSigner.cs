@@ -33,7 +33,7 @@ namespace Obfuscar
             , [Out] out uint pcbSignatureBlob
             );
 
-        public static void SignAssemblyFromKeyContainer(string assemblyname, string keyname)
+        public static void StrongNameSignAssemblyFromKeyContainer(string assemblyname, string keyname)
         {
             if (!StrongNameSignatureGeneration(assemblyname, keyname, null, 0, IntPtr.Zero, out _))
             {
