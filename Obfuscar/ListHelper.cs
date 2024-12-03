@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace Obfuscar
 {
-    static class ListHelper
+    internal static class ListHelper
     {
         public static bool ListsEqual<T>(IList<T> a, IList<T> b)
         {
@@ -65,7 +65,9 @@ namespace Obfuscar
                     }
                 }
 
-                // they aren't not equal
+                //
+                // They aren't not equal.
+                //
                 return true;
             }
         }

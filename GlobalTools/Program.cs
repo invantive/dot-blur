@@ -56,13 +56,8 @@ namespace Obfuscar
         {
             Translations.Configure();
 
-            string originalObfuscarBaseVersion = "2.2.40";
-            string dotBlurPatchLevel = "6";
-
-            string fullVersion = string.Concat(originalObfuscarBaseVersion, ".", dotBlurPatchLevel);
-
             Log.OutputLine(MessageCodes.dbr126, null);
-            Log.OutputLine(MessageCodes.dbr127, String.Format(Translations.GetTranslationOfKey(TranslationKeys.db_gt_title_par2), fullVersion, DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")));
+            Log.OutputLine(MessageCodes.dbr127, String.Format(Translations.GetTranslationOfKey(TranslationKeys.db_gt_title_par2), Obfuscator.FullVersion, DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")));
             Log.OutputLine(MessageCodes.dbr128, null);
 
             bool showHelp = false;
@@ -70,7 +65,8 @@ namespace Obfuscar
 
             OptionSet p = new OptionSet()
                 .Add("h|?|help", Translations.GetTranslationOfKey(TranslationKeys.db_help_info), delegate (string v) { showHelp = v != null; })
-                .Add("V|version", Translations.GetTranslationOfKey(TranslationKeys.db_display_version), delegate (string v) { showVersion = v != null; });
+                .Add("V|version", Translations.GetTranslationOfKey(TranslationKeys.db_display_version), delegate (string v) { showVersion = v != null; })
+                ;
 
             if (args.Length == 0)
             {
@@ -99,7 +95,7 @@ namespace Obfuscar
 
             if (showVersion)
             {
-                Log.OutputLine(MessageCodes.dbr115, fullVersion);
+                Log.OutputLine(MessageCodes.dbr115, Obfuscator.FullVersion);
                 return 0;
             }
 

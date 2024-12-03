@@ -30,7 +30,7 @@ using System;
 
 namespace Obfuscar
 {
-    class TypeKey : IComparable<TypeKey>
+    internal class TypeKey : IComparable<TypeKey>
     {
         readonly TypeReference? typeReference;
         readonly int hashCode;
@@ -42,7 +42,10 @@ namespace Obfuscar
 
             this.Name = string.IsNullOrEmpty(type.Namespace) ? type.Name : type.Namespace + "." + type.Name;
             TypeReference declaringType = type;
-            // Build path to nested type
+
+            //
+            // Build path to nested type.
+            //
             while (declaringType.DeclaringType != null)
             {
                 declaringType = declaringType.DeclaringType;
@@ -52,9 +55,12 @@ namespace Obfuscar
 
             this.Fullname = !string.IsNullOrEmpty(this.Namespace) && this.Namespace != type.Namespace ? this.Namespace + "." + this.Name : this.Name;
 
+            //
             // Our name should be the same as the Cecil's name. This is important to the Match method.
+            //
             GenericInstanceType? gi = type as GenericInstanceType;
             type.DeclaringType = type.DeclaringType; // Hack: Update fullname of nested type
+
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
             {
                 throw new ObfuscarException(MessageCodes.dbr035, $"Type names do not match: \"{this.Fullname}\" != \"{type}\"");
@@ -100,7 +106,9 @@ namespace Obfuscar
 
         public bool Matches(TypeReference type)
         {
-            // Remove generic type parameters and compare full names
+            //
+            // Remove generic type parameters and compare full names.
+            //
             GenericInstanceType? instanceType = type as GenericInstanceType;
             if (instanceType == null)
             {
@@ -121,7 +129,8 @@ namespace Obfuscar
                    this.Scope == other.Scope &&
                    this.Namespace == other.Namespace &&
                    this.Name == other.Name &&
-                   this.Fullname == other.Fullname;
+                   this.Fullname == other.Fullname
+                   ;
         }
 
         public override bool Equals(object? obj)
@@ -173,7 +182,9 @@ namespace Obfuscar
 
         public int CompareTo(TypeKey? other)
         {
-            // no need to check ns and name...should be in fullname
+            //
+            // No need to check ns and name...should be in fullname.
+            //
             int cmp = string.Compare(this.Scope, other?.Scope);
 
             if (cmp == 0)

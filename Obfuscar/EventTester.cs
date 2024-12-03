@@ -28,7 +28,7 @@ using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
-    class EventTester : IPredicate<EventKey>
+    internal class EventTester : IPredicate<EventKey>
     {
         private readonly string? name;
         private readonly Regex? nameRx;

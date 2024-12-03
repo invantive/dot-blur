@@ -31,7 +31,7 @@ using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
-    class MethodTester : IPredicate<MethodKey>
+    internal class MethodTester : IPredicate<MethodKey>
     {
         private readonly MethodKey? key;
         private readonly string? name;
@@ -172,7 +172,7 @@ namespace Obfuscar
                 }
 
                 //
-                // attrib value given, but the member is not public/protected. We signal that the Skip* rule should be ignored. The member is obfuscated in any case.
+                // Attrib value given, but the member is not public/protected. We signal that the Skip* rule should be ignored. The member is obfuscated in any case.
                 //
                 return false;
             }

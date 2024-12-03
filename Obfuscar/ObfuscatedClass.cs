@@ -24,28 +24,19 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace Obfuscar
 {
-    interface IPredicate<T>
+    internal class ObfuscatedClass : ObfuscatedThing
     {
-        bool Test(T item, InheritMap? map = null);
-    }
+        public ObfuscatedClass(string name): base(name)
+        { }
 
-    internal class PredicateCollection<T> : List<IPredicate<T>>
-    {
-        public bool IsMatch(T thing, InheritMap? map = null)
-        {
-            foreach (IPredicate<T> test in this)
-            {
-                if (test.Test(thing, map))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public Dictionary<MethodKey, ObfuscatedThing> Methods = new Dictionary<MethodKey, ObfuscatedThing>();
+        public Dictionary<FieldKey, ObfuscatedThing> Fields = new Dictionary<FieldKey, ObfuscatedThing>();
+        public Dictionary<PropertyKey, ObfuscatedThing> Properties = new Dictionary<PropertyKey, ObfuscatedThing>();
+        public Dictionary<EventKey, ObfuscatedThing> Events = new Dictionary<EventKey, ObfuscatedThing>();
     }
 }

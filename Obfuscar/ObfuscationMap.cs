@@ -29,50 +29,7 @@ using System.Collections.Generic;
 
 namespace Obfuscar
 {
-    enum ObfuscationStatus
-    {
-        Unknown,
-        WillRename,
-        Renamed,
-        Skipped
-    }
-
-    class ObfuscatedThing
-    {
-        public ObfuscatedThing(string name)
-        {
-            this.Name = name;
-        }
-
-        public string Name { get; }
-
-        public void Update(ObfuscationStatus status, string statusText)
-        {
-            this.Status = status;
-            this.StatusText = statusText;
-        }
-
-        public ObfuscationStatus Status = ObfuscationStatus.Unknown;
-        public string? StatusText;
-
-        public override string ToString()
-        {
-            return this.Name + " " + this.Status + " " + (this.StatusText ?? "");
-        }
-    }
-
-    class ObfuscatedClass : ObfuscatedThing
-    {
-        public ObfuscatedClass(string name): base(name)
-        { }
-
-        public Dictionary<MethodKey, ObfuscatedThing> Methods = new Dictionary<MethodKey, ObfuscatedThing>();
-        public Dictionary<FieldKey, ObfuscatedThing> Fields = new Dictionary<FieldKey, ObfuscatedThing>();
-        public Dictionary<PropertyKey, ObfuscatedThing> Properties = new Dictionary<PropertyKey, ObfuscatedThing>();
-        public Dictionary<EventKey, ObfuscatedThing> Events = new Dictionary<EventKey, ObfuscatedThing>();
-    }
-
-    class ObfuscationMap
+    internal class ObfuscationMap
     {
         public Dictionary<TypeKey, ObfuscatedClass> ClassMap { get; } = new Dictionary<TypeKey, ObfuscatedClass>();
 

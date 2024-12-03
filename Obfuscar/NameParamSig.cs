@@ -32,9 +32,11 @@ namespace Obfuscar
     /// <summary>
     /// Used to identify the signature of a method by its name and parameters.
     /// </summary>
-    class NameParamSig : ParamSig, IComparable<NameParamSig>
+    internal class NameParamSig : ParamSig, IComparable<NameParamSig>
     {
-        readonly int hashCode;
+        public string Name { get; }
+
+        private readonly int hashCode;
 
         public NameParamSig(string name, string[] paramTypes): base(paramTypes)
         {
@@ -46,14 +48,12 @@ namespace Obfuscar
         public NameParamSig(MethodReference method): base(method)
         {
             this.Name = method.Name;
-
             this.hashCode = this.CalcHashCode();
         }
 
         public NameParamSig(MethodDefinition method): base(method)
         {
             this.Name = method.Name;
-
             this.hashCode = this.CalcHashCode();
         }
 
@@ -62,11 +62,12 @@ namespace Obfuscar
             return this.Name.GetHashCode() ^ base.GetHashCode();
         }
 
-        public string Name { get; }
-
         public bool Equals(NameParamSig? other)
         {
-            return other != null && this.Name == other.Name && this.Equals((ParamSig) other);
+            return other != null 
+                && this.Name == other.Name 
+                && this.Equals((ParamSig) other)
+                ;
         }
 
         public override bool Equals(object? obj)

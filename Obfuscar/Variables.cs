@@ -29,7 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Obfuscar
 {
-    class Variables
+    internal class Variables
     {
         readonly Dictionary<string, string> vars = new Dictionary<string, string>();
 

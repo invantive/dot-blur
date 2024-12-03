@@ -511,15 +511,21 @@ namespace Obfuscar
 
         public void LoadAssemblies()
         {
-            // build reference tree
+            //
+            // Build reference tree.
+            //
             foreach (AssemblyInfo info in this.AssemblyList)
             {
-                // add self reference...makes things easier later, when
-                // we need to go through the member references
+                //
+                // Add self reference...makes things easier later, when
+                // we need to go through the member references.
+                //
                 info.ReferencedBy.Add(info);
 
-                // try to get each assembly referenced by this one.  if it's in
-                // the map (and therefore in the project), set up the mappings
+                //
+                // Try to get each assembly referenced by this one.  if it's in
+                // the map (and therefore in the project), set up the mappings.
+                //
                 foreach (AssemblyNameReference nameRef in info.Definition.MainModule.AssemblyReferences)
                 {
                     if (this.assemblyMap.TryGetValue(nameRef.Name, out AssemblyInfo? reference))
@@ -530,13 +536,17 @@ namespace Obfuscar
                 }
             }
 
-            // make each assembly's list of member refs
+            //
+            // Make each assembly's list of member refs.
+            //
             foreach (AssemblyInfo info in this.AssemblyList)
             {
                 info.Init();
             }
 
-            // build inheritance map
+            //
+            // Build inheritance map.
+            //
             this.InheritMap = new InheritMap(this);
 
             this.ReorderAssemblies();
@@ -595,8 +605,9 @@ namespace Obfuscar
                 throw new ArgumentException("Invalid certificate", nameof(pfxFile));
             }
 
-            //not clear, but we may need to have only one key and that should be the provider https://msdn.microsoft.com/en-us/library/aa730868(vs.80).aspx
-
+            //
+            // Not clear, but we may need to have only one key and that should be the provider https://msdn.microsoft.com/en-us/library/aa730868(vs.80).aspx
+            //
             foreach (X509Certificate2 cert in certs)
             {
 #pragma warning disable SYSLIB0028

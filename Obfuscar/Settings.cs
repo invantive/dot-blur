@@ -29,7 +29,7 @@ using System.Xml;
 
 namespace Obfuscar
 {
-    class Settings
+    internal class Settings
     {
         private const string VariableAnalyzeXaml = "AnalyzeXaml";
         private const string VariableCustomChars = "CustomChars";

@@ -30,10 +30,11 @@ using System.Text;
 
 namespace Obfuscar
 {
-    static class NameMaker
+    internal static class NameMaker
     {
         static string uniqueChars = string.Empty;
         static int numUniqueChars;
+
         const string defaultChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
         const string unicodeChars = "\u00A0\u1680" +
@@ -49,11 +50,14 @@ namespace Obfuscar
 
         static NameMaker()
         {
+            //
             // Fill the char array used for renaming with characters
             // from Hangul (Korean) unicode character set.
+            //
             List<char> chars = new List<char>(128);
             Random rnd = new Random();
             int startPoint = rnd.Next(0xAC00, 0xD5D0);
+
             for (int i = startPoint; i < startPoint + 128; i++)
             {
                 chars.Add((char)i);
@@ -66,6 +70,7 @@ namespace Obfuscar
         private static void ShuffleArray<T>(IList<T> list, Random rnd)
         {
             int n = list.Count;
+
             while (n > 1)
             {
                 n--;
@@ -85,7 +90,9 @@ namespace Obfuscar
 
         public static string UniqueName(int index, string? sep)
         {
-            // optimization for simple case
+            //
+            // Optimization for simple case.
+            //
             if (index < numUniqueChars)
             {
                 return uniqueChars[index].ToString();
@@ -106,6 +113,7 @@ namespace Obfuscar
 
             StringBuilder builder = new StringBuilder();
             builder.Append(stack.Pop());
+
             while (stack.Count > 0)
             {
                 if (sep != null)
@@ -154,6 +162,7 @@ namespace Obfuscar
 
             numUniqueChars = uniqueChars.Length;
             string unicode = uniqueChars;
+
             for (int i = 0; i < unicode.Length; i++)
             {
                 for (int j = i + 1; j < unicode.Length; j++)

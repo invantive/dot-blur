@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Obfuscar.Helpers
 {
-    static class ILProcessorExtensions
+    internal static class ILProcessorExtensions
     {
         public static void ReplaceAndFixReferences(this ILProcessor processor, MethodBody body, Dictionary<Instruction, LdStrInstructionReplacement> oldToNewStringInstructions)
         {

@@ -28,7 +28,7 @@ using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
-    class NamespaceTester : IPredicate<string>
+    internal class NamespaceTester : IPredicate<string>
     {
         private readonly string? name;
         private readonly Regex? nameRx;
@@ -45,19 +45,24 @@ namespace Obfuscar
 
         public bool Test(string ns, InheritMap? map)
         {
-            // regex matches
+            //
+            // Regex matches.
+            //
             if (this.nameRx != null && !this.nameRx.IsMatch(ns))
             {
                 return false;
             }
-
-            // name matches
-            if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(ns, this.name))
+            //
+            // Name matches.
+            //
+            else if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(ns, this.name))
             {
                 return false;
             }
-
-            return true;
+            else
+            {
+                return true;
+            }
         }
     }
 }

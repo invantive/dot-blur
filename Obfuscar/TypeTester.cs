@@ -68,7 +68,7 @@ namespace Obfuscar
         AffectString = 0x10
     }
 
-    class TypeTester : IPredicate<TypeKey>
+    internal class TypeTester : IPredicate<TypeKey>
     {
         private readonly string? name;
         private readonly Regex? nameRx;
@@ -130,13 +130,17 @@ namespace Obfuscar
                 }
             }
 
-            // type's regex matches
+            //
+            // Type's regex matches.
+            //
             if (this.nameRx != null && !this.nameRx.IsMatch(type.Fullname))
             {
                 return false;
             }
 
-            // type's name matches
+            //
+            // Type's name matches.
+            //
             if (!string.IsNullOrEmpty(this.name) && !Helper.CompareOptionalRegex(type.Fullname, this.name))
             {
                 return false;

@@ -29,7 +29,7 @@ using System;
 
 namespace Obfuscar
 {
-    class MethodKey : NameParamSig, IComparable<MethodKey>
+    internal class MethodKey : NameParamSig, IComparable<MethodKey>
     {
         readonly int hashCode;
 
@@ -87,7 +87,11 @@ namespace Obfuscar
 
         public bool Equals(MethodKey? other)
         {
-            return other != null && this.hashCode == other.hashCode && (this.TypeKey == null ? other.TypeKey == null : this.TypeKey == other.TypeKey) && this.Equals((NameParamSig) other);
+            return other != null 
+                && this.hashCode == other.hashCode 
+                && (this.TypeKey == null ? other.TypeKey == null : this.TypeKey == other.TypeKey) 
+                && this.Equals((NameParamSig) other)
+                ;
         }
 
         public override bool Equals(object? obj)
@@ -152,9 +156,6 @@ namespace Obfuscar
         // taken from https://github.com/mono/mono/blob/master/mcs/tools/linker/Mono.Linker.Steps/TypeMapStep.cs
         internal static bool MethodMatch(MethodDefinition candidate, MethodReference method)
         {
-            //if (!candidate.IsVirtual)
-            //    return false;
-
             if (candidate.Name != method.Name)
             {
                 return false;
@@ -187,8 +188,10 @@ namespace Obfuscar
             {
                 return false;
             }
-
-            return TypeMatch(a.ElementType, b.ElementType);
+            else
+            {
+                return TypeMatch(a.ElementType, b.ElementType);
+            }
         }
 
         private static bool TypeMatch(TypeSpecification a, TypeSpecification b)
@@ -197,13 +200,14 @@ namespace Obfuscar
             {
                 return TypeMatch((GenericInstanceType)a, (GenericInstanceType)b);
             }
-
-            if (a is IModifierType)
+            else if (a is IModifierType)
             {
                 return TypeMatch((IModifierType)a, (IModifierType)b);
             }
-
-            return TypeMatch(a.ElementType, b.ElementType);
+            else
+            {
+                return TypeMatch(a.ElementType, b.ElementType);
+            }
         }
 
         private static bool TypeMatch(GenericInstanceType a, GenericInstanceType b)
@@ -212,26 +216,26 @@ namespace Obfuscar
             {
                 return false;
             }
-
-            if (a.GenericArguments.Count != b.GenericArguments.Count)
+            else if (a.GenericArguments.Count != b.GenericArguments.Count)
             {
                 return false;
             }
-
-            if (a.GenericArguments.Count == 0)
+            else if (a.GenericArguments.Count == 0)
             {
                 return true;
             }
-
-            for (int i = 0; i < a.GenericArguments.Count; i++)
+            else
             {
-                if (!TypeMatch(a.GenericArguments[i], b.GenericArguments[i]))
+                for (int i = 0; i < a.GenericArguments.Count; i++)
                 {
-                    return false;
+                    if (!TypeMatch(a.GenericArguments[i], b.GenericArguments[i]))
+                    {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
+                return true;
+            }
         }
 
         private static bool TypeMatch(TypeReference a, TypeReference b)
@@ -240,18 +244,19 @@ namespace Obfuscar
             {
                 return true;
             }
-
-            if (a is TypeSpecification || b is TypeSpecification)
+            else if (a is TypeSpecification || b is TypeSpecification)
             {
                 if (a.GetType() != b.GetType())
                 {
                     return false;
                 }
 
-                return TypeMatch((TypeSpecification) a, (TypeSpecification) b);
+                return TypeMatch((TypeSpecification)a, (TypeSpecification)b);
             }
-
-            return a.FullName == b.FullName;
+            else
+            {
+                return a.FullName == b.FullName;
+            }
         }
     }
 }

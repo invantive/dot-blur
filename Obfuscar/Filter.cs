@@ -9,7 +9,8 @@ namespace Obfuscar
     internal class Filter : IEnumerable<string>
     {
         private static readonly char[] directorySeparators = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-        private readonly IList<string> inclusions, exclusions;
+        private readonly IList<string> inclusions;
+        private readonly IList<string> exclusions;
         private readonly string path;
 
         public Filter(string path, IList<string> inclusions, IList<string> exclusions)

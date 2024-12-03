@@ -28,7 +28,7 @@ using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
-    class PropertyTester : IPredicate<PropertyKey>
+    internal class PropertyTester : IPredicate<PropertyKey>
     {
         private readonly string? name;
         private readonly Regex? nameRx;

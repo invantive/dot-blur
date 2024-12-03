@@ -28,7 +28,7 @@ using Mono.Cecil;
 
 namespace Obfuscar
 {
-    class PropertyKey
+    internal class PropertyKey
     {
         public PropertyKey(TypeKey typeKey, PropertyDefinition prop)
         {
@@ -59,6 +59,7 @@ namespace Obfuscar
         public virtual bool Matches(MemberReference member)
         {
             PropertyReference? propRef = member as PropertyReference;
+
             if (propRef != null)
             {
                 if (this.TypeKey.Matches(propRef.DeclaringType))
@@ -73,12 +74,15 @@ namespace Obfuscar
         public override bool Equals(object? obj)
         {
             PropertyKey? key = obj as PropertyKey;
+
             if (key == null)
             {
                 return false;
             }
-
-            return this == key;
+            else
+            {
+                return this == key;
+            }
         }
 
         public static bool operator ==(PropertyKey? a, PropertyKey? b)

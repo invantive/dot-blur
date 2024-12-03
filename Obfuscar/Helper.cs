@@ -31,7 +31,7 @@ using System.Xml.Linq;
 
 namespace Obfuscar
 {
-    class Node<T>
+    internal class Node<T>
     {
         public List<Node<T>> Parents = new List<Node<T>>();
         public List<Node<T>> Children = new List<Node<T>>();
@@ -49,7 +49,7 @@ namespace Obfuscar
         }
     }
 
-    static class Helper
+    internal static class Helper
     {
         public static void Noop()
         {
@@ -109,6 +109,7 @@ namespace Obfuscar
                     {
                         return false;
                     }
+
                     testIdx++;
                 }
                 else

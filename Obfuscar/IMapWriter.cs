@@ -24,28 +24,10 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 namespace Obfuscar
 {
-    interface IPredicate<T>
+    interface IMapWriter
     {
-        bool Test(T item, InheritMap? map = null);
-    }
-
-    internal class PredicateCollection<T> : List<IPredicate<T>>
-    {
-        public bool IsMatch(T thing, InheritMap? map = null)
-        {
-            foreach (IPredicate<T> test in this)
-            {
-                if (test.Test(thing, map))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        void WriteMap(ObfuscationMap map);
     }
 }

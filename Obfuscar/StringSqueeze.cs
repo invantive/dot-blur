@@ -147,7 +147,9 @@ namespace Obfuscar
                 MethodReference? encodingGetUtf8Method = library.MainModule.ImportReference(this.EncodingTypeDefinition.Methods.FirstOrDefault(method => method.Name == "get_UTF8"));
                 MethodReference? encodingGetStringMethod = library.MainModule.ImportReference(this.EncodingTypeDefinition.Methods.FirstOrDefault(method => method.FullName == "System.String System.Text.Encoding::GetString(System.Byte[],System.Int32,System.Int32)"));
 
+                //
                 // New static class with a method for each unique string we substitute.
+                //
                 string guid = Guid.NewGuid().ToString().ToUpper();
 
                 TypeDefinition newType = new TypeDefinition
@@ -172,7 +174,9 @@ namespace Obfuscar
                 structType.PackingSize = 1;
                 newType.NestedTypes.Add(structType);
 
-                // Add field with constant string data
+                //
+                // Add field with constant string data.
+                //
                 FieldDefinition dataConstantField = new FieldDefinition
                                                         ( "3"
                                                         , FieldAttributes.HasFieldRVA | FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly
@@ -180,7 +184,9 @@ namespace Obfuscar
                                                         );
                 newType.Fields.Add(dataConstantField);
 
-                // Add data field where constructor copies the data to
+                //
+                // Add data field where constructor copies the data to.
+                //
                 FieldDefinition dataField = new FieldDefinition
                                                 ( "4"
                                                 , FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly
@@ -189,7 +195,9 @@ namespace Obfuscar
 
                 newType.Fields.Add(dataField);
 
-                // Add string array of deobfuscated strings
+                //
+                // Add string array of deobfuscated strings.
+                //
                 FieldDefinition stringArrayField = new FieldDefinition
                                                     ( "5"
                                                     , FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.Assembly
@@ -198,7 +206,9 @@ namespace Obfuscar
 
                 newType.Fields.Add(stringArrayField);
 
+                //
                 // Add method to extract a string from the byte array. It is called by the indiviual string getter methods we add later to the class.
+                //
                 MethodDefinition stringGetterMethodDefinition = new MethodDefinition
                                                                     ( "6"
                                                                     , MethodAttributes.Static | MethodAttributes.Private | MethodAttributes.HideBySig
@@ -268,7 +278,9 @@ namespace Obfuscar
 
                 data.DataConstantField.InitialValue = data.DataBytes.ToArray();
 
-                // Add static constructor which initializes the dataField from the constant data field
+                //
+                // Add static constructor which initializes the dataField from the constant data field.
+                //
                 MethodDefinition ctorMethodDefinition = new MethodDefinition
                                                             ( ".cctor"
                                                             , MethodAttributes.Static
@@ -354,8 +366,10 @@ namespace Obfuscar
                 return;
             }
 
+            //
             // Unroll short form instructions so they can be auto-fixed by Cecil
-            // automatically when instructions are inserted/replaced
+            // automatically when instructions are inserted/replaced.
+            //
             method.Body.SimplifyMacros();
             ILProcessor worker = method.Body.GetILProcessor();
 
@@ -378,13 +392,17 @@ namespace Obfuscar
 
                         string methodName = NameMaker.UniqueName(data.NameIndex++);
 
-                        // Add the string to the data array
+                        //
+                        // Add the string to the data array.
+                        //
                         byte[] stringBytes = Encoding.UTF8.GetBytes(str);
                         int start = data.DataBytes.Count;
                         data.DataBytes.AddRange(stringBytes);
                         int count = data.DataBytes.Count - start;
 
-                        // Add a method for this string to our new class
+                        //
+                        // Add a method for this string to our new class.
+                        //
                         individualStringMethodDefinition = new MethodDefinition
                                                             ( methodName
                                                             , MethodAttributes.Static | MethodAttributes.Public | MethodAttributes.HideBySig
@@ -425,8 +443,9 @@ namespace Obfuscar
                         this.mostRecentData.StringIndex++;
                     }
 
-                    // Replace Ldstr with Call
-
+                    //
+                    // Replace Ldstr with Call.
+                    //
                     Instruction newinstruction = worker.Create(OpCodes.Call, individualStringMethodDefinition);
 
                     oldToNewStringInstructions.Add(instruction, new LdStrInstructionReplacement(index, newinstruction));
@@ -435,7 +454,9 @@ namespace Obfuscar
 
             worker.ReplaceAndFixReferences(method.Body, oldToNewStringInstructions);
 
-            // Optimize method back
+            //
+            // Optimize method back.
+            //
             if (project.Settings.OptimizeMethods)
             {
                 method.Body.Optimize();

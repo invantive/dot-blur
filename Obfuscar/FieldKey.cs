@@ -28,7 +28,7 @@ using Mono.Cecil;
 
 namespace Obfuscar
 {
-    class FieldKey
+    internal class FieldKey
     {
         public FieldDefinition Field { get; }
 
@@ -69,6 +69,7 @@ namespace Obfuscar
         public virtual bool Matches(MemberReference member)
         {
             FieldReference? fieldRef = member as FieldReference;
+
             if (fieldRef != null)
             {
                 if (this.TypeKey.Matches(fieldRef.DeclaringType))
@@ -83,12 +84,15 @@ namespace Obfuscar
         public override bool Equals(object? obj)
         {
             FieldKey? key = obj as FieldKey;
+
             if (key == null)
             {
                 return false;
             }
-
-            return this == key;
+            else
+            {
+                return this == key;
+            }
         }
 
         public static bool operator ==(FieldKey? a, FieldKey? b)

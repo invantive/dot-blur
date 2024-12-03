@@ -31,8 +31,7 @@ namespace Obfuscar
     /// <summary>
     /// Attribute used to mark whether a type should be obfuscated.
     /// </summary>
-    [Obsolete(
-        "Please use ObfuscationAttribute of .NET Framework, http://msdn.microsoft.com/en-us/library/system.reflection.obfuscationattribute(v=vs.110).aspx")]
+    [Obsolete("Please use ObfuscationAttribute of .NET Framework, http://msdn.microsoft.com/en-us/library/system.reflection.obfuscationattribute(v=vs.110).aspx")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Enum)]
     public class ObfuscateAttribute : Attribute
     {

@@ -31,7 +31,7 @@ using System.Text;
 
 namespace Obfuscar
 {
-    static class TypeNameCache
+    internal static class TypeNameCache
     {
         public static Dictionary<TypeReference, string> nameCache = new Dictionary<TypeReference, string>();
 
@@ -43,6 +43,7 @@ namespace Obfuscar
         static void BuildTypeName(StringBuilder builder, TypeReference type)
         {
             GenericParameter? genParam = type as GenericParameter;
+
             if (genParam != null)
             {
                 builder.AppendFormat("!{0}", genParam.Position);
@@ -50,6 +51,7 @@ namespace Obfuscar
             else
             {
                 GenericInstanceType? genType = type as GenericInstanceType;
+
                 if (genType != null)
                 {
                     builder.AppendFormat("[{2}]{0}.{1}<", genType.Namespace, genType.Name, type.GetScopeName());
@@ -91,6 +93,7 @@ namespace Obfuscar
             lock (nameCache)
             {
                 string? name;
+
                 if (!nameCache.TryGetValue(type, out name))
                 {
                     StringBuilder builder = new StringBuilder();
@@ -99,6 +102,7 @@ namespace Obfuscar
 
                     nameCache[type] = name;
                 }
+
                 return name;
             }
         }

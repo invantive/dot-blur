@@ -38,12 +38,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console هو فرع من Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** وحدة تحكم DotBlur ({0}) في {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "تم الانتهاء بنجاح في {0:N0} ثانية." }
+          , { TranslationKeys.db_dbr082_par1, "تم الانتهاء بنجاح في {0:N0} ثانية." }
+          , { TranslationKeys.db_dbr130_par1, "تم الانتهاء من ذلك مع وجود خطأ في {0:N0} ثانية." }
+          , { TranslationKeys.db_dbr131_par1, "تم الانتهاء من ذلك مع وجود خطأ في {0:N0} ثانية." }
+          , { TranslationKeys.db_dbr132_par1, "تم الانتهاء من ذلك مع وجود خطأ في {0:N0} ثانية." }
+          , { TranslationKeys.db_dbr133_par1, "تم الانتهاء من ذلك مع وجود خطأ في {0:N0} ثانية." }
           , { TranslationKeys.db_display_version, "عرض رقم إصدار هذا التطبيق." }
           , { TranslationKeys.db_error_processing_colon, "حدث خطأ أثناء المعالجة:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur هو شوكة من Obfuscar (https://www.obfuscar.com)" }
@@ -59,12 +59,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console je rozvětvení aplikace Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) na {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Úspěšně dokončeno za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr082_par1, "Úspěšně dokončeno za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr130_par1, "Dokončeno s chybou za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr131_par1, "Dokončeno s chybou za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr132_par1, "Dokončeno s chybou za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr133_par1, "Dokončeno s chybou za {0:N0} sekund." }
           , { TranslationKeys.db_display_version, "Zobrazení čísla verze této aplikace." }
           , { TranslationKeys.db_error_processing_colon, "Při zpracování došlo k chybě:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur je rozvětvení produktu Obfuscar (https://www.obfuscar.com)." }
@@ -80,12 +80,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console er en forgrening af Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) den {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Afsluttet med succes på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr082_par1, "Afsluttet med succes på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr130_par1, "Afsluttet med fejl om {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr131_par1, "Afsluttet med fejl om {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr132_par1, "Afsluttet med fejl om {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr133_par1, "Afsluttet med fejl om {0:N0} sekunder." }
           , { TranslationKeys.db_display_version, "Vis versionsnummeret for denne applikation." }
           , { TranslationKeys.db_error_processing_colon, "Der opstod en fejl under behandlingen:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur er en forgrening af Obfuscar (https://www.obfuscar.com)" }
@@ -101,12 +101,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console ist ein Fork von Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) am {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Erfolgreich abgeschlossen in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr082_par1, "Erfolgreich abgeschlossen in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr130_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr131_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr132_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr133_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
           , { TranslationKeys.db_display_version, "Versionsnummer dieser Anwendung anzeigen." }
           , { TranslationKeys.db_error_processing_colon, "Bei der Verarbeitung ist ein Fehler aufgetreten:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur ist ein Fork von Obfuscar (https://www.obfuscar.com)" }
@@ -143,12 +143,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console es una bifurcación de Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** Consola DotBlur ({0}) el {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Completado con éxito en {0:N0} segundos." }
+          , { TranslationKeys.db_dbr082_par1, "Completado con éxito en {0:N0} segundos." }
+          , { TranslationKeys.db_dbr130_par1, "Completado con error en {0:N0} segundos." }
+          , { TranslationKeys.db_dbr131_par1, "Completado con error en {0:N0} segundos." }
+          , { TranslationKeys.db_dbr132_par1, "Completado con error en {0:N0} segundos." }
+          , { TranslationKeys.db_dbr133_par1, "Completado con error en {0:N0} segundos." }
           , { TranslationKeys.db_display_version, "Muestra el número de versión de esta aplicación." }
           , { TranslationKeys.db_error_processing_colon, "Se ha producido un error durante el procesamiento:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur es una bifurcación de Obfuscar (https://www.obfuscar.com)" }
@@ -164,12 +164,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console on haarautunut Obfuscarista (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) on {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Suoritettu onnistuneesti {0:N0} sekunnissa." }
+          , { TranslationKeys.db_dbr082_par1, "Suoritettu onnistuneesti {0:N0} sekunnissa." }
+          , { TranslationKeys.db_dbr130_par1, "Valmistui virheellisesti {0:N0} sekunnissa." }
+          , { TranslationKeys.db_dbr131_par1, "Valmistui virheellisesti {0:N0} sekunnissa." }
+          , { TranslationKeys.db_dbr132_par1, "Valmistui virheellisesti {0:N0} sekunnissa." }
+          , { TranslationKeys.db_dbr133_par1, "Valmistui virheellisesti {0:N0} sekunnissa." }
           , { TranslationKeys.db_display_version, "Näyttää tämän sovelluksen versionumeron." }
           , { TranslationKeys.db_error_processing_colon, "Käsittelyssä tapahtui virhe:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur on haara Obfuscarista (https://www.obfuscar.com)." }
@@ -185,12 +185,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console est un fork de Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) on {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Terminé avec succès en {0:N0} secondes." }
+          , { TranslationKeys.db_dbr082_par1, "Terminé avec succès en {0:N0} secondes." }
+          , { TranslationKeys.db_dbr130_par1, "Terminé avec une erreur dans {0:N0} secondes." }
+          , { TranslationKeys.db_dbr131_par1, "Terminé avec une erreur dans {0:N0} secondes." }
+          , { TranslationKeys.db_dbr132_par1, "Terminé avec une erreur dans {0:N0} secondes." }
+          , { TranslationKeys.db_dbr133_par1, "Terminé avec une erreur dans {0:N0} secondes." }
           , { TranslationKeys.db_display_version, "Affiche le numéro de version de cette application." }
           , { TranslationKeys.db_error_processing_colon, "Une erreur s'est produite pendant le traitement :" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur est un fork de Obfuscar (https://www.obfuscar.com)" }
@@ -206,12 +206,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console è un fork di Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) il {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Completato con successo in {0:N0} secondi." }
+          , { TranslationKeys.db_dbr082_par1, "Completato con successo in {0:N0} secondi." }
+          , { TranslationKeys.db_dbr130_par1, "Completato con errore in {0:N0} secondi." }
+          , { TranslationKeys.db_dbr131_par1, "Completato con errore in {0:N0} secondi." }
+          , { TranslationKeys.db_dbr132_par1, "Completato con errore in {0:N0} secondi." }
+          , { TranslationKeys.db_dbr133_par1, "Completato con errore in {0:N0} secondi." }
           , { TranslationKeys.db_display_version, "Visualizza il numero di versione di questa applicazione." }
           , { TranslationKeys.db_error_processing_colon, "Si è verificato un errore durante l'elaborazione:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur è un fork di Obfuscar (https://www.obfuscar.com)" }
@@ -227,12 +227,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console は Obfuscar (https://www.obfuscar.com) のフォークです。" }
           , { TranslationKeys.db_con_title_par2, "*** ドットブラーコンソール ({0}) on {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "0:N0}秒で正常に完了しました。" }
+          , { TranslationKeys.db_dbr082_par1, "0:N0}秒で正常に完了しました。" }
+          , { TranslationKeys.db_dbr130_par1, "エラーで{0:N0}秒で完了。" }
+          , { TranslationKeys.db_dbr131_par1, "エラーで{0:N0}秒で完了。" }
+          , { TranslationKeys.db_dbr132_par1, "エラーで{0:N0}秒で完了。" }
+          , { TranslationKeys.db_dbr133_par1, "エラーで{0:N0}秒で完了。" }
           , { TranslationKeys.db_display_version, "このアプリケーションのバージョン番号を表示します。" }
           , { TranslationKeys.db_error_processing_colon, "処理中にエラーが発生しました：" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlurはObfuscar (https://www.obfuscar.com) のフォークである。" }
@@ -248,12 +248,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console은 Obfuscar(https://www.obfuscar.com)의 포크입니다." }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur 콘솔({0}) {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "{0:N0}초 만에 성공적으로 완료되었습니다." }
+          , { TranslationKeys.db_dbr082_par1, "{0:N0}초 만에 성공적으로 완료되었습니다." }
+          , { TranslationKeys.db_dbr130_par1, "{0:N0}초 만에 오류가 발생하여 완료되었습니다." }
+          , { TranslationKeys.db_dbr131_par1, "{0:N0}초 만에 오류가 발생하여 완료되었습니다." }
+          , { TranslationKeys.db_dbr132_par1, "{0:N0}초 만에 오류가 발생하여 완료되었습니다." }
+          , { TranslationKeys.db_dbr133_par1, "{0:N0}초 만에 오류가 발생하여 완료되었습니다." }
           , { TranslationKeys.db_display_version, "이 애플리케이션의 버전 번호를 표시합니다." }
           , { TranslationKeys.db_error_processing_colon, "처리 중 오류가 발생했습니다:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur는 Obfuscar(https://www.obfuscar.com)의 포크입니다." }
@@ -269,12 +269,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console er en gaffel av Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur-konsoll ({0}) på {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Fullført på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr082_par1, "Fullført på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr130_par1, "Fullført med feil på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr131_par1, "Fullført med feil på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr132_par1, "Fullført med feil på {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr133_par1, "Fullført med feil på {0:N0} sekunder." }
           , { TranslationKeys.db_display_version, "Vis versjonsnummeret til denne applikasjonen." }
           , { TranslationKeys.db_error_processing_colon, "Det oppstod en feil under behandlingen:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur er en gaffel av Obfuscar (https://www.obfuscar.com)" }
@@ -290,12 +290,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console is een fork van Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) op {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Succesvol voltooid in {0:N0} seconden." }
+          , { TranslationKeys.db_dbr082_par1, "Succesvol voltooid in {0:N0} seconden." }
+          , { TranslationKeys.db_dbr130_par1, "Voltooid met fout in {0:N0} seconden." }
+          , { TranslationKeys.db_dbr131_par1, "Voltooid met fout in {0:N0} seconden." }
+          , { TranslationKeys.db_dbr132_par1, "Voltooid met fout in {0:N0} seconden." }
+          , { TranslationKeys.db_dbr133_par1, "Voltooid met fout in {0:N0} seconden." }
           , { TranslationKeys.db_display_version, "Versienummer van deze applicatie weergeven." }
           , { TranslationKeys.db_error_processing_colon, "Er is een fout opgetreden tijdens de verwerking:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur is een fork van Obfuscar (https://www.obfuscar.com)" }
@@ -311,12 +311,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console jest rozwidleniem Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_title_par2, "*** Konsola DotBlur ({0}) w dniu {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Zakończono pomyślnie w ciągu {0:N0} sekund." }
+          , { TranslationKeys.db_dbr082_par1, "Zakończono pomyślnie w ciągu {0:N0} sekund." }
+          , { TranslationKeys.db_dbr130_par1, "Ukończono z błędem za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr131_par1, "Ukończono z błędem za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr132_par1, "Ukończono z błędem za {0:N0} sekund." }
+          , { TranslationKeys.db_dbr133_par1, "Ukończono z błędem za {0:N0} sekund." }
           , { TranslationKeys.db_display_version, "Wyświetla numer wersji tej aplikacji." }
           , { TranslationKeys.db_error_processing_colon, "Podczas przetwarzania wystąpił błąd:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur jest rozwidleniem Obfuscar (https://www.obfuscar.com)" }
@@ -332,12 +332,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "A Consola DotBlur é uma bifurcação do Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** Consola DotBlur ({0}) em {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Concluído com êxito em {0:N0} segundos." }
+          , { TranslationKeys.db_dbr082_par1, "Concluído com êxito em {0:N0} segundos." }
+          , { TranslationKeys.db_dbr130_par1, "Concluído com erro em {0:N0} segundos." }
+          , { TranslationKeys.db_dbr131_par1, "Concluído com erro em {0:N0} segundos." }
+          , { TranslationKeys.db_dbr132_par1, "Concluído com erro em {0:N0} segundos." }
+          , { TranslationKeys.db_dbr133_par1, "Concluído com erro em {0:N0} segundos." }
           , { TranslationKeys.db_display_version, "Mostra o número da versão desta aplicação." }
           , { TranslationKeys.db_error_processing_colon, "Ocorreu um erro durante o processamento:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur é uma bifurcação do Obfuscar (https://www.obfuscar.com)" }
@@ -353,12 +353,12 @@ namespace Obfuscar
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console är en förgrening av Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) den {1} (UTC) ***" }
-          , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr130_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
-          , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_dbr071_par1, "Avslutades framgångsrikt inom {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr082_par1, "Avslutades framgångsrikt inom {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr130_par1, "Avslutades med fel inom {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr131_par1, "Avslutades med fel inom {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr132_par1, "Avslutades med fel inom {0:N0} sekunder." }
+          , { TranslationKeys.db_dbr133_par1, "Avslutades med fel inom {0:N0} sekunder." }
           , { TranslationKeys.db_display_version, "Visar versionsnummer för denna applikation." }
           , { TranslationKeys.db_error_processing_colon, "Ett fel inträffade under bearbetningen:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur är en förgrening av Obfuscar (https://www.obfuscar.com)" }

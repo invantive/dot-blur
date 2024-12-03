@@ -34,7 +34,7 @@ namespace Obfuscar
     /// <summary>
     /// Used to identify the signature of a method by its parameters.
     /// </summary>
-    class ParamSig : IComparable<ParamSig>
+    internal class ParamSig : IComparable<ParamSig>
     {
         readonly int hashCode;
 
@@ -123,8 +123,9 @@ namespace Obfuscar
             }
             else
             {
-                // kludge...too simplistic...param types match anything
-
+                //
+                // Kludge...too simplistic...param types match anything.
+                //
                 for (int i = 0; i < a.Count; i++)
                 {
                     if (!a[i].StartsWith("!") && !b[i].StartsWith("!") && !a[i].Equals(b[i]))
@@ -133,7 +134,9 @@ namespace Obfuscar
                     }
                 }
 
-                // they aren't not equal
+                //
+                // They aren't not equal.
+                //
                 return true;
             }
         }

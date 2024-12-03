@@ -29,7 +29,7 @@ using System.Text.RegularExpressions;
 
 namespace Obfuscar
 {
-    class FieldTester : IPredicate<FieldKey>
+    internal class FieldTester : IPredicate<FieldKey>
     {
         private readonly string? name;
         private readonly Regex? nameRx;
@@ -149,7 +149,9 @@ namespace Obfuscar
                 }
             }
 
-            // finally does method's type inherit?
+            //
+            // Finally does method's type inherit?
+            //
             if (!string.IsNullOrEmpty(this.inherits))
             {
                 if (map == null || !map.Inherits(field.DeclaringType, this.inherits))

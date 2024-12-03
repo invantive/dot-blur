@@ -28,7 +28,7 @@ using Mono.Cecil;
 
 namespace Obfuscar
 {
-    class EventKey
+    internal class EventKey
     {
         public EventKey(EventDefinition evt): this(new TypeKey(evt.DeclaringType), evt)
         {
@@ -79,8 +79,10 @@ namespace Obfuscar
             {
                 return false;
             }
-
-            return this == key;
+            else
+            {
+                return this == key;
+            }
         }
 
         public static bool operator ==(EventKey? a, EventKey? b)

@@ -31,7 +31,7 @@ using System.IO;
 
 namespace Obfuscar
 {
-    class AssemblyCache : DefaultAssemblyResolver
+    internal class AssemblyCache : DefaultAssemblyResolver
     {
         private readonly List<string> paths = new List<string>();
 

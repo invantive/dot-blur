@@ -30,7 +30,7 @@ using System.Text;
 
 namespace Obfuscar
 {
-    class NameGroup : IEnumerable<string>
+    internal class NameGroup : IEnumerable<string>
     {
         readonly HashSet<string> names = new HashSet<string>();
 
@@ -38,6 +38,7 @@ namespace Obfuscar
         {
             int index = 0;
             string name;
+
             for (;;)
             {
                 name = NameMaker.UniqueName(index++);
@@ -53,11 +54,11 @@ namespace Obfuscar
             return this.names.Contains(name);
         }
 
-        public void AddAll(IEnumerable<string> range)
+        public void AddAll(IEnumerable<string> elements)
         {
-            foreach (string item in range)
+            foreach (string element in elements)
             {
-                this.names.Add(item);
+                this.names.Add(element);
             }
         }
 
@@ -76,11 +77,13 @@ namespace Obfuscar
             int index = 0;
 
             string name;
+
             for (;;)
             {
                 name = NameMaker.UniqueName(index++);
 
                 bool contained = false;
+
                 foreach (NameGroup group in groups)
                 {
                     if (group.Contains(name))
@@ -112,7 +115,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(this.names.Count * 32);
 
             foreach (string s in this.names)
             {
@@ -120,6 +123,7 @@ namespace Obfuscar
                 {
                     sb.Append(",");
                 }
+
                 sb.Append(s);
             }
 

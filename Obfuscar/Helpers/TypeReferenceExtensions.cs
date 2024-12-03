@@ -2,7 +2,7 @@
 
 namespace Obfuscar.Helpers
 {
-    static class TypeReferenceExtensions
+    internal static class TypeReferenceExtensions
     {
         /// <summary>
         /// Returns the simplified name for the assembly where a type can be found,
