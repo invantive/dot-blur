@@ -38,10 +38,10 @@ namespace Obfuscar
     {
         private static void ShowHelp(OptionSet optionSet)
         {
-            Console.WriteLine("Obfuscar is available at https://www.obfuscar.com");
+            Console.WriteLine("DotBlur Console is a specific fork of Obfuscar (https://www.obfuscar.com)");
             Console.WriteLine("(C) 2007-2024, Ryan Williams and other contributors.");
             Console.WriteLine();
-            Console.WriteLine("obfuscar [Options] [project_file] [project_file]");
+            Console.WriteLine("dotblur.exe [Options] [project_file] [project_file]");
             Console.WriteLine("Options:");
             optionSet.WriteOptionDescriptions(Console.Out);
         }
@@ -53,19 +53,11 @@ namespace Obfuscar
         /// <returns>Exit code.</returns>
         private static int Main(string[] args)
         {
-            string versionLabel = "2.2.40.4-INVANTIVE";
+            string originalObfuscarBaseVersion = "2.2.40";
+            string dotBlurPatchLevel = "6";
 
             Console.WriteLine();
-            Console.WriteLine($"*** Obfuscar {versionLabel} ***");
-
-            Console.WriteLine();
-            Console.WriteLine("Improvements to 2.2.40-DEFAULT:");
-            Console.WriteLine("* Correct spacing, introduce central constants for variables in project file [ER] (coding-20241119-guido, 1aa890c4fc5c71ab694b1153d1b343078c529025).");
-            Console.WriteLine("* Fix System.NotSupportedException on reading resources [PR] (notsupportedexception-20241119-patrick, 51460ef56996009d56e6b0bdbaba17beaba9211d).");
-            Console.WriteLine("* Sign assemblies using PFX [ER] (signpfx-20241119-patrick, 4988154ac6a6575330a6123f8327bcdaf2431ee8).");
-            Console.WriteLine("* Fix ArgumentNullException on KeyPair when using KeyContainerName on signing [PR] (argumentnullexception-20241119-patrick, f389749e7d0c203435b80b0cafd3532381cf8efd).");
-            Console.WriteLine("* ADD VERSION PRINTING");
-
+            Console.WriteLine($"*** DotBlur Console ({originalObfuscarBaseVersion}.{dotBlurPatchLevel}) on {DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")} (UTC) ***");
             Console.WriteLine();
 
             bool showHelp = false;

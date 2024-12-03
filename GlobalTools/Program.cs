@@ -38,10 +38,10 @@ namespace Obfuscar
     {
         private static void ShowHelp(OptionSet optionSet)
         {
-            Console.WriteLine("Obfuscar for .NET Core is available at https://www.obfuscar.com");
+            Console.WriteLine("DotBlur is a specific fork of Obfuscar (https://www.obfuscar.com)");
             Console.WriteLine("(C) 2007-2024, Ryan Williams and other contributors.");
             Console.WriteLine();
-            Console.WriteLine("obfuscar [Options] [project_file] [project_file]");
+            Console.WriteLine("dotblur [Options] [project_file] [project_file]");
             Console.WriteLine("Options:");
             optionSet.WriteOptionDescriptions(Console.Out);
         }
@@ -53,6 +53,13 @@ namespace Obfuscar
         /// <returns>Exit code.</returns>
         private static int Main(string[] args)
         {
+            string originalObfuscarBaseVersion = "2.2.40";
+            string dotBlurPatchLevel = "6";
+
+            Console.WriteLine();
+            Console.WriteLine($"*** DotBlur Global Tool ({originalObfuscarBaseVersion}.{dotBlurPatchLevel}) on {DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")} (UTC) ***");
+            Console.WriteLine();
+
             bool showHelp = false;
             bool showVersion = false;
 

@@ -11,16 +11,16 @@
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <PackageIcon>Potion-icon.png</PackageIcon>
-    <PackageId>Obfuscar.GlobalTool</PackageId>
+    <PackageId>DotBlur.GlobalTool</PackageId>
     <PackageLicense>MIT</PackageLicense>
     <PackageOutputPath>..</PackageOutputPath>
     <PackageProjectUrl>https://github.com/obfuscar/obfuscar</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/obfuscar/obfuscar/releases</PackageReleaseNotes>
     <PackageTags>obfuscar,obfuscation</PackageTags>
-    <Product>Obfuscar Global Tools build</Product>
+    <Product>DotBlur Global Tools build</Product>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/obfuscar/obfuscar</RepositoryUrl>
-    <ToolCommandName>obfuscar.console</ToolCommandName>
+    <ToolCommandName>dotblur.console</ToolCommandName>
     <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
 
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>

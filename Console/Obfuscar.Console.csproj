@@ -15,6 +15,7 @@
 
   <PropertyGroup>
     <DocumentationFile>$(OutDir)$(RootNamespace).xml</DocumentationFile>
+    <AssemblyName>DotBlur.Console</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -42,3 +42,5 @@ T4MVC.cs
 .vs
 /local
 nuget.exe
+/Baml/Baml.xml
+/Obfuscar/Obfuscar.xml
