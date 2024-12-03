@@ -41,7 +41,8 @@ namespace Obfuscar
             Console.WriteLine("DotBlur Console is a specific fork of Obfuscar (https://www.obfuscar.com)");
             Console.WriteLine("(C) 2007-2024, Ryan Williams and other contributors.");
             Console.WriteLine();
-            Console.WriteLine("dotblur.exe [Options] [project_file] [project_file]");
+            Console.WriteLine("DotBlur.Console.exe [Options] [project_file] [project_file]");
+            Console.WriteLine();
             Console.WriteLine("Options:");
             optionSet.WriteOptionDescriptions(Console.Out);
         }
