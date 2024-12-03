@@ -1,34 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <Authors>Ryan Williams, and other contributors.</Authors>
+    <Company>LeXtudio</Company>
+    <Copyright>Copyright (c) 2007 Ryan Williams. Copyright (c) 2009-2024 Calvin Rien, Lex Li, RemObjects and other contributors.</Copyright>
+    <Description>Obfuscar is a basic obfuscator for .NET assemblies. It uses massive overloading to rename metadata in .NET assemblies (including the names of methods, properties, events, fields, types and namespaces) to a minimal set, distinguishable in most cases only by signature.</Description>
+    <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <!-- detection SDK version -->
+    <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <PackageIcon>Potion-icon.png</PackageIcon>
+    <PackageId>Obfuscar.GlobalTool</PackageId>
+    <PackageLicense>MIT</PackageLicense>
+    <PackageOutputPath>..</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/obfuscar/obfuscar</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/obfuscar/obfuscar/releases</PackageReleaseNotes>
+    <PackageTags>obfuscar,obfuscation</PackageTags>
+    <Product>Obfuscar Global Tools build</Product>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/obfuscar/obfuscar</RepositoryUrl>
+    <ToolCommandName>obfuscar.console</ToolCommandName>
+    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
+
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>
     <IsNet80Supported Condition="'$(ParsedSdkVersion)' &gt;= '8.0'">true</IsNet80Supported>
     <IsNet90Supported Condition="'$(ParsedSdkVersion)' &gt;= '9.0'">true</IsNet90Supported>
     <TargetFrameworks Condition="'$(IsNet80Supported)' == 'true'">$(TargetFrameworks);net8.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet90Supported)' == 'true'">$(TargetFrameworks);net9.0</TargetFrameworks>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>obfuscar.console</ToolCommandName>
-    <PackageOutputPath>..</PackageOutputPath>
-    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
+  </PropertyGroup>
 
-    <PackageId>Obfuscar.GlobalTool</PackageId>
-    <Authors>Ryan Williams, and other contributors.</Authors>
-    <Company>LeXtudio</Company>
-    <Product>Obfuscar Global Tools build</Product>
-    <Description>Obfuscar is a basic obfuscator for .NET assemblies. It uses massive overloading to rename metadata in .NET assemblies (including the names of methods, properties, events, fields, types and namespaces) to a minimal set, distinguishable in most cases only by signature.</Description>
-    <PackageReleaseNotes>https://github.com/obfuscar/obfuscar/releases</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/obfuscar/obfuscar</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/obfuscar/obfuscar</PackageProjectUrl>
-    <PackageIcon>Potion-icon.png</PackageIcon>
-    <PackageLicense>MIT</PackageLicense>
-    <Copyright>Copyright (c) 2007 Ryan Williams. Copyright (c) 2009-2024 Calvin Rien, Lex Li, RemObjects and other contributors.</Copyright>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>obfuscar,obfuscation</PackageTags>
-    <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
+  <PropertyGroup>
+    <DocumentationFile>$(OutDir)$(RootNamespace).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

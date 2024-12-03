@@ -7,6 +7,10 @@
     <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DocumentationFile>$(OutDir)$(RootNamespace).xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="$(TargetFramework) == 'net8.0'">
     <Nullable>enable</Nullable>
   </PropertyGroup>

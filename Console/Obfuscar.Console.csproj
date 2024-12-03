@@ -1,15 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <TargetFramework>net48</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Obfuscar</RootNamespace>
     <ApplicationIcon>..\Raindropmemory-Legendora-Potion.ico</ApplicationIcon>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
     <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Obfuscar</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>$(OutDir)$(RootNamespace).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
