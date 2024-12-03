@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 
 namespace Obfuscar
 {
+    /// <summary>
+    /// Obfuscar exception.
+    /// </summary>
     [Serializable]
     public class ObfuscarException : Exception
     {
@@ -35,6 +38,7 @@ namespace Obfuscar
         /// <summary>
         /// Creates a <see cref="ObfuscarException"/> instance with a specific <see cref="string"/> and an <see cref="Exception"/>.
         /// </summary>
+        /// <param name="messageCode">The message code.</param>
         /// <param name="message">Message</param>
         /// <param name="inner">Inner exception</param>
         public ObfuscarException(string messageCode, string message, Exception inner): base(message, inner)

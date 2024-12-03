@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace Obfuscar.Helpers
 {
+    /// <summary>
+    /// Assembly definition extension methods.
+    /// </summary>
     public static class AssemblyDefinitionExtensions
     {
         public static string? GetPortableProfileDirectory(this AssemblyDefinition assembly)

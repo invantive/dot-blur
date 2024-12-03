@@ -52,6 +52,9 @@ namespace System.Diagnostics.CodeAnalysis
 
 namespace System.Runtime.Versioning
 {
+    /// <summary>
+    /// Base type for all platform-specific API attributes.
+    /// </summary>
     public abstract class OSPlatformAttribute : Attribute
     {
         private protected OSPlatformAttribute(string platformName)
@@ -59,11 +62,28 @@ namespace System.Runtime.Versioning
             this.PlatformName = platformName;
         }
 
+        /// <summary>
+        /// Gets or sets the platform name.
+        /// </summary>
         public string PlatformName { get; }
     }
 
+    /// <summary>
+    /// Records the operating system (and minimum version) that supports an API. Multiple attributes can be
+    /// applied to indicate support on multiple operating systems.
+    /// </summary>
+    /// <remarks>
+    /// Callers can apply a <see cref="SupportedOSPlatformAttribute " />
+    /// or use guards to prevent calls to APIs on unsupported operating systems.
+    ///
+    /// A given platform should only be specified once.
+    /// </remarks>
     public sealed class SupportedOSPlatformAttribute : OSPlatformAttribute
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="platformName">The platform name.</param>
         public SupportedOSPlatformAttribute(string platformName) : base(platformName)
         {
         }
