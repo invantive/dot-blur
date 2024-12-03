@@ -38,7 +38,7 @@ using System.Xml.Linq;
 
 namespace Obfuscar
 {
-    class Project
+    internal class Project
     {
         public List<AssemblyInfo> AssemblyList { get; } = new List<AssemblyInfo>();
         public List<AssemblyInfo> CopyAssemblyList { get; } = new List<AssemblyInfo>();
@@ -47,7 +47,7 @@ namespace Obfuscar
         private readonly Variables vars = new Variables();
         private readonly List<string> assemblySearchPaths = new List<string>();
 
-        Settings? settings;
+        private Settings? settings;
 
         // FIXME: Figure out why this exists if it is never used.
         //private RSA keyvalue;

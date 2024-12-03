@@ -11,6 +11,11 @@ namespace Obfuscar.Helpers
     /// </summary>
     public static class AssemblyDefinitionExtensions
     {
+        /// <summary>
+        /// Get the portable profile directory.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>The portable profile directory.</returns>
         public static string? GetPortableProfileDirectory(this AssemblyDefinition assembly)
         {
             foreach (CustomAttribute customAttribute in assembly.CustomAttributes)
@@ -61,6 +66,11 @@ namespace Obfuscar.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Gets whether the assembly definition is marked to be renamed.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>True if the assembly definition is marked to be renamed. Otherwise false.</returns>
         public static bool MarkedToRename(this AssemblyDefinition assembly)
         {
             foreach (CustomAttribute customAttribute in assembly.CustomAttributes)
@@ -77,7 +87,11 @@ namespace Obfuscar.Helpers
             return true;
         }
 
-        public static bool CleanAttributes(this AssemblyDefinition assembly)
+        /// <summary>
+        /// Clean attributes.
+        /// </summary>
+        /// <param name="assembly">The assembly to clean.</param>
+        public static void CleanAttributes(this AssemblyDefinition assembly)
         {
             for (int i = 0; i < assembly.CustomAttributes.Count; i++)
             {
@@ -91,8 +105,6 @@ namespace Obfuscar.Helpers
                     }
                 }
             }
-
-            return true;
         }
     }
 }
