@@ -734,6 +734,7 @@ namespace Obfuscar
             try
             {
                 bool readSymbols = this.project.Settings.RegenerateDebugInfo && System.IO.File.Exists(System.IO.Path.ChangeExtension(filename, "pdb"));
+
                 try
                 {
                     this.Definition = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters

@@ -72,8 +72,6 @@ namespace Obfuscar
 
         private void Initialize()
         {
-            this.Settings = new Settings(this.vars);
-
             string? keyFileName = this.Settings.KeyFile;
             string? keyFilePassword = this.Settings.KeyFilePassword;
             string? keyContainerName = this.Settings.KeyContainer;
@@ -219,6 +217,12 @@ namespace Obfuscar
         private static void FromXmlReadNode(XElement reader, Project project)
         {
             ReadVariables(reader, project);
+
+            //
+            // Initialize settings as soons as possible.
+            //
+            project.Settings = new Settings(project.vars);
+
             ReadIncludeTags(reader, project);
             ReadAssemblySearchPath(reader, project);
             ReadModules(reader, project);
@@ -340,10 +344,11 @@ namespace Obfuscar
 
         private static List<string> ReadModuleGroupPattern(string name, XElement module, Project project)
         {
-            return (from i in module.Elements(name)
-                    let value = project.vars.Replace(i.Value)
-                    where !string.IsNullOrWhiteSpace(value)
-                    select value).ToList();
+            return module.Elements(name)
+                         .Select(e => project.vars.Replace(e.Value))
+                         .Where(s => !string.IsNullOrWhiteSpace(s))
+                         .ToList()
+                         ;
         }
 
         private static void ReadModule(string file, XElement module, Project project)
