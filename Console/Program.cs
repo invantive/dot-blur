@@ -38,12 +38,12 @@ namespace Obfuscar
     {
         private static void ShowHelp(OptionSet optionSet)
         {
-            Console.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_con_fork_obfuscar));
-            Console.WriteLine(string.Format("(C) 2007-{0}, Ryan Williams and other contributors.", DateTime.UtcNow.Year));
-            Console.WriteLine();
-            Console.WriteLine("DotBlur.Console.exe [Options] [project_file] [project_file]");
-            Console.WriteLine();
-            Console.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_options_colon));
+            Log.OutputLine(MessageCodes.dbr096, Translations.GetTranslationOfKey(TranslationKeys.db_con_fork_obfuscar));
+            Log.OutputLine(MessageCodes.dbr097, string.Format("(C) 2007-{0}, Ryan Williams and other contributors.", DateTime.UtcNow.Year));
+            Log.OutputLine(MessageCodes.dbr098, null);
+            Log.OutputLine(MessageCodes.dbr099, "DotBlur.Console.exe [Options] [project_file] [project_file]");
+            Log.OutputLine(MessageCodes.dbr100, null);
+            Log.OutputLine(MessageCodes.dbr101, Translations.GetTranslationOfKey(TranslationKeys.db_options_colon));
             optionSet.WriteOptionDescriptions(Console.Out);
         }
 
@@ -61,9 +61,9 @@ namespace Obfuscar
 
             string fullVersion = string.Concat(originalObfuscarBaseVersion, ".", dotBlurPatchLevel);
 
-            Console.WriteLine();
-            Console.WriteLine(String.Format(Translations.GetTranslationOfKey(TranslationKeys.db_con_title_par2), fullVersion, DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")));
-            Console.WriteLine();
+            Log.OutputLine(MessageCodes.dbr105, null);
+            Log.OutputLine(MessageCodes.dbr106, String.Format(Translations.GetTranslationOfKey(TranslationKeys.db_con_title_par2), fullVersion, DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")));
+            Log.OutputLine(MessageCodes.dbr107, null);
 
             bool showHelp = false;
             bool showVersion = false;
@@ -85,7 +85,7 @@ namespace Obfuscar
             }
             catch (OptionException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.OutputLine(MessageCodes.dbr103, ex.Message);
                 return 1;
             }
 
@@ -97,7 +97,7 @@ namespace Obfuscar
 
             if (showVersion)
             {
-                Console.WriteLine(fullVersion);
+                Log.OutputLine(MessageCodes.dbr104, fullVersion);
                 return 0;
             }
 
@@ -112,45 +112,42 @@ namespace Obfuscar
             {
                 try
                 {
-                    Log.OutputLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_loading_pjt_par1), project));
+                    Log.OutputLine(MessageCodes.dbr072, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_loading_pjt_par1), project));
                     Obfuscator obfuscator = new Obfuscator(project);
 
                     obfuscator.RunRules();
 
-                    Log.OutputLine($"Completed, {(Environment.TickCount - start) / 1000.0:f2} secs.");
+                    Log.OutputLine(MessageCodes.dbr071, $"Completed, {(Environment.TickCount - start) / 1000.0:f2} secs.");
                 }
                 catch (ObfuscarException e)
                 {
-                    Console.WriteLine();
-                    Console.Error.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
+                    Log.OutputLine(MessageCodes.dbr067, null);
+                    Log.OutputLine(MessageCodes.dbr066, Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
 
-                    Console.Error.Write(e.MessageCode);
-                    Console.Error.Write(": ");
-
-                    Console.Error.WriteLine(e.Message);
+                    Log.OutputLine(MessageCodes.dbr074, string.Concat(e.MessageCode, ": ", e.Message));
 
                     if (!string.IsNullOrEmpty(e.Hint))
                     {
-                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_hint_colon_par1), e.Hint));
+                        Log.OutputLine(MessageCodes.dbr073, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_hint_colon_par1), e.Hint));
                     }
 
                     if (e.InnerException != null)
                     {
-                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
+                        Log.OutputLine(MessageCodes.dbr075, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
                     return 1;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine();
-                    Console.Error.WriteLine(Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
+                    Log.OutputLine(MessageCodes.dbr102, null);
+                    Log.OutputLine(MessageCodes.dbr076, Translations.GetTranslationOfKey(TranslationKeys.db_error_processing_colon));
 
-                    Console.Error.WriteLine(e.Message);
+                    Log.OutputLine(MessageCodes.dbr077, e.Message);
 
                     if (e.InnerException != null)
                     {
-                        Console.Error.WriteLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
+                        Log.OutputLine(MessageCodes.dbr078, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
                     return 1;

@@ -103,39 +103,39 @@ namespace Obfuscar
 
             if (hideStrings)
             {
-                Log.OutputLine("Phase: hide strings.");
+                Log.OutputLine(MessageCodes.dbr052, "Phase: hide strings.");
                 this.HideStrings();
             }
             else
             {
-                Log.OutputLine("Phase: NOT hiding strings.");
+                Log.OutputLine(MessageCodes.dbr053, "Phase: NOT hiding strings.");
             }
 
-            Log.Output("Phase: rename fields.");
+            Log.Output(MessageCodes.dbr047, "Phase: rename fields.");
             this.RenameFields();
 
-            Log.Output("Phase: rename parameters.");
+            Log.Output(MessageCodes.dbr048, "Phase: rename parameters.");
             this.RenameParams();
 
-            Log.Output("Phase: rename properties.");
+            Log.Output(MessageCodes.dbr049, "Phase: rename properties.");
             this.RenameProperties();
 
-            Log.Output("Phase: rename events.");
+            Log.Output(MessageCodes.dbr050, "Phase: rename events.");
             this.RenameEvents();
 
-            Log.Output("Phase: rename methods.");
+            Log.Output(MessageCodes.dbr051, "Phase: rename methods.");
             this.RenameMethods();
 
-            Log.Output("Phase: rename types.");
+            Log.Output(MessageCodes.dbr054, "Phase: rename types.");
             this.RenameTypes();
 
-            Log.Output("Phase: post processing.");
+            Log.Output(MessageCodes.dbr055, "Phase: post processing.");
             this.PostProcessing();
 
-            Log.OutputLine("Phase: saving assemblies.");
+            Log.OutputLine(MessageCodes.dbr056, "Phase: saving assemblies.");
             this.SaveAssemblies();
 
-            Log.OutputLine("Phase: save mapping file.");
+            Log.OutputLine(MessageCodes.dbr057, "Phase: save mapping file.");
             this.SaveMapping();
         }
 
@@ -165,16 +165,16 @@ namespace Obfuscar
 
             NameMaker.DetermineChars(this.Project.Settings);
 
-            Log.OutputLine("Loading assemblies.");
+            Log.OutputLine(MessageCodes.dbr116, "Loading assemblies.");
 
-            Log.Output("Extra framework folders: ");
+            Log.Output(MessageCodes.dbr059, "Extra framework folders: ");
 
-            foreach (string lExtraPath in this.Project.ExtraPaths ?? [])
+            foreach (string extraPath in this.Project.ExtraPaths ?? [])
             {
-                Log.Output(lExtraPath + ", ");
+                Log.Output(MessageCodes.dbr058, extraPath + ", ");
             }
 
-            Log.OutputLine();
+            Log.OutputLine(MessageCodes.dbr060, null);
 
             this.Project.LoadAssemblies();
         }
@@ -215,7 +215,7 @@ namespace Obfuscar
                 }
             }
 
-            Log.OutputLine($"There are {this.Project.AssemblyList.Count:N0} assemblies in the project to save.");
+            Log.OutputLine(MessageCodes.dbr122, $"There are {this.Project.AssemblyList.Count:N0} assemblies in the project to save.");
 
             //
             // Save the modified assemblies.
@@ -271,7 +271,7 @@ namespace Obfuscar
                                 info.Definition.Write(outName, parameters);
                                 info.OutputFileName = outName;
 
-                                Log.OutputLine($"{fileName} save using project keypair to '{outName}'.");
+                                Log.OutputLine(MessageCodes.dbr120, $"{fileName} save using project keypair to '{outName}'.");
                             }
                             catch (Exception ex)
                             {
@@ -289,7 +289,7 @@ namespace Obfuscar
                                 info.Definition.Write(outName, parameters);
                                 info.OutputFileName = outName;
 
-                                Log.OutputLine($"{fileName} not saved using project keypair to '{outName}' due to {ex}.");
+                                Log.OutputLine(MessageCodes.dbr117, $"{fileName} not saved using project keypair to '{outName}' due to {ex}.");
                             }
                         }
                         else if (!string.IsNullOrEmpty(keyContainerName))
@@ -301,7 +301,7 @@ namespace Obfuscar
 
                             MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, keyContainerName);
 
-                            Log.OutputLine($"{fileName} signed as '{outName}' using container '{keyContainerName}'.");
+                            Log.OutputLine(MessageCodes.dbr118, $"{fileName} signed as '{outName}' using container '{keyContainerName}'.");
                         }
                         else if (!info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
                         {
@@ -312,7 +312,7 @@ namespace Obfuscar
                             info.Definition.Write(outName, parameters);
                             info.OutputFileName = outName;
 
-                            Log.OutputLine($"{fileName} saved as is in '{outName}'; was originally not strong name signed.");
+                            Log.OutputLine(MessageCodes.dbr119, $"{fileName} saved as is in '{outName}'; was originally not strong name signed.");
                         }
                         else
                         {
@@ -343,7 +343,7 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.dbr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
                             }
 
-                            Log.OutputLine($"Start signing '{fileName}' using sign tool '{signToolExePath}'.");
+                            Log.OutputLine(MessageCodes.dbr113, $"Start signing '{fileName}' using sign tool '{signToolExePath}'.");
 
                             if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
                             {
@@ -379,7 +379,7 @@ namespace Obfuscar
                                 signProcessResult.AppendLine(line);
                             }
 
-                            Log.OutputLine(signProcessResult.ToString());
+                            Log.OutputLine(MessageCodes.dbr125, signProcessResult.ToString());
 
                             const int SignTimeOutMs = 60_000;
 
@@ -388,12 +388,12 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.dbr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
                             }
 
-                            Log.OutputLine($"'{fileName}' was signed.");
+                            Log.OutputLine(MessageCodes.dbr123, $"'{fileName}' was signed.");
                         }
                     }
                     else
                     {
-                        Log.OutputLine($"'{fileName}' has no public key; save as is.");
+                        Log.OutputLine(MessageCodes.dbr124, $"'{fileName}' has no public key; save as is.");
 
                         info.Definition.Write(outName, parameters);
                         info.OutputFileName = outName;
@@ -406,8 +406,8 @@ namespace Obfuscar
                         throw;
                     }
 
-                    Log.Output($"\nFailed to save {fileName}");
-                    Log.Output($"\n{e.GetType().Name}: {e.Message}");
+                    Log.Output(MessageCodes.dbr061, $"\nFailed to save {fileName}");
+                    Log.Output(MessageCodes.dbr062, $"\n{e.GetType().Name}: {e.Message}");
 
                     Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
 
@@ -415,11 +415,11 @@ namespace Obfuscar
                     {
                         string name = match.Groups["name"].Value;
 
-                        Log.Output($"\n{name} might be one of:");
+                        Log.OutputLine(MessageCodes.dbr063, $"{name} might be one of:");
 
                         this.LogMappings(name);
 
-                        Log.Output("\nHint: you might need to add a SkipType for an enum above.");
+                        Log.OutputLine(MessageCodes.dbr064, "Hint: you might need to add a SkipType for an enum above.");
                     }
                 }
             }
@@ -467,7 +467,7 @@ namespace Obfuscar
         {
             foreach ((TypeKey key, string statusText) in this.Mapping.FindClasses(name))
             {
-                Log.Output($"\n{key.Fullname} => {statusText}");
+                Log.Output(MessageCodes.dbr065, "{key.Fullname} => {statusText}");
             }
         }
 

@@ -604,12 +604,12 @@ namespace Obfuscar
 
                     if (toRemove.Count == 0)
                     {
-                        Console.Error.WriteLine("Still in pool:");
+                        Log.OutputLine(MessageCodes.dbr080, "Still in pool:");
 
                         foreach (Node<TypeDefinition> node in pool)
                         {
                             string? parents = string.Join(", ", node.Parents.Select(p => p.Item?.FullName + " " + p.Item?.Scope.Name));
-                            Console.Error.WriteLine("{0} {1} : [{2}]", node.Item?.FullName, node.Item?.Scope.Name, parents);
+                            Log.OutputLine(MessageCodes.dbr068, string.Format("{0} {1} : [{2}]", node.Item?.FullName, node.Item?.Scope.Name, parents));
                         }
 
                         throw new ObfuscarException(MessageCodes.dbr019, "Cannot clean pool.");

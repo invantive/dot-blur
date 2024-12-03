@@ -12,18 +12,20 @@ namespace Obfuscar
         /// <summary>
         /// Write a line of text with line-end to output.
         /// </summary>
+        /// <param name="messageCode">Message code.</param>
         /// <param name="output">Text.</param>
-        public static void OutputLine(string? output = null)
+        public static void OutputLine(string messageCode, string? output)
         {
-            Output(output, true);
+            Output(messageCode, output, true);
         }
 
         /// <summary>
         /// Write a line of text to output.
         /// </summary>
+        /// <param name="messageCode">Message code.</param>
         /// <param name="output">Text.</param>
         /// <param name="addNewLine">Whether to append a new line.</param>
-        public static void Output(string? output, bool addNewLine = false)
+        public static void Output(string messageCode, string? output, bool addNewLine = false)
         {
             string? line;
 
@@ -33,12 +35,12 @@ namespace Obfuscar
 
                 if (addNewLine)
                 {
-                    line = String.Concat(dateTxt, ": ", output, "\n");
+                    line = String.Concat(dateTxt, ": ", messageCode, output, "\n");
                     isAtNewLine = true;
                 }
                 else
                 {
-                    line = String.Concat(dateTxt, ": ", output);
+                    line = String.Concat(dateTxt, ": ", messageCode, output);
                     isAtNewLine = output?.EndsWith("\n") ?? false;
                 }
             }

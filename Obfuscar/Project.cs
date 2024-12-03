@@ -89,7 +89,7 @@ namespace Obfuscar
             {
                 if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
                 {
-                    Log.OutputLine("No key file and no key container configured. Use no key pair.");
+                    Log.OutputLine(MessageCodes.dbr110, "No key file and no key container configured. Use no key pair.");
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace Obfuscar
 
                         if (Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                         {
-                            Log.OutputLine($"Create key pair from '{keyFileName}' with password.");
+                            Log.OutputLine(MessageCodes.dbr109, $"Create key pair from '{keyFileName}' with password.");
 
                             if (string.IsNullOrEmpty(keyFileName))
                             {
@@ -110,13 +110,13 @@ namespace Obfuscar
                         }
                         else if (!string.IsNullOrEmpty(keyFileName))
                         {
-                            Log.OutputLine($"Create key pair from '{keyFileName}' with no password.");
+                            Log.OutputLine(MessageCodes.dbr070, $"Create key pair from '{keyFileName}' with no password.");
 
                             keyPair = File.ReadAllBytes(keyFileName);
                         }
                         else
                         {
-                            Log.OutputLine($"Create no key pair from '{keyFileName}'.");
+                            Log.OutputLine(MessageCodes.dbr069, $"Create no key pair from '{keyFileName}'.");
 
                             keyPair = null;
                         }
@@ -143,13 +143,13 @@ namespace Obfuscar
 
                 if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
                 {
-                    Log.OutputLine("No key file and no key container configured. Use no RSA key value.");
+                    Log.OutputLine(MessageCodes.dbr111, "No key file and no key container configured. Use no RSA key value.");
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(keyContainerName))
                     {
-                        Log.OutputLine($"Create RSA key value from '{keyContainerName}'.");
+                        Log.OutputLine(MessageCodes.dbr079, $"Create RSA key value from '{keyContainerName}'.");
 
                         CspParameters cp = new CspParameters();
                         cp.KeyContainerName = keyContainerName;
@@ -158,7 +158,7 @@ namespace Obfuscar
                     }
                     else
                     {
-                        Log.OutputLine($"Create no RSA key value from '{keyContainerName}'.");
+                        Log.OutputLine(MessageCodes.dbr112, $"Create no RSA key value from '{keyContainerName}'.");
                     }
                 }
             }
@@ -361,7 +361,7 @@ namespace Obfuscar
             }
             else
             {
-                Console.WriteLine("Processing assembly: " + info.Definition.Name.FullName);
+                Log.OutputLine(MessageCodes.dbr108, "Processing assembly: " + info.Definition.Name.FullName);
                 project.AssemblyList.Add(info);
                 project.assemblyMap[info.Name] = info;
             }
