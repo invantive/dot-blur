@@ -69,7 +69,7 @@ namespace Obfuscar
             try
             {
                 XDocument document = XDocument.Load(projfile);
-                this.LoadFromReader(document, Path.GetDirectoryName(projfile));
+                this.LoadFromReader(document, projfile);
             }
             catch (IOException e)
             {

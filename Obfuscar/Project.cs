@@ -191,11 +191,19 @@ namespace Obfuscar
         {
             Project project = new Project();
 
-            project.vars.Add(Settings.SpecialVariableProjectFileDirectory, string.IsNullOrEmpty(projectFileDirectory) ? "." : projectFileDirectory);
+            string? projectDirectory = Path.GetDirectoryName(projectFileDirectory);
+                
+            project.vars.Add(Settings.SpecialVariableProjectFileDirectory, string.IsNullOrEmpty(projectDirectory) ? "." : projectDirectory);
 
-            if (reader.Root?.Name != "Obfuscator")
+            const string ROOT_TAG = "DotBlur";
+
+            if (reader.Root?.Name != ROOT_TAG)
             {
-                throw new ObfuscarException(MessageCodes.dbr004, "XML configuration file should have <Obfuscator> root tag.", $"Please correct the contents of '{projectFileDirectory}'.");
+                throw new ObfuscarException
+                ( MessageCodes.dbr004
+                , string.Format("XML configuration file should have <{0}> root tag.", ROOT_TAG)
+                , string.Format("Please correct the contents of the file '{0}'.", projectFileDirectory)
+                );
             }
 
             FromXmlReadNode(reader.Root, project);
