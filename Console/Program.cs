@@ -54,21 +54,23 @@ namespace Obfuscar
         /// <returns>Exit code.</returns>
         private static int Main(string[] args)
         {
+            Translations.Configure();
+
             string originalObfuscarBaseVersion = "2.2.40";
             string dotBlurPatchLevel = "6";
 
             string fullVersion = string.Concat(originalObfuscarBaseVersion, ".", dotBlurPatchLevel);
 
             Console.WriteLine();
-            Console.WriteLine($"*** DotBlur Console ({fullVersion}) on {DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")} (UTC) ***");
+            Console.WriteLine(String.Format(Translations.GetTranslationOfKey(TranslationKeys.db_con_title_par2), fullVersion, DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss")));
             Console.WriteLine();
 
             bool showHelp = false;
             bool showVersion = false;
 
             OptionSet p = new OptionSet()
-                .Add("h|?|help", "Print this help information.", delegate(string v) { showHelp = v != null; })
-                .Add("V|version", "Display version number of this application.", delegate(string v) { showVersion = v != null; });
+                .Add("h|?|help", Translations.GetTranslationOfKey(TranslationKeys.db_help_info), delegate (string v) { showHelp = v != null; })
+                .Add("V|version", Translations.GetTranslationOfKey(TranslationKeys.db_display_version), delegate (string v) { showVersion = v != null; });
 
             if (args.Length == 0)
             {
@@ -110,7 +112,7 @@ namespace Obfuscar
             {
                 try
                 {
-                    Log.OutputLine($"Loading project {project}.");
+                    Log.OutputLine(string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_loading_pjt_par1), project));
                     Obfuscator obfuscator = new Obfuscator(project);
 
                     obfuscator.RunRules();
