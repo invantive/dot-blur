@@ -1,4 +1,6 @@
-# Obfuscar, Minimalistic Obfuscation Tool for .NET Assemblies
+# DotBlur, Minimalistic Obfuscation Tool for .NET Assemblies based on Obfuscar
+
+DotBlur is a fork from Obfuscar. The name was altered to avoid confusion during use.
 
 [![NuGet Version](https://img.shields.io/nuget/v/Obfuscar.svg?style=flat-square)](https://www.nuget.org/packages/Obfuscar/)
 [![Build status](https://img.shields.io/github/actions/workflow/status/obfuscar/obfuscar/windows.yml?style=flat-square)](https://github.com/obfuscar/obfuscar/actions/workflows/windows.yml)
