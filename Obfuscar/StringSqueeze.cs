@@ -436,7 +436,7 @@ namespace Obfuscar
             worker.ReplaceAndFixReferences(method.Body, oldToNewStringInstructions);
 
             // Optimize method back
-            if (project.Settings.Optimize)
+            if (project.Settings.OptimizeMethods)
             {
                 method.Body.Optimize();
             }

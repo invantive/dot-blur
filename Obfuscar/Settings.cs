@@ -77,7 +77,7 @@ namespace Obfuscar
             this.UseUnicodeNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseUnicodeNames, "false"));
             this.UseKoreanNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseKoreanNames, "false"));
             this.HideStrings = XmlConvert.ToBoolean(vars.GetValue(VariableHideStrings, "true"));
-            this.Optimize = XmlConvert.ToBoolean(vars.GetValue(VariableOptimizeMethods, "true"));
+            this.OptimizeMethods = XmlConvert.ToBoolean(vars.GetValue(VariableOptimizeMethods, "true"));
             this.SuppressIldasm = XmlConvert.ToBoolean(vars.GetValue(VariableSuppressIldasm, "true"));
 
             this.XmlMapping = XmlConvert.ToBoolean(vars.GetValue(VariableXmlMapping, "false"));
@@ -96,56 +96,128 @@ namespace Obfuscar
 
         public bool RegenerateDebugInfo { get; }
 
+        /// <summary>
+        /// Directory containing the input assemblies, such as c:\\in.
+        /// </summary>
         public string InPath { get; }
 
+        /// <summary>
+        /// Directory to contain the obfuscated assemblies, such as c:\\out.
+        /// </summary>
         public string OutPath { get; }
 
+        /// <summary>
+        /// Whether to only obfuscate marked items. All items are obfuscated when set to false.
+        /// </summary>
         public bool MarkedOnly { get; }
 
+        /// <summary>
+        /// Obfuscation log file path (mapping.txt).
+        /// </summary>
         public string LogFilePath { get; }
 
+        /// <summary>
+        /// Whether to rename fields.
+        /// </summary>
         public bool RenameFields { get; }
 
+        /// <summary>
+        /// Whether to rename properties.
+        /// </summary>
         public bool RenameProperties { get; }
 
+        /// <summary>
+        /// Whether to rename events.
+        /// </summary>
         public bool RenameEvents { get; }
 
+        /// <summary>
+        /// Whether to exclude public types and type members from obfuscation.
+        /// </summary>
         public bool KeepPublicApi { get; }
 
+        /// <summary>
+        /// Whether to include private types and type members from obfuscation.
+        /// </summary>
         public bool HidePrivateApi { get; }
 
+        /// <summary>
+        /// Whether to reuse obfuscated names.
+        /// </summary>
         public bool ReuseNames { get; }
 
+        /// <summary>
+        /// Whether to hide strings.
+        /// </summary>
         public bool HideStrings { get; }
 
-        public bool Optimize { get; }
+        /// <summary>
+        /// Whether to optimize methods.
+        /// </summary>
+        public bool OptimizeMethods { get; }
 
+        /// <summary>
+        /// Whether to include an attribute for ILDASM to indicate that assemblies are obfuscated.
+        /// </summary>
         public bool SuppressIldasm { get; }
 
+        /// <summary>
+        /// Whether the log file should be of XML format.
+        /// </summary>
         public bool XmlMapping { get; }
 
+        /// <summary>
+        /// Whether to use Unicode characters as obfuscated names.
+        /// </summary>
         public bool UseUnicodeNames { get; }
 
+        /// <summary>
+        /// Whether to use Korean characters as obfuscated names.
+        /// </summary>
         public bool UseKoreanNames { get; }
 
+        /// <summary>
+        /// Whether to analyze XAML related metadata for obfuscation.
+        /// </summary>
         public bool AnalyzeXaml { get; }
 
         public string CustomChars { get; }
 
         public string? ExtraFrameworkFolders { get; }
 
+        /// <summary>
+        /// Key container name.
+        /// </summary>
         public string? KeyContainer { get; }
 
+        /// <summary>
+        /// Key file path, such as c:\folder\key.pfx.
+        /// </summary>
         public string? KeyFile { get; }
 
+        /// <summary>
+        /// Key file password.
+        /// </summary>
         public string? KeyFilePassword { get; }
 
+        /// <summary>
+        /// The path to signtool.exe.
+        /// </summary>
         public string? SignToolExe { get; }
 
+        /// <summary>
+        /// Whether to sign assemblies.
+        /// </summary>
         public bool SignAssembly { get; }
 
+        /// <summary>
+        /// Signing file digest algorithm.
+        /// </summary>
         public string? SigningFileDigestAlgorithm { get; }
 
+        /// <summary>
+        /// Signing time stamp server URL.
+        /// </summary>
         public string? SigningTimeStampServerUrl { get; }
     }
 }

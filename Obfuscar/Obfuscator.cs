@@ -1676,7 +1676,7 @@ namespace Obfuscar
                     foreach (MethodDefinition method in type.Methods)
                     {
                         method.CleanAttributes();
-                        if (method.HasBody && this.Project.Settings.Optimize)
+                        if (method.HasBody && this.Project.Settings.OptimizeMethods)
                         {
                             method.Body.Optimize();
                         }
