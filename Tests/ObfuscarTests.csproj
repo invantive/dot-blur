@@ -14,6 +14,7 @@
     <EnableDefaultItems>false</EnableDefaultItems> <!-- Disable automatic inclusion of files -->
     <LangVersion>latest</LangVersion>
     <OutputType Condition="'$(TargetFramework)'!='net48'">Exe</OutputType>
+    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

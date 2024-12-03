@@ -9,6 +9,7 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
+    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

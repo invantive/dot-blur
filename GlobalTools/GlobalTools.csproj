@@ -13,6 +13,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>obfuscar.console</ToolCommandName>
     <PackageOutputPath>..</PackageOutputPath>
+    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
 
     <PackageId>Obfuscar.GlobalTool</PackageId>
     <Authors>Ryan Williams, and other contributors.</Authors>
