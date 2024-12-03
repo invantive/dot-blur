@@ -4,10 +4,8 @@
     <!-- detection SDK version -->
     <Nullable>enable</Nullable>
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>
-    <IsNet60Supported Condition="'$(ParsedSdkVersion)' &gt;= '6.0'">true</IsNet60Supported>
     <IsNet80Supported Condition="'$(ParsedSdkVersion)' &gt;= '8.0'">true</IsNet80Supported>
     <IsNet90Supported Condition="'$(ParsedSdkVersion)' &gt;= '9.0'">true</IsNet90Supported>
-    <TargetFrameworks Condition="'$(IsNet60Supported)' == 'true'">$(TargetFrameworks);net6.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet80Supported)' == 'true'">$(TargetFrameworks);net8.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet90Supported)' == 'true'">$(TargetFrameworks);net9.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows'">$(TargetFrameworks);net48</TargetFrameworks>
