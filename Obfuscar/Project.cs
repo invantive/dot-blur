@@ -106,7 +106,7 @@ namespace Obfuscar
                 {
                     try
                     {
-                        byte[]? kp;
+                        byte[]? keyPair;
 
                         if (Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                         {
@@ -117,22 +117,22 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.ofr024, $"'{Settings.VariableKeyFile}' is not set.");
                             }
 
-                            kp = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
+                            keyPair = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
                         }
                         else if (!string.IsNullOrEmpty(keyFileName))
                         {
                             Log.OutputLine($"Create key pair from '{keyFileName}' with no password.");
 
-                            kp = File.ReadAllBytes(keyFileName);
+                            keyPair = File.ReadAllBytes(keyFileName);
                         }
                         else
                         {
                             Log.OutputLine($"Create no key pair from '{keyFileName}'.");
 
-                            kp = null;
+                            keyPair = null;
                         }
 
-                        this.KeyPair = kp;
+                        this.KeyPair = keyPair;
                     }
                     catch (Exception ex)
                     {
