@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>annotations</Nullable>
     <TargetFrameworks>net8.0;net48</TargetFrameworks>
-    <!--WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors-->
+    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
     <DocumentationFile>$(OutDir)$(RootNamespace).xml</DocumentationFile>
   </PropertyGroup>
 

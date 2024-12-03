@@ -91,6 +91,9 @@ namespace Obfuscar
             this.LoadFromReader(reader, null);
         }
 
+        /// <summary>
+        /// Run rules.
+        /// </summary>
         public void RunRules()
         {
             //
@@ -129,6 +132,11 @@ namespace Obfuscar
             this.SaveMapping();
         }
 
+        /// <summary>
+        /// Create obfuscator from XML.
+        /// </summary>
+        /// <param name="xml">The XML to read.</param>
+        /// <returns>A new <see cref="Obfuscator">Obfuscator</see> instance.</returns>
         public static Obfuscator CreateFromXml(string xml)
         {
             XDocument document = XDocument.Load(new StringReader(xml));
@@ -1061,6 +1069,9 @@ namespace Obfuscar
             return nameGroup;
         }
 
+        /// <summary>
+        /// Rename properties.
+        /// </summary>
         public void RenameProperties()
         {
             // do nothing if it was requested not to rename
@@ -1178,6 +1189,9 @@ namespace Obfuscar
             this.Mapping.UpdateProperty(propertyKey, ObfuscationStatus.Renamed, newName);
         }
 
+        /// <summary>
+        /// Rename events.
+        /// </summary>
         public void RenameEvents()
         {
             // do nothing if it was requested not to rename
@@ -1244,6 +1258,9 @@ namespace Obfuscar
             delete.StatusText = skip;
         }
 
+        /// <summary>
+        /// Rename methods.
+        /// </summary>
         public void RenameMethods()
         {
             Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames = new Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>>();
@@ -1643,6 +1660,9 @@ namespace Obfuscar
             }
         }
 
+        /// <summary>
+        /// Do post processing actions.
+        /// </summary>
         public void PostProcessing()
         {
             foreach (AssemblyInfo info in this.Project.AssemblyList)
