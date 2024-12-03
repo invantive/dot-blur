@@ -2,6 +2,9 @@ using System;
 
 namespace Obfuscar
 {
+    /// <summary>
+    /// Logging utility.
+    /// </summary>
     public static class Log
     {
         private static bool isAtNewLine = true;
