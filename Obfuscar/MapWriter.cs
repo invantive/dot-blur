@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -391,13 +392,13 @@ namespace Obfuscar
 
         private void DumpClass(ObfuscatedClass classInfo)
         {
-            if (classInfo.Status != ObfuscationStatus.Renamed)
+            if (classInfo.Status == ObfuscationStatus.Skipped)
             {
                 this.writer.WriteStartElement("skippedClass");
                 this.writer.WriteAttributeString("name", classInfo.Name);
                 this.writer.WriteAttributeString("reason", classInfo.StatusText);
             }
-            else if (classInfo.Status == ObfuscationStatus.Skipped)
+            else if (classInfo.Status == ObfuscationStatus.Renamed)
             {
                 this.writer.WriteStartElement("renamedClass");
                 this.writer.WriteAttributeString("oldName", classInfo.Name);
@@ -405,81 +406,50 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr139, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr139, $"Status is expected to be either Renamed or Skipped instead of {classInfo.Status} of '{classInfo.Name}'.");
             }
 
             int numRenamed = 0;
-            foreach (KeyValuePair<MethodKey, ObfuscatedThing> method in classInfo.Methods)
+
+            foreach (KeyValuePair<MethodKey, ObfuscatedThing> method in classInfo.Methods.Where(x => x.Value.Status == ObfuscationStatus.Renamed))
             {
-                if (method.Value.Status == ObfuscationStatus.Renamed)
-                {
-                    this.DumpMethod(method.Key, method.Value);
-                    numRenamed++;
-                }
+                this.DumpMethod(method.Key, method.Value);
+                numRenamed++;
             }
 
-
-            foreach (KeyValuePair<MethodKey, ObfuscatedThing> method in classInfo.Methods)
+            foreach (KeyValuePair<MethodKey, ObfuscatedThing> method in classInfo.Methods.Where(x => x.Value.Status == ObfuscationStatus.Skipped))
             {
-                if (method.Value.Status == ObfuscationStatus.Skipped)
-                {
-                    this.DumpMethod(method.Key, method.Value);
-                }
+                this.DumpMethod(method.Key, method.Value);
             }
 
-
-            foreach (KeyValuePair<FieldKey, ObfuscatedThing> field in classInfo.Fields)
+            foreach (KeyValuePair<FieldKey, ObfuscatedThing> field in classInfo.Fields.Where(x => x.Value.Status == ObfuscationStatus.Renamed))
             {
-                if (field.Value.Status == ObfuscationStatus.Renamed)
-                {
-                    this.DumpField(this.writer, field.Key, field.Value);
-                }
+                this.DumpField(this.writer, field.Key, field.Value);
             }
 
-            //
-
-            foreach (KeyValuePair<FieldKey, ObfuscatedThing> field in classInfo.Fields)
+            foreach (KeyValuePair<FieldKey, ObfuscatedThing> field in classInfo.Fields.Where(x => x.Value.Status == ObfuscationStatus.Skipped))
             {
-                if (field.Value.Status == ObfuscationStatus.Skipped)
-                {
-                    this.DumpField(this.writer, field.Key, field.Value);
-                }
+                this.DumpField(this.writer, field.Key, field.Value);
             }
 
-
-            foreach (KeyValuePair<PropertyKey, ObfuscatedThing> field in classInfo.Properties)
+            foreach (KeyValuePair<PropertyKey, ObfuscatedThing> field in classInfo.Properties.Where(x => x.Value.Status == ObfuscationStatus.Renamed))
             {
-                if (field.Value.Status == ObfuscationStatus.Renamed)
-                {
-                    this.DumpProperty(this.writer, field.Key, field.Value);
-                }
+                this.DumpProperty(this.writer, field.Key, field.Value);
             }
 
-
-            foreach (KeyValuePair<PropertyKey, ObfuscatedThing> field in classInfo.Properties)
+            foreach (KeyValuePair<PropertyKey, ObfuscatedThing> field in classInfo.Properties.Where(x => x.Value.Status == ObfuscationStatus.Skipped))
             {
-                if (field.Value.Status == ObfuscationStatus.Skipped)
-                {
-                    this.DumpProperty(this.writer, field.Key, field.Value);
-                }
+                this.DumpProperty(this.writer, field.Key, field.Value);
             }
 
-
-            foreach (KeyValuePair<EventKey, ObfuscatedThing> field in classInfo.Events)
+            foreach (KeyValuePair<EventKey, ObfuscatedThing> field in classInfo.Events.Where(x => x.Value.Status == ObfuscationStatus.Renamed))
             {
-                if (field.Value.Status == ObfuscationStatus.Renamed)
-                {
-                    this.DumpEvent(this.writer, field.Key, field.Value);
-                }
+                this.DumpEvent(this.writer, field.Key, field.Value);
             }
 
-
-            foreach (KeyValuePair<EventKey, ObfuscatedThing> field in classInfo.Events)
+            foreach (KeyValuePair<EventKey, ObfuscatedThing> field in classInfo.Events.Where(x => x.Value.Status == ObfuscationStatus.Skipped))
             {
-                if (field.Value.Status == ObfuscationStatus.Skipped)
-                {
-                    this.DumpEvent(this.writer, field.Key, field.Value);
-                }
+                this.DumpEvent(this.writer, field.Key, field.Value);
             }
 
             this.writer.WriteEndElement();
@@ -489,6 +459,7 @@ namespace Obfuscar
         private void DumpMethod(MethodKey key, ObfuscatedThing info)
         {
             StringBuilder sb = new StringBuilder();
+
             sb.AppendFormat("{0}(", info.Name);
             for (int i = 0; i < key.Count; i++)
             {
@@ -510,13 +481,17 @@ namespace Obfuscar
                 this.writer.WriteEndElement();
                 this.writer.WriteString("\r\n");
             }
-            else
+            else if (info.Status == ObfuscationStatus.Skipped)
             {
                 this.writer.WriteStartElement("skippedMethod");
                 this.writer.WriteAttributeString("name", sb.ToString());
                 this.writer.WriteAttributeString("reason", info.StatusText);
                 this.writer.WriteEndElement();
                 this.writer.WriteString("\r\n");
+            }
+            else
+            {
+                throw new ObfuscarException(MessageCodes.dbr149, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
             }
         }
 
@@ -530,13 +505,17 @@ namespace Obfuscar
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
             }
-            else
+            else if (info.Status == ObfuscationStatus.Skipped)
             {
                 writer.WriteStartElement("skippedField");
                 writer.WriteAttributeString("name", info.Name);
                 writer.WriteAttributeString("reason", info.StatusText);
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
+            }
+            else
+            {
+                throw new ObfuscarException(MessageCodes.dbr148, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
             }
         }
 
@@ -550,13 +529,17 @@ namespace Obfuscar
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
             }
-            else
+            else if (info.Status == ObfuscationStatus.Skipped)
             {
                 writer.WriteStartElement("skippedProperty");
                 writer.WriteAttributeString("name", info.Name);
                 writer.WriteAttributeString("reason", info.StatusText);
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
+            }
+            else
+            {
+                throw new ObfuscarException(MessageCodes.dbr147, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
             }
         }
 
@@ -570,13 +553,17 @@ namespace Obfuscar
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
             }
-            else
+            else if (info.Status == ObfuscationStatus.Skipped)
             {
                 writer.WriteStartElement("skippedEvent");
                 writer.WriteAttributeString("name", info.Name);
                 writer.WriteAttributeString("reason", info.StatusText);
                 writer.WriteEndElement();
                 writer.WriteString("\r\n");
+            }
+            else
+            {
+                throw new ObfuscarException(MessageCodes.dbr146, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
             }
         }
 
