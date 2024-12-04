@@ -1,3 +1,5 @@
+![DotBlur Logo](https://github.com/invantive/dot-blur/blob/master/DotBlur-128.png?raw=true)
+
 # DotBlur, Minimalistic Obfuscation Tool for .NET Assemblies based on Obfuscar
 
 DotBlur is a fork from Obfuscar. The name was altered to avoid confusion during use.
