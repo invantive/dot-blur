@@ -2,19 +2,11 @@
 
 DotBlur is a fork from Obfuscar. The name was altered to avoid confusion during use.
 
-[![NuGet Version](https://img.shields.io/nuget/v/Obfuscar.svg?style=flat-square)](https://www.nuget.org/packages/Obfuscar/)
-[![Build status](https://img.shields.io/github/actions/workflow/status/obfuscar/obfuscar/windows.yml?style=flat-square)](https://github.com/obfuscar/obfuscar/actions/workflows/windows.yml)
-
-The project logo came from [Legendora Icon](http://raindropmemory.deviantart.com/art/Legendora-Icon-Set-118999011) by
-[Teekatas Suwannakrua](https://raindropmemory.deviantart.com/).
-
-Maintained by [LeXtudio Inc.](https://lextudio.com/).
-
 ## Description
 
-Obfuscar is an open source .NET obfuscator released under MIT license. It provides basic obfuscation features that help secure secrets in a .NET assembly.
+DotBlur is based on Obfuscar as an open source .NET obfuscator released under MIT license. Obfuscar provides basic obfuscation features that help secure secrets in a .NET assembly.
 
-[![Obfuscar](obfuscar.png)](https://www.obfuscar.com/)
+DotBlur improves Obfuscar in the area of code signing.
 
 ## Get Started
 
@@ -22,11 +14,7 @@ Obfuscar is an open source .NET obfuscator released under MIT license. It provid
 
 ## Issues
 
-If you have a patch to contribute, a feature to request, or a bug to report, please post to the [Issue Tracker](https://github.com/obfuscar/obfuscar/issues).
-
-## Support Services
-
-Please contact [LeXtudio Inc.](https://lextudio.com/) for support services.
+If you have a patch to contribute on DotBlur, a feature to request, or a bug to report, please post to the [Issue Tracker]([https://github.com/obfuscar/obfuscar/issues](https://github.com/invantive/dot-blur/issues)).
 
 ## Contribution
 
