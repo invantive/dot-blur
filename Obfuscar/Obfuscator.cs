@@ -364,10 +364,6 @@ namespace Obfuscar
                                 throw new ObfuscarException(MessageCodes.dbr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
                             }
 
-                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {signingFileDigestAlgorithm} /t {signingTimeStampServerUrl} \"{outName}\"";
-
-                            Log.OutputLine(MessageCodes.dbr113, $"Start signing '{fileName}' using sign tool '{signToolExePath}' with arguments '{signToolArguments}'.");
-
                             if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
                             {
                                 signingFileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
@@ -377,6 +373,10 @@ namespace Obfuscar
                             {
                                 signingTimeStampServerUrl = "http://timestamp.digicert.com";
                             }
+
+                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {signingFileDigestAlgorithm} /t {signingTimeStampServerUrl} \"{outName}\"";
+
+                            Log.OutputLine(MessageCodes.dbr113, $"Start signing '{fileName}' using sign tool '{signToolExePath}' with arguments '{signToolArguments}'.");
 
                             ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArguments)
                                                         { UseShellExecute = false
