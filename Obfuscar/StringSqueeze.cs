@@ -382,11 +382,9 @@ namespace Obfuscar
             {
                 Instruction instruction = method.Body.Instructions[index];
 
-                if (instruction.OpCode == OpCodes.Ldstr)
+                if (instruction.OpCode == OpCodes.Ldstr && instruction.Operand is string operand)
                 {
-                    string str = (string)instruction.Operand;
-
-                    if (!this._methodByString.TryGetValue(str, out MethodDefinition? individualStringMethodDefinition))
+                    if (!this._methodByString.TryGetValue(operand, out MethodDefinition? individualStringMethodDefinition))
                     {
                         StringSqueezeData data = this.GetNewType();
 
@@ -395,7 +393,7 @@ namespace Obfuscar
                         //
                         // Add the string to the data array.
                         //
-                        byte[] stringBytes = Encoding.UTF8.GetBytes(str);
+                        byte[] stringBytes = Encoding.UTF8.GetBytes(operand);
                         int start = data.DataBytes.Count;
                         data.DataBytes.AddRange(stringBytes);
                         int count = data.DataBytes.Count - start;
@@ -433,7 +431,7 @@ namespace Obfuscar
                         worker4.Append((Instruction)label20.Operand);
 
                         data.NewType.Methods.Add(individualStringMethodDefinition);
-                        this._methodByString.Add(str, individualStringMethodDefinition);
+                        this._methodByString.Add(operand, individualStringMethodDefinition);
 
                         if (this.mostRecentData == null)
                         {

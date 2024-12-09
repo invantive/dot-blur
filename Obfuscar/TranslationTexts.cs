@@ -33,7 +33,7 @@ namespace Obfuscar
     /// </summary>
     public static partial class Translations
     {
-        private static Dictionary<string, Dictionary<string, string>> translationsByLanguage = new Dictionary<string, Dictionary<string, string>>()
+        private static readonly Dictionary<string, Dictionary<string, string>> translationsByLanguage = new Dictionary<string, Dictionary<string, string>>()
         { { "DUMMY", new Dictionary<string, string>(){ } }, { Languages.ar, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console هو فرع من Obfuscar (https://www.obfuscar.com)" }

@@ -97,7 +97,7 @@ namespace Obfuscar
         }
 
         private static string? defaultLanguageCode;
-        private static object defaultLanguageCodeLocker = new object();
+        private static readonly object defaultLanguageCodeLocker = new object();
 
         /// <summary>
         /// Gets the default language code for the user from the Operating System.
