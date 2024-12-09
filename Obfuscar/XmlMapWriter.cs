@@ -178,25 +178,31 @@ namespace Obfuscar
 
         private void DumpMethod(MethodKey key, ObfuscatedThing info)
         {
-            StringBuilder sb = new StringBuilder();
+            string txt;
 
-            sb.AppendFormat("{0}(", info.Name);
-            for (int i = 0; i < key.Count; i++)
             {
-                if (i > 0)
+                StringBuilder sb = new StringBuilder(32 + 1 + 1 + 1 + key.Count * 32);
+
+                sb.AppendFormat("{0}(", info.Name);
+                for (int i = 0; i < key.Count; i++)
                 {
-                    sb.Append(",");
+                    if (i > 0)
+                    {
+                        sb.Append(",");
+                    }
+
+                    sb.Append(key.ParamTypes[i]);
                 }
 
-                sb.Append(key.ParamTypes[i]);
-            }
+                sb.Append(")");
 
-            sb.Append(")");
+                txt = sb.ToString();
+            }
 
             if (info.Status == ObfuscationStatus.Renamed)
             {
                 this.writer.WriteStartElement("renamedMethod");
-                this.writer.WriteAttributeString("oldName", sb.ToString());
+                this.writer.WriteAttributeString("oldName", txt);
                 this.writer.WriteAttributeString("newName", info.StatusText);
                 this.writer.WriteEndElement();
                 this.writer.WriteString("\r\n");
@@ -204,7 +210,7 @@ namespace Obfuscar
             else if (info.Status == ObfuscationStatus.Skipped)
             {
                 this.writer.WriteStartElement("skippedMethod");
-                this.writer.WriteAttributeString("name", sb.ToString());
+                this.writer.WriteAttributeString("name", txt);
                 this.writer.WriteAttributeString("reason", info.StatusText);
                 this.writer.WriteEndElement();
                 this.writer.WriteString("\r\n");

@@ -111,7 +111,8 @@ namespace Obfuscar
             } 
             while (true);
 
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder(stack.Count * 32);
+
             builder.Append(stack.Pop());
 
             while (stack.Count > 0)

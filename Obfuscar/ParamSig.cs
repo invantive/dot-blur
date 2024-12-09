@@ -199,8 +199,9 @@ namespace Obfuscar
             }
             else
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder(this.ParamTypes.Length * 32);
                 sb.Append(this.ParamTypes[0]);
+
                 for (int i = 1; i < this.ParamTypes.Length; i++)
                 {
                     sb.Append(" ");

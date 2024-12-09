@@ -112,8 +112,8 @@ namespace Obfuscar
             foreach (XElement reader in element.Elements())
             {
                 string name = Helper.GetAttribute(reader, "name", vars);
-
                 string rxStr = Helper.GetAttribute(reader, "rx");
+
                 Regex? rx = null;
                 if (!string.IsNullOrEmpty(rxStr))
                 {
@@ -487,7 +487,7 @@ namespace Obfuscar
 
         private Dictionary<string, HashSet<string>> GetXamlMethodsToExclude(Dictionary<string, BamlDocument> xamlFiles)
         {
-            Dictionary<string, HashSet<string>> list = new Dictionary<string, HashSet<string>>();
+            Dictionary<string, HashSet<string>> list = new Dictionary<string, HashSet<string>>(xamlFiles.Count());
 
             foreach (KeyValuePair<string, BamlDocument> kvp in xamlFiles)
             {
@@ -532,20 +532,10 @@ namespace Obfuscar
                     continue;
                 }
 
-                //string[] embedNameExtensionsToExclude = [ ".png"
-                //                                        , ".ico"
-                //                                        , ".svg"
-                //                                        ];
-
                 string[] embedNameExtensionsToInclude = [ ".resources"
                                                         ];
 
                 string? extensionOfEmbedName = Path.GetExtension(embed.Name);
-
-                //if (embedNameExtensionsToExclude.Contains(extensionOfEmbedName))
-                //{
-                //    continue;
-                //}
 
                 if (!embedNameExtensionsToInclude.Contains(extensionOfEmbedName))
                 {
@@ -677,6 +667,8 @@ namespace Obfuscar
 
             public Graph(IEnumerable<TypeDefinition> typeDefinitions)
             {
+                this.Root.Capacity = this.Root.Capacity + typeDefinitions.Count();
+
                 foreach (TypeDefinition typeDefinition in typeDefinitions)
                 {
                     Node<TypeDefinition> node = new Node<TypeDefinition> {Item = typeDefinition};

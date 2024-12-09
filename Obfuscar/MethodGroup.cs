@@ -39,7 +39,7 @@ namespace Obfuscar
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(5 + 2 + this.Methods.Count * 32);
 
             sb.Append(this.Name);
 

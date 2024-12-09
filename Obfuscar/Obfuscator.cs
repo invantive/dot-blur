@@ -61,7 +61,7 @@ namespace Obfuscar
         /// <summary>
         /// Patch level within version of Obfuscar based upon.
         /// </summary>
-        public const string DotBlurPatchLevel = "7";
+        public const string DotBlurPatchLevel = "8";
 
         /// <summary>
         /// Full version.
