@@ -189,6 +189,11 @@ namespace Obfuscar
         public const string dbr152 = "dbr152";
         public const string dbr153 = "dbr153";
         public const string dbr154 = "dbr154";
+        public const string dbr155 = "dbr155";
+        //public const string dbr156 = "dbr156";
+        //public const string dbr157 = "dbr157";
+        //public const string dbr158 = "dbr158";
+        //public const string dbr159 = "dbr159";
     }
 }
 

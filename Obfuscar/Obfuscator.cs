@@ -30,16 +30,13 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Obfuscar.Helpers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Xml.Linq;
 
 namespace Obfuscar
@@ -778,11 +775,9 @@ namespace Obfuscar
                 //
                 // Make a list of the resources that can be renamed.
                 //
-                List<Resource> resources = new List<Resource>(library.MainModule.Resources.Count);
-                resources.AddRange(library.MainModule.Resources);
+                List<Resource> resources = new List<Resource>(library.MainModule.Resources);
 
-                List<BamlDocument> xamlFiles = this.GetXamlDocuments(library, this.Project.Settings.AnalyzeXaml);
-                HashSet<string> namesInXaml = this.NamesInXaml(xamlFiles);
+                Dictionary<string, BamlDocument>? xamlFiles = info.XamlFiles;
 
                 //
                 // Save the original names of all types because parent (declaring) types of nested types may be already renamed.
@@ -832,11 +827,8 @@ namespace Obfuscar
                                 i++;
                             }
                         }
-
-                        continue;
                     }
-
-                    if (namesInXaml.Contains(type.FullName))
+                    else if (xamlFiles?.ContainsKey(type.FullName) ?? false)
                     {
                         this.Mapping.UpdateType(oldTypeKey, ObfuscationStatus.Skipped, "filtered by BAML");
 
@@ -847,9 +839,11 @@ namespace Obfuscar
                         {
                             Resource res = resources[i];
                             string resName = res.Name;
+
                             if (Path.GetFileNameWithoutExtension(resName) == fullName)
                             {
                                 resources.RemoveAt(i);
+
                                 this.Mapping.AddResource(resName, ObfuscationStatus.Skipped, "filtered by BAML");
                             }
                             else
@@ -857,54 +851,56 @@ namespace Obfuscar
                                 i++;
                             }
                         }
-
-                        continue;
-                    }
-
-                    string name;
-                    string ns;
-                    if (type.IsNested)
-                    {
-                        ns = "";
-                        if (type.DeclaringType != null)
-                        {
-                            name = NameMaker.UniqueNestedTypeName(type.DeclaringType.NestedTypes.IndexOf(type));
-                        }
-                        else
-                        {
-                            name = string.Empty;
-                        }
                     }
                     else
                     {
-                        if (this.Project.Settings.ReuseNames)
+                        string name;
+                        string ns;
+                        if (type.IsNested)
                         {
-                            name = NameMaker.UniqueTypeName(typeIndex);
-                            ns = NameMaker.UniqueNamespace(typeIndex);
+                            ns = string.Empty;
+
+                            if (type.DeclaringType != null)
+                            {
+                                name = NameMaker.UniqueNestedTypeName(type.DeclaringType.NestedTypes.IndexOf(type));
+                            }
+                            else
+                            {
+                                name = string.Empty;
+                            }
                         }
                         else
                         {
-                            name = NameMaker.UniqueName(this._uniqueTypeNameIndex);
-                            ns = NameMaker.UniqueNamespace(this._uniqueTypeNameIndex);
-                            this._uniqueTypeNameIndex++;
+                            if (this.Project.Settings.ReuseNames)
+                            {
+                                name = NameMaker.UniqueTypeName(typeIndex);
+                                ns = NameMaker.UniqueNamespace(typeIndex);
+                            }
+                            else
+                            {
+                                name = NameMaker.UniqueName(this._uniqueTypeNameIndex);
+                                ns = NameMaker.UniqueNamespace(this._uniqueTypeNameIndex);
+                                this._uniqueTypeNameIndex++;
+                            }
                         }
+
+                        if (type.GenericParameters.Count > 0)
+                        {
+                            name += '`' + type.GenericParameters.Count.ToString();
+                        }
+
+                        if (type.DeclaringType != null)
+                        {
+                            ns = string.Empty; // Nested types do not have namespaces
+                        }
+
+                        TypeKey newTypeKey = new TypeKey(info.Name, ns, name);
+                        typeIndex++;
+
+                        this.FixResouceManager(resources, type, fullName, newTypeKey);
+
+                        this.RenameType(info, type, oldTypeKey, newTypeKey, unrenamedTypeKey);
                     }
-
-                    if (type.GenericParameters.Count > 0)
-                    {
-                        name += '`' + type.GenericParameters.Count.ToString();
-                    }
-
-                    if (type.DeclaringType != null)
-                    {
-                        ns = ""; // Nested types do not have namespaces
-                    }
-
-                    TypeKey newTypeKey = new TypeKey(info.Name, ns, name);
-                    typeIndex++;
-
-                    this.FixResouceManager(resources, type, fullName, newTypeKey);
-                    this.RenameType(info, type, oldTypeKey, newTypeKey, unrenamedTypeKey);
                 }
 
                 foreach (Resource res in resources)
@@ -948,7 +944,7 @@ namespace Obfuscar
 
                         foreach (Instruction instruction in method.Body.Instructions)
                         {
-                            if (instruction.OpCode == OpCodes.Ldstr && (string)instruction.Operand == fullName)
+                            if (instruction.OpCode == OpCodes.Ldstr && instruction.Operand is string operand && operand == fullName)
                             {
                                 instruction.Operand = newTypeKey.Fullname;
                             }
@@ -961,6 +957,7 @@ namespace Obfuscar
                         string newName = newTypeKey.Fullname + suffix;
                         res.Name = newName;
                         resources.RemoveAt(i);
+
                         this.Mapping.AddResource(resName, ObfuscationStatus.Renamed, newName);
                     }
                     else
@@ -973,141 +970,6 @@ namespace Obfuscar
                     i++;
                 }
             }
-        }
-
-        private HashSet<string> NamesInXaml(List<BamlDocument> xamlFiles)
-        {
-            HashSet<string> result = new HashSet<string>();
-            if (xamlFiles.Count == 0)
-            {
-                return result;
-            }
-
-            foreach (BamlDocument doc in xamlFiles)
-            {
-                foreach (BamlRecord child in doc)
-                {
-                    TypeInfoRecord? classAttribute = child as TypeInfoRecord;
-
-                    if (classAttribute == null)
-                    {
-                        continue;
-                    }
-
-                    if (string.IsNullOrEmpty(classAttribute.TypeFullName))
-                    {
-                        continue;
-                    }
-
-                    result.Add(classAttribute.TypeFullName);
-                }
-            }
-
-            return result;
-        }
-
-        private List<BamlDocument> GetXamlDocuments(AssemblyDefinition library, bool analyzeXaml)
-        {
-            List<BamlDocument> result = new List<BamlDocument>();
-
-            if (!analyzeXaml)
-            {
-                return result;
-            }
-
-            foreach (Resource res in library.MainModule.Resources)
-            {
-                EmbeddedResource? embed = res as EmbeddedResource;
-
-                if (embed == null)
-                {
-                    continue;
-                }
-
-                Stream s = embed.GetResourceStream();
-                s.Position = 0;
-
-                try
-                {
-                    ResourceReader reader = new ResourceReader(s);
-
-                    foreach (DictionaryEntry entry in reader.Cast<DictionaryEntry>().OrderBy(e => e.Key.ToString()))
-                    {
-                        if (entry.Key.ToString()?.EndsWith(".baml", StringComparison.OrdinalIgnoreCase) ?? false)
-                        {
-                            Stream stream;
-
-                            if (entry.Value is Stream st)
-                            {
-                                stream = st;
-                            }
-                            else if (entry.Value is byte[] b)
-                            {
-                                stream = new MemoryStream(b);
-                            }
-                            else
-                            {
-                                continue;
-                            }
-
-                            try
-                            {
-                                result.Add(BamlReader.ReadDocument(stream, CancellationToken.None));
-                            }
-                            catch (ArgumentException)
-                            {
-                            }
-                            catch (FileNotFoundException)
-                            {
-                            }
-                        }
-                    }
-                }
-                catch (NotSupportedException)
-                {
-                    s.Position = 0;
-
-                    System.Resources.Extensions.DeserializingResourceReader reader = new System.Resources.Extensions.DeserializingResourceReader(s);
-
-                    foreach (DictionaryEntry entry in reader.Cast<DictionaryEntry>().OrderBy(e => e.Key.ToString()))
-                    {
-                        if (entry.Key.ToString()?.EndsWith(".baml", StringComparison.OrdinalIgnoreCase) ?? false)
-                        {
-                            Stream stream;
-
-                            if (entry.Value is Stream st)
-                            {
-                                stream = st;
-                            }
-                            else if (entry.Value is byte[] b)
-                            {
-                                stream = new MemoryStream(b);
-                            }
-                            else
-                            {
-                                continue;
-                            }
-
-                            try
-                            {
-                                result.Add(BamlReader.ReadDocument(stream, CancellationToken.None));
-                            }
-                            catch (ArgumentException)
-                            {
-                            }
-                            catch (FileNotFoundException)
-                            {
-                            }
-                        }
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    continue;
-                }
-            }
-
-            return result;
         }
 
         private void RenameType(AssemblyInfo info, TypeDefinition type, TypeKey oldTypeKey, TypeKey newTypeKey, TypeKey unrenamedTypeKey)
@@ -1153,8 +1015,7 @@ namespace Obfuscar
 
         private Dictionary<ParamSig, NameGroup> GetSigNames(Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames, TypeKey typeKey)
         {
-            Dictionary<ParamSig, NameGroup>? sigNames;
-            if (!baseSigNames.TryGetValue(typeKey, out sigNames))
+            if (!baseSigNames.TryGetValue(typeKey, out Dictionary<ParamSig, NameGroup>? sigNames))
             {
                 sigNames = new Dictionary<ParamSig, NameGroup>();
                 baseSigNames[typeKey] = sigNames;
@@ -1297,8 +1158,7 @@ namespace Obfuscar
                 {
                     for (int i = 0; i < reference.UnrenamedReferences.Count;)
                     {
-                        PropertyReference? member = reference.UnrenamedReferences[i] as PropertyReference;
-                        if (member != null)
+                        if (reference.UnrenamedReferences[i] is PropertyReference member)
                         {
                             if (propertyKey.Matches(member))
                             {
@@ -1766,8 +1626,7 @@ namespace Obfuscar
             //
             // Find references, rename them, then rename the method itself.
             //
-            List<AssemblyInfo> references = new List<AssemblyInfo>();
-            references.AddRange(info.ReferencedBy);
+            List<AssemblyInfo> references = new List<AssemblyInfo>(info.ReferencedBy);
 
             if (!references.Contains(info))
             {
@@ -1776,27 +1635,26 @@ namespace Obfuscar
 
             List<GenericInstanceMethod> generics = new List<GenericInstanceMethod>();
 
+            //
+            // Rename references.
+            //
             foreach (AssemblyInfo reference in references)
             {
                 if (reference.UnrenamedReferences != null)
                 {
                     for (int i = 0; i < reference.UnrenamedReferences.Count;)
                     {
-                        MethodReference? member = reference.UnrenamedReferences[i] as MethodReference;
-
-                        if (member != null)
+                        if (reference.UnrenamedReferences[i] is MethodReference member)
                         {
                             if (methodKey.Matches(member))
                             {
-                                GenericInstanceMethod? generic = member as GenericInstanceMethod;
-
-                                if (generic == null)
+                                if (member is GenericInstanceMethod generic)
                                 {
-                                    member.Name = newName;
+                                    generics.Add(generic);
                                 }
                                 else
                                 {
-                                    generics.Add(generic);
+                                    member.Name = newName;
                                 }
 
                                 reference.UnrenamedReferences.RemoveAt(i);
@@ -1813,6 +1671,9 @@ namespace Obfuscar
                 }
             }
 
+            //
+            // Rename generic methods.
+            //
             foreach (GenericInstanceMethod generic in generics)
             {
                 generic.ElementMethod.Name = newName;
