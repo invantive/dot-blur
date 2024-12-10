@@ -121,12 +121,12 @@ namespace Obfuscar
 
             if (hideStrings)
             {
-                Log.OutputLine(MessageCodes.dbr052, "Hide strings.");
+                Log.OutputLine(MessageCodes.dbr052, Translations.GetTranslationOfKey(TranslationKeys.db_hide_strings));
                 this.HideStrings();
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr053, "Not hiding strings.");
+                Log.OutputLine(MessageCodes.dbr053, Translations.GetTranslationOfKey(TranslationKeys.db_not_hide_strings));
             }
 
             this.RenameFields();
@@ -166,11 +166,11 @@ namespace Obfuscar
 
             NameMaker.DetermineChars(this.Project.Settings);
 
-            Log.OutputLine(MessageCodes.dbr116, "Loading assemblies.");
+            Log.OutputLine(MessageCodes.dbr116, Translations.GetTranslationOfKey(TranslationKeys.db_dbr116_msg));
 
             if (this.Project.ExtraPaths?.Any() ?? false)
             {
-                Log.OutputLine(MessageCodes.dbr059, "Extra framework folders: ");
+                Log.OutputLine(MessageCodes.dbr059, Translations.GetTranslationOfKey(TranslationKeys.db_dbr059_msg));
 
                 foreach (string extraPath in this.Project.ExtraPaths)
                 {
@@ -179,7 +179,7 @@ namespace Obfuscar
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr154, "No extra framework folders: ");
+                Log.OutputLine(MessageCodes.dbr154, Translations.GetTranslationOfKey(TranslationKeys.db_dbr154_msg));
             }
 
             Log.OutputLine(MessageCodes.dbr060, null);
@@ -194,7 +194,7 @@ namespace Obfuscar
         {
             string outPath = this.Project.Settings.OutPath;
 
-            Log.OutputLine(MessageCodes.dbr056, $"Save assemblies to '{outPath}'.");
+            Log.OutputLine(MessageCodes.dbr056, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr056_msg_par1), outPath));
 
             //
             // Copy excluded assemblies.
@@ -289,7 +289,7 @@ namespace Obfuscar
                                 info.Definition.Write(outName, parameters);
                                 info.OutputFileName = outName;
 
-                                Log.OutputLine(MessageCodes.dbr120, $"{fileName} save using project keypair to '{outName}'.");
+                                Log.OutputLine(MessageCodes.dbr120, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr120_msg_par1), fileName, outName));
                             }
                             catch (Exception ex)
                             {
@@ -307,7 +307,7 @@ namespace Obfuscar
                                 info.Definition.Write(outName, parameters);
                                 info.OutputFileName = outName;
 
-                                Log.OutputLine(MessageCodes.dbr117, $"{fileName} not saved using project keypair to '{outName}' due to {ex}.");
+                                Log.OutputLine(MessageCodes.dbr117, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr117_msg_par1), fileName, outName, ex));
                             }
                         }
                         else if (!string.IsNullOrEmpty(keyContainerName))
@@ -319,7 +319,7 @@ namespace Obfuscar
 
                             MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, keyContainerName);
 
-                            Log.OutputLine(MessageCodes.dbr118, $"{fileName} signed as '{outName}' using container '{keyContainerName}'.");
+                            Log.OutputLine(MessageCodes.dbr118, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr118_msg_par1), fileName, outName, keyContainerName));
                         }
                         else if (!info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
                         {
@@ -330,7 +330,7 @@ namespace Obfuscar
                             info.Definition.Write(outName, parameters);
                             info.OutputFileName = outName;
 
-                            Log.OutputLine(MessageCodes.dbr119, $"{fileName} saved as is in '{outName}'; was originally not strong name signed.");
+                            Log.OutputLine(MessageCodes.dbr119, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr119_msg_par1), fileName, outName));
                         }
                         else
                         {
@@ -373,7 +373,7 @@ namespace Obfuscar
 
                             string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {signingFileDigestAlgorithm} /t {signingTimeStampServerUrl} \"{outName}\"";
 
-                            Log.OutputLine(MessageCodes.dbr113, $"Start signing '{fileName}' using sign tool '{signToolExePath}' with arguments '{signToolArguments}'.");
+                            Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, signToolExePath, signToolArguments));
 
                             ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArguments)
                                                         { UseShellExecute = false
@@ -406,7 +406,7 @@ namespace Obfuscar
 
                                 if (nonEmptyLineSeen)
                                 {
-                                    Log.OutputLine(MessageCodes.dbr153, string.Concat("stdout: ", line));
+                                    Log.OutputLine(MessageCodes.dbr153, string.Concat("Stdout channel: ", line));
                                 }
                             }
 
@@ -425,7 +425,7 @@ namespace Obfuscar
 
                                 if (nonEmptyLineSeen)
                                 {
-                                    Log.OutputLine(MessageCodes.dbr125, string.Concat("stderr: ", line));
+                                    Log.OutputLine(MessageCodes.dbr125, string.Concat("Stderr channel: ", line));
                                 }
                             }
 
@@ -440,7 +440,7 @@ namespace Obfuscar
 
                             if (exitCode == 0)
                             {
-                                Log.OutputLine(MessageCodes.dbr123, $"'{fileName}' was signed.");
+                                Log.OutputLine(MessageCodes.dbr123, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr123_msg_par1), fileName));
                             }
                             else
                             {
@@ -450,7 +450,7 @@ namespace Obfuscar
                     }
                     else
                     {
-                        Log.OutputLine(MessageCodes.dbr124, $"'{fileName}' has no public key; save as is.");
+                        Log.OutputLine(MessageCodes.dbr124, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr124_msg_par1), fileName));
 
                         info.Definition.Write(outName, parameters);
                         info.OutputFileName = outName;
@@ -463,7 +463,7 @@ namespace Obfuscar
                         throw;
                     }
 
-                    Log.OutputLine(MessageCodes.dbr061, $"Failed to save {fileName}");
+                    Log.OutputLine(MessageCodes.dbr061, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr061_msg_par1), fileName));
                     Log.OutputLine(MessageCodes.dbr062, $"{e.GetType().Name}: {e.Message}");
 
                     Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
@@ -472,11 +472,11 @@ namespace Obfuscar
                     {
                         string name = match.Groups["name"].Value;
 
-                        Log.OutputLine(MessageCodes.dbr063, $"{name} might be one of:");
+                        Log.OutputLine(MessageCodes.dbr063, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr063_msg_par1), name));
 
                         this.LogMappings(name);
 
-                        Log.OutputLine(MessageCodes.dbr064, "Hint: you might need to add a SkipType for an enum above.");
+                        Log.OutputLine(MessageCodes.dbr064, Translations.GetTranslationOfKey(TranslationKeys.db_hint_skiptype));
                     }
                 }
             }
@@ -549,7 +549,7 @@ namespace Obfuscar
                 Directory.CreateDirectory(logDirectoryPath);
             }
 
-            Log.OutputLine(MessageCodes.dbr057, $"Save mapping to file '{logFilePath}'.");
+            Log.OutputLine(MessageCodes.dbr057, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr057_msg_par1), logFilePath));
 
             using (TextWriter file = File.CreateText(logFilePath))
             {
@@ -596,13 +596,13 @@ namespace Obfuscar
         {
             if (!this.Project.Settings.RenameFields)
             {
-                Log.OutputLine(MessageCodes.dbr150, "Do not rename fields.");
+                Log.OutputLine(MessageCodes.dbr150, Translations.GetTranslationOfKey(TranslationKeys.db_not_rename_fields));
 
                 return;
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr047, "Rename fields.");
+                Log.OutputLine(MessageCodes.dbr047, Translations.GetTranslationOfKey(TranslationKeys.db_rename_fields));
 
                 foreach (AssemblyInfo info in this.Project.AssemblyList)
                 {
@@ -695,7 +695,7 @@ namespace Obfuscar
         /// </summary>
         private void RenameParameters()
         {
-            Log.OutputLine(MessageCodes.dbr048, "Rename parameters.");
+            Log.OutputLine(MessageCodes.dbr048, Translations.GetTranslationOfKey(TranslationKeys.db_rename_parameters));
 
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
@@ -1050,13 +1050,13 @@ namespace Obfuscar
             //
             if (!this.Project.Settings.RenameProperties)
             {
-                Log.OutputLine(MessageCodes.dbr151, "Do not rename properties.");
+                Log.OutputLine(MessageCodes.dbr151, Translations.GetTranslationOfKey(TranslationKeys.db_not_rename_properties));
 
                 return;
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr049, "Rename properties.");
+                Log.OutputLine(MessageCodes.dbr049, Translations.GetTranslationOfKey(TranslationKeys.db_rename_properties));
 
                 foreach (AssemblyInfo info in this.Project.AssemblyList)
                 {
@@ -1191,13 +1191,13 @@ namespace Obfuscar
             //
             if (!this.Project.Settings.RenameEvents)
             {
-                Log.OutputLine(MessageCodes.dbr050, "Do not rename events.");
+                Log.OutputLine(MessageCodes.dbr050, Translations.GetTranslationOfKey(TranslationKeys.db_not_rename_events));
 
                 return;
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr152, "Rename events.");
+                Log.OutputLine(MessageCodes.dbr152, Translations.GetTranslationOfKey(TranslationKeys.db_rename_events));
 
                 foreach (AssemblyInfo info in this.Project.AssemblyList)
                 {
@@ -1268,7 +1268,7 @@ namespace Obfuscar
         /// </summary>
         private void RenameMethods()
         {
-            Log.OutputLine(MessageCodes.dbr051, "Rename methods.");
+            Log.OutputLine(MessageCodes.dbr051, Translations.GetTranslationOfKey(TranslationKeys.db_rename_methods));
 
             Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>> baseSigNames = new Dictionary<TypeKey, Dictionary<ParamSig, NameGroup>>();
             foreach (AssemblyInfo info in this.Project.AssemblyList)
