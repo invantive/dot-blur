@@ -41,7 +41,7 @@ namespace Obfuscar.Helpers
 
                     if (parts == null)
                     {
-                        throw new ObfuscarException(MessageCodes.dbr037, "Missing parts.");
+                        throw new ObfuscarException(MessageCodes.dbr037, Translations.GetTranslationOfKey(TranslationKeys.db_missing_parts));
                     }
 
                     string? p1 = parts[0];

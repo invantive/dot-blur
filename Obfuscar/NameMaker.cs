@@ -170,7 +170,7 @@ namespace Obfuscar
                 {
                     if (unicode[i] == unicode[j])
                     {
-                        throw new ObfuscarException(MessageCodes.dbr140, "Duplicate character.");
+                        throw new ObfuscarException(MessageCodes.dbr140, Translations.GetTranslationOfKey(TranslationKeys.db_duplicate_character));
                     }
                 }
             }

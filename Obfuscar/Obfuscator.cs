@@ -90,11 +90,11 @@ namespace Obfuscar
             }
             catch (IOException e)
             {
-                throw new ObfuscarException(MessageCodes.dbr014, "Unable to read specified project file: " + projectFileNamePath, innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr014, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr014_msg_par1), projectFileNamePath), innerException: e);
             }
             catch (System.Xml.XmlException e)
             {
-                throw new ObfuscarException(MessageCodes.dbr018, $"{projectFileNamePath} is not a valid XML file", innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr018, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr018_msg_par1), projectFileNamePath), innerException: e);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Obfuscar
 
                 if (string.IsNullOrEmpty(fileName))
                 {
-                    throw new ObfuscarException(MessageCodes.dbr141, "Missing file name.");
+                    throw new ObfuscarException(MessageCodes.dbr141, Translations.GetTranslationOfKey(TranslationKeys.db_dbr141_msg));
                 }
 
                 string outName = Path.Combine(outPath, fileName);
@@ -230,7 +230,7 @@ namespace Obfuscar
 
             int assemblyCount = this.Project.AssemblyList.Count;
 
-            Log.OutputLine(MessageCodes.dbr122, $"There are {assemblyCount:N0} assemblies in the project to save.");
+            Log.OutputLine(MessageCodes.dbr122, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr122_msg_par1), assemblyCount));
 
             //
             // Save the modified assemblies.
@@ -239,7 +239,7 @@ namespace Obfuscar
             {
                 if (info.Definition == null)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr026, "Definition is missing.");
+                    throw new ObfuscarException(MessageCodes.dbr026, Translations.GetTranslationOfKey(TranslationKeys.db_definition_missing));
                 }
 
                 string? fileName = Path.GetFileName(info.FileName);
@@ -248,7 +248,7 @@ namespace Obfuscar
                 {
                     if (string.IsNullOrEmpty(fileName))
                     {
-                        throw new ObfuscarException(MessageCodes.dbr142, "Missing file name.");
+                        throw new ObfuscarException(MessageCodes.dbr142, Translations.GetTranslationOfKey(TranslationKeys.db_filename_missing));
                     }
 
                     string outName = Path.Combine(outPath, fileName);
@@ -334,7 +334,11 @@ namespace Obfuscar
                         }
                         else
                         {
-                            throw new ObfuscarException(MessageCodes.dbr015, $"Obfuscating a signed assembly would result in an invalid assembly: {info.Name}; use the KeyFile or KeyContainer property to set a key to use.");
+                            throw new ObfuscarException
+                            ( MessageCodes.dbr015
+                            , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg_par1), info.Name)
+                            , Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg)
+                            );
                         }
 
                         if (this.Project.Settings.SignAssembly)
@@ -343,22 +347,22 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(signToolExePath))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr040, $"Could not sign assembly since signtool.exe could not be located.");
+                                throw new ObfuscarException(MessageCodes.dbr040, Translations.GetTranslationOfKey(TranslationKeys.db_dbr040_msg));
                             }
 
                             if (!File.Exists(signToolExePath))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr041, $"Could not sign assembly since signtool.exe could not be found on the specified location '{signToolExePath}'.");
+                                throw new ObfuscarException(MessageCodes.dbr041, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr041_msg_par1), signToolExePath));
                             }
 
                             if (string.IsNullOrEmpty(keyFileName))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr044, $"Could not sign assembly since the key file name is not set.");
+                                throw new ObfuscarException(MessageCodes.dbr044, Translations.GetTranslationOfKey(TranslationKeys.db_dbr044_msg));
                             }
 
                             if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr045, $"Could not sign assembly since the key file name '{keyFileName}' is not a PFX certificate file.");
+                                throw new ObfuscarException(MessageCodes.dbr045, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr045_msg_par1), keyFileName));
                             }
 
                             if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
@@ -386,7 +390,7 @@ namespace Obfuscar
 
                             if (signProcess == null)
                             {
-                                throw new ObfuscarException(MessageCodes.dbr042, $"Could not start sign process using since signtool.exe. No process.");
+                                throw new ObfuscarException(MessageCodes.dbr042, Translations.GetTranslationOfKey(TranslationKeys.db_dbr042_msg));
                             }
 
                             bool nonEmptyLineSeen;
@@ -406,7 +410,7 @@ namespace Obfuscar
 
                                 if (nonEmptyLineSeen)
                                 {
-                                    Log.OutputLine(MessageCodes.dbr153, string.Concat("Stdout channel: ", line));
+                                    Log.OutputLine(MessageCodes.dbr153, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr153_msg_par1), line));
                                 }
                             }
 
@@ -425,7 +429,7 @@ namespace Obfuscar
 
                                 if (nonEmptyLineSeen)
                                 {
-                                    Log.OutputLine(MessageCodes.dbr125, string.Concat("Stderr channel: ", line));
+                                    Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
                                 }
                             }
 
@@ -433,7 +437,7 @@ namespace Obfuscar
 
                             if (!signProcess.WaitForExit(SignTimeOutMs))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr043, $"Signing assembly did not end within the allotted time of {SignTimeOutMs:N0}ms.");
+                                throw new ObfuscarException(MessageCodes.dbr043, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr043_msg_par1), SignTimeOutMs));
                             }
 
                             int exitCode = signProcess.ExitCode;
@@ -444,7 +448,7 @@ namespace Obfuscar
                             }
                             else
                             {
-                                throw new ObfuscarException(MessageCodes.dbr145, $"'{fileName}' was NOT signed due to error code {exitCode}.");
+                                throw new ObfuscarException(MessageCodes.dbr145, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr145_msg_par1), fileName, exitCode));
                             }
                         }
                     }
@@ -766,7 +770,7 @@ namespace Obfuscar
         /// </summary>
         private void RenameTypes()
         {
-            Log.OutputLine(MessageCodes.dbr054, $"Rename types in {this.Project.AssemblyList.Count:N0} assemblies.");
+            Log.OutputLine(MessageCodes.dbr054, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr054_msg_par1), this.Project.AssemblyList.Count));
 
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {
@@ -962,7 +966,7 @@ namespace Obfuscar
                     }
                     else
                     {
-                        throw new ObfuscarException(MessageCodes.dbr023, "Full name is missing.");
+                        throw new ObfuscarException(MessageCodes.dbr023, Translations.GetTranslationOfKey(TranslationKeys.db_full_name_missing));
                     }
                 }
                 else
@@ -1500,7 +1504,10 @@ namespace Obfuscar
                 //
                 if (group.External)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr143, "Group's external flag should have been handled when the group was created, \" + \"and all methods in the group should already be marked skipped.");
+                    throw new ObfuscarException
+                    ( MessageCodes.dbr143
+                    , "Group's external flag should have been handled when the group was created and all methods in the group should already be marked skipped."
+                    );
                 }
 
                 this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
@@ -1519,7 +1526,7 @@ namespace Obfuscar
                 ObfuscatedThing m = this.Mapping.GetMethod(methodKey);
                 if (!(m.Status == ObfuscationStatus.Skipped || ((m.Status == ObfuscationStatus.WillRename || m.Status == ObfuscationStatus.Renamed) && m.StatusText == groupName)))
                 {
-                    throw new ObfuscarException(MessageCodes.dbr144, "If the method isn't skipped, and the group already has a name...method should have one too.");
+                    throw new ObfuscarException(MessageCodes.dbr144, Translations.GetTranslationOfKey(TranslationKeys.db_dbr144_msg));
                 }
             }
         }
@@ -1723,7 +1730,7 @@ namespace Obfuscar
         /// </summary>
         private void PostProcessing()
         {
-            Log.OutputLine(MessageCodes.dbr055, $"Post processing of {this.Project.AssemblyList.Count:N0} assemblies.");
+            Log.OutputLine(MessageCodes.dbr055, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr055_msg_par1), this.Project.AssemblyList.Count));
 
             foreach (AssemblyInfo info in this.Project.AssemblyList)
             {

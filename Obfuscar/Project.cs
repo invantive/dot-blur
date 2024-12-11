@@ -80,7 +80,7 @@ namespace Obfuscar
 
             if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyContainerName))
             {
-                throw new ObfuscarException(MessageCodes.dbr002, $"'{Settings.VariableKeyFile}' and '{Settings.VariableKeyContainer}' variables can't be set together.");
+                throw new ObfuscarException(MessageCodes.dbr002, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr002_msg_par1), Settings.VariableKeyFile, Settings.VariableKeyContainer));
             }
 
             //
@@ -103,7 +103,7 @@ namespace Obfuscar
 
                             if (string.IsNullOrEmpty(keyFileName))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr024, $"'{Settings.VariableKeyFile}' is not set.");
+                                throw new ObfuscarException(MessageCodes.dbr024, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr024_msg_par1), Settings.VariableKeyFile));
                             }
 
                             keyPair = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
@@ -125,7 +125,7 @@ namespace Obfuscar
                     }
                     catch (Exception ex)
                     {
-                        throw new ObfuscarException(MessageCodes.dbr007, $"Failure loading key file \"{keyFileName}\"", innerException: ex);
+                        throw new ObfuscarException(MessageCodes.dbr007, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr007_msg_par1), keyFileName), innerException: ex);
                     }
                 }
             }
@@ -138,7 +138,7 @@ namespace Obfuscar
             {
                 if (Type.GetType("System.MonoType") != null)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr008, "Key containers are not supported for Mono.");
+                    throw new ObfuscarException(MessageCodes.dbr008, Translations.GetTranslationOfKey(TranslationKeys.db_dbr008_msg));
                 }
 
                 if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
@@ -199,7 +199,7 @@ namespace Obfuscar
             {
                 throw new ObfuscarException
                 ( MessageCodes.dbr004
-                , string.Format("XML configuration file should have <{0}> root tag.", ROOT_TAG)
+                , string.Format("XML configuration file should have a <{0}> root tag.", ROOT_TAG)
                 , string.Format("Please correct the contents of the file '{0}'.", projectFileDirectory)
                 );
             }
@@ -311,7 +311,7 @@ namespace Obfuscar
 
                 if (string.IsNullOrWhiteSpace(file))
                 {
-                    throw new ObfuscarException(MessageCodes.dbr034, "Need valid file attribute.");
+                    throw new ObfuscarException(MessageCodes.dbr034, Translations.GetTranslationOfKey(TranslationKeys.db_dbr034_msg));
                 }
 
                 ReadModule(file, module, project);
@@ -361,7 +361,7 @@ namespace Obfuscar
             }
             else
             {
-                Log.OutputLine(MessageCodes.dbr108, string.Format("Process assembly '{0}''.", info.Definition.Name.FullName));
+                Log.OutputLine(MessageCodes.dbr108, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr108_msg_par1), info.Definition.Name.FullName));
                 project.AssemblyList.Add(info);
                 project.assemblyMap[info.Name] = info;
             }
@@ -475,7 +475,7 @@ namespace Obfuscar
 
             if (!Directory.Exists(this.Settings.InPath))
             {
-                throw new ObfuscarException(MessageCodes.dbr006, "Path specified by InPath variable must exist:" + this.Settings.InPath);
+                throw new ObfuscarException(MessageCodes.dbr006, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr006_msg_par1), this.Settings.InPath));
             }
 
             if (!Directory.Exists(this.Settings.OutPath))
@@ -486,7 +486,7 @@ namespace Obfuscar
                 }
                 catch (IOException e)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr005, "Could not create path specified by OutPath:  " + this.Settings.OutPath, innerException: e);
+                    throw new ObfuscarException(MessageCodes.dbr005, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr005_msg_par1), this.Settings.OutPath), innerException: e);
                 }
             }
         }
@@ -501,7 +501,7 @@ namespace Obfuscar
             {
                 if (this.settings == null)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr046, "Settings not yet initialized.");
+                    throw new ObfuscarException(MessageCodes.dbr046, Translations.GetTranslationOfKey(TranslationKeys.db_settings_not_initialized));
                 }
 
                 return this.settings;

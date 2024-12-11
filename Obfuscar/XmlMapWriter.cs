@@ -126,7 +126,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr139, $"Status is expected to be either Renamed or Skipped instead of {classInfo.Status} of '{classInfo.Name}'.");
+                throw new ObfuscarException(MessageCodes.dbr139, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr139_msg_par1), classInfo.Status, classInfo.Name));
             }
 
             int numRenamed = 0;
@@ -217,7 +217,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr149, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
+                throw new ObfuscarException(MessageCodes.dbr149, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr149_msg_par1), info.Status));
             }
         }
 
@@ -241,7 +241,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr148, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
+                throw new ObfuscarException(MessageCodes.dbr148, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr149_msg_par1), info.Status));
             }
         }
 
@@ -265,7 +265,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr147, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
+                throw new ObfuscarException(MessageCodes.dbr147, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr149_msg_par1), info.Status));
             }
         }
 
@@ -289,7 +289,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr146, $"Status must be Renamed or Skipped instead of '{info.Status}'.");
+                throw new ObfuscarException(MessageCodes.dbr146, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr149_msg_par1), info.Status));
             }
         }
 

@@ -139,7 +139,7 @@ namespace Obfuscar
             {
                 if (this.EncodingTypeDefinition == null)
                 {
-                    throw new ObfuscarException(MessageCodes.dbr038, "Encoding type definition not set.");
+                    throw new ObfuscarException(MessageCodes.dbr038, Translations.GetTranslationOfKey(TranslationKeys.db_dbr038_msg));
                 }
 
                 AssemblyDefinition library = this.library;
@@ -435,7 +435,7 @@ namespace Obfuscar
 
                         if (this.mostRecentData == null)
                         {
-                            throw new ObfuscarException(MessageCodes.dbr039, "Most recent data not set.");
+                            throw new ObfuscarException(MessageCodes.dbr039, Translations.GetTranslationOfKey(TranslationKeys.db_dbr039_msg));
                         }
 
                         this.mostRecentData.StringIndex++;

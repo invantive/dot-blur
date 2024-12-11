@@ -17,7 +17,7 @@ namespace Obfuscar
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ObfuscarException(MessageCodes.dbr032, "Missing value for path.");
+                throw new ObfuscarException(MessageCodes.dbr032, Translations.GetTranslationOfKey(TranslationKeys.db_missing_path_value));
             }
 
             this.path = path;

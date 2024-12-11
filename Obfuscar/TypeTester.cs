@@ -125,8 +125,11 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.dbr011, string.Format("'{0}' is not valid for the 'attrib' value of the SkipType element. Only 'public' is supported by now.",
-                        this.attrib));
+                    throw new ObfuscarException
+                        ( MessageCodes.dbr011
+                        , string.Format("'{0}' is not valid for the 'attrib' value of the SkipType element.", this.attrib)
+                        , "Use 'public'."
+                        );
                 }
             }
 

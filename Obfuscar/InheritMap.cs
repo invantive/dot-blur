@@ -110,7 +110,7 @@ namespace Obfuscar
                             //
                             if (group == null)
                             {
-                                throw new ObfuscarException(MessageCodes.dbr033, "Missing group.");
+                                throw new ObfuscarException(MessageCodes.dbr033, Translations.GetTranslationOfKey(TranslationKeys.db_missing_group));
                             }
 
                             if (!group.External && !project.Contains(right.TypeKey))

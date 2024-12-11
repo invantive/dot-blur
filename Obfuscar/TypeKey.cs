@@ -63,7 +63,7 @@ namespace Obfuscar
 
             if (this.Fullname != type.ToString() && (gi == null || this.Fullname != gi.ElementType.FullName))
             {
-                throw new ObfuscarException(MessageCodes.dbr035, $"Type names do not match: \"{this.Fullname}\" != \"{type}\"");
+                throw new ObfuscarException(MessageCodes.dbr035, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr035_msg_par1), this.Fullname, type));
             }
 
             this.hashCode = this.CalcHashCode();

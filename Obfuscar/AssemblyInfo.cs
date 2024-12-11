@@ -656,7 +656,7 @@ namespace Obfuscar
                 }
             }
 
-            throw new ObfuscarException(MessageCodes.dbr155, "Can't extract type name.");
+            throw new ObfuscarException(MessageCodes.dbr155, Translations.GetTranslationOfKey(TranslationKeys.db_dbr155_msg));
         }
 
         private class Graph
@@ -849,7 +849,7 @@ namespace Obfuscar
             }
             catch (Exception e)
             {
-                throw new ObfuscarException(MessageCodes.dbr020, $"Failed to get type definitions for {this.Definition.Name}", innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr020, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr020_msg_par1), this.Definition.Name), innerException: e);
             }
         }
 
@@ -992,7 +992,7 @@ namespace Obfuscar
             }
             catch (System.IO.IOException e)
             {
-                throw new ObfuscarException(MessageCodes.dbr020, "Unable to find assembly: " + filename, innerException: e);
+                throw new ObfuscarException(MessageCodes.dbr020, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr020_2_msg_par1), filename), innerException: e);
             }
         }
 
@@ -1031,7 +1031,7 @@ namespace Obfuscar
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ObfuscarException(MessageCodes.dbr027, "Expected name to have a value.");
+                    throw new ObfuscarException(MessageCodes.dbr027, Translations.GetTranslationOfKey(TranslationKeys.db_dbr027_msg));
                 }
 
                 this.name = value;
@@ -1534,12 +1534,12 @@ namespace Obfuscar
         {
             if (this.definition == null)
             {
-                throw new ObfuscarException(MessageCodes.dbr029, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr029, Translations.GetTranslationOfKey(TranslationKeys.db_dbr029_msg));
             }
 
             if (string.IsNullOrEmpty(this.name))
             {
-                throw new ObfuscarException(MessageCodes.dbr030, "Expected that AssemblyInfo.LoadAssembly would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr030, Translations.GetTranslationOfKey(TranslationKeys.db_dbr029_msg));
             }
         }
 
@@ -1550,7 +1550,7 @@ namespace Obfuscar
         {
             if (!this.initialized)
             {
-                throw new ObfuscarException(MessageCodes.dbr031, "Expected that AssemblyInfo.Init would be called before use.");
+                throw new ObfuscarException(MessageCodes.dbr031, Translations.GetTranslationOfKey(TranslationKeys.db_dbr031_msg));
             }
         }
 

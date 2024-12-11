@@ -106,7 +106,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr135, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr135, Translations.GetTranslationOfKey(TranslationKeys.db_dbr135_msg));
             }
 
             this.writer.WriteLine("{");
@@ -269,7 +269,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr136, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr136, Translations.GetTranslationOfKey(TranslationKeys.db_dbr135_msg));
             }
         }
 
@@ -285,7 +285,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr137, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr137, Translations.GetTranslationOfKey(TranslationKeys.db_dbr135_msg));
             }
         }
 
@@ -301,7 +301,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr134, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr134, Translations.GetTranslationOfKey(TranslationKeys.db_dbr135_msg));
             }
         }
 
@@ -317,7 +317,7 @@ namespace Obfuscar
             }
             else
             {
-                throw new ObfuscarException(MessageCodes.dbr138, "Status is expected to be either Renamed or Skipped.");
+                throw new ObfuscarException(MessageCodes.dbr138, Translations.GetTranslationOfKey(TranslationKeys.db_dbr135_msg));
             }
         }
 

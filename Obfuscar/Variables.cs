@@ -77,7 +77,7 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.dbr012, "Unable to replace variable: " + variable);
+                    throw new ObfuscarException(MessageCodes.dbr012, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr012_msg_par1), variable));
                 }
 
                 lastMatch = m.Index + m.Length;
