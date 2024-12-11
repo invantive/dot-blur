@@ -47,8 +47,54 @@ namespace Obfuscar
         /// the user UI language.
         /// </summary>
         /// <returns>List of language codes.</returns>
-        [SupportedOSPlatform("windows")]
         private static List<string>? GetUserPreferredUITwoIsoLetterLanguageCodes()
+        {
+            List<string> result = new List<string>(4);
+
+            {
+                //
+                // Add language defined as LANG environment variable.
+                //
+                string? languageCodeLang = Environment.GetEnvironmentVariable("LANG");
+
+                if (!string.IsNullOrEmpty(languageCodeLang))
+                {
+                    result.Add(languageCodeLang.Substring(0, 2));
+                }
+            }
+
+            {
+                //
+                // Add languages defined as LANGUAGES environment variable.
+                //
+                string? languageCodeLanguage = Environment.GetEnvironmentVariable("LANGUAGE");
+
+                if (!string.IsNullOrEmpty(languageCodeLanguage))
+                {
+                    foreach (string languageCode in languageCodeLanguage.Split(new char[] { ':' }))
+                    {
+                        result.Add(languageCode.Substring(0, 2));
+                    }
+                }
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                foreach (string languageCode in GetWindowsLanguageCodes())
+                {
+                    result.Add(languageCode);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets languages defined on the Microsoft Windows UI.
+        /// </summary>
+        /// <returns>List of language codes.</returns>
+        [SupportedOSPlatform("windows")]
+        private static IEnumerable<string> GetWindowsLanguageCodes()
         {
             //
             // ISO language (culture) name convention.
@@ -66,7 +112,6 @@ namespace Obfuscar
                 char[] languagesBuffer = new char[languagesBufferSize];
                 if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, out languagesCount, languagesBuffer, ref languagesBufferSize))
                 {
-                    List<string> result = new List<string>((int)languagesCount);
                     string[] languages = new string(languagesBuffer, 0, (int)languagesBufferSize - 2).Split('\0');
 
                     int cnt = 0;
@@ -79,20 +124,10 @@ namespace Obfuscar
                         //
                         if (language.Length == 5 && language[2] == '-')
                         {
-                            result.Add(language.Substring(0, 2));
+                            yield return language.Substring(0, 2);
                         }
                     }
-
-                    return result;
                 }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
             }
         }
 
@@ -111,6 +146,8 @@ namespace Obfuscar
                 {
                     if (string.IsNullOrEmpty(defaultLanguageCode))
                     {
+                        HashSet<string> allowedUserInterfaceLanguages = Languages.DisplayLanguages.Keys.ToHashSet<string>();
+
                         string? languageToUse = null;
 
                         bool useFallback;
@@ -121,19 +158,12 @@ namespace Obfuscar
                         //
                         try
                         {
-                            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                            {
-                                List<string>? preferredUiLanguages = GetUserPreferredUITwoIsoLetterLanguageCodes();
+                            List<string>? preferredUiLanguages = GetUserPreferredUITwoIsoLetterLanguageCodes();
 
-                                if (preferredUiLanguages?.Any() ?? false)
-                                {
-                                    languageToUse = preferredUiLanguages.First();
-                                    useFallback = false;
-                                }
-                                else
-                                {
-                                    useFallback = true;
-                                }
+                            if (preferredUiLanguages?.Any() ?? false)
+                            {
+                                languageToUse = preferredUiLanguages.Where(x => allowedUserInterfaceLanguages.Contains(x)).FirstOrDefault();
+                                useFallback = string.IsNullOrEmpty(languageToUse);
                             }
                             else
                             {
@@ -151,25 +181,16 @@ namespace Obfuscar
                         //
                         if (useFallback)
                         {
-                            languageToUse = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                            string languageToUseAlt = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                            if (allowedUserInterfaceLanguages.Contains(languageToUseAlt))
+                            {
+                                languageToUse = languageToUseAlt;
+                            }
                         }
 
                         if (string.IsNullOrEmpty(languageToUse))
                         {
                             languageToUse = Languages.DefaultLanguageCode;
-                        }
-
-                        //
-                        // Only choose supported languages, and English otherwise.
-                        //
-                        string[] allowedUserInterfaceLanguages = Languages.DisplayLanguages.Keys.ToArray();
-
-                        if (allowedUserInterfaceLanguages != null && allowedUserInterfaceLanguages.Any())
-                        {
-                            if (!allowedUserInterfaceLanguages.Contains(languageToUse))
-                            {
-                                languageToUse = Languages.DefaultLanguageCode;
-                            }
                         }
 
                         defaultLanguageCode = languageToUse;
