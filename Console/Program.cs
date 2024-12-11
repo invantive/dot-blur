@@ -38,9 +38,9 @@ namespace Obfuscar
         private static void ShowHelp(OptionSet optionSet)
         {
             Log.OutputLine(MessageCodes.dbr096, Translations.GetTranslationOfKey(TranslationKeys.db_con_fork_obfuscar));
-            Log.OutputLine(MessageCodes.dbr097, string.Format("(C) 2007-{0}, Ryan Williams and other contributors.", DateTime.UtcNow.Year));
+            Log.OutputLine(MessageCodes.dbr097, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_copyright_par1), DateTime.UtcNow.Year));
             Log.OutputLine(MessageCodes.dbr098, null);
-            Log.OutputLine(MessageCodes.dbr099, "DotBlur.Console.exe [Options] [project_file] [project_file]");
+            Log.OutputLine(MessageCodes.dbr099, Translations.GetTranslationOfKey(TranslationKeys.db_con_syntax));
             Log.OutputLine(MessageCodes.dbr100, null);
             Log.OutputLine(MessageCodes.dbr101, Translations.GetTranslationOfKey(TranslationKeys.db_options_colon));
             optionSet.WriteOptionDescriptions(Console.Out);

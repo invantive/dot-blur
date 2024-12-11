@@ -128,6 +128,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr131_par1, "Completed with error in {0:N0} seconds." }
           , { TranslationKeys.db_dbr132_par1, "Completed with error in {0:N0} seconds." }
           , { TranslationKeys.db_dbr133_par1, "Completed with error in {0:N0} seconds." }
+          , { TranslationKeys.db_con_syntax, "Syntax spul" }
           , { TranslationKeys.db_display_version, "Display version number of this application." }
           , { TranslationKeys.db_error_processing_colon, "An error occurred during processing:" }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur is a fork of Obfuscar (https://www.obfuscar.com)" }

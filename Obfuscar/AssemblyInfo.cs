@@ -798,7 +798,7 @@ namespace Obfuscar
 
                     if (toRemove.Count == 0)
                     {
-                        Log.OutputLine(MessageCodes.dbr080, "Still in pool:");
+                        Log.OutputLine(MessageCodes.dbr080, Translations.GetTranslationOfKey(TranslationKeys.db_pool_still));
 
                         foreach (Node<TypeDefinition> node in pool)
                         {
@@ -806,7 +806,7 @@ namespace Obfuscar
                             Log.OutputLine(MessageCodes.dbr068, string.Format("{0} {1} : [{2}]", node.Item?.FullName, node.Item?.Scope.Name, parents));
                         }
 
-                        throw new ObfuscarException(MessageCodes.dbr019, "Cannot clean pool.");
+                        throw new ObfuscarException(MessageCodes.dbr019, Translations.GetTranslationOfKey(TranslationKeys.db_pool_clean));
                     }
 
                     foreach (Node<TypeDefinition> remove in toRemove)
