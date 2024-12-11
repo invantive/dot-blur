@@ -167,8 +167,14 @@ namespace Obfuscar
             }
         }
 
+        /// <summary>
+        /// Key pair.
+        /// </summary>
         public byte[]? KeyPair { get; private set; }
 
+        /// <summary>
+        /// RSA key value.
+        /// </summary>
         [SupportedOSPlatform("windows")]
         public RSA? KeyValue { get; private set; }
 
