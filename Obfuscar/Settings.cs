@@ -61,8 +61,14 @@ namespace Obfuscar
 
         internal const string SpecialVariableProjectFileDirectory = "ProjectFileDirectory";
 
+        /// <summary>
+        /// Initialize settings from variables in project definition.
+        /// </summary>
+        /// <param name="vars">Variables.</param>
         public Settings(Variables vars)
         {
+            Log.OutputLine(MessageCodes.dbr162, "Initialize settings from variables.");
+
             this.InPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableInPath, "."));
             this.OutPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableOutPath, "."));
             this.LogFilePath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableLogFile, ""));

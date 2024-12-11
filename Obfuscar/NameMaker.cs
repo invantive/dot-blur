@@ -144,6 +144,8 @@ namespace Obfuscar
 
         internal static void DetermineChars(Settings settings)
         {
+            Log.OutputLine(MessageCodes.dbr169, "Determine characters for name generation.");
+
             if (settings.CustomChars != null && !string.IsNullOrWhiteSpace(settings.CustomChars))
             {
                 uniqueChars = settings.CustomChars;

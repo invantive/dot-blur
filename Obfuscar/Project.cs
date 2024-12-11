@@ -70,6 +70,9 @@ namespace Obfuscar
             }
         }
 
+        /// <summary>
+        /// Initialize project.
+        /// </summary>
         private void Initialize()
         {
             string? keyFileName = this.Settings.KeyFile;
@@ -185,11 +188,19 @@ namespace Obfuscar
             set => this.m_cache = value;
         }
 
-        public static Project FromXml(XDocument reader, string? projectFileDirectory)
+        /// <summary>
+        /// Load and initialize project from XML.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="projectFileNameDirectory">Project file name and directory.</param>
+        /// <returns>Project.</returns>
+        public static Project FromXml(XDocument reader, string? projectFileNameDirectory)
         {
+            Log.OutputLine(MessageCodes.dbr156, String.Format("Load XML project definition from '{0}'.", projectFileNameDirectory));
+
             Project project = new Project();
 
-            string? projectDirectory = Path.GetDirectoryName(projectFileDirectory);
+            string? projectDirectory = Path.GetDirectoryName(projectFileNameDirectory);
                 
             project.vars.Add(Settings.SpecialVariableProjectFileDirectory, string.IsNullOrEmpty(projectDirectory) ? "." : projectDirectory);
 
@@ -200,7 +211,7 @@ namespace Obfuscar
                 throw new ObfuscarException
                 ( MessageCodes.dbr004
                 , string.Format("XML configuration file should have <{0}> root tag.", ROOT_TAG)
-                , string.Format("Please correct the contents of the file '{0}'.", projectFileDirectory)
+                , string.Format("Please correct the contents of the file '{0}'.", projectFileNameDirectory)
                 );
             }
 
@@ -229,9 +240,16 @@ namespace Obfuscar
             ReadModuleGroups(reader, project);
         }
 
+        /// <summary>
+        /// Process variables from project definition.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="project">Project.</param>
         private static void ReadVariables(XElement reader, Project project)
         {
             IEnumerable<XElement> settings = reader.Elements("Var");
+
+            int variableCnt = 0;
 
             foreach (XElement setting in settings)
             {
@@ -252,19 +270,34 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ArgumentNullException("name");
+                    throw new ObfuscarException(MessageCodes.dbr163, "Missing setting name.");
                 }
+
+                variableCnt++;
             }
+
+            Log.OutputLine(MessageCodes.dbr157, String.Format("Processed {0} variables.", variableCnt));
         }
 
+        /// <summary>
+        /// Process Include tags from project definition.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="project">Project.</param>
         private static void ReadIncludeTags(XElement reader, Project project)
         {
             IEnumerable<XElement> includes = reader.Elements("Include");
 
+            int includeTagCnt = 0;
+
             foreach (XElement include in includes)
             {
                 ReadIncludeTag(include, project, FromXmlReadNode);
+
+                includeTagCnt++;
             }
+
+            Log.OutputLine(MessageCodes.dbr158, String.Format("Processed {0} include tags.", includeTagCnt));
         }
 
         internal static void ReadIncludeTag(XElement parentReader, Project project,
@@ -272,12 +305,12 @@ namespace Obfuscar
         {
             if (parentReader == null)
             {
-                throw new ArgumentNullException("parentReader");
+                throw new ObfuscarException(MessageCodes.dbr164, "Missing parent reader.");
             }
 
             if (readAction == null)
             {
-                throw new ArgumentNullException("readAction");
+                throw new ObfuscarException(MessageCodes.dbr165, "Missing read action.");
             }
 
             string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(parentReader, "path", project.vars));
@@ -290,20 +323,38 @@ namespace Obfuscar
             }
         }
 
+        /// <summary>
+        /// Process AssemblySearchPath in project definition.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="project">Project.</param>
         private static void ReadAssemblySearchPath(XElement reader, Project project)
         {
             IEnumerable<XElement> searchPaths = reader.Elements("AssemblySearchPath");
+
+            int assemblySearchPathCnt = 0;
 
             foreach (XElement searchPath in searchPaths)
             {
                 string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(searchPath, "path", project.vars));
                 project.assemblySearchPaths.Add(path);
+
+                assemblySearchPathCnt++;
             }
+
+            Log.OutputLine(MessageCodes.dbr159, String.Format("Processed {0} assembly search paths.", assemblySearchPathCnt));
         }
 
+        /// <summary>
+        /// Process Module in project definition.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="project">Project</param>
         private static void ReadModules(XElement reader, Project project)
         {
             IEnumerable<XElement> modules = reader.Elements("Module");
+
+            int moduleCnt = 0;
 
             foreach (XElement module in modules)
             {
@@ -315,12 +366,23 @@ namespace Obfuscar
                 }
 
                 ReadModule(file, module, project);
+
+                moduleCnt++;
             }
+
+            Log.OutputLine(MessageCodes.dbr160, String.Format("Processed {0} modules.", moduleCnt));
         }
 
+        /// <summary>
+        /// Process Modules in project definition.
+        /// </summary>
+        /// <param name="reader">XML reader.</param>
+        /// <param name="project">Project</param>
         private static void ReadModuleGroups(XElement reader, Project project)
         {
             IEnumerable<XElement> modules = reader.Elements("Modules");
+
+            int moduleGroupCnt = 0;
 
             foreach (XElement module in modules)
             {
@@ -339,7 +401,11 @@ namespace Obfuscar
                 {
                     ReadModule(file, module, project);
                 }
+
+                moduleGroupCnt++;
             }
+
+            Log.OutputLine(MessageCodes.dbr161, String.Format("Processed {0} module groups.", moduleGroupCnt));
         }
 
         private static List<string> ReadModuleGroupPattern(string name, XElement module, Project project)
@@ -463,6 +529,8 @@ namespace Obfuscar
         /// </summary>
         public void CheckSettings()
         {
+            Log.OutputLine(MessageCodes.dbr168, "Check project settings.");
+
             for (int i = 0; i < this.assemblySearchPaths.Count; i++)
             {
                 string assemblySearchPath = this.assemblySearchPaths[i];
@@ -602,7 +670,7 @@ namespace Obfuscar
 
             if (certs.Count == 0)
             {
-                throw new ArgumentException("Invalid certificate", nameof(pfxFile));
+                throw new ObfuscarException(MessageCodes.dbr166, string.Format("The certificate file '{0}' must contain at least one certificate.", pfxFile));
             }
 
             //
@@ -617,7 +685,7 @@ namespace Obfuscar
                 }
             }
 
-            throw new ArgumentException("Invalid private key certificate", nameof(pfxFile));
+            throw new ObfuscarException(MessageCodes.dbr167, string.Format("The certificate file '{0}' has an invalid format.", pfxFile));
         }
     }
 }
