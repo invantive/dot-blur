@@ -24,8 +24,10 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 
 namespace Obfuscar
 {
@@ -45,11 +47,38 @@ namespace Obfuscar
             this.vars.Remove(name);
         }
 
-        [return: NotNullIfNotNull(nameof(def))]
-        public string? GetValue(string name, string? def)
+        [return: NotNullIfNotNull(nameof(defaultValue))]
+        public string? GetStringValue(string name, string? defaultValue)
         {
-            string? value;
-            return this.Replace(this.vars.TryGetValue(name, out value) ? value : def);
+            bool found = this.vars.TryGetValue(name, out string? stringValue);
+
+            if (!found)
+            {
+                stringValue = defaultValue;
+            }
+
+            return this.Replace(stringValue);
+        }
+
+        [return: NotNullIfNotNull(nameof(defaultValue))]
+        public bool? GetBoolValue(string name, bool? defaultValue)
+        {
+            bool found = this.vars.TryGetValue(name, out string? stringValue);
+
+            bool? value;
+            if (!found)
+            {
+                value = defaultValue;
+            }
+            else if (string.IsNullOrEmpty(stringValue))
+            {
+                value = null;
+            }
+            {
+                value = XmlConvert.ToBoolean(stringValue);
+            }
+
+            return value;
         }
 
         [return: NotNullIfNotNull(nameof(str))]
@@ -86,6 +115,38 @@ namespace Obfuscar
             formatted.Append(str.Substring(lastMatch));
 
             return formatted.ToString();
+        }
+
+        /// <summary>
+        /// Gets the expanded string value of a variable by name.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>Value of variable, after expansion for environment variables.</returns>
+        public string? EvaluateStringVariable(string name, string? defaultValue)
+        {
+            string? value = this.GetStringValue(name, defaultValue);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            else
+            {
+                return Environment.ExpandEnvironmentVariables(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the expanded value of a variable by name.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>Value of variable, after expansion for environment variables.</returns>
+        [return: NotNullIfNotNull(nameof(defaultValue))]
+        public bool? EvaluateBoolVariable(string name, bool? defaultValue)
+        {
+            return GetBoolValue(name, defaultValue);
         }
     }
 }

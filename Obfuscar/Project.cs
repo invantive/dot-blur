@@ -51,7 +51,10 @@ namespace Obfuscar
         {
         }
 
-        public IEnumerable<string>? ExtraPaths
+        /// <summary>
+        /// Gets list of extra .net framework paths to search.
+        /// </summary>
+        public IEnumerable<string>? ExtraFrameworkPaths
         {
             get
             {
@@ -63,7 +66,7 @@ namespace Obfuscar
         {
             get
             {
-                return (this.ExtraPaths ?? Enumerable.Empty<string>())
+                return (this.ExtraFrameworkPaths ?? Enumerable.Empty<string>())
                         .Concat(this.assemblySearchPaths)
                         .Concat([this.Settings.InPath])
                         ;

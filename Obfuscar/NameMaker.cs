@@ -26,14 +26,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Obfuscar
 {
     internal static class NameMaker
     {
-        static string uniqueChars = string.Empty;
-        static int numUniqueChars;
+        private static string uniqueChars = string.Empty;
+
+        private static int numUniqueChars;
 
         const string defaultChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
@@ -48,11 +50,14 @@ namespace Obfuscar
 
         private static readonly string koreanChars;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         static NameMaker()
         {
             //
             // Fill the char array used for renaming with characters
-            // from Hangul (Korean) unicode character set.
+            // from Hangul (Korean) Unicode character set.
             //
             List<char> chars = new List<char>(128);
             Random rnd = new Random();
@@ -67,20 +72,34 @@ namespace Obfuscar
             koreanChars = new string(chars.ToArray());
         }
 
+        /// <summary>
+        /// Apply somewhat random sorting on entries in list by exchanging list elements equal to the number of elements in the list.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="list">List to shuffle.</param>
+        /// <param name="rnd">Randomizer.</param>
         private static void ShuffleArray<T>(IList<T> list, Random rnd)
         {
-            int n = list.Count;
+            int numberOfShufflesLeft = list.Count;
 
-            while (n > 1)
+            int position;
+
+            while (numberOfShufflesLeft >= 1)
             {
-                n--;
-                int k = rnd.Next(n + 1);
-                (list[n], list[k]) = (list[k], list[n]);
+                numberOfShufflesLeft--;
+                position = rnd.Next(numberOfShufflesLeft + 1);
+                (list[numberOfShufflesLeft], list[position]) = (list[position], list[numberOfShufflesLeft]);
             }
         }
 
+        /// <summary>
+        /// Unique characters.
+        /// </summary>
         public static string UniqueChars => uniqueChars;
 
+        /// <summary>
+        /// Korean characters.
+        /// </summary>
         public static string KoreanChars => koreanChars;
 
         public static string UniqueName(int index)
@@ -164,17 +183,15 @@ namespace Obfuscar
             }
 
             numUniqueChars = uniqueChars.Length;
-            string unicode = uniqueChars;
 
-            for (int i = 0; i < unicode.Length; i++)
+            //
+            // Check that characters are not included twice.
+            //
+            bool hasDuplicateChars = uniqueChars.GroupBy(x => x).Where(x => x.Count() >= 2).Any();
+
+            if (hasDuplicateChars)
             {
-                for (int j = i + 1; j < unicode.Length; j++)
-                {
-                    if (unicode[i] == unicode[j])
-                    {
-                        throw new ObfuscarException(MessageCodes.dbr140, Translations.GetTranslationOfKey(TranslationKeys.db_duplicate_character));
-                    }
-                }
+                throw new ObfuscarException(MessageCodes.dbr140, Translations.GetTranslationOfKey(TranslationKeys.db_duplicate_character));
             }
         }
     }
