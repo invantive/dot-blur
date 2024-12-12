@@ -71,7 +71,7 @@ namespace Obfuscar
         /// <param name="vars">Variables.</param>
         public Settings(Variables vars)
         {
-            Log.OutputLine(MessageCodes.dbr162, "Initialize settings from variables.");
+            Log.OutputLine(MessageCodes.dbr162, Translations.GetTranslationOfKey(TranslationKeys.db_dbr162_msg));
 
             this.AnalyzeXaml = vars.EvaluateBoolVariable(VariableAnalyzeXaml, false) ?? false;
             this.CustomChars = vars.EvaluateStringVariable(VariableCustomChars, "");

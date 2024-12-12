@@ -126,8 +126,8 @@ namespace Obfuscar
                 {
                     throw new ObfuscarException
                         ( MessageCodes.dbr011
-                        , string.Format("'{0}' is not valid for the 'attrib' value of the SkipType element.", this.attrib)
-                        , "Use 'public'."
+                        , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr011_msg_par1), this.attrib)
+                        , Translations.GetTranslationOfKey(TranslationKeys.db_dbr011_msg)
                         );
                 }
             }

@@ -205,7 +205,7 @@ namespace Obfuscar
         /// <returns>Project.</returns>
         public static Project FromXml(XDocument reader, string? projectFileNameDirectory)
         {
-            Log.OutputLine(MessageCodes.dbr156, String.Format("Load XML project definition from '{0}'.", projectFileNameDirectory));
+            Log.OutputLine(MessageCodes.dbr156, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr156_msg_par1), projectFileNameDirectory));
 
             Project project = new Project();
 
@@ -219,8 +219,8 @@ namespace Obfuscar
             {
                 throw new ObfuscarException
                 ( MessageCodes.dbr004
-                , string.Format("XML configuration file should have a <{0}> root tag.", ROOT_TAG)
-                , string.Format("Please correct the contents of the file '{0}'.", projectFileNameDirectory)
+                , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr004_msg_par1), ROOT_TAG)
+                , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr004_2_msg_par1), projectFileNameDirectory)
                 );
             }
 
@@ -279,13 +279,13 @@ namespace Obfuscar
                 }
                 else
                 {
-                    throw new ObfuscarException(MessageCodes.dbr163, "Missing setting name.");
+                    throw new ObfuscarException(MessageCodes.dbr163, Translations.GetTranslationOfKey(TranslationKeys.db_missing_setting_name));
                 }
 
                 variableCnt++;
             }
 
-            Log.OutputLine(MessageCodes.dbr157, String.Format("Processed {0} variables.", variableCnt));
+            Log.OutputLine(MessageCodes.dbr157, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr157_msg_par1), variableCnt));
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace Obfuscar
                 includeTagCnt++;
             }
 
-            Log.OutputLine(MessageCodes.dbr158, String.Format("Processed {0} include tags.", includeTagCnt));
+            Log.OutputLine(MessageCodes.dbr158, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr158_msg_par1), includeTagCnt));
         }
 
         internal static void ReadIncludeTag(XElement parentReader, Project project,
@@ -314,12 +314,12 @@ namespace Obfuscar
         {
             if (parentReader == null)
             {
-                throw new ObfuscarException(MessageCodes.dbr164, "Missing parent reader.");
+                throw new ObfuscarException(MessageCodes.dbr164, Translations.GetTranslationOfKey(TranslationKeys.db_missing_parent_reader));
             }
 
             if (readAction == null)
             {
-                throw new ObfuscarException(MessageCodes.dbr165, "Missing read action.");
+                throw new ObfuscarException(MessageCodes.dbr165, Translations.GetTranslationOfKey(TranslationKeys.db_missing_read_action));
             }
 
             string path = Environment.ExpandEnvironmentVariables(Helper.GetAttribute(parentReader, "path", project.vars));
@@ -351,7 +351,7 @@ namespace Obfuscar
                 assemblySearchPathCnt++;
             }
 
-            Log.OutputLine(MessageCodes.dbr159, String.Format("Processed {0} assembly search paths.", assemblySearchPathCnt));
+            Log.OutputLine(MessageCodes.dbr159, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr159_msg_par1), assemblySearchPathCnt));
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace Obfuscar
                 moduleCnt++;
             }
 
-            Log.OutputLine(MessageCodes.dbr160, String.Format("Processed {0} modules.", moduleCnt));
+            Log.OutputLine(MessageCodes.dbr160, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr160_msg_par1), moduleCnt));
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace Obfuscar
                 moduleGroupCnt++;
             }
 
-            Log.OutputLine(MessageCodes.dbr161, String.Format("Processed {0} module groups.", moduleGroupCnt));
+            Log.OutputLine(MessageCodes.dbr161, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr161_msg_par1), moduleGroupCnt));
         }
 
         private static List<string> ReadModuleGroupPattern(string name, XElement module, Project project)
@@ -538,7 +538,7 @@ namespace Obfuscar
         /// </summary>
         public void CheckSettings()
         {
-            Log.OutputLine(MessageCodes.dbr168, "Check project settings.");
+            Log.OutputLine(MessageCodes.dbr168, Translations.GetTranslationOfKey(TranslationKeys.db_check_project_settings));
 
             for (int i = 0; i < this.assemblySearchPaths.Count; i++)
             {
@@ -679,7 +679,7 @@ namespace Obfuscar
 
             if (certs.Count == 0)
             {
-                throw new ObfuscarException(MessageCodes.dbr166, string.Format("The certificate file '{0}' must contain at least one certificate.", pfxFile));
+                throw new ObfuscarException(MessageCodes.dbr166, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr166_msg_par1), pfxFile));
             }
 
             //
@@ -694,7 +694,7 @@ namespace Obfuscar
                 }
             }
 
-            throw new ObfuscarException(MessageCodes.dbr167, string.Format("The certificate file '{0}' has an invalid format.", pfxFile));
+            throw new ObfuscarException(MessageCodes.dbr167, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr167_msg_par1), pfxFile));
         }
     }
 }

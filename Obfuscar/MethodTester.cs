@@ -146,8 +146,8 @@ namespace Obfuscar
                 {
                     throw new ObfuscarException
                     ( MessageCodes.dbr010
-                    , $"'{typeAttribute}' is not valid for the 'typeattrib' value of skip elements."
-                    , "Use 'public'."
+                    , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr010_msg_par1), typeAttribute)
+                    , Translations.GetTranslationOfKey(TranslationKeys.db_dbr010_msg)
                     );
                 }
             }
@@ -174,8 +174,8 @@ namespace Obfuscar
                 {
                     throw new ObfuscarException
                     ( MessageCodes.dbr013
-                    , $"'{attribute}' is not valid for the 'attrib' value of skip elements."
-                    , "Use 'public' or 'protected'."
+                    , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr013_msg_par1), attribute)
+                    , Translations.GetTranslationOfKey(TranslationKeys.db_dbr013_msg)
                     );
                 }
 
