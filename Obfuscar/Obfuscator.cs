@@ -1506,7 +1506,7 @@ namespace Obfuscar
                 {
                     throw new ObfuscarException
                     ( MessageCodes.dbr143
-                    , "Group's external flag should have been handled when the group was created and all methods in the group should already be marked skipped."
+                    , Translations.GetTranslationOfKey(TranslationKeys.db_dbr143_msg)
                     );
                 }
 

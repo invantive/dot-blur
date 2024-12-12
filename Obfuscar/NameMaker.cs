@@ -144,7 +144,7 @@ namespace Obfuscar
 
         internal static void DetermineChars(Settings settings)
         {
-            Log.OutputLine(MessageCodes.dbr169, "Determine characters for name generation.");
+            Log.OutputLine(MessageCodes.dbr169, Translations.GetTranslationOfKey(TranslationKeys.db_dbr169_msg));
 
             if (settings.CustomChars != null && !string.IsNullOrWhiteSpace(settings.CustomChars))
             {

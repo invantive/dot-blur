@@ -67,7 +67,7 @@ namespace Obfuscar
         /// <param name="vars">Variables.</param>
         public Settings(Variables vars)
         {
-            Log.OutputLine(MessageCodes.dbr162, "Initialize settings from variables.");
+            Log.OutputLine(MessageCodes.dbr162, Translations.GetTranslationOfKey(TranslationKeys.db_dbr162_msg));
 
             this.InPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableInPath, "."));
             this.OutPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableOutPath, "."));

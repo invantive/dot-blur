@@ -138,6 +138,29 @@ namespace Obfuscar
         public const string db_dbr012_msg_par1 = nameof(db_dbr012_msg_par1);
         public const string db_dbr139_msg_par1 = nameof(db_dbr139_msg_par1);
         public const string db_dbr149_msg_par1 = nameof(db_dbr149_msg_par1);
+        public const string db_dbr010_msg_par1 = nameof(db_dbr010_msg_par1);
+        public const string db_dbr010_msg = nameof(db_dbr010_msg);
+        public const string db_dbr013_msg_par1 = nameof(db_dbr013_msg_par1);
+        public const string db_dbr013_msg = nameof(db_dbr013_msg);
+        public const string db_dbr143_msg = nameof(db_dbr143_msg);
+        public const string db_dbr004_msg_par1 = nameof(db_dbr004_msg_par1);
+        public const string db_dbr004_2_msg_par1 = nameof(db_dbr004_2_msg_par1);
+        public const string db_missing_setting_name = nameof(db_missing_setting_name);
+        public const string db_dbr157_msg_par1 = nameof(db_dbr157_msg_par1);
+        public const string db_dbr158_msg_par1 = nameof(db_dbr158_msg_par1);
+        public const string db_missing_parent_reader = nameof(db_missing_parent_reader);
+        public const string db_missing_read_action = nameof(db_missing_read_action);
+        public const string db_dbr159_msg_par1 = nameof(db_dbr159_msg_par1);
+        public const string db_dbr166_msg_par1 = nameof(db_dbr166_msg_par1);
+        public const string db_dbr167_msg_par1 = nameof(db_dbr167_msg_par1);
+        public const string db_dbr011_msg_par1 = nameof(db_dbr011_msg_par1);
+        public const string db_dbr011_msg = nameof(db_dbr011_msg);
+        public const string db_dbr169_msg = nameof(db_dbr169_msg);
+        public const string db_dbr156_msg_par1 = nameof(db_dbr156_msg_par1);
+        public const string db_dbr160_msg_par1 = nameof(db_dbr160_msg_par1);
+        public const string db_dbr161_msg_par1 = nameof(db_dbr161_msg_par1);
+        public const string db_check_project_settings = nameof(db_check_project_settings);
+        public const string db_dbr162_msg = nameof(db_dbr162_msg);
 
 
 
