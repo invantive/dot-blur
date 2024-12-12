@@ -29,35 +29,39 @@ using System.Xml;
 
 namespace Obfuscar
 {
+    /// <summary>
+    /// Settings.
+    /// </summary>
     internal class Settings
     {
-        private const string VariableAnalyzeXaml = "AnalyzeXaml";
-        private const string VariableCustomChars = "CustomChars";
-        private const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
-        private const string VariableHidePrivateApi = "HidePrivateApi";
-        private const string VariableHideStrings = "HideStrings";
-        private const string VariableInPath = "InPath";
-        private const string VariableKeepPublicApi = "KeepPublicApi";
+        internal const string VariableAnalyzeXaml = "AnalyzeXaml";
+        internal const string VariableCustomChars = "CustomChars";
+        internal const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
+        internal const string VariableHidePrivateApi = "HidePrivateApi";
+        internal const string VariableHideStrings = "HideStrings";
+        internal const string VariableInPath = "InPath";
+        internal const string VariableKeepPublicApi = "KeepPublicApi";
         internal const string VariableKeyContainer = "KeyContainer";
         internal const string VariableKeyFile = "KeyFile";
-        private const string VariableKeyFilePassword = "KeyFilePassword";
-        private const string VariableLogFile = "LogFile";
-        private const string VariableMarkedOnly = "MarkedOnly";
-        private const string VariableOptimizeMethods = "OptimizeMethods";
-        private const string VariableOutPath = "OutPath";
-        private const string VariableRegenerateDebugInfo = "RegenerateDebugInfo";
-        private const string VariableRenameEvents = "RenameEvents";
-        private const string VariableRenameFields = "RenameFields";
-        private const string VariableRenameProperties = "RenameProperties";
-        private const string VariableReuseNames = "ReuseNames";
-        private const string VariableSuppressIldasm = "SuppressIldasm";
-        private const string VariableUseKoreanNames = "UseKoreanNames";
-        private const string VariableUseUnicodeNames = "UseUnicodeNames";
-        private const string VariableXmlMapping = "XmlMapping";
-        private const string VariableSignToolExe = "SignToolExe";
-        private const string VariableSignAssembly = "SignAssembly";
-        private const string VariableSigningFileDigestAlgorithm = "SigningFileDigestAlgorithm";
-        private const string VariableSigningTimeStampServerUrl = "SigningTimeStampServerUrl";
+        internal const string VariableKeyFilePassword = "KeyFilePassword";
+        internal const string VariableLogFile = "LogFile";
+        internal const string VariableMarkedOnly = "MarkedOnly";
+        internal const string VariableOptimizeMethods = "OptimizeMethods";
+        internal const string VariableOutPath = "OutPath";
+        internal const string VariableRegenerateDebugInfo = "RegenerateDebugInfo";
+        internal const string VariableRenameEvents = "RenameEvents";
+        internal const string VariableRenameFields = "RenameFields";
+        internal const string VariableRenameProperties = "RenameProperties";
+        internal const string VariableReuseNames = "ReuseNames";
+        internal const string VariableSignAssembly = "SignAssembly";
+        internal const string VariableSigningCertificateSha1Thumbprint = "SigningCertificateSha1Thumbprint";
+        internal const string VariableSigningFileDigestAlgorithm = "SigningFileDigestAlgorithm";
+        internal const string VariableSigningTimeStampServerUrl = "SigningTimeStampServerUrl";
+        internal const string VariableSignToolExe = "SignToolExe";
+        internal const string VariableSuppressIldasm = "SuppressIldasm";
+        internal const string VariableUseKoreanNames = "UseKoreanNames";
+        internal const string VariableUseUnicodeNames = "UseUnicodeNames";
+        internal const string VariableXmlMapping = "XmlMapping";
 
         internal const string SpecialVariableProjectFileDirectory = "ProjectFileDirectory";
 
@@ -69,35 +73,34 @@ namespace Obfuscar
         {
             Log.OutputLine(MessageCodes.dbr162, "Initialize settings from variables.");
 
-            this.InPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableInPath, "."));
-            this.OutPath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableOutPath, "."));
-            this.LogFilePath = Environment.ExpandEnvironmentVariables(vars.GetValue(VariableLogFile, ""));
-            this.MarkedOnly = XmlConvert.ToBoolean(vars.GetValue(VariableMarkedOnly, "false"));
-
-            this.RenameFields = XmlConvert.ToBoolean(vars.GetValue(VariableRenameFields, "true"));
-            this.RenameProperties = XmlConvert.ToBoolean(vars.GetValue(VariableRenameProperties, "true"));
-            this.RenameEvents = XmlConvert.ToBoolean(vars.GetValue(VariableRenameEvents, "true"));
-            this.KeepPublicApi = XmlConvert.ToBoolean(vars.GetValue(VariableKeepPublicApi, "true"));
-            this.HidePrivateApi = XmlConvert.ToBoolean(vars.GetValue(VariableHidePrivateApi, "true"));
-            this.ReuseNames = XmlConvert.ToBoolean(vars.GetValue(VariableReuseNames, "true"));
-            this.UseUnicodeNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseUnicodeNames, "false"));
-            this.UseKoreanNames = XmlConvert.ToBoolean(vars.GetValue(VariableUseKoreanNames, "false"));
-            this.HideStrings = XmlConvert.ToBoolean(vars.GetValue(VariableHideStrings, "true"));
-            this.OptimizeMethods = XmlConvert.ToBoolean(vars.GetValue(VariableOptimizeMethods, "true"));
-            this.SuppressIldasm = XmlConvert.ToBoolean(vars.GetValue(VariableSuppressIldasm, "true"));
-
-            this.XmlMapping = XmlConvert.ToBoolean(vars.GetValue(VariableXmlMapping, "false"));
-            this.RegenerateDebugInfo = XmlConvert.ToBoolean(vars.GetValue(VariableRegenerateDebugInfo, "false"));
-            this.AnalyzeXaml = XmlConvert.ToBoolean(vars.GetValue(VariableAnalyzeXaml, "false"));
-            this.CustomChars = vars.GetValue(VariableCustomChars, "");
-            this.ExtraFrameworkFolders = vars.GetValue(VariableExtraFrameworkFolders, null);
-            this.KeyContainer = vars.GetValue(VariableKeyContainer, null);
-            this.KeyFile = vars.GetValue(VariableKeyFile, null);
-            this.KeyFilePassword = vars.GetValue(VariableKeyFilePassword, null);
-            this.SignToolExe = vars.GetValue(VariableSignToolExe, null);
-            this.SignAssembly = XmlConvert.ToBoolean(vars.GetValue(VariableSignAssembly, "false"));
-            this.SigningFileDigestAlgorithm = vars.GetValue(VariableSigningFileDigestAlgorithm, null);
-            this.SigningTimeStampServerUrl = vars.GetValue(VariableSigningTimeStampServerUrl, null);
+            this.AnalyzeXaml = vars.EvaluateBoolVariable(VariableAnalyzeXaml, false) ?? false;
+            this.CustomChars = vars.EvaluateStringVariable(VariableCustomChars, "");
+            this.ExtraFrameworkFolders = vars.EvaluateStringVariable(VariableExtraFrameworkFolders, null);
+            this.HidePrivateApi = vars.EvaluateBoolVariable(VariableHidePrivateApi, true) ?? true;
+            this.HideStrings = vars.EvaluateBoolVariable(VariableHideStrings, true) ?? true;
+            this.InPath = vars.EvaluateStringVariable(VariableInPath, ".");
+            this.KeepPublicApi = vars.EvaluateBoolVariable(VariableKeepPublicApi, true) ?? true;
+            this.KeyContainer = vars.EvaluateStringVariable(VariableKeyContainer, null);
+            this.KeyFile = vars.EvaluateStringVariable(VariableKeyFile, null);
+            this.KeyFilePassword = vars.EvaluateStringVariable(VariableKeyFilePassword, null);
+            this.LogFilePath = vars.EvaluateStringVariable(VariableLogFile, "");
+            this.MarkedOnly = vars.EvaluateBoolVariable(VariableMarkedOnly, false) ?? false;
+            this.OptimizeMethods = vars.EvaluateBoolVariable(VariableOptimizeMethods, true) ?? true;
+            this.OutPath = vars.EvaluateStringVariable(VariableOutPath, ".");
+            this.RegenerateDebugInfo = vars.EvaluateBoolVariable(VariableRegenerateDebugInfo, false) ?? false;
+            this.RenameEvents = vars.EvaluateBoolVariable(VariableRenameEvents, true) ?? true;
+            this.RenameFields = vars.EvaluateBoolVariable(VariableRenameFields, true) ?? true;
+            this.RenameProperties = vars.EvaluateBoolVariable(VariableRenameProperties, true) ?? true;
+            this.ReuseNames = vars.EvaluateBoolVariable(VariableReuseNames, true) ?? true;
+            this.SignAssembly = vars.EvaluateBoolVariable(VariableSignAssembly, false) ?? false;
+            this.SigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableSigningCertificateSha1Thumbprint, null);
+            this.SigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableSigningFileDigestAlgorithm, null);
+            this.SigningTimeStampServerUrl = vars.EvaluateStringVariable(VariableSigningTimeStampServerUrl, null);
+            this.SignToolExe = vars.EvaluateStringVariable(VariableSignToolExe, null);
+            this.SuppressIldasm = vars.EvaluateBoolVariable(VariableSuppressIldasm, true) ?? true;
+            this.UseKoreanNames = vars.EvaluateBoolVariable(VariableUseKoreanNames, false) ?? false;
+            this.UseUnicodeNames = vars.EvaluateBoolVariable(VariableUseUnicodeNames, false) ?? false;
+            this.XmlMapping = vars.EvaluateBoolVariable(VariableXmlMapping, false) ?? false;
         }
 
         public bool RegenerateDebugInfo { get; }
@@ -105,12 +108,12 @@ namespace Obfuscar
         /// <summary>
         /// Directory containing the input assemblies, such as c:\\in.
         /// </summary>
-        public string InPath { get; }
+        public string? InPath { get; }
 
         /// <summary>
         /// Directory to contain the obfuscated assemblies, such as c:\\out.
         /// </summary>
-        public string OutPath { get; }
+        public string? OutPath { get; }
 
         /// <summary>
         /// Whether to only obfuscate marked items. All items are obfuscated when set to false.
@@ -120,7 +123,7 @@ namespace Obfuscar
         /// <summary>
         /// Obfuscation log file path (mapping.txt).
         /// </summary>
-        public string LogFilePath { get; }
+        public string? LogFilePath { get; }
 
         /// <summary>
         /// Whether to rename fields.
@@ -187,8 +190,14 @@ namespace Obfuscar
         /// </summary>
         public bool AnalyzeXaml { get; }
 
-        public string CustomChars { get; }
+        /// <summary>
+        /// Unique list of characters to use for naming.
+        /// </summary>
+        public string? CustomChars { get; }
 
+        /// <summary>
+        /// List of extra .net framework folders to search, separated by semicolon as path list separator.
+        /// </summary>
         public string? ExtraFrameworkFolders { get; }
 
         /// <summary>
@@ -225,5 +234,10 @@ namespace Obfuscar
         /// Signing time stamp server URL.
         /// </summary>
         public string? SigningTimeStampServerUrl { get; }
+
+        /// <summary>
+        /// SHA1 thumbprint to select the certificate for signing.
+        /// </summary>
+        public string? SigningCertificateSha1Thumbprint { get; internal set; }
     }
 }

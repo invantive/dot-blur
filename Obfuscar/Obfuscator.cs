@@ -44,8 +44,6 @@ namespace Obfuscar
     /// <summary>
     /// Obfuscator.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification =
-        "Reviewed. Suppression is OK here.")]
     public class Obfuscator
     {
         /// <summary>
@@ -61,7 +59,7 @@ namespace Obfuscar
         /// <summary>
         /// Patch level within version of Obfuscar based upon.
         /// </summary>
-        public const string DotBlurPatchLevel = "9";
+        public const string DotBlurPatchLevel = "10";
 
         /// <summary>
         /// Full version.
@@ -77,8 +75,6 @@ namespace Obfuscar
         /// Creates an obfuscator initialized from a project filename/path.
         /// </summary>
         /// <param name="projectFileNamePath">Path to project file.</param>
-        [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification =
-            "Reviewed. Suppression is OK here.")]
         public Obfuscator(string projectFileNamePath)
         {
             this.Mapping = new ObfuscationMap();
@@ -168,11 +164,11 @@ namespace Obfuscar
 
             Log.OutputLine(MessageCodes.dbr116, Translations.GetTranslationOfKey(TranslationKeys.db_dbr116_msg));
 
-            if (this.Project.ExtraPaths?.Any() ?? false)
+            if (this.Project.ExtraFrameworkPaths?.Any() ?? false)
             {
                 Log.OutputLine(MessageCodes.dbr059, Translations.GetTranslationOfKey(TranslationKeys.db_dbr059_msg));
 
-                foreach (string extraPath in this.Project.ExtraPaths)
+                foreach (string extraPath in this.Project.ExtraFrameworkPaths)
                 {
                     Log.OutputLine(MessageCodes.dbr058, extraPath + ", ");
                 }
@@ -192,7 +188,7 @@ namespace Obfuscar
         /// </summary>
         private void SaveAssemblies(bool throwException = true)
         {
-            string outPath = this.Project.Settings.OutPath;
+            string? outPath = this.Project.Settings.OutPath;
 
             Log.OutputLine(MessageCodes.dbr056, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr056_msg_par1), outPath));
 
@@ -277,6 +273,7 @@ namespace Obfuscar
                         string? keyContainerName = this.Project.Settings.KeyContainer;
                         string? signingFileDigestAlgorithm = this.Project.Settings.SigningFileDigestAlgorithm;
                         string? signingTimeStampServerUrl = this.Project.Settings.SigningTimeStampServerUrl;
+                        string? certificateSha1Thumbprint = this.Project.Settings.SigningCertificateSha1Thumbprint;
 
                         byte[]? keyPair = this.Project.KeyPair;
 
@@ -343,28 +340,11 @@ namespace Obfuscar
 
                         if (this.Project.Settings.SignAssembly)
                         {
-                            string? signToolExePath = this.DetermineSignToolExePath();
+                            string? signToolExePath = this.GetSignToolExeFileNamePath();
 
-                            if (string.IsNullOrEmpty(signToolExePath))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr040, Translations.GetTranslationOfKey(TranslationKeys.db_dbr040_msg));
-                            }
-
-                            if (!File.Exists(signToolExePath))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr041, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr041_msg_par1), signToolExePath));
-                            }
-
-                            if (string.IsNullOrEmpty(keyFileName))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr044, Translations.GetTranslationOfKey(TranslationKeys.db_dbr044_msg));
-                            }
-
-                            if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr045, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr045_msg_par1), keyFileName));
-                            }
-
+                            //
+                            // Defaulting.
+                            //
                             if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
                             {
                                 signingFileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
@@ -375,11 +355,115 @@ namespace Obfuscar
                                 signingTimeStampServerUrl = "http://timestamp.digicert.com";
                             }
 
-                            string signToolArguments = $"sign /f \"{keyFileName}\" /p \"{keyFilePassword}\" /fd {signingFileDigestAlgorithm} /t {signingTimeStampServerUrl} \"{outName}\"";
+                            //
+                            // Various checks.
+                            //
+                            if (string.IsNullOrEmpty(signToolExePath))
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr040, Translations.GetTranslationOfKey(TranslationKeys.db_dbr040_msg));
+                            }
 
-                            Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, signToolExePath, signToolArguments));
+                            if (!File.Exists(signToolExePath))
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr041, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr041_msg_par1), signToolExePath));
+                            }
 
-                            ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArguments)
+                            if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(certificateSha1Thumbprint))
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr175, "At most one of certificate selection by key file name and SHA1 thumbprint can be used.");
+                            }
+
+                            //
+                            // When both key file name and certificate SHA1 thumbprint are missing, automatic selection could be used.
+                            // However, that is quite tricky securitwise.
+                            //
+                            if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(certificateSha1Thumbprint))
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr176, "Either certificate selection by key file name or SHA1 thumbprint must be used.");
+                            }
+
+                            if (string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyFilePassword))
+                            {
+                                throw new ObfuscarException(MessageCodes.dbr177, "The key file password can only be supplied when the certificate is selected by key file name.");
+                            }
+
+                            //if (string.IsNullOrEmpty(keyFileName))
+                            //{
+                            //    throw new ObfuscarException(MessageCodes.dbr044, Translations.GetTranslationOfKey(TranslationKeys.db_dbr044_msg));
+                            //}
+
+                            //if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
+                            //{
+                            //    throw new ObfuscarException(MessageCodes.dbr045, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr045_msg_par1), keyFileName));
+                            //}
+
+                            List<string> signToolArguments = new List<string>();
+
+                            //
+                            // Command: sign files using an embedded signature.
+                            //
+                            signToolArguments.Add("sign");
+
+                            //
+                            // Specify the signing cert in a file. If this file is a PFX with a password, the password may be
+                            // supplied with the "/p" option. If the file does not contain private keys, use the "/csp" and "/kc"
+                            // options to specify the CSP and container name of the private key.
+                            //
+                            if (!string.IsNullOrEmpty(keyFileName))
+                            {
+                                signToolArguments.Add("/f");
+                                signToolArguments.Add($"\"{keyFileName}\"");
+
+                                if (!string.IsNullOrEmpty(keyFilePassword))
+                                {
+                                    //
+                                    // Specify a password to use when opening the PFX file.
+                                    //
+                                    signToolArguments.Add("/p");
+                                    signToolArguments.Add($"\"{keyFilePassword}\"");
+                                }
+                            }
+
+                            //
+                            // Specify the SHA1 thumbprint of the signing cert.
+                            //
+                            // The list of SHA1 thumbprints of available certificates can be 
+                            // retrieved using:
+                            // 
+                            // signtool.exe sign FILENAME
+                            //
+                            if (!string.IsNullOrEmpty(certificateSha1Thumbprint))
+                            {
+                                signToolArguments.Add("/sha1");
+                                signToolArguments.Add($"\"{certificateSha1Thumbprint}\"");
+                            }
+
+                            //
+                            // Specifies the file digest algorithm to use for creating file signatures. (Default is SHA1)
+                            //
+                            if (!string.IsNullOrEmpty(signingFileDigestAlgorithm))
+                            {
+                                signToolArguments.Add("/fd");
+                                signToolArguments.Add($"\"{signingFileDigestAlgorithm}\"");
+                            }
+
+                            //
+                            // Specify the timestamp server's URL. If this option is not present, the signed file will not
+                            // be timestamped.A warning is generated if timestamping fails.
+                            //
+                            if (!string.IsNullOrEmpty(signingTimeStampServerUrl))
+                            {
+                                signToolArguments.Add("/t");
+                                signToolArguments.Add($"\"{signingTimeStampServerUrl}\"");
+                            }
+
+                            signToolArguments.Add($"\"{outName}\"");
+
+                            string signToolArgumentsTxt = string.Join(" ", signToolArguments);
+
+                            Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, signToolExePath, signToolArgumentsTxt));
+
+                            ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArgumentsTxt)
                                                         { UseShellExecute = false
                                                         , RedirectStandardOutput = true
                                                         , RedirectStandardError = true
@@ -488,25 +572,44 @@ namespace Obfuscar
             TypeNameCache.nameCache.Clear();
         }
 
-        private string? DetermineSignToolExePath()
+        /// <summary>
+        /// Gets the file name and path for signtool.exe.
+        /// </summary>
+        /// <returns>File name and path.</returns>
+        private string? GetSignToolExeFileNamePath()
         {
             string? path = this.Project.Settings.SignToolExe;
 
             if (string.IsNullOrEmpty(path))
             {
+                const string SIGN_TOOL_EXE_NAME = "signtool.exe";
+
+                //
+                // Discover signtool location when not specified.
+                //
+                // Selects highest installed version.
+                //
                 string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
-                string windows10SdkFolder = Path.Combine(programFilesX86Folder, @"Windows Kits\10\bin");
+                string windows10SdkFolder = Path.Combine(programFilesX86Folder, "Windows Kits", "10", "bin");
 
                 string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
 
+                string? highestWindows10KitSignToolExe = windows10KitVersionFolders
+                    .Select(p => Path.Combine(p, "x64", SIGN_TOOL_EXE_NAME))
+                    .Where(File.Exists)
+                    .OrderByDescending(x => x)
+                    .FirstOrDefault()
+                    ;
 
-
-                string? highestWindows10KitSignToolExe = windows10KitVersionFolders.Select(p => Path.Combine(p, "x64", "signtool.exe"))
-                                                                                   .Where(File.Exists)
-                                                                                   .OrderByDescending(x => x)
-                                                                                   .FirstOrDefault()
-                                                                                   ;
+                if (!string.IsNullOrEmpty(highestWindows10KitSignToolExe))
+                {
+                    Log.OutputLine(MessageCodes.dbr173, string.Format("Found installation of {0} at '{1}'.", SIGN_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
+                }
+                else
+                {
+                    Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SIGN_TOOL_EXE_NAME, programFilesX86Folder));
+                }
 
                 path = highestWindows10KitSignToolExe;
             }
