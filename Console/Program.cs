@@ -153,6 +153,9 @@ namespace Obfuscar
                         Log.OutputLine(MessageCodes.dbr078, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_inner_exception_par1), e.InnerException.Message));
                     }
 
+                    Log.OutputLine(MessageCodes.dbr076, "Callstack:");
+                    Log.OutputLine(MessageCodes.dbr178, e.StackTrace);
+
                     Log.OutputLine(MessageCodes.dbr132, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr132_par1), (DateTime.UtcNow - startUtc).TotalSeconds));
 
                     return 3;
