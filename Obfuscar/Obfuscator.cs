@@ -237,7 +237,7 @@ namespace Obfuscar
             //
             if (assemblyCount == 1)
             {
-                this.SaveAssembly(this.Project.AssemblyList.First(), outPath, throwException)
+                this.SaveAssembly(this.Project.AssemblyList.First(), outPath, throwException);
             }
             else
             {
