@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Obfuscar
 {
@@ -27,30 +28,42 @@ namespace Obfuscar
         /// <param name="addNewLine">Whether to append a new line.</param>
         public static void Output(string messageCode, string? output, bool addNewLine = false)
         {
+            Output(Console.Out, messageCode, output, addNewLine);
+        }
+
+        /// <summary>
+        /// Write a line of text to output.
+        /// </summary>
+        /// <param name="writer">Text writer.</param>
+        /// <param name="messageCode">Message code.</param>
+        /// <param name="output">Text.</param>
+        /// <param name="addNewLine">Whether to append a new line.</param>
+        public static void Output(TextWriter writer, string messageCode, string? output, bool addNewLine = false)
+        {
             string? line;
 
-            if (isAtNewLine || addNewLine)
+            if (isAtNewLine)
             {
                 string dateTxt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
-                if (addNewLine)
-                {
-                    line = String.Concat(dateTxt, ": ", messageCode, " ", output, "\n");
-                    isAtNewLine = true;
-                }
-                else
-                {
-                    line = String.Concat(dateTxt, ": ", messageCode, " ", output);
-                    isAtNewLine = output?.EndsWith("\n") ?? false;
-                }
+                line = String.Concat(dateTxt, ": ", messageCode, " ", output);
             }
             else
             {
                 line = output;
-                isAtNewLine = output?.EndsWith("\n") ?? false;
             }
 
-            Console.Write(line);
+            if (addNewLine)
+            {
+                isAtNewLine = true;
+                writer.WriteLine(line);
+            }
+            else
+            {
+                isAtNewLine = output?.EndsWith("\n") ?? false;
+                writer.Write(line);
+            }
+
         }
     }
 }

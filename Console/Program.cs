@@ -43,7 +43,11 @@ namespace Obfuscar
             Log.OutputLine(MessageCodes.dbr099, Translations.GetTranslationOfKey(TranslationKeys.db_con_syntax));
             Log.OutputLine(MessageCodes.dbr100, null);
             Log.OutputLine(MessageCodes.dbr101, Translations.GetTranslationOfKey(TranslationKeys.db_options_colon));
-            optionSet.WriteOptionDescriptions(Console.Out);
+
+            using (OptionTextWriter writer = new OptionTextWriter(Console.Out, MessageCodes.dbr171))
+            {
+                optionSet.WriteOptionDescriptions(writer);
+            }
         }
 
         /// <summary>
