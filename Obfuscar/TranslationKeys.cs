@@ -159,6 +159,7 @@ namespace Obfuscar
         public const string db_rename_parameters = nameof(db_rename_parameters);
         public const string db_rename_properties = nameof(db_rename_properties);
         public const string db_settings_not_initialized = nameof(db_settings_not_initialized);
+        public const string db_syntax = nameof(db_syntax);
     }
 }
 #pragma warning restore 1591
