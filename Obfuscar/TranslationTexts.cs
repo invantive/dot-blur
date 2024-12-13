@@ -36,11 +36,15 @@ namespace Obfuscar
         private static Dictionary<string, Dictionary<string, string>> translationsByLanguage = new Dictionary<string, Dictionary<string, string>>()
         { { "DUMMY", new Dictionary<string, string>(){ } }, { Languages.ar, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "مجموعة نداءات" }
+          , { TranslationKeys.db_check_project_settings, "التحقق من إعدادات المشروع." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console هو فرع من Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [خيارات] [ملف المشروع] [ملف المشروع]" }
           , { TranslationKeys.db_con_title_par2, "*** وحدة تحكم DotBlur ({0}) في {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(ج) 2007-{0}، ريان ويليامز ومساهمون آخرون." }
           , { TranslationKeys.db_dbr002_msg_par1, "لا يمكن تعيين المتغيرين \"{0}\" و\"{1}\" معًا." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "يرجى تصحيح محتويات الملف '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "يجب أن يحتوي ملف تكوين XML على علامة الجذر <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "تعذر إنشاء المسار '{0}' المحدد بواسطة OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "يجب أن يكون المسار '{0}' المحدد بواسطة متغير InPath موجودًا،" }
           , { TranslationKeys.db_dbr007_msg_par1, "فشل تحميل ملف المفتاح '{0}'." }
@@ -48,7 +52,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "غير قادر على حل التبعية '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "استخدم 'العام'." }
           , { TranslationKeys.db_dbr010_msg_par1, "\"{0}\" غير صالح لقيمة 'typeattrib' لعناصر التخطي." }
+          , { TranslationKeys.db_dbr011_msg, "استخدم 'العام'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "\"{0}\" غير صالح لقيمة \"attrib\" لعنصر SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "غير قادر على استبدال المتغير '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "استخدم \"عام\" أو \"محمي\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "\"{0}\" غير صالح لقيمة \"attrib\" لعناصر التخطي." }
           , { TranslationKeys.db_dbr014_msg_par1, "غير قادر على قراءة ملف المشروع المحدد '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "استخدم خاصية KeyFile أو KeyContainer لتعيين المفتاح الذي تريد استخدامه." }
           , { TranslationKeys.db_dbr015_msg_par1, "سيؤدي إخفاء التجميع الموقع '{0}' إلى إنشاء تجميع غير صالح." }
@@ -106,12 +114,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "من المتوقع أن تكون الحالة إما \"تمت إعادة تسميتها\" أو \"تم تخطيها\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "من المتوقع أن تكون الحالة إما \"تمت إعادة تسميتها\" أو \"تم تخطيها\" بدلاً من {0} من '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "اسم الملف مفقود." }
+          , { TranslationKeys.db_dbr143_msg, "كان من المفترض أن يتم التعامل مع العلم الخارجي للمجموعة عند إنشاء المجموعة ويجب أن يتم بالفعل وضع علامة \"تخطي\" على جميع الأساليب في المجموعة." }
           , { TranslationKeys.db_dbr144_msg, "يجب أن يكون للطريقة اسم عندما لا يتم تخطي الطريقة ويكون للمجموعة اسم." }
           , { TranslationKeys.db_dbr145_msg_par1, "لم يتم توقيع \"{0}\" بسبب رمز الخطأ {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "يجب أن تكون الحالة \"تمت إعادة تسميتها\" أو \"تخطيها\" بدلاً من \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "القناة القياسية: {0}" }
           , { TranslationKeys.db_dbr154_msg, "لا توجد مجلدات إطارية إضافية:" }
           , { TranslationKeys.db_dbr155_msg, "لا يمكن استخراج اسم النوع." }
+          , { TranslationKeys.db_dbr156_msg_par1, "قم بتحميل تعريف مشروع XML من '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "تمت معالجة {0} متغير." }
+          , { TranslationKeys.db_dbr158_msg_par1, "تمت معالجة {0} تتضمن العلامات." }
+          , { TranslationKeys.db_dbr159_msg_par1, "تمت معالجة {0} مسارات بحث التجميع." }
+          , { TranslationKeys.db_dbr160_msg_par1, "تمت معالجة {0} وحدة." }
+          , { TranslationKeys.db_dbr161_msg_par1, "تمت معالجة {0} مجموعات وحدات." }
+          , { TranslationKeys.db_dbr162_msg, "تهيئة الإعدادات من المتغيرات." }
+          , { TranslationKeys.db_dbr166_msg_par1, "يجب أن يحتوي ملف الشهادة '{0}' على شهادة واحدة على الأقل." }
+          , { TranslationKeys.db_dbr167_msg_par1, "ملف الشهادة '{0}' له تنسيق غير صالح." }
+          , { TranslationKeys.db_dbr169_msg, "تحديد الأحرف لتوليد الاسم." }
+          , { TranslationKeys.db_dbr173_msg_par1, "تم العثور على تثبيت {0} في '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "لم يتم العثور على تثبيت {0} في '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "يمكن استخدام واحد على الأكثر من اختيار الشهادة حسب اسم ملف المفتاح وبصمة SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "يجب استخدام اختيار الشهادة عن طريق اسم ملف المفتاح أو بصمة SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "لا يمكن توفير كلمة مرور ملف المفتاح إلا عند تحديد الشهادة حسب اسم ملف المفتاح." }
           , { TranslationKeys.db_definition_missing, "التعريف مفقود." }
           , { TranslationKeys.db_display_version, "عرض رقم إصدار هذا التطبيق." }
           , { TranslationKeys.db_duplicate_character, "شخصية مكررة." }
@@ -127,8 +151,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "الاستثناء الداخلي: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "جاري تحميل المشروع '{0}'." }
           , { TranslationKeys.db_missing_group, "مجموعة مفقودة." }
+          , { TranslationKeys.db_missing_parent_reader, "قارئ الوالدين مفقود." }
           , { TranslationKeys.db_missing_parts, "أجزاء مفقودة." }
           , { TranslationKeys.db_missing_path_value, "قيمة مفقودة للمسار." }
+          , { TranslationKeys.db_missing_read_action, "إجراء القراءة مفقود." }
+          , { TranslationKeys.db_missing_setting_name, "اسم الإعداد مفقود." }
           , { TranslationKeys.db_not_hide_strings, "لا تخفي الخيوط." }
           , { TranslationKeys.db_not_rename_events, "لا تقم بإعادة تسمية الأحداث." }
           , { TranslationKeys.db_not_rename_fields, "لا تقم بإعادة تسمية الحقول." }
@@ -147,11 +174,15 @@ namespace Obfuscar
         }
         , { Languages.cs, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Zkontrolujte nastavení projektu." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console je rozvětvení aplikace Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) na {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams a další přispěvatelé." }
           , { TranslationKeys.db_dbr002_msg_par1, "Proměnné '{0}' a '{1}' nelze nastavit společně." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Opravte prosím obsah souboru '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Konfigurační soubor XML by měl mít kořenovou značku <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "Nepodařilo se vytvořit cestu '{0}' zadanou pomocí OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Cesta '{0}' zadaná proměnnou InPath musí existovat," }
           , { TranslationKeys.db_dbr007_msg_par1, "Selhání při načítání souboru s klíčem '{0}'." }
@@ -159,7 +190,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Nelze vyřešit závislost '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Použijte \"public\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" není platná pro hodnotu \"typeattrib\" prvků skip." }
+          , { TranslationKeys.db_dbr011_msg, "Použijte \"public\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" není platná pro hodnotu \"attrib\" elementu SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "Nelze nahradit proměnnou '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Použijte \"public\" nebo \"protected\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" není platná pro hodnotu \"attrib\" prvků skip." }
           , { TranslationKeys.db_dbr014_msg_par1, "Nelze načíst zadaný soubor projektu '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Pomocí vlastnosti KeyFile nebo KeyContainer nastavte klíč, který chcete použít." }
           , { TranslationKeys.db_dbr015_msg_par1, "Obfuskace podepsané sestavy '{0}' by vedla k neplatné sestavě." }
@@ -217,12 +252,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Očekává se, že stav bude buď \"Přejmenováno\", nebo \"Přeskočeno\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Očekává se, že stav bude buď \"Přejmenováno\", nebo \"Přeskočeno\" místo {0} nebo \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Chybějící název souboru." }
+          , { TranslationKeys.db_dbr143_msg, "Externí příznak skupiny by měl být zpracován již při jejím vytvoření a všechny metody ve skupině by měly být označeny jako přeskočené." }
           , { TranslationKeys.db_dbr144_msg, "Metoda musí mít název, pokud není přeskočena a skupina má název." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}\" nebyl podepsán kvůli chybovému kódu {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Stav musí být \"Přejmenováno\" nebo \"Přeskočeno\" místo \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Kanál Stdout: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Žádné další rámcové složky:" }
           , { TranslationKeys.db_dbr155_msg, "Nelze extrahovat název typu." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Načtení definice projektu XML z '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Zpracované proměnné {0}." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Zpracované {0} zahrnují značky." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Zpracováno {0} cest hledání sestavy." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Zpracováno {0} modulů." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Zpracováno {0} skupin modulů." }
+          , { TranslationKeys.db_dbr162_msg, "Inicializace nastavení z proměnných." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Soubor certifikátu \"{0}\" musí obsahovat alespoň jeden certifikát." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Soubor certifikátu '{0}' má nesprávný formát." }
+          , { TranslationKeys.db_dbr169_msg, "Určete znaky pro generování názvu." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Nalezena instalace {0} na adrese '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "V '{1}' nebyla nalezena žádná instalace {0}." }
+          , { TranslationKeys.db_dbr175_msg, "Lze použít nejvýše jeden z certifikátů vybraných podle názvu souboru klíče a otisku SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "Je třeba použít buď výběr certifikátu podle názvu souboru s klíčem, nebo otisk SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "Heslo souboru s klíčem lze zadat pouze v případě, že je certifikát vybrán podle názvu souboru s klíčem." }
           , { TranslationKeys.db_definition_missing, "Definice chybí." }
           , { TranslationKeys.db_display_version, "Zobrazení čísla verze této aplikace." }
           , { TranslationKeys.db_duplicate_character, "Duplicitní znak." }
@@ -238,8 +289,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Vnitřní výjimka: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Načítání projektu '{0}'." }
           , { TranslationKeys.db_missing_group, "Chybějící skupina." }
+          , { TranslationKeys.db_missing_parent_reader, "Chybějící rodičovský čtenář." }
           , { TranslationKeys.db_missing_parts, "Chybějící díly." }
           , { TranslationKeys.db_missing_path_value, "Chybějící hodnota pro cestu." }
+          , { TranslationKeys.db_missing_read_action, "Chybějící čtení." }
+          , { TranslationKeys.db_missing_setting_name, "Chybějící název nastavení." }
           , { TranslationKeys.db_not_hide_strings, "Neskrývání řetězců." }
           , { TranslationKeys.db_not_rename_events, "Nepřejmenovávejte události." }
           , { TranslationKeys.db_not_rename_fields, "Nepřejmenovávejte pole." }
@@ -258,11 +312,15 @@ namespace Obfuscar
         }
         , { Languages.da, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Tjek projektindstillingerne." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console er en forgrening af Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Indstillinger] [projekt_fil] [projekt_fil]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) den {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams og andre bidragydere." }
           , { TranslationKeys.db_dbr002_msg_par1, "Variablerne '{0}' og '{1}' kan ikke indstilles sammen." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Ret venligst indholdet af filen '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML-konfigurationsfilen skal have et <{0}> root-tag." }
           , { TranslationKeys.db_dbr005_msg_par1, "Kunne ikke oprette stien '{0}' specificeret af OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Stien '{0}', der er angivet af InPath-variablen, skal eksistere," }
           , { TranslationKeys.db_dbr007_msg_par1, "Fejl i indlæsning af nøglefilen '{0}'." }
@@ -270,7 +328,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Kan ikke løse afhængigheden '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Brug 'offentlig'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' er ikke gyldig for 'typeattrib'-værdien for skip-elementer." }
+          , { TranslationKeys.db_dbr011_msg, "Brug 'offentlig'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' er ikke gyldig for 'attrib'-værdien i SkipType-elementet." }
           , { TranslationKeys.db_dbr012_msg_par1, "Kunne ikke erstatte variablen '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Brug 'offentlig' eller 'beskyttet'." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}' er ikke gyldig for 'attrib'-værdien af skip-elementer." }
           , { TranslationKeys.db_dbr014_msg_par1, "Kunne ikke læse den angivne projektfil '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Brug egenskaben KeyFile eller KeyContainer til at angive en nøgle, der skal bruges." }
           , { TranslationKeys.db_dbr015_msg_par1, "Obfuskering af den signerede samling '{0}' ville resultere i en ugyldig samling." }
@@ -328,12 +390,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Status forventes at være enten 'Renamed' eller 'Skipped'." }
           , { TranslationKeys.db_dbr139_msg_par1, "Status forventes at være enten 'Renamed' eller 'Skipped' i stedet for {0} eller '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Manglende filnavn." }
+          , { TranslationKeys.db_dbr143_msg, "Gruppens eksterne flag skulle have været håndteret, da gruppen blev oprettet, og alle metoder i gruppen skulle allerede være markeret som sprunget over." }
           , { TranslationKeys.db_dbr144_msg, "Metoden skal have et navn, når metoden ikke er sprunget over, og gruppen har et navn." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' blev IKKE signeret på grund af fejlkode {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status skal være 'Renamed' eller 'Skipped' i stedet for '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Ingen ekstra rammemapper:" }
           , { TranslationKeys.db_dbr155_msg, "Kan ikke udtrække typenavn." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Indlæs XML-projektdefinition fra '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Behandlet {0} variabler." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Behandlet {0} inkluderer tags." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Behandlet {0} monteringssøgningsstier." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Behandlet {0} moduler." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Behandlet {0} modulgrupper." }
+          , { TranslationKeys.db_dbr162_msg, "Initialiser indstillinger fra variabler." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Certifikatfilen '{0}' skal indeholde mindst ét certifikat." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Certifikatfilen '{0}' har et ugyldigt format." }
+          , { TranslationKeys.db_dbr169_msg, "Bestem tegn til navnegenerering." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Fandt installation af {0} på '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Fandt ingen installation af {0} i '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Der kan højst bruges et af de certifikater, der vælges ud fra nøglefilens navn og SHA1 thumbprint." }
+          , { TranslationKeys.db_dbr176_msg, "Der skal bruges enten certifikatvalg via nøglefilnavn eller SHA1 thumbprint." }
+          , { TranslationKeys.db_dbr177_msg, "Adgangskoden til nøglefilen kan kun angives, når certifikatet vælges med nøglefilens navn." }
           , { TranslationKeys.db_definition_missing, "Der mangler en definition." }
           , { TranslationKeys.db_display_version, "Vis versionsnummeret for denne applikation." }
           , { TranslationKeys.db_duplicate_character, "Duplikeret tegn." }
@@ -349,8 +427,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Indre undtagelse: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Indlæser projekt '{0}'." }
           , { TranslationKeys.db_missing_group, "Mangler en gruppe." }
+          , { TranslationKeys.db_missing_parent_reader, "Mangler en forælder som læser." }
           , { TranslationKeys.db_missing_parts, "Manglende dele." }
           , { TranslationKeys.db_missing_path_value, "Manglende værdi for sti." }
+          , { TranslationKeys.db_missing_read_action, "Missing read action." }
+          , { TranslationKeys.db_missing_setting_name, "Mangler navn på indstilling." }
           , { TranslationKeys.db_not_hide_strings, "Skjuler ikke strenge." }
           , { TranslationKeys.db_not_rename_events, "Du må ikke omdøbe begivenheder." }
           , { TranslationKeys.db_not_rename_fields, "Du må ikke omdøbe felter." }
@@ -369,11 +450,15 @@ namespace Obfuscar
         }
         , { Languages.de, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Aufrufstapel" }
+          , { TranslationKeys.db_check_project_settings, "Überprüfen Sie die Projekteinstellungen." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console ist ein Fork von Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Optionen] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) am {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams und andere Mitwirkende." }
           , { TranslationKeys.db_dbr002_msg_par1, "Die Variablen '{0}' und '{1}' können nicht zusammen gesetzt werden." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Bitte korrigieren Sie den Inhalt der Datei '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Die XML-Konfigurationsdatei sollte einen <{0}> Root-Tag haben." }
           , { TranslationKeys.db_dbr005_msg_par1, "Der durch OutPath angegebene Pfad '{0}' konnte nicht erstellt werden." }
           , { TranslationKeys.db_dbr006_msg_par1, "Der in der Variable InPath angegebene Pfad '{0}' muss existieren," }
           , { TranslationKeys.db_dbr007_msg_par1, "Laden der Schlüsseldatei '{0}' fehlgeschlagen." }
@@ -381,7 +466,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Die Abhängigkeit '{0}' kann nicht aufgelöst werden." }
           , { TranslationKeys.db_dbr010_msg, "Verwenden Sie \"öffentlich\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' ist für den 'typeattrib'-Wert von Skip-Elementen nicht gültig." }
+          , { TranslationKeys.db_dbr011_msg, "Verwenden Sie \"öffentlich\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" ist für den \"attrib\"-Wert des SkipType-Elements nicht gültig." }
           , { TranslationKeys.db_dbr012_msg_par1, "Die Variable '{0}' kann nicht ersetzt werden." }
+          , { TranslationKeys.db_dbr013_msg, "Verwenden Sie \"öffentlich\" oder \"geschützt\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" ist für den \"attrib\"-Wert von \"Skip\"-Elementen nicht gültig." }
           , { TranslationKeys.db_dbr014_msg_par1, "Die angegebene Projektdatei '{0}' kann nicht gelesen werden." }
           , { TranslationKeys.db_dbr015_msg, "Verwenden Sie die Eigenschaft KeyFile oder KeyContainer, um einen zu verwendenden Schlüssel festzulegen." }
           , { TranslationKeys.db_dbr015_msg_par1, "Die Verschleierung der signierten Assembly '{0}' würde zu einer ungültigen Assembly führen." }
@@ -439,12 +528,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Es wird erwartet, dass der Status entweder \"Umbenannt\" oder \"Übersprungen\" lautet." }
           , { TranslationKeys.db_dbr139_msg_par1, "Es wird erwartet, dass der Status entweder \"Umbenannt\" oder \"Übersprungen\" anstelle von {0} oder \"{1}\" lautet." }
           , { TranslationKeys.db_dbr141_msg, "Fehlender Dateiname." }
+          , { TranslationKeys.db_dbr143_msg, "Das externe Flag der Gruppe sollte bereits bei der Erstellung der Gruppe behandelt worden sein und alle Methoden der Gruppe sollten bereits als übersprungen markiert sein." }
           , { TranslationKeys.db_dbr144_msg, "Die Methode muss einen Namen haben, wenn die Methode nicht übersprungen wird und die Gruppe einen Namen hat." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' wurde aufgrund von Fehlercode {1} NICHT signiert." }
           , { TranslationKeys.db_dbr149_msg_par1, "Der Status muss 'Umbenannt' oder 'Übersprungen' anstelle von '{0}' sein." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-Kanal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Keine zusätzlichen Framework-Ordner:" }
           , { TranslationKeys.db_dbr155_msg, "Typname kann nicht extrahiert werden." }
+          , { TranslationKeys.db_dbr156_msg_par1, "XML-Projektdefinition aus '{0}' laden." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Verarbeitete {0} Variablen." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Verarbeitete {0} Include-Tags." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Verarbeitete {0} Baugruppen-Suchpfade." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Verarbeitete {0} Module." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Verarbeitete {0} Modulgruppen." }
+          , { TranslationKeys.db_dbr162_msg, "Initialisieren von Einstellungen aus Variablen." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Die Zertifikatsdatei '{0}' muss mindestens ein Zertifikat enthalten." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Die Zertifikatsdatei '{0}' hat ein ungültiges Format." }
+          , { TranslationKeys.db_dbr169_msg, "Bestimmen Sie Zeichen für die Namensgenerierung." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Installation von {0} bei '{1}' gefunden." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Keine Installation von {0} in '{1}' gefunden." }
+          , { TranslationKeys.db_dbr175_msg, "Es kann höchstens ein Zertifikat nach Schlüsseldateiname und SHA1-Thumbprint verwendet werden." }
+          , { TranslationKeys.db_dbr176_msg, "Es muss entweder die Zertifikatsauswahl über den Namen der Schlüsseldatei oder der SHA1-Thumbprint verwendet werden." }
+          , { TranslationKeys.db_dbr177_msg, "Das Passwort für die Schlüsseldatei kann nur angegeben werden, wenn das Zertifikat über den Namen der Schlüsseldatei ausgewählt wurde." }
           , { TranslationKeys.db_definition_missing, "Es fehlt eine Definition." }
           , { TranslationKeys.db_display_version, "Versionsnummer dieser Anwendung anzeigen." }
           , { TranslationKeys.db_duplicate_character, "Doppeltes Zeichen." }
@@ -460,8 +565,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Innere Ausnahme: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Projekt '{0}' wird geladen." }
           , { TranslationKeys.db_missing_group, "Fehlende Gruppe." }
+          , { TranslationKeys.db_missing_parent_reader, "Fehlender elterlicher Leser." }
           , { TranslationKeys.db_missing_parts, "Fehlende Teile." }
           , { TranslationKeys.db_missing_path_value, "Fehlender Wert für Pfad." }
+          , { TranslationKeys.db_missing_read_action, "Missing read action." }
+          , { TranslationKeys.db_missing_setting_name, "Der Name der Einstellung fehlt." }
           , { TranslationKeys.db_not_hide_strings, "Keine versteckten Fäden." }
           , { TranslationKeys.db_not_rename_events, "Benennen Sie Ereignisse nicht um." }
           , { TranslationKeys.db_not_rename_fields, "Benennen Sie keine Felder um." }
@@ -480,11 +588,15 @@ namespace Obfuscar
         }
         , { Languages.en, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Check project settings." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console is a fork of Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) on {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams and other contributors." }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}' and '{1}' variables can not be set together." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Please correct the contents of the file '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML configuration file should have a <{0}> root tag." }
           , { TranslationKeys.db_dbr005_msg_par1, "Could not create the path '{0}' specified by OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Path '{0}' specified by InPath variable must exist," }
           , { TranslationKeys.db_dbr007_msg_par1, "Failure loading key file '{0}'." }
@@ -492,7 +604,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Unable to resolve dependency '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Use 'public'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' is not valid for the 'typeattrib' value of skip elements." }
+          , { TranslationKeys.db_dbr011_msg, "Use 'public'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' is not valid for the 'attrib' value of the SkipType element." }
           , { TranslationKeys.db_dbr012_msg_par1, "Unable to replace variable '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Use 'public' or 'protected'." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}' is not valid for the 'attrib' value of skip elements." }
           , { TranslationKeys.db_dbr014_msg_par1, "Unable to read specified project file '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Use the KeyFile or KeyContainer property to set a key to use." }
           , { TranslationKeys.db_dbr015_msg_par1, "Obfuscating the signed assembly '{0}' would result in an invalid assembly." }
@@ -550,12 +666,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Status is expected to be either 'Renamed' or 'Skipped'." }
           , { TranslationKeys.db_dbr139_msg_par1, "Status is expected to be either 'Renamed' or 'Skipped' instead of {0} of '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Missing file name." }
+          , { TranslationKeys.db_dbr143_msg, "Group's external flag should have been handled when the group was created and all methods in the group should already be marked skipped." }
           , { TranslationKeys.db_dbr144_msg, "Method must have a name when the method is not skipped and the group has a name." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' was NOT signed due to error code {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status must be 'Renamed' or 'Skipped' instead of '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout channel: {0}" }
           , { TranslationKeys.db_dbr154_msg, "No extra framework folders:" }
           , { TranslationKeys.db_dbr155_msg, "Can not extract type name." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Load XML project definition from '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Processed {0} variables." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Processed {0} include tags." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Processed {0} assembly search paths." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Processed {0} modules." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Processed {0} module groups." }
+          , { TranslationKeys.db_dbr162_msg, "Initialize settings from variables." }
+          , { TranslationKeys.db_dbr166_msg_par1, "The certificate file '{0}' must contain at least one certificate." }
+          , { TranslationKeys.db_dbr167_msg_par1, "The certificate file '{0}' has an invalid format." }
+          , { TranslationKeys.db_dbr169_msg, "Determine characters for name generation." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Found installation of {0} at '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Found no installation of {0} in '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "At most one of certificate selection by key file name and SHA1 thumbprint can be used." }
+          , { TranslationKeys.db_dbr176_msg, "Either certificate selection by key file name or SHA1 thumbprint must be used." }
+          , { TranslationKeys.db_dbr177_msg, "The key file password can only be supplied when the certificate is selected by key file name." }
           , { TranslationKeys.db_definition_missing, "Definition is missing." }
           , { TranslationKeys.db_display_version, "Display version number of this application." }
           , { TranslationKeys.db_duplicate_character, "Duplicate character." }
@@ -571,8 +703,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Inner exception: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Loading project '{0}'." }
           , { TranslationKeys.db_missing_group, "Missing group." }
+          , { TranslationKeys.db_missing_parent_reader, "Missing parent reader." }
           , { TranslationKeys.db_missing_parts, "Missing parts." }
           , { TranslationKeys.db_missing_path_value, "Missing value for path." }
+          , { TranslationKeys.db_missing_read_action, "Missing read action." }
+          , { TranslationKeys.db_missing_setting_name, "Missing setting name." }
           , { TranslationKeys.db_not_hide_strings, "Not hiding strings." }
           , { TranslationKeys.db_not_rename_events, "Do not rename events." }
           , { TranslationKeys.db_not_rename_fields, "Do not rename fields." }
@@ -591,11 +726,15 @@ namespace Obfuscar
         }
         , { Languages.es, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Pila de llamadas" }
+          , { TranslationKeys.db_check_project_settings, "Compruebe la configuración del proyecto." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console es una bifurcación de Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Opciones] [archivo_proyecto] [archivo_proyecto]" }
           , { TranslationKeys.db_con_title_par2, "*** Consola DotBlur ({0}) el {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams y otros colaboradores." }
           , { TranslationKeys.db_dbr002_msg_par1, "Las variables '{0}' y '{1}' no pueden establecerse juntas." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Por favor, corrija el contenido del fichero '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "El archivo de configuración XML debe tener una etiqueta raíz <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "No se ha podido crear la ruta '{0}' especificada por OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "La ruta '{0}' especificada por la variable InPath debe existir," }
           , { TranslationKeys.db_dbr007_msg_par1, "Fallo al cargar el archivo de claves '{0}'." }
@@ -603,7 +742,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "No se ha podido resolver la dependencia '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Utiliza \"público\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' no es válido para el valor 'typeattrib' de los elementos skip." }
+          , { TranslationKeys.db_dbr011_msg, "Utiliza \"público\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' no es válido para el valor 'attrib' del elemento SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "No se ha podido reemplazar la variable '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Utiliza \"público\" o \"protegido\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}' no es válido para el valor 'attrib' de los elementos skip." }
           , { TranslationKeys.db_dbr014_msg_par1, "No se ha podido leer el archivo de proyecto especificado '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Utilice la propiedad KeyFile o KeyContainer para establecer una clave a utilizar." }
           , { TranslationKeys.db_dbr015_msg_par1, "La ofuscación del ensamblado firmado '{0}' daría como resultado un ensamblado inválido." }
@@ -661,12 +804,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Se espera que el estado sea 'Renombrado' u 'Omitido'." }
           , { TranslationKeys.db_dbr139_msg_par1, "Se espera que el estado sea 'Renombrado' u 'Omitido' en lugar de {0} de '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Falta el nombre del archivo." }
+          , { TranslationKeys.db_dbr143_msg, "La bandera externa del grupo debería haberse gestionado cuando se creó el grupo y todos los métodos del grupo deberían estar ya marcados como omitidos." }
           , { TranslationKeys.db_dbr144_msg, "El método debe tener un nombre cuando el método no se omite y el grupo tiene un nombre." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' NO ha sido firmado debido al código de error {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "El estado debe ser 'Renombrado' u 'Omitido' en lugar de '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Canal de salida: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Sin carpetas adicionales:" }
           , { TranslationKeys.db_dbr155_msg, "No se puede extraer el nombre del tipo." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Cargar definición de proyecto XML de '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Variables procesadas {0}." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Procesadas {0} etiquetas de inclusión." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Procesadas {0} rutas de búsqueda de montaje." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Procesados {0} módulos." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Procesados {0} grupos de módulos." }
+          , { TranslationKeys.db_dbr162_msg, "Inicializar ajustes a partir de variables." }
+          , { TranslationKeys.db_dbr166_msg_par1, "El archivo de certificado '{0}' debe contener al menos un certificado." }
+          , { TranslationKeys.db_dbr167_msg_par1, "El archivo de certificado '{0}' tiene un formato no válido." }
+          , { TranslationKeys.db_dbr169_msg, "Determinar los caracteres para la generación de nombres." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Encontrada instalación de {0} en '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "No se ha encontrado ninguna instalación de {0} en '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Se puede utilizar como máximo una selección de certificados por nombre de archivo de claves y huella digital SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "Debe utilizarse la selección de certificado por nombre de archivo de clave o la huella digital SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "La contraseña del archivo de claves sólo puede facilitarse cuando el certificado se selecciona por nombre de archivo de claves." }
           , { TranslationKeys.db_definition_missing, "Falta la definición." }
           , { TranslationKeys.db_display_version, "Muestra el número de versión de esta aplicación." }
           , { TranslationKeys.db_duplicate_character, "Carácter duplicado." }
@@ -682,8 +841,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Excepción interna: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Cargando proyecto '{0}'." }
           , { TranslationKeys.db_missing_group, "Falta un grupo." }
+          , { TranslationKeys.db_missing_parent_reader, "Faltan padres lectores." }
           , { TranslationKeys.db_missing_parts, "Faltan piezas." }
           , { TranslationKeys.db_missing_path_value, "Falta el valor de la ruta." }
+          , { TranslationKeys.db_missing_read_action, "Falta leer acción." }
+          , { TranslationKeys.db_missing_setting_name, "Falta el nombre del ajuste." }
           , { TranslationKeys.db_not_hide_strings, "No esconder las cuerdas." }
           , { TranslationKeys.db_not_rename_events, "No cambie el nombre de los eventos." }
           , { TranslationKeys.db_not_rename_fields, "No cambie el nombre de los campos." }
@@ -702,11 +864,15 @@ namespace Obfuscar
         }
         , { Languages.fi, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Tarkista projektin asetukset." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console on haarautunut Obfuscarista (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [project_file] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) on {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams ja muut avustajat." }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}'- ja '{1}'-muuttujia ei voi asettaa yhdessä." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Korjaa tiedoston '{0}' sisältö." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML-konfiguraatiotiedostossa pitäisi olla <{0}>-juuritunniste." }
           , { TranslationKeys.db_dbr005_msg_par1, "OutPathin määrittämää polkua '{0}' ei voitu luoda." }
           , { TranslationKeys.db_dbr006_msg_par1, "InPath-muuttujan määrittämän polun '{0}' on oltava olemassa," }
           , { TranslationKeys.db_dbr007_msg_par1, "Avaintiedoston '{0}' lataaminen epäonnistui." }
@@ -714,7 +880,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Riippuvuutta '{0}' ei pystytä ratkaisemaan." }
           , { TranslationKeys.db_dbr010_msg, "Käytä ilmaisua 'julkinen'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" ei kelpaa skip-elementtien typeattrib-arvolle." }
+          , { TranslationKeys.db_dbr011_msg, "Käytä ilmaisua 'julkinen'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" ei kelpaa SkipType-elementin attrib-arvolle." }
           , { TranslationKeys.db_dbr012_msg_par1, "Muuttujaa '{0}' ei pystytä korvaamaan." }
+          , { TranslationKeys.db_dbr013_msg, "Käytä sanaa \"julkinen\" tai \"suojattu\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" ei kelpaa skip-elementtien attrib-arvolle." }
           , { TranslationKeys.db_dbr014_msg_par1, "Määritettyä projektitiedostoa '{0}' ei pystytä lukemaan." }
           , { TranslationKeys.db_dbr015_msg, "Käytä KeyFile- tai KeyContainer-ominaisuutta käytettävän avaimen asettamiseen." }
           , { TranslationKeys.db_dbr015_msg_par1, "Allekirjoitetun kokoonpanon '{0}' peittäminen johtaisi virheelliseen kokoonpanoon." }
@@ -772,12 +942,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Tilan odotetaan olevan joko \"Uudelleen nimetty\" tai \"Ohitettu\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Tilan odotetaan olevan joko \"Uudelleen nimetty\" tai \"Ohitettu\" eikä {0} tai \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Tiedoston nimi puuttuu." }
+          , { TranslationKeys.db_dbr143_msg, "Ryhmän ulkoinen lippu olisi pitänyt käsitellä jo ryhmää luotaessa, ja kaikki ryhmän metodit olisi jo pitänyt merkitä ohitetuiksi." }
           , { TranslationKeys.db_dbr144_msg, "Metodilla on oltava nimi, kun metodia ei ole ohitettu ja ryhmällä on nimi." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}\" EI allekirjoitettu virhekoodin {1} vuoksi." }
           , { TranslationKeys.db_dbr149_msg_par1, "Tilan on oltava 'Renamed' tai 'Skipped' eikä '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanava: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Ei ylimääräisiä kehyskansioita:" }
           , { TranslationKeys.db_dbr155_msg, "Tyypin nimeä ei voida poimia." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Lataa XML-projektin määritelmä osoitteesta '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Käsitelty {0} muuttujaa." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Käsitellyt {0} sisältävät tunnisteet." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Käsitelty {0} kokoonpanon hakupolkua." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Käsitelty {0} moduulia." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Käsitelty {0} moduuliryhmää." }
+          , { TranslationKeys.db_dbr162_msg, "Asetusten alustaminen muuttujista." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Varmentetiedoston '{0}' on sisällettävä vähintään yksi varmenne." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Varmentetiedoston '{0}' muoto on virheellinen." }
+          , { TranslationKeys.db_dbr169_msg, "Määritä merkit nimen muodostamista varten." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Löytyi {0}:n asennus osoitteessa '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Ei löytynyt {0}:n asennusta paikassa '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Voidaan käyttää korkeintaan yhtä varmenteen valintaa avaintiedoston nimen ja SHA1-peukalonjäljen mukaan." }
+          , { TranslationKeys.db_dbr176_msg, "On käytettävä joko varmenteen valintaa avaintiedoston nimen tai SHA1-peukalonjäljen perusteella." }
+          , { TranslationKeys.db_dbr177_msg, "Avaintiedoston salasana voidaan antaa vain, kun varmenne valitaan avaintiedoston nimen perusteella." }
           , { TranslationKeys.db_definition_missing, "Määritelmä puuttuu." }
           , { TranslationKeys.db_display_version, "Näyttää tämän sovelluksen versionumeron." }
           , { TranslationKeys.db_duplicate_character, "Kaksoishahmo." }
@@ -793,8 +979,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Sisäinen poikkeus: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Lataa projekti '{0}'." }
           , { TranslationKeys.db_missing_group, "Puuttuva ryhmä." }
+          , { TranslationKeys.db_missing_parent_reader, "Puuttuva vanhempi lukija." }
           , { TranslationKeys.db_missing_parts, "Puuttuvat osat." }
           , { TranslationKeys.db_missing_path_value, "Polun puuttuva arvo." }
+          , { TranslationKeys.db_missing_read_action, "Missing read action." }
+          , { TranslationKeys.db_missing_setting_name, "Asetusten nimi puuttuu." }
           , { TranslationKeys.db_not_hide_strings, "Ei piilotella jousia." }
           , { TranslationKeys.db_not_rename_events, "Älä nimeä tapahtumia uudelleen." }
           , { TranslationKeys.db_not_rename_fields, "Älä nimeä kenttiä uudelleen." }
@@ -813,11 +1002,15 @@ namespace Obfuscar
         }
         , { Languages.fr, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Pile d'appels" }
+          , { TranslationKeys.db_check_project_settings, "Vérifier les paramètres du projet." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console est un fork de Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [fichier_projet] [fichier_projet]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) on {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams et autres contributeurs." }
           , { TranslationKeys.db_dbr002_msg_par1, "Les variables '{0}' et '{1}' ne peuvent pas être définies ensemble." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Veuillez corriger le contenu du fichier '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Le fichier de configuration XML doit avoir une balise racine <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "Impossible de créer le chemin '{0}' spécifié par OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Le chemin '{0}' spécifié par la variable InPath doit exister," }
           , { TranslationKeys.db_dbr007_msg_par1, "Échec du chargement du fichier clé '{0}'." }
@@ -825,7 +1018,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Impossible de résoudre la dépendance '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Utiliser \"public\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" n'est pas valable pour la valeur \"typeattrib\" des éléments de saut." }
+          , { TranslationKeys.db_dbr011_msg, "Utiliser \"public\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" n'est pas valide pour la valeur \"attrib\" de l'élément SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "Impossible de remplacer la variable '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Utilisez \"public\" ou \"protégé\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" n'est pas valable pour la valeur \"attrib\" des éléments de saut." }
           , { TranslationKeys.db_dbr014_msg_par1, "Impossible de lire le fichier de projet spécifié '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Utilisez la propriété KeyFile ou KeyContainer pour définir une clé à utiliser." }
           , { TranslationKeys.db_dbr015_msg_par1, "L'obscurcissement de l'assemblage signé \"{0}\" aboutirait à un assemblage non valide." }
@@ -883,12 +1080,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Le statut devrait être \"Renommé\" ou \"Ignoré\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Le statut devrait être \"Renommé\" ou \"Ignoré\" au lieu de {0} ou \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Nom de fichier manquant." }
+          , { TranslationKeys.db_dbr143_msg, "L'indicateur externe du groupe aurait dû être traité lors de la création du groupe et toutes les méthodes du groupe devraient déjà être marquées comme étant ignorées." }
           , { TranslationKeys.db_dbr144_msg, "La méthode doit avoir un nom lorsque la méthode n'est pas ignorée et que le groupe a un nom." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' n'a pas été signé en raison du code d'erreur {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Le statut doit être \"Renommé\" ou \"Ignoré\" au lieu de \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Canal de sortie : {0}" }
           , { TranslationKeys.db_dbr154_msg, "Pas de dossiers supplémentaires :" }
           , { TranslationKeys.db_dbr155_msg, "Impossible d'extraire le nom du type." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Charger la définition du projet XML de '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Traitement de {0} variables." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Les balises {0} traitées sont incluses." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Traitement de {0} chemins de recherche d'assemblage." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Traitement de {0} modules." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Traitement de {0} groupes de modules." }
+          , { TranslationKeys.db_dbr162_msg, "Initialiser les paramètres à partir des variables." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Le fichier de certificats \"{0}\" doit contenir au moins un certificat." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Le format du fichier de certificat \"{0}\" n'est pas valide." }
+          , { TranslationKeys.db_dbr169_msg, "Déterminer les caractères pour la génération des noms." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Installation trouvée de {0} à '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Aucune installation de {0} n'a été trouvée dans '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Il est possible d'utiliser au maximum un certificat sélectionné par le nom du fichier de clés et l'empreinte SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "Il faut utiliser soit la sélection du certificat par le nom du fichier de clé, soit l'empreinte SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "Le mot de passe du fichier clé ne peut être fourni que lorsque le certificat est sélectionné par le nom du fichier clé." }
           , { TranslationKeys.db_definition_missing, "La définition est manquante." }
           , { TranslationKeys.db_display_version, "Affiche le numéro de version de cette application." }
           , { TranslationKeys.db_duplicate_character, "Caractère dupliqué." }
@@ -904,8 +1117,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Exception interne : {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Chargement du projet '{0}'." }
           , { TranslationKeys.db_missing_group, "Groupe manquant." }
+          , { TranslationKeys.db_missing_parent_reader, "Parent lecteur manquant." }
           , { TranslationKeys.db_missing_parts, "Pièces manquantes." }
           , { TranslationKeys.db_missing_path_value, "Valeur manquante pour le chemin." }
+          , { TranslationKeys.db_missing_read_action, "Action de lecture manquante." }
+          , { TranslationKeys.db_missing_setting_name, "Nom du paramètre manquant." }
           , { TranslationKeys.db_not_hide_strings, "Ne pas cacher les ficelles." }
           , { TranslationKeys.db_not_rename_events, "Ne pas renommer les événements." }
           , { TranslationKeys.db_not_rename_fields, "Ne pas renommer les champs." }
@@ -924,11 +1140,15 @@ namespace Obfuscar
         }
         , { Languages.it, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Controllare le impostazioni del progetto." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console è un fork di Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) il {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams e altri collaboratori." }
           , { TranslationKeys.db_dbr002_msg_par1, "Le variabili \"{0}\" e \"{1}\" non possono essere impostate insieme." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Correggere il contenuto del file \"{0}\"." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Il file di configurazione XML deve avere un tag principale <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "Impossibile creare il percorso '{0}' specificato da OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Il percorso '{0}' specificato dalla variabile InPath deve esistere," }
           , { TranslationKeys.db_dbr007_msg_par1, "Errore nel caricamento del file chiave '{0}'." }
@@ -936,7 +1156,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Impossibile risolvere la dipendenza '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Utilizzare \"pubblico\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" non è valido per il valore \"typeattrib\" degli elementi di salto." }
+          , { TranslationKeys.db_dbr011_msg, "Utilizzare \"pubblico\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" non è valido per il valore \"attrib\" dell'elemento SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "Impossibile sostituire la variabile '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Utilizzare \"pubblico\" o \"protetto\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" non è valido per il valore \"attrib\" degli elementi di salto." }
           , { TranslationKeys.db_dbr014_msg_par1, "Impossibile leggere il file di progetto specificato '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Utilizzare la proprietà KeyFile o KeyContainer per impostare una chiave da utilizzare." }
           , { TranslationKeys.db_dbr015_msg_par1, "L'offuscamento dell'assembly firmato '{0}' risulterebbe in un assembly non valido." }
@@ -994,12 +1218,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Lo stato dovrebbe essere \"Rinominato\" o \"Saltato\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Lo stato dovrebbe essere \"Rinominato\" o \"Saltato\" invece di {0} o \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Nome del file mancante." }
+          , { TranslationKeys.db_dbr143_msg, "Il flag esterno del gruppo dovrebbe essere stato gestito quando il gruppo è stato creato e tutti i metodi del gruppo dovrebbero essere già contrassegnati come saltati." }
           , { TranslationKeys.db_dbr144_msg, "Il metodo deve avere un nome quando il metodo non viene saltato e il gruppo ha un nome." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' NON è stato firmato a causa del codice di errore {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Lo stato deve essere \"Rinominato\" o \"Saltato\" invece di \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Canale stdout: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Nessuna cartella extra del framework:" }
           , { TranslationKeys.db_dbr155_msg, "Impossibile estrarre il nome del tipo." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Carica la definizione di progetto XML da '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Elaborate {0} variabili." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Elaborato {0} include tag." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Elaborati {0} percorsi di ricerca degli assiemi." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Elaborati {0} moduli." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Elaborati {0} gruppi di moduli." }
+          , { TranslationKeys.db_dbr162_msg, "Inizializza le impostazioni dalle variabili." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Il file di certificato \"{0}\" deve contenere almeno un certificato." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Il file di certificato \"{0}\" ha un formato non valido." }
+          , { TranslationKeys.db_dbr169_msg, "Determinare i caratteri per la generazione dei nomi." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Trovata installazione di {0} in '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Non è stata trovata alcuna installazione di {0} in '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "È possibile utilizzare al massimo uno dei certificati selezionati in base al nome del file chiave e all'impronta SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "È necessario utilizzare la selezione del certificato tramite il nome del file chiave o l'impronta SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "La password del file chiave può essere fornita solo quando il certificato è selezionato per nome del file chiave." }
           , { TranslationKeys.db_definition_missing, "Manca la definizione." }
           , { TranslationKeys.db_display_version, "Visualizza il numero di versione di questa applicazione." }
           , { TranslationKeys.db_duplicate_character, "Carattere duplicato." }
@@ -1015,8 +1255,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Eccezione interna: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Caricamento del progetto '{0}'." }
           , { TranslationKeys.db_missing_group, "Gruppo mancante." }
+          , { TranslationKeys.db_missing_parent_reader, "Manca il lettore genitore." }
           , { TranslationKeys.db_missing_parts, "Parti mancanti." }
           , { TranslationKeys.db_missing_path_value, "Valore mancante per il percorso." }
+          , { TranslationKeys.db_missing_read_action, "Manca l'azione di lettura." }
+          , { TranslationKeys.db_missing_setting_name, "Nome dell'impostazione mancante." }
           , { TranslationKeys.db_not_hide_strings, "Non nasconde le corde." }
           , { TranslationKeys.db_not_rename_events, "Non rinominare gli eventi." }
           , { TranslationKeys.db_not_rename_fields, "Non rinominare i campi." }
@@ -1035,11 +1278,15 @@ namespace Obfuscar
         }
         , { Languages.ja, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "コールスタック" }
+          , { TranslationKeys.db_check_project_settings, "プロジェクトの設定を確認する。" }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console は Obfuscar (https://www.obfuscar.com) のフォークです。" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [オプション] [プロジェクトファイル] [プロジェクトファイル］" }
           , { TranslationKeys.db_con_title_par2, "*** ドットブラーコンソール ({0}) on {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}、ライアン・ウィリアムズ、その他の寄稿者。" }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}' と '{1}' 変数を一緒に設定することはできません。" }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "ファイル'{0}'の内容を修正してください。" }
+          , { TranslationKeys.db_dbr004_msg_par1, "XMLコンフィギュレーション・ファイルは<{0}>ルート・タグを持つべきである。" }
           , { TranslationKeys.db_dbr005_msg_par1, "OutPath で指定されたパス '{0}' を作成できませんでした。" }
           , { TranslationKeys.db_dbr006_msg_par1, "InPath 変数で指定されたパス '{0}' が存在しなければならない、" }
           , { TranslationKeys.db_dbr007_msg_par1, "キーファイル '{0}' の読み込みに失敗しました。" }
@@ -1047,7 +1294,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "依存関係 '{0}' を解決できません。" }
           , { TranslationKeys.db_dbr010_msg, "パブリック」を使う。" }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}'はスキップ要素の'typeattrib'値としては無効である。" }
+          , { TranslationKeys.db_dbr011_msg, "パブリック」を使う。" }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' は SkipType 要素の 'attrib' 値としては無効です。" }
           , { TranslationKeys.db_dbr012_msg_par1, "変数 '{0}' を置換できません。" }
+          , { TranslationKeys.db_dbr013_msg, "パブリック」または「プロテクト」を使用する。" }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}'はスキップ要素の'attribute'値としては無効である。" }
           , { TranslationKeys.db_dbr014_msg_par1, "指定されたプロジェクト・ファイル '{0}' を読み取れません。" }
           , { TranslationKeys.db_dbr015_msg, "使用するキーを設定するには、KeyFile または KeyContainer プロパティを使用します。" }
           , { TranslationKeys.db_dbr015_msg_par1, "署名されたアセンブリ '{0}' を難読化すると、無効なアセンブリになります。" }
@@ -1105,12 +1356,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "ステータスは「Renamed」か「Skipped」のどちらかになると予想される。" }
           , { TranslationKeys.db_dbr139_msg_par1, "ステータスは「{1}」の{0}ではなく、「Renamed」か「Skipped」のいずれかになると予想される。" }
           , { TranslationKeys.db_dbr141_msg, "ファイル名がありません。" }
+          , { TranslationKeys.db_dbr143_msg, "グループの外部フラグはグループ作成時に処理されているはずであり、グループ内のすべてのメソッドはすでにスキップされているはずである。" }
           , { TranslationKeys.db_dbr144_msg, "メソッドがスキップされず、グループに名前がある場合は、メソッドに名前がなければならない。" }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}'はエラーコード{1}により署名されなかった。" }
           , { TranslationKeys.db_dbr149_msg_par1, "ステータスは'{0}'ではなく、'Renamed'または'Skipped'でなければならない。" }
           , { TranslationKeys.db_dbr153_msg_par1, "標準出力チャンネル：{0｝" }
           , { TranslationKeys.db_dbr154_msg, "余分なフレームワークフォルダはない：" }
           , { TranslationKeys.db_dbr155_msg, "型名を抽出できません。" }
+          , { TranslationKeys.db_dbr156_msg_par1, "XMLプロジェクト定義を'{0}'から読み込みます。" }
+          , { TranslationKeys.db_dbr157_msg_par1, "0}個の変数を処理した。" }
+          , { TranslationKeys.db_dbr158_msg_par1, "処理済み{0} インクルード・タグ。" }
+          , { TranslationKeys.db_dbr159_msg_par1, "0}個のアセンブリ検索パスを処理しました。" }
+          , { TranslationKeys.db_dbr160_msg_par1, "0}個のモジュールを処理しました。" }
+          , { TranslationKeys.db_dbr161_msg_par1, "0}個のモジュールグループを処理しました。" }
+          , { TranslationKeys.db_dbr162_msg, "変数から設定を初期化する。" }
+          , { TranslationKeys.db_dbr166_msg_par1, "証明書ファイル「{0}」には、少なくとも1つの証明書が含まれていなければならない。" }
+          , { TranslationKeys.db_dbr167_msg_par1, "証明書ファイル '{0}' の形式が無効です。" }
+          , { TranslationKeys.db_dbr169_msg, "名前生成のための文字を決定する。" }
+          , { TranslationKeys.db_dbr173_msg_par1, "1}'で{0}のインストールが見つかりました。" }
+          , { TranslationKeys.db_dbr174_msg_par1, "1}' に {0} のインストールが見つかりませんでした。" }
+          , { TranslationKeys.db_dbr175_msg, "鍵ファイル名による証明書選択とSHA1サムプリントのうち、使用できるのは1つまでである。" }
+          , { TranslationKeys.db_dbr176_msg, "鍵ファイル名で証明書を選択するか、SHA1サムプリントを使用しなければならない。" }
+          , { TranslationKeys.db_dbr177_msg, "鍵ファイルのパスワードは、鍵ファイル名で証明書を選択した場合にのみ入力できる。" }
           , { TranslationKeys.db_definition_missing, "定義が欠けている。" }
           , { TranslationKeys.db_display_version, "このアプリケーションのバージョン番号を表示します。" }
           , { TranslationKeys.db_duplicate_character, "文字が重複している。" }
@@ -1126,8 +1393,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "内部例外：{0}。" }
           , { TranslationKeys.db_loading_pjt_par1, "プロジェクト '{0}' をロードしています。" }
           , { TranslationKeys.db_missing_group, "欠場組。" }
+          , { TranslationKeys.db_missing_parent_reader, "親の読者がいない。" }
           , { TranslationKeys.db_missing_parts, "部品が足りない。" }
           , { TranslationKeys.db_missing_path_value, "パスの値がない。" }
+          , { TranslationKeys.db_missing_read_action, "ミッシング・リード・アクション" }
+          , { TranslationKeys.db_missing_setting_name, "設定名がありません。" }
           , { TranslationKeys.db_not_hide_strings, "糸を隠しているわけではない。" }
           , { TranslationKeys.db_not_rename_events, "イベント名を変更しないでください。" }
           , { TranslationKeys.db_not_rename_fields, "フィールド名は変更しないでください。" }
@@ -1146,11 +1416,15 @@ namespace Obfuscar
         }
         , { Languages.ko, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "콜스택" }
+          , { TranslationKeys.db_check_project_settings, "프로젝트 설정을 확인하세요." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console은 Obfuscar(https://www.obfuscar.com)의 포크입니다." }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [옵션] [프로젝트 파일] [프로젝트 파일]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur 콘솔({0}) {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams 및 기타 기여자." }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}' 및 '{1}' 변수는 함께 설정할 수 없습니다." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "파일 '{0}'의 내용을 수정하세요." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML 구성 파일에는 <{0}> 루트 태그가 있어야 합니다." }
           , { TranslationKeys.db_dbr005_msg_par1, "OutPath에서 지정한 경로 '{0}'을(를) 만들 수 없습니다." }
           , { TranslationKeys.db_dbr006_msg_par1, "InPath 변수로 지정된 경로 '{0}'이(가) 존재해야 합니다." }
           , { TranslationKeys.db_dbr007_msg_par1, "키 파일 '{0}'을 로드하는 중 실패했습니다." }
@@ -1158,7 +1432,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "종속성 '{0}'을(를) 해결할 수 없습니다." }
           , { TranslationKeys.db_dbr010_msg, "'공개'를 사용하세요." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}'은 skip 요소의 'typeattrib' 값에 유효하지 않습니다." }
+          , { TranslationKeys.db_dbr011_msg, "'공개'를 사용하세요." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}'은 SkipType 요소의 'attrib' 값에 유효하지 않습니다." }
           , { TranslationKeys.db_dbr012_msg_par1, "변수 '{0}'을(를) 바꿀 수 없습니다." }
+          , { TranslationKeys.db_dbr013_msg, "'공개' 또는 '보호'를 사용하세요." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}'은 skip 요소의 'attrib' 값에 유효하지 않습니다." }
           , { TranslationKeys.db_dbr014_msg_par1, "지정된 프로젝트 파일 '{0}'을 읽을 수 없습니다." }
           , { TranslationKeys.db_dbr015_msg, "KeyFile 또는 KeyContainer 속성을 사용하여 사용할 키를 설정합니다." }
           , { TranslationKeys.db_dbr015_msg_par1, "서명된 어셈블리 '{0}'을 난독화하면 잘못된 어셈블리가 생성됩니다." }
@@ -1216,12 +1494,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "상태는 '이름 변경됨' 또는 '건너뜀' 중 하나여야 합니다." }
           , { TranslationKeys.db_dbr139_msg_par1, "상태는 '{1}'의 {0} 대신 '이름 변경됨' 또는 '건너뜀'이어야 합니다." }
           , { TranslationKeys.db_dbr141_msg, "파일 이름이 없습니다." }
+          , { TranslationKeys.db_dbr143_msg, "그룹의 외부 플래그는 그룹이 생성될 때 처리되어야 하고, 그룹의 모든 메서드는 이미 건너뜀으로 표시되어야 합니다." }
           , { TranslationKeys.db_dbr144_msg, "메서드가 건너뛰어지지 않고 그룹에 이름이 있는 경우 메서드에는 이름이 있어야 합니다." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}'은 오류 코드 {1}로 인해 서명되지 않았습니다." }
           , { TranslationKeys.db_dbr149_msg_par1, "상태는 '{0}' 대신 '이름 변경됨' 또는 '건너뜀'이어야 합니다." }
           , { TranslationKeys.db_dbr153_msg_par1, "표준 출력 채널: {0}" }
           , { TranslationKeys.db_dbr154_msg, "추가 프레임워크 폴더 없음:" }
           , { TranslationKeys.db_dbr155_msg, "형식 이름을 추출할 수 없습니다." }
+          , { TranslationKeys.db_dbr156_msg_par1, "'{0}'에서 XML 프로젝트 정의를 로드합니다." }
+          , { TranslationKeys.db_dbr157_msg_par1, "{0}개의 변수를 처리했습니다." }
+          , { TranslationKeys.db_dbr158_msg_par1, "처리된 {0}에는 태그가 포함됩니다." }
+          , { TranslationKeys.db_dbr159_msg_par1, "{0}개의 어셈블리 검색 경로를 처리했습니다." }
+          , { TranslationKeys.db_dbr160_msg_par1, "{0}개의 모듈을 처리했습니다." }
+          , { TranslationKeys.db_dbr161_msg_par1, "{0}개의 모듈 그룹을 처리했습니다." }
+          , { TranslationKeys.db_dbr162_msg, "변수에서 설정을 초기화합니다." }
+          , { TranslationKeys.db_dbr166_msg_par1, "인증서 파일 '{0}'에는 최소한 하나의 인증서가 포함되어야 합니다." }
+          , { TranslationKeys.db_dbr167_msg_par1, "인증서 파일 '{0}'의 형식이 잘못되었습니다." }
+          , { TranslationKeys.db_dbr169_msg, "이름 생성에 사용할 문자를 결정합니다." }
+          , { TranslationKeys.db_dbr173_msg_par1, "'{1}'에서 {0}의 설치를 찾았습니다." }
+          , { TranslationKeys.db_dbr174_msg_par1, "'{1}'에서 {0}의 설치를 찾을 수 없습니다." }
+          , { TranslationKeys.db_dbr175_msg, "키 파일 이름과 SHA1 지문을 통한 인증서 선택 중 하나만 사용할 수 있습니다." }
+          , { TranslationKeys.db_dbr176_msg, "키 파일 이름이나 SHA1 지문을 사용한 인증서 선택을 사용해야 합니다." }
+          , { TranslationKeys.db_dbr177_msg, "키 파일 비밀번호는 인증서가 키 파일 이름으로 선택된 경우에만 제공될 수 있습니다." }
           , { TranslationKeys.db_definition_missing, "정의가 없습니다." }
           , { TranslationKeys.db_display_version, "이 애플리케이션의 버전 번호를 표시합니다." }
           , { TranslationKeys.db_duplicate_character, "중복된 문자입니다." }
@@ -1237,8 +1531,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "내부 예외: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "프로젝트 '{0}'을 로드하는 중입니다." }
           , { TranslationKeys.db_missing_group, "그룹이 누락되었습니다." }
+          , { TranslationKeys.db_missing_parent_reader, "부모님이 읽어주시지 않아요." }
           , { TranslationKeys.db_missing_parts, "부품이 누락되었습니다." }
           , { TranslationKeys.db_missing_path_value, "경로 값이 누락되었습니다." }
+          , { TranslationKeys.db_missing_read_action, "읽기 작업이 누락되었습니다." }
+          , { TranslationKeys.db_missing_setting_name, "설정 이름이 없습니다." }
           , { TranslationKeys.db_not_hide_strings, "끈을 숨기지 마세요." }
           , { TranslationKeys.db_not_rename_events, "이벤트 이름을 바꾸지 마세요." }
           , { TranslationKeys.db_not_rename_fields, "필드 이름을 바꾸지 마세요." }
@@ -1257,11 +1554,15 @@ namespace Obfuscar
         }
         , { Languages.nb, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Sjekk prosjektinnstillingene." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console er en gaffel av Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Alternativer] [prosjektfil] [prosjektfil]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur-konsoll ({0}) på {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams og andre bidragsytere." }
           , { TranslationKeys.db_dbr002_msg_par1, "Variablene {0}' og '{1}' kan ikke settes sammen." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Rett innholdet i filen '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML-konfigurasjonsfilen skal ha en <{0}>-rotkode." }
           , { TranslationKeys.db_dbr005_msg_par1, "Kunne ikke opprette banen '{0}' spesifisert av OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Banen '{0}' spesifisert av InPath-variabelen må eksistere," }
           , { TranslationKeys.db_dbr007_msg_par1, "Feil ved innlasting av nøkkelfil '{0}'." }
@@ -1269,7 +1570,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Kan ikke løse avhengigheten '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Bruk 'offentlig'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' er ikke gyldig for 'typeattrib'-verdien for hopp over elementer." }
+          , { TranslationKeys.db_dbr011_msg, "Bruk 'offentlig'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' er ikke gyldig for 'attrib'-verdien til SkipType-elementet." }
           , { TranslationKeys.db_dbr012_msg_par1, "Kan ikke erstatte variabelen '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Bruk \"offentlig\" eller \"beskyttet\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}' er ikke gyldig for 'attrib'-verdien for hopp over elementer." }
           , { TranslationKeys.db_dbr014_msg_par1, "Kan ikke lese den spesifiserte prosjektfilen '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Bruk egenskapen KeyFile eller KeyContainer for å angi en nøkkel som skal brukes." }
           , { TranslationKeys.db_dbr015_msg_par1, "Å skjule den signerte sammenstillingen '{0}' vil resultere i en ugyldig sammenstilling." }
@@ -1327,12 +1632,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Status forventes å være enten \"Omdøpt\" eller \"Hoppet over\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Status forventes å være enten «Omdøpt» eller «Hoppet over» i stedet for {0} av «{1}»." }
           , { TranslationKeys.db_dbr141_msg, "Manglende filnavn." }
+          , { TranslationKeys.db_dbr143_msg, "Gruppens eksterne flagg skal ha blitt håndtert da gruppen ble opprettet og alle metoder i gruppen skal allerede være merket som hoppet over." }
           , { TranslationKeys.db_dbr144_msg, "Metode må ha et navn når metoden ikke hoppes over og gruppen har et navn." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' ble IKKE signert på grunn av feilkode {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status må være 'Omdøpt' eller 'Hoppet over' i stedet for '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Ingen ekstra rammemapper:" }
           , { TranslationKeys.db_dbr155_msg, "Kan ikke trekke ut typenavn." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Last inn XML-prosjektdefinisjon fra '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Behandlet {0} variabler." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Behandlet {0} inkluderer tagger." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Behandlet {0} samlingssøkebaner." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Behandlet {0} moduler." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Behandlet {0} modulgrupper." }
+          , { TranslationKeys.db_dbr162_msg, "Initialiser innstillinger fra variabler." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Sertifikatfilen '{0}' må inneholde minst ett sertifikat." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Sertifikatfilen '{0}' har et ugyldig format." }
+          , { TranslationKeys.db_dbr169_msg, "Bestem tegn for navngenerering." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Fant installasjon av {0} ved '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Fant ingen installasjon av {0} i '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Høyst ett av sertifikatvalg etter nøkkelfilnavn og SHA1-tommelavtrykk kan brukes." }
+          , { TranslationKeys.db_dbr176_msg, "Enten sertifikatvalg etter nøkkelfilnavn eller SHA1-tommelavtrykk må brukes." }
+          , { TranslationKeys.db_dbr177_msg, "Nøkkelfilpassordet kan bare oppgis når sertifikatet er valgt med nøkkelfilnavn." }
           , { TranslationKeys.db_definition_missing, "Definisjon mangler." }
           , { TranslationKeys.db_display_version, "Vis versjonsnummeret til denne applikasjonen." }
           , { TranslationKeys.db_duplicate_character, "Duplikattegn." }
@@ -1348,8 +1669,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Indre unntak: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Laster prosjektet '{0}'." }
           , { TranslationKeys.db_missing_group, "Mangler gruppe." }
+          , { TranslationKeys.db_missing_parent_reader, "Mangler foreldreleser." }
           , { TranslationKeys.db_missing_parts, "Manglende deler." }
           , { TranslationKeys.db_missing_path_value, "Manglende verdi for banen." }
+          , { TranslationKeys.db_missing_read_action, "Mangler lesehandling." }
+          , { TranslationKeys.db_missing_setting_name, "Mangler innstillingsnavn." }
           , { TranslationKeys.db_not_hide_strings, "Ikke skjule strenger." }
           , { TranslationKeys.db_not_rename_events, "Ikke gi nytt navn til hendelser." }
           , { TranslationKeys.db_not_rename_fields, "Ikke gi nytt navn til felt." }
@@ -1368,11 +1692,15 @@ namespace Obfuscar
         }
         , { Languages.nl, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Controleer de projectinstellingen." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console is een fork van Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Opties] [project_bestand] [project_bestand]." }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) op {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams en andere medewerkers." }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}' en '{1}' variabelen kunnen niet samen worden ingesteld." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Corrigeer de inhoud van het bestand '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Het XML-configuratiebestand moet een <{0}> root tag hebben." }
           , { TranslationKeys.db_dbr005_msg_par1, "Kan het door OutPath opgegeven pad '{0}' niet maken." }
           , { TranslationKeys.db_dbr006_msg_par1, "Pad '{0}' gespecificeerd door InPath variabele moet bestaan," }
           , { TranslationKeys.db_dbr007_msg_par1, "Fout bij laden van sleutelbestand '{0}'." }
@@ -1380,7 +1708,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Kan afhankelijkheid '{0}' niet oplossen." }
           , { TranslationKeys.db_dbr010_msg, "Gebruik 'openbaar'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' is niet geldig voor de 'typeattrib'-waarde van overgeslagen elementen." }
+          , { TranslationKeys.db_dbr011_msg, "Gebruik 'openbaar'." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}' is niet geldig voor de 'attrib' waarde van het SkipType element." }
           , { TranslationKeys.db_dbr012_msg_par1, "Variabele '{0}' kan niet worden vervangen." }
+          , { TranslationKeys.db_dbr013_msg, "Gebruik 'openbaar' of 'beschermd'." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}' is niet geldig voor de 'attrib'-waarde van overgeslagen elementen." }
           , { TranslationKeys.db_dbr014_msg_par1, "Kan opgegeven projectbestand '{0}' niet lezen." }
           , { TranslationKeys.db_dbr015_msg, "Gebruik de eigenschap KeyFile of KeyContainer om een sleutel in te stellen om te gebruiken." }
           , { TranslationKeys.db_dbr015_msg_par1, "Het versleutelen van de ondertekende assembly '{0}' zou resulteren in een ongeldige assembly." }
@@ -1438,12 +1770,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "De status is naar verwachting 'Hernoemd' of 'Overgeslagen'." }
           , { TranslationKeys.db_dbr139_msg_par1, "De status wordt verwacht als 'Hernoemd' of 'Overgeslagen' in plaats van {0} of '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Ontbrekende bestandsnaam." }
+          , { TranslationKeys.db_dbr143_msg, "De externe vlag van de groep moet zijn behandeld toen de groep werd gemaakt en alle methoden in de groep moeten al zijn gemarkeerd als overgeslagen." }
           , { TranslationKeys.db_dbr144_msg, "De methode moet een naam hebben als de methode niet wordt overgeslagen en de groep een naam heeft." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' was NIET ondertekend vanwege foutcode {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status moet 'Hernoemd' of 'Overgeslagen' zijn in plaats van '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanaal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Geen extra frameworkmappen:" }
           , { TranslationKeys.db_dbr155_msg, "Kan typenaam niet extraheren." }
+          , { TranslationKeys.db_dbr156_msg_par1, "XML-projectdefinitie laden van '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "{0} variabelen verwerkt." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Verwerkt {0} inclusief tags." }
+          , { TranslationKeys.db_dbr159_msg_par1, "{0} assemblage zoekpaden verwerkt." }
+          , { TranslationKeys.db_dbr160_msg_par1, "{0} modules verwerkt." }
+          , { TranslationKeys.db_dbr161_msg_par1, "{0} modulegroepen verwerkt." }
+          , { TranslationKeys.db_dbr162_msg, "Instellingen initialiseren vanuit variabelen." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Het certificaatbestand '{0}' moet minstens één certificaat bevatten." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Het certificaatbestand '{0}' heeft een ongeldig formaat." }
+          , { TranslationKeys.db_dbr169_msg, "Karakters bepalen voor het genereren van namen." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Installatie van {0} gevonden op '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Geen installatie van {0} gevonden in '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Er kan maximaal één certificaatselectie op basis van sleutelbestandsnaam en SHA1-miniatuurafdruk worden gebruikt." }
+          , { TranslationKeys.db_dbr176_msg, "Er moet een certificaatselectie op basis van de bestandsnaam of een SHA1-miniatuurafdruk worden gebruikt." }
+          , { TranslationKeys.db_dbr177_msg, "Het wachtwoord van het sleutelbestand kan alleen worden opgegeven als het certificaat is geselecteerd op sleutelbestandsnaam." }
           , { TranslationKeys.db_definition_missing, "Definitie ontbreekt." }
           , { TranslationKeys.db_display_version, "Geef versienummer van deze applicatie weer." }
           , { TranslationKeys.db_duplicate_character, "Duplicaat karakter." }
@@ -1459,8 +1807,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Binnengelegen uitzondering: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Project '{0}' wordt geladen." }
           , { TranslationKeys.db_missing_group, "Ontbrekende groep." }
+          , { TranslationKeys.db_missing_parent_reader, "Ontbrekende ouderlezer." }
           , { TranslationKeys.db_missing_parts, "Ontbrekende onderdelen." }
           , { TranslationKeys.db_missing_path_value, "Ontbrekende waarde voor pad." }
+          , { TranslationKeys.db_missing_read_action, "Ontbrekende actie." }
+          , { TranslationKeys.db_missing_setting_name, "Ontbrekende instellingsnaam." }
           , { TranslationKeys.db_not_hide_strings, "Geen touwtjes verbergen." }
           , { TranslationKeys.db_not_rename_events, "Geef gebeurtenissen geen andere naam." }
           , { TranslationKeys.db_not_rename_fields, "Hernoem velden niet." }
@@ -1479,11 +1830,15 @@ namespace Obfuscar
         }
         , { Languages.pl, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Sprawdź ustawienia projektu." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console jest rozwidleniem Obfuscar (https://www.obfuscar.com)." }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Options] [project_file] [project_file]" }
           , { TranslationKeys.db_con_title_par2, "*** Konsola DotBlur ({0}) w dniu {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams i inni współpracownicy." }
           , { TranslationKeys.db_dbr002_msg_par1, "Zmienne \"{0}\" i \"{1}\" nie mogą być ustawione razem." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Popraw zawartość pliku '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Plik konfiguracyjny XML powinien mieć tag główny <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "Nie można utworzyć ścieżki '{0}' określonej przez OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Ścieżka '{0}' określona przez zmienną InPath musi istnieć," }
           , { TranslationKeys.db_dbr007_msg_par1, "Błąd ładowania pliku klucza '{0}'." }
@@ -1491,7 +1846,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Nie można rozwiązać zależności \"{0}\"." }
           , { TranslationKeys.db_dbr010_msg, "Użyj słowa \"publiczny\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" nie jest prawidłowa dla wartości \"typeattrib\" elementów pomijanych." }
+          , { TranslationKeys.db_dbr011_msg, "Użyj słowa \"publiczny\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" nie jest prawidłowa dla wartości \"attrib\" elementu SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "Nie można zastąpić zmiennej \"{0}\"." }
+          , { TranslationKeys.db_dbr013_msg, "Użyj \"publiczne\" lub \"chronione\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" nie jest prawidłowa dla wartości \"attrib\" elementów pomijanych." }
           , { TranslationKeys.db_dbr014_msg_par1, "Nie można odczytać określonego pliku projektu \"{0}\"." }
           , { TranslationKeys.db_dbr015_msg, "Użyj właściwości KeyFile lub KeyContainer, aby ustawić klucz do użycia." }
           , { TranslationKeys.db_dbr015_msg_par1, "Zaciemnienie podpisanego zespołu \"{0}\" spowodowałoby utworzenie nieprawidłowego zespołu." }
@@ -1549,12 +1908,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Oczekiwany status to \"Zmieniono nazwę\" lub \"Pominięto\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Oczekuje się, że status będzie wynosił \"Zmieniono nazwę\" lub \"Pominięto\" zamiast {0} lub \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Brakująca nazwa pliku." }
+          , { TranslationKeys.db_dbr143_msg, "Flaga zewnętrzna grupy powinna być obsługiwana podczas tworzenia grupy, a wszystkie metody w grupie powinny być już oznaczone jako pominięte." }
           , { TranslationKeys.db_dbr144_msg, "Metoda musi mieć nazwę, gdy metoda nie jest pomijana, a grupa ma nazwę." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}\" NIE zostało podpisane z powodu kodu błędu {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status musi mieć wartość \"Zmieniono nazwę\" lub \"Pominięto\" zamiast \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Kanał stdout: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Brak dodatkowych folderów frameworka:" }
           , { TranslationKeys.db_dbr155_msg, "Nie można wyodrębnić nazwy typu." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Załaduj definicję projektu XML z '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Przetworzono {0} zmiennych." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Przetworzone {0} zawierają tagi." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Przetworzono {0} ścieżek wyszukiwania zespołów." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Przetworzono {0} modułów." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Przetworzono {0} grup modułów." }
+          , { TranslationKeys.db_dbr162_msg, "Inicjalizacja ustawień ze zmiennych." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Plik certyfikatu \"{0}\" musi zawierać co najmniej jeden certyfikat." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Plik certyfikatu \"{0}\" ma nieprawidłowy format." }
+          , { TranslationKeys.db_dbr169_msg, "Określ znaki do generowania nazw." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Znaleziono instalację {0} w '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Nie znaleziono instalacji {0} w '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Można użyć co najwyżej jednego z certyfikatów wybranych według nazwy pliku klucza i odcisku kciuka SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "Należy użyć wyboru certyfikatu według nazwy pliku klucza lub odcisku kciuka SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "Hasło pliku klucza można podać tylko wtedy, gdy certyfikat jest wybrany według nazwy pliku klucza." }
           , { TranslationKeys.db_definition_missing, "Brak definicji." }
           , { TranslationKeys.db_display_version, "Wyświetla numer wersji tej aplikacji." }
           , { TranslationKeys.db_duplicate_character, "Zduplikowany znak." }
@@ -1570,8 +1945,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Wyjątek wewnętrzny: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Ładowanie projektu '{0}'." }
           , { TranslationKeys.db_missing_group, "Brakująca grupa." }
+          , { TranslationKeys.db_missing_parent_reader, "Brakujący czytelnik-rodzic." }
           , { TranslationKeys.db_missing_parts, "Brakujące części." }
           , { TranslationKeys.db_missing_path_value, "Brakująca wartość dla ścieżki." }
+          , { TranslationKeys.db_missing_read_action, "Brak akcji odczytu." }
+          , { TranslationKeys.db_missing_setting_name, "Brakująca nazwa ustawienia." }
           , { TranslationKeys.db_not_hide_strings, "Nie ukrywa strun." }
           , { TranslationKeys.db_not_rename_events, "Nie należy zmieniać nazw zdarzeń." }
           , { TranslationKeys.db_not_rename_fields, "Nie należy zmieniać nazw pól." }
@@ -1590,11 +1968,15 @@ namespace Obfuscar
         }
         , { Languages.pt, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Pilha de chamadas" }
+          , { TranslationKeys.db_check_project_settings, "Verificar as definições do projeto." }
           , { TranslationKeys.db_con_fork_obfuscar, "A Consola DotBlur é uma bifurcação do Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Opções] [ficheiro_projecto] [ficheiro_projecto]" }
           , { TranslationKeys.db_con_title_par2, "*** Consola DotBlur ({0}) em {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams e outros colaboradores." }
           , { TranslationKeys.db_dbr002_msg_par1, "As variáveis '{0}' e '{1}' não podem ser definidas em conjunto." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Por favor, corrija o conteúdo do ficheiro '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "O ficheiro de configuração XML deve ter uma etiqueta de raiz <{0}>." }
           , { TranslationKeys.db_dbr005_msg_par1, "Não foi possível criar o caminho '{0}' especificado por OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "O caminho '{0}' especificado pela variável InPath tem de existir," }
           , { TranslationKeys.db_dbr007_msg_par1, "Falha ao carregar o ficheiro de chaves '{0}'." }
@@ -1602,7 +1984,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Não foi possível resolver a dependência '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Utilizar \"público\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" não é válido para o valor \"typeattrib\" de elementos de salto." }
+          , { TranslationKeys.db_dbr011_msg, "Utilizar \"público\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" não é válido para o valor \"attrib\" do elemento SkipType." }
           , { TranslationKeys.db_dbr012_msg_par1, "Não é possível substituir a variável '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Utilizar \"público\" ou \"protegido\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" não é válido para o valor \"attrib\" de elementos de salto." }
           , { TranslationKeys.db_dbr014_msg_par1, "Não foi possível ler o ficheiro de projeto especificado '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Utilize a propriedade KeyFile ou KeyContainer para definir uma chave a utilizar." }
           , { TranslationKeys.db_dbr015_msg_par1, "A ofuscação do conjunto assinado '{0}' resultaria num conjunto inválido." }
@@ -1660,12 +2046,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Espera-se que o estado seja \"Renomeado\" ou \"Ignorado\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Espera-se que o estado seja \"Renomeado\" ou \"Ignorado\" em vez de {0} ou \"{1}\"." }
           , { TranslationKeys.db_dbr141_msg, "Nome de ficheiro em falta." }
+          , { TranslationKeys.db_dbr143_msg, "O sinalizador externo do grupo deveria ter sido tratado quando o grupo foi criado e todos os métodos do grupo já deveriam estar marcados como ignorados." }
           , { TranslationKeys.db_dbr144_msg, "O método deve ter um nome quando o método não é ignorado e o grupo tem um nome." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' NÃO foi assinado devido ao código de erro {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "O estado deve ser \"Renomeado\" ou \"Ignorado\" em vez de \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Canal Stdout: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Sem pastas de estrutura adicionais:" }
           , { TranslationKeys.db_dbr155_msg, "Não é possível extrair o nome do tipo." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Carregar a definição de projeto XML de \"{0}\"." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Processou {0} variáveis." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Tags de inclusão {0} processadas." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Processou {0} caminhos de pesquisa de montagem." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Processou {0} módulos." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Processou {0} grupos de módulos." }
+          , { TranslationKeys.db_dbr162_msg, "Inicializar definições a partir de variáveis." }
+          , { TranslationKeys.db_dbr166_msg_par1, "O ficheiro de certificado \"{0}\" deve conter pelo menos um certificado." }
+          , { TranslationKeys.db_dbr167_msg_par1, "O ficheiro de certificado '{0}' tem um formato inválido." }
+          , { TranslationKeys.db_dbr169_msg, "Determinar caracteres para a geração de nomes." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Encontrada a instalação de {0} em '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Não foi encontrada nenhuma instalação de {0} em '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Pode ser utilizada, no máximo, uma das selecções de certificado por nome de ficheiro de chave e impressão digital SHA1." }
+          , { TranslationKeys.db_dbr176_msg, "Deve ser utilizada a seleção de certificado por nome de ficheiro de chave ou a impressão digital SHA1." }
+          , { TranslationKeys.db_dbr177_msg, "A palavra-passe do ficheiro chave só pode ser fornecida quando o certificado é selecionado pelo nome do ficheiro chave." }
           , { TranslationKeys.db_definition_missing, "Falta uma definição." }
           , { TranslationKeys.db_display_version, "Mostra o número da versão desta aplicação." }
           , { TranslationKeys.db_duplicate_character, "Carácter duplicado." }
@@ -1681,8 +2083,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Exceção interna: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "A carregar o projeto '{0}'." }
           , { TranslationKeys.db_missing_group, "Grupo em falta." }
+          , { TranslationKeys.db_missing_parent_reader, "Falta o leitor pai." }
           , { TranslationKeys.db_missing_parts, "Peças em falta." }
           , { TranslationKeys.db_missing_path_value, "Valor em falta para o caminho." }
+          , { TranslationKeys.db_missing_read_action, "Ação de leitura em falta." }
+          , { TranslationKeys.db_missing_setting_name, "Nome da definição em falta." }
           , { TranslationKeys.db_not_hide_strings, "Não escondendo os fios." }
           , { TranslationKeys.db_not_rename_events, "Não renomear eventos." }
           , { TranslationKeys.db_not_rename_fields, "Não mudar o nome dos campos." }
@@ -1701,11 +2106,15 @@ namespace Obfuscar
         }
         , { Languages.sv, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
+          , { TranslationKeys.db_callstack, "Callstack" }
+          , { TranslationKeys.db_check_project_settings, "Kontrollera projektinställningarna." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console är en förgrening av Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Alternativ] [projekt_fil] [projekt_fil]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) den {1} (UTC) ***" }
           , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams och andra bidragsgivare." }
           , { TranslationKeys.db_dbr002_msg_par1, "Variablerna '{0}' och '{1}' kan inte ställas in tillsammans." }
+          , { TranslationKeys.db_dbr004_2_msg_par1, "Vänligen korrigera innehållet i filen '{0}'." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML-konfigurationsfilen bör ha en <{0}> root-tagg." }
           , { TranslationKeys.db_dbr005_msg_par1, "Det gick inte att skapa sökvägen '{0}' som anges av OutPath." }
           , { TranslationKeys.db_dbr006_msg_par1, "Sökvägen '{0}' som anges av variabeln InPath måste finnas," }
           , { TranslationKeys.db_dbr007_msg_par1, "Fel vid laddning av nyckelfilen '{0}'." }
@@ -1713,7 +2122,11 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr009_msg_par1, "Det går inte att lösa beroendet '{0}'." }
           , { TranslationKeys.db_dbr010_msg, "Använd \"offentlig\"." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}\" är inte giltigt för \"typeattrib\"-värdet för skip-element." }
+          , { TranslationKeys.db_dbr011_msg, "Använd \"offentlig\"." }
+          , { TranslationKeys.db_dbr011_msg_par1, "{0}\" är inte giltigt för \"attrib\"-värdet i SkipType-elementet." }
           , { TranslationKeys.db_dbr012_msg_par1, "Det går inte att ersätta variabeln '{0}'." }
+          , { TranslationKeys.db_dbr013_msg, "Använd \"offentlig\" eller \"skyddad\"." }
+          , { TranslationKeys.db_dbr013_msg_par1, "{0}\" är inte giltigt för \"attrib\"-värdet för skip-element." }
           , { TranslationKeys.db_dbr014_msg_par1, "Det gick inte att läsa den angivna projektfilen '{0}'." }
           , { TranslationKeys.db_dbr015_msg, "Använd egenskapen KeyFile eller KeyContainer för att ange en nyckel som ska användas." }
           , { TranslationKeys.db_dbr015_msg_par1, "Att fördunkla den signerade enheten '{0}' skulle resultera i en ogiltig enhet." }
@@ -1771,12 +2184,28 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr135_msg, "Status förväntas vara antingen \"Renamed\" eller \"Skipped\"." }
           , { TranslationKeys.db_dbr139_msg_par1, "Status förväntas vara antingen 'Renamed' eller 'Skipped' istället för {0} eller '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Saknar filnamn." }
+          , { TranslationKeys.db_dbr143_msg, "Gruppens externa flagga borde ha hanterats när gruppen skapades och alla metoder i gruppen borde redan vara markerade som hoppade över." }
           , { TranslationKeys.db_dbr144_msg, "Metod måste ha ett namn när metoden inte hoppas över och gruppen har ett namn." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' var INTE signerad på grund av felkod {1}." }
           , { TranslationKeys.db_dbr149_msg_par1, "Status måste vara \"Renamed\" eller \"Skipped\" i stället för \"{0}\"." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Inga extra ramverksmappar:" }
           , { TranslationKeys.db_dbr155_msg, "Kan inte extrahera typnamn." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Ladda XML-projektdefinition från '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Bearbetade {0} variabler." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Bearbetad {0} inkluderar taggar." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Bearbetade {0} sökvägar för montering." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Bearbetade {0} moduler." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Bearbetade {0} modulgrupper." }
+          , { TranslationKeys.db_dbr162_msg, "Initialisera inställningar från variabler." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Certifikatfilen \"{0}\" måste innehålla minst ett certifikat." }
+          , { TranslationKeys.db_dbr167_msg_par1, "Certifikatfilen '{0}' har ett ogiltigt format." }
+          , { TranslationKeys.db_dbr169_msg, "Bestäm karaktärer för namngenerering." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Hittade installation av {0} på '{1}'." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Hittade ingen installation av {0} i '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Högst ett av certifikaturvalen genom nyckelfilens namn och SHA1-miniatyravtryck kan användas." }
+          , { TranslationKeys.db_dbr176_msg, "Antingen måste certifikatval genom nyckelfilens namn eller SHA1-miniatyravtryck användas." }
+          , { TranslationKeys.db_dbr177_msg, "Lösenordet för nyckelfilen kan endast anges när certifikatet väljs med nyckelfilens namn." }
           , { TranslationKeys.db_definition_missing, "Definition saknas." }
           , { TranslationKeys.db_display_version, "Visar versionsnummer för denna applikation." }
           , { TranslationKeys.db_duplicate_character, "Duplicerad karaktär." }
@@ -1792,8 +2221,11 @@ namespace Obfuscar
           , { TranslationKeys.db_inner_exception_par1, "Inre undantag: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Laddar projekt '{0}'." }
           , { TranslationKeys.db_missing_group, "Saknad grupp." }
+          , { TranslationKeys.db_missing_parent_reader, "Saknad förälder läsare." }
           , { TranslationKeys.db_missing_parts, "Saknade delar." }
           , { TranslationKeys.db_missing_path_value, "Saknar värde för sökväg." }
+          , { TranslationKeys.db_missing_read_action, "Missing read action." }
+          , { TranslationKeys.db_missing_setting_name, "Saknar namn på inställning." }
           , { TranslationKeys.db_not_hide_strings, "Inte dölja strängar." }
           , { TranslationKeys.db_not_rename_events, "Byt inte namn på händelser." }
           , { TranslationKeys.db_not_rename_fields, "Byt inte namn på fält." }

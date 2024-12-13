@@ -32,6 +32,7 @@ namespace Obfuscar
     /// </summary>
     public static partial class TranslationKeys
     {
+        public const string db_callstack = nameof(db_callstack);
         public const string db_check_project_settings = nameof(db_check_project_settings);
         public const string db_con_fork_obfuscar = nameof(db_con_fork_obfuscar);
         public const string db_con_syntax = nameof(db_con_syntax);
@@ -126,6 +127,11 @@ namespace Obfuscar
         public const string db_dbr166_msg_par1 = nameof(db_dbr166_msg_par1);
         public const string db_dbr167_msg_par1 = nameof(db_dbr167_msg_par1);
         public const string db_dbr169_msg = nameof(db_dbr169_msg);
+        public const string db_dbr173_msg_par1 = nameof(db_dbr173_msg_par1);
+        public const string db_dbr174_msg_par1 = nameof(db_dbr174_msg_par1);
+        public const string db_dbr175_msg = nameof(db_dbr175_msg);
+        public const string db_dbr176_msg = nameof(db_dbr176_msg);
+        public const string db_dbr177_msg = nameof(db_dbr177_msg);
         public const string db_definition_missing = nameof(db_definition_missing);
         public const string db_display_version = nameof(db_display_version);
         public const string db_duplicate_character = nameof(db_duplicate_character);
@@ -160,13 +166,6 @@ namespace Obfuscar
         public const string db_rename_properties = nameof(db_rename_properties);
         public const string db_settings_not_initialized = nameof(db_settings_not_initialized);
         public const string db_syntax = nameof(db_syntax);
-        public const string db_dbr173_msg_par1 = nameof(db_dbr173_msg_par1);
-        public const string db_dbr174_msg_par1 = nameof(db_dbr174_msg_par1);
-        public const string db_callstack = nameof(db_callstack);
-        public const string db_dbr175_msg = nameof(db_dbr175_msg);
-        public const string db_dbr176_msg = nameof(db_dbr176_msg);
-        public const string db_dbr177_msg = nameof(db_dbr177_msg);
-
     }
 }
 #pragma warning restore 1591
