@@ -872,11 +872,11 @@ namespace Obfuscar
 
                 if (!string.IsNullOrEmpty(highestWindows10KitSignToolExe))
                 {
-                    Log.OutputLine(MessageCodes.dbr173, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr173_msg_par1), SIGN_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
+                    Log.OutputLine(MessageCodes.dbr173, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr173_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
                 }
                 else
                 {
-                    Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), SIGN_TOOL_EXE_NAME, programFilesX86Folder));
+                    Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, programFilesX86Folder));
                 }
 
                 path = highestWindows10KitSignToolExe;
