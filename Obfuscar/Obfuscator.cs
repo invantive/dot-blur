@@ -370,7 +370,7 @@ namespace Obfuscar
 
                             if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(certificateSha1Thumbprint))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr175, "At most one of certificate selection by key file name and SHA1 thumbprint can be used.");
+                                throw new ObfuscarException(MessageCodes.dbr175, Translations.GetTranslationOfKey(TranslationKeys.db_dbr175_msg));
                             }
 
                             //
@@ -379,12 +379,12 @@ namespace Obfuscar
                             //
                             if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(certificateSha1Thumbprint))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr176, "Either certificate selection by key file name or SHA1 thumbprint must be used.");
+                                throw new ObfuscarException(MessageCodes.dbr176, Translations.GetTranslationOfKey(TranslationKeys.db_dbr176_msg));
                             }
 
                             if (string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyFilePassword))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr177, "The key file password can only be supplied when the certificate is selected by key file name.");
+                                throw new ObfuscarException(MessageCodes.dbr177, Translations.GetTranslationOfKey(TranslationKeys.db_dbr177_msg));
                             }
 
                             //if (string.IsNullOrEmpty(keyFileName))
@@ -604,11 +604,11 @@ namespace Obfuscar
 
                 if (!string.IsNullOrEmpty(highestWindows10KitSignToolExe))
                 {
-                    Log.OutputLine(MessageCodes.dbr173, string.Format("Found installation of {0} at '{1}'.", SIGN_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
+                    Log.OutputLine(MessageCodes.dbr173, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr173_msg_par1), SIGN_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
                 }
                 else
                 {
-                    Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SIGN_TOOL_EXE_NAME, programFilesX86Folder));
+                    Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), SIGN_TOOL_EXE_NAME, programFilesX86Folder));
                 }
 
                 path = highestWindows10KitSignToolExe;
