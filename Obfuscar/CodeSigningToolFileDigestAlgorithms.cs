@@ -1,9 +1,9 @@
 ﻿namespace Obfuscar
 {
     /// <summary>
-    /// signtool.exe file digest algorithms.
+    /// File digest algorithms for code signing.
     /// </summary>
-    public static class SignToolFileDigestAlgorithms
+    public static class CodeSigningToolFileDigestAlgorithms
     {
         /// <summary>
         /// SHA1.

@@ -78,22 +78,20 @@ namespace Obfuscar
         /// </summary>
         private void Initialize()
         {
-            string? keyFileName = this.Settings.KeyFile;
-            string? keyFilePassword = this.Settings.KeyFilePassword;
-            string? keyContainerName = this.Settings.KeyContainer;
-            string? signingFileDigestAlgorithm = this.Settings.SigningFileDigestAlgorithm;
-            string? signingTimeStampServerUrl = this.Settings.SigningTimeStampServerUrl;
+            string? strongNameSigningKeyFileName = this.Settings.StrongNameSigningKeyFile;
+            string? strongNameSigningKeyFilePassword = this.Settings.StrongNameSigningKeyFilePassword;
+            string? strongNameSigningKeyContainerName = this.Settings.StrongNameSigningKeyContainer;
 
-            if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyContainerName))
+            if (!string.IsNullOrEmpty(strongNameSigningKeyFileName) && !string.IsNullOrEmpty(strongNameSigningKeyContainerName))
             {
-                throw new ObfuscarException(MessageCodes.dbr002, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr002_msg_par1), Settings.VariableKeyFile, Settings.VariableKeyContainer));
+                throw new ObfuscarException(MessageCodes.dbr002, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr002_msg_par1), Settings.VariableStrongNameSigningKeyFile, Settings.VariableStrongNameSigningKeyContainer));
             }
 
             //
-            // Initialize key pair.
+            // Initialize strong name signing key pair.
             //
             {
-                if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
+                if (string.IsNullOrEmpty(strongNameSigningKeyFileName) && string.IsNullOrEmpty(strongNameSigningKeyContainerName))
                 {
                     Log.OutputLine(MessageCodes.dbr110, Translations.GetTranslationOfKey(TranslationKeys.db_dbr110_msg));
                 }
@@ -103,26 +101,26 @@ namespace Obfuscar
                     {
                         byte[]? keyPair;
 
-                        if (Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                        if (Path.GetExtension(strongNameSigningKeyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false)
                         {
-                            Log.OutputLine(MessageCodes.dbr109, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr109_msg_par1), keyFileName));
+                            Log.OutputLine(MessageCodes.dbr109, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr109_msg_par1), strongNameSigningKeyFileName));
 
-                            if (string.IsNullOrEmpty(keyFileName))
+                            if (string.IsNullOrEmpty(strongNameSigningKeyFileName))
                             {
-                                throw new ObfuscarException(MessageCodes.dbr024, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr024_msg_par1), Settings.VariableKeyFile));
+                                throw new ObfuscarException(MessageCodes.dbr024, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr024_msg_par1), Settings.VariableStrongNameSigningKeyFile));
                             }
 
-                            keyPair = GetStrongNameKeyPairFromPfx(keyFileName, keyFilePassword);
+                            keyPair = GetStrongNameKeyPairFromPfx(strongNameSigningKeyFileName, strongNameSigningKeyFilePassword);
                         }
-                        else if (!string.IsNullOrEmpty(keyFileName))
+                        else if (!string.IsNullOrEmpty(strongNameSigningKeyFileName))
                         {
-                            Log.OutputLine(MessageCodes.dbr070, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr070_msg_par1), keyFileName));
+                            Log.OutputLine(MessageCodes.dbr070, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr070_msg_par1), strongNameSigningKeyFileName));
 
-                            keyPair = File.ReadAllBytes(keyFileName);
+                            keyPair = File.ReadAllBytes(strongNameSigningKeyFileName);
                         }
                         else
                         {
-                            Log.OutputLine(MessageCodes.dbr069, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr069_msg_par1), keyFileName));
+                            Log.OutputLine(MessageCodes.dbr069, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr069_msg_par1), strongNameSigningKeyFileName));
 
                             keyPair = null;
                         }
@@ -131,7 +129,7 @@ namespace Obfuscar
                     }
                     catch (Exception ex)
                     {
-                        throw new ObfuscarException(MessageCodes.dbr007, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr007_msg_par1), keyFileName), innerException: ex);
+                        throw new ObfuscarException(MessageCodes.dbr007, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr007_msg_par1), strongNameSigningKeyFileName), innerException: ex);
                     }
                 }
             }
@@ -147,24 +145,24 @@ namespace Obfuscar
                     throw new ObfuscarException(MessageCodes.dbr008, Translations.GetTranslationOfKey(TranslationKeys.db_dbr008_msg));
                 }
 
-                if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(keyContainerName))
+                if (string.IsNullOrEmpty(strongNameSigningKeyFileName) && string.IsNullOrEmpty(strongNameSigningKeyContainerName))
                 {
                     Log.OutputLine(MessageCodes.dbr111, Translations.GetTranslationOfKey(TranslationKeys.db_dbr111_msg));
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(keyContainerName))
+                    if (!string.IsNullOrEmpty(strongNameSigningKeyContainerName))
                     {
-                        Log.OutputLine(MessageCodes.dbr079, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr079_msg_par1), keyContainerName));
+                        Log.OutputLine(MessageCodes.dbr079, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr079_msg_par1), strongNameSigningKeyContainerName));
 
                         CspParameters cp = new CspParameters();
-                        cp.KeyContainerName = keyContainerName;
+                        cp.KeyContainerName = strongNameSigningKeyContainerName;
 
                         this.KeyValue = new RSACryptoServiceProvider(cp);
                     }
                     else
                     {
-                        Log.OutputLine(MessageCodes.dbr112, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr112_msg_par1), keyContainerName));
+                        Log.OutputLine(MessageCodes.dbr112, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr112_msg_par1), strongNameSigningKeyContainerName));
                     }
                 }
             }

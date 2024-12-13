@@ -32,15 +32,22 @@ namespace Obfuscar
     internal class Settings
     {
         internal const string VariableAnalyzeXaml = "AnalyzeXaml";
+        internal const string VariableCodeSignAssembly = "CodeSignAssembly";
+        internal const string VariableCodeSigningCertificateSha1Thumbprint = "CodeSigningCertificateSha1Thumbprint";
+        internal const string VariableCodeSigningFileDigestAlgorithm = "CodeSigningFileDigestAlgorithm";
+        internal const string VariableCodeSigningKeyContainer = "CodeSigningKeyContainer";
+        internal const string VariableCodeSigningKeyFile = "CodeSigningKeyFile";
+        internal const string VariableCodeSigningKeyFilePassword = "CodeSigningKeyFilePassword";
+        internal const string VariableCodeSigningTimeStampServerUrl = "CodeSigningTimeStampServerUrl";
+        internal const string VariableCodeSigningToolExe = "CodeSigningToolExe";
+        internal const string VariableCodeSigningValidation = "CodeSigningValidation";
+        internal const string VariableCodeSignInParallel = "CodeSignInParallel";
         internal const string VariableCustomChars = "CustomChars";
         internal const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
         internal const string VariableHidePrivateApi = "HidePrivateApi";
         internal const string VariableHideStrings = "HideStrings";
         internal const string VariableInPath = "InPath";
         internal const string VariableKeepPublicApi = "KeepPublicApi";
-        internal const string VariableKeyContainer = "KeyContainer";
-        internal const string VariableKeyFile = "KeyFile";
-        internal const string VariableKeyFilePassword = "KeyFilePassword";
         internal const string VariableLogFile = "LogFile";
         internal const string VariableMarkedOnly = "MarkedOnly";
         internal const string VariableOptimizeMethods = "OptimizeMethods";
@@ -50,14 +57,11 @@ namespace Obfuscar
         internal const string VariableRenameFields = "RenameFields";
         internal const string VariableRenameProperties = "RenameProperties";
         internal const string VariableReuseNames = "ReuseNames";
-        internal const string VariableSignAssembly = "SignAssembly";
-        internal const string VariableSignatureValidation = "SignatureValidation";
-        internal const string VariableSignInParallel = "SignInParallel";
-        internal const string VariableSigningCertificateSha1Thumbprint = "SigningCertificateSha1Thumbprint";
-        internal const string VariableSigningFileDigestAlgorithm = "SigningFileDigestAlgorithm";
-        internal const string VariableSigningTimeStampServerUrl = "SigningTimeStampServerUrl";
-        internal const string VariableSignToolExe = "SignToolExe";
-        internal const string VariableSnExe = "SnExe";
+        internal const string VariableStrongNameSigningKeyContainer = "StrongNameSigningKeyContainer";
+        internal const string VariableStrongNameSigningKeyFile = "StrongNameSigningKeyFile";
+        internal const string VariableStrongNameSigningKeyFilePassword = "StrongNameSigningKeyFilePassword";
+        internal const string VariableStrongNameValidation = "StrongNameValidation";
+        internal const string VariableStrongNamingToolExe = "StrongNamingToolExe";
         internal const string VariableSuppressIldasm = "SuppressIldasm";
         internal const string VariableUseKoreanNames = "UseKoreanNames";
         internal const string VariableUseUnicodeNames = "UseUnicodeNames";
@@ -74,15 +78,22 @@ namespace Obfuscar
             Log.OutputLine(MessageCodes.dbr162, Translations.GetTranslationOfKey(TranslationKeys.db_dbr162_msg));
 
             this.AnalyzeXaml = vars.EvaluateBoolVariable(VariableAnalyzeXaml, false) ?? false;
+            this.CodeSignAssembly = vars.EvaluateBoolVariable(VariableCodeSignAssembly, false) ?? false;
+            this.CodeSigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableCodeSigningCertificateSha1Thumbprint, null);
+            this.CodeSigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableCodeSigningFileDigestAlgorithm, null);
+            this.CodeSigningKeyContainer = vars.EvaluateStringVariable(VariableCodeSigningKeyContainer, null);
+            this.CodeSigningKeyFile = vars.EvaluateStringVariable(VariableCodeSigningKeyFile, null);
+            this.CodeSigningKeyFilePassword = vars.EvaluateStringVariable(VariableCodeSigningKeyFilePassword, null);
+            this.CodeSigningTimeStampServerUrl = vars.EvaluateStringVariable(VariableCodeSigningTimeStampServerUrl, null);
+            this.CodeSigningToolExe = vars.EvaluateStringVariable(VariableCodeSigningToolExe, null);
+            this.CodeSigningValidation = vars.EvaluateBoolVariable(VariableCodeSigningValidation, true) ?? true;
+            this.CodeSignInParallel = vars.EvaluateBoolVariable(VariableCodeSignInParallel, true) ?? true;
             this.CustomChars = vars.EvaluateStringVariable(VariableCustomChars, "");
             this.ExtraFrameworkFolders = vars.EvaluateStringVariable(VariableExtraFrameworkFolders, null);
             this.HidePrivateApi = vars.EvaluateBoolVariable(VariableHidePrivateApi, true) ?? true;
             this.HideStrings = vars.EvaluateBoolVariable(VariableHideStrings, true) ?? true;
             this.InPath = vars.EvaluateStringVariable(VariableInPath, ".");
             this.KeepPublicApi = vars.EvaluateBoolVariable(VariableKeepPublicApi, true) ?? true;
-            this.KeyContainer = vars.EvaluateStringVariable(VariableKeyContainer, null);
-            this.KeyFile = vars.EvaluateStringVariable(VariableKeyFile, null);
-            this.KeyFilePassword = vars.EvaluateStringVariable(VariableKeyFilePassword, null);
             this.LogFilePath = vars.EvaluateStringVariable(VariableLogFile, "");
             this.MarkedOnly = vars.EvaluateBoolVariable(VariableMarkedOnly, false) ?? false;
             this.OptimizeMethods = vars.EvaluateBoolVariable(VariableOptimizeMethods, true) ?? true;
@@ -92,14 +103,11 @@ namespace Obfuscar
             this.RenameFields = vars.EvaluateBoolVariable(VariableRenameFields, true) ?? true;
             this.RenameProperties = vars.EvaluateBoolVariable(VariableRenameProperties, true) ?? true;
             this.ReuseNames = vars.EvaluateBoolVariable(VariableReuseNames, true) ?? true;
-            this.SignAssembly = vars.EvaluateBoolVariable(VariableSignAssembly, false) ?? false;
-            this.SignatureValidation = vars.EvaluateBoolVariable(VariableSignatureValidation, true) ?? true;
-            this.SignInParallel = vars.EvaluateBoolVariable(VariableSignInParallel, true) ?? true;
-            this.SigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableSigningCertificateSha1Thumbprint, null);
-            this.SigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableSigningFileDigestAlgorithm, null);
-            this.SigningTimeStampServerUrl = vars.EvaluateStringVariable(VariableSigningTimeStampServerUrl, null);
-            this.SignToolExe = vars.EvaluateStringVariable(VariableSignToolExe, null);
-            this.SnExe = vars.EvaluateStringVariable(VariableSnExe, null);
+            this.StrongNameSigningKeyContainer = vars.EvaluateStringVariable(VariableStrongNameSigningKeyContainer, null);
+            this.StrongNameSigningKeyFile = vars.EvaluateStringVariable(VariableStrongNameSigningKeyFile, null);
+            this.StrongNameSigningKeyFilePassword = vars.EvaluateStringVariable(VariableStrongNameSigningKeyFilePassword, null);
+            this.StrongNameValidation = vars.EvaluateBoolVariable(VariableStrongNameValidation, true) ?? true;
+            this.StrongNamingToolExe = vars.EvaluateStringVariable(VariableStrongNamingToolExe, null);
             this.SuppressIldasm = vars.EvaluateBoolVariable(VariableSuppressIldasm, true) ?? true;
             this.UseKoreanNames = vars.EvaluateBoolVariable(VariableUseKoreanNames, false) ?? false;
             this.UseUnicodeNames = vars.EvaluateBoolVariable(VariableUseUnicodeNames, false) ?? false;
@@ -204,60 +212,80 @@ namespace Obfuscar
         public string? ExtraFrameworkFolders { get; private set; }
 
         /// <summary>
-        /// Key container name.
+        /// Key container name for code signing.
         /// </summary>
-        public string? KeyContainer { get; private set; }
+        public string? CodeSigningKeyContainer { get; private set; }
 
         /// <summary>
-        /// Key file path, such as c:\folder\key.pfx.
+        /// Key file path for code signing, such as c:\folder\key.pfx.
         /// </summary>
-        public string? KeyFile { get; private set; }
+        public string? CodeSigningKeyFile { get; private set; }
 
         /// <summary>
-        /// Key file password.
+        /// Key file password for code signing.
         /// </summary>
-        public string? KeyFilePassword { get; private set; }
+        public string? CodeSigningKeyFilePassword { get; private set; }
 
         /// <summary>
-        /// The path to signtool.exe.
+        /// Key container name for strong name signing.
         /// </summary>
-        public string? SignToolExe { get; private set; }
+        public string? StrongNameSigningKeyContainer { get; private set; }
 
         /// <summary>
-        /// The path to sn.exe.
+        /// Key file path for strong name signing, such as c:\folder\key.pfx.
         /// </summary>
-        public string? SnExe { get; private set; }
+        public string? StrongNameSigningKeyFile { get; private set; }
 
         /// <summary>
-        /// Whether to sign assemblies.
+        /// Key file password for strong name signing.
         /// </summary>
-        public bool SignAssembly { get; private set; }
+        public string? StrongNameSigningKeyFilePassword { get; private set; }
 
         /// <summary>
-        /// Signing file digest algorithm.
+        /// The path to the code signing tool signtool.exe.
         /// </summary>
-        public string? SigningFileDigestAlgorithm { get; private set; }
+        public string? CodeSigningToolExe { get; private set; }
 
         /// <summary>
-        /// Signing time stamp server URL.
+        /// The path to the strong naming tool sn.exe.
         /// </summary>
-        public string? SigningTimeStampServerUrl { get; private set; }
+        public string? StrongNamingToolExe { get; private set; }
 
         /// <summary>
-        /// SHA1 thumbprint to select the certificate for signing.
+        /// Whether to code sign assemblies.
         /// </summary>
-        public string? SigningCertificateSha1Thumbprint { get; private set; }
+        public bool CodeSignAssembly { get; private set; }
 
         /// <summary>
-        /// Whether to perform signing in parallel for the assemblies.
+        /// File digest algorithm for code signing.
+        /// </summary>
+        public string? CodeSigningFileDigestAlgorithm { get; private set; }
+
+        /// <summary>
+        /// Time stamp server URL for code signing.
+        /// </summary>
+        public string? CodeSigningTimeStampServerUrl { get; private set; }
+
+        /// <summary>
+        /// SHA1 thumbprint to select the certificate for code signing.
+        /// </summary>
+        public string? CodeSigningCertificateSha1Thumbprint { get; private set; }
+
+        /// <summary>
+        /// Whether to perform code signing in parallel for the assemblies.
         /// </summary>
         /// <remarks>When using a hardware token, depending on configuration the password must be entered on first use. 
         /// Avoid multiple token password requests by falling back to serial signing on first solution being signed.</remarks>
-        public bool SignInParallel { get; private set; }
+        public bool CodeSignInParallel { get; private set; }
 
         /// <summary>
-        /// Whether to check afterwards that the signature was correctly applied using sn.exe.
+        /// Whether to check afterwards that the code signing signature was correctly applied.
         /// </summary>
-        public bool SignatureValidation { get; private set; }
+        public bool CodeSigningValidation { get; private set; }
+
+        /// <summary>
+        /// Whether to validate strong name signature of an assembly.
+        /// </summary>
+        public bool StrongNameValidation { get; private set; }
     }
 }
