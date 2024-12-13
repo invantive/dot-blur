@@ -237,6 +237,8 @@ namespace Obfuscar
             //
             if (assemblyCount == 1 || !this.Project.Settings.CodeSignInParallel)
             {
+                Log.OutputLine(MessageCodes.dbr183, string.Format("Save {0:N0} obfuscated assemblies serially.", assemblyCount));
+
                 foreach (AssemblyInfo assemblyInfo in this.Project.AssemblyList)
                 {
                     this.SaveAssembly(assemblyInfo, outPath, throwException);
@@ -244,6 +246,8 @@ namespace Obfuscar
             }
             else
             {
+                Log.OutputLine(MessageCodes.dbr184, string.Format("Save {0:N0} obfuscated assemblies in a parallel.", assemblyCount));
+
                 Parallel.ForEach(this.Project.AssemblyList, info => this.SaveAssembly(info, outPath, throwException));
             }
 
@@ -376,7 +380,7 @@ namespace Obfuscar
                 if (this.Project.Settings.CodeSignAssembly)
                 {
                     {
-                        string? exePath = this.GetCodeSigningToolExeFileNamePath();
+                        string? exePath = this.GetCodeSigningToolExeFileNamePathCached();
 
                         //
                         // Defaulting.
@@ -581,7 +585,7 @@ namespace Obfuscar
                         //
                         // Check code signing signature afterwards when requested to.
                         //
-                        string? exePath = this.GetCodeSigningToolExeFileNamePath();
+                        string? exePath = this.GetCodeSigningToolExeFileNamePathCached();
 
                         List<string> cmdArguments = new List<string>();
 
@@ -708,7 +712,7 @@ namespace Obfuscar
                     //
                     // Check strong name signature afterwards when requested to.
                     //
-                    string? exePath = this.GetStrongNamingToolExeFileNamePath();
+                    string? exePath = this.GetStrongNamingToolExeFileNamePathCached();
 
                     List<string> cmdArguments = new List<string>();
 
@@ -840,94 +844,122 @@ namespace Obfuscar
             }
         }
 
+        private string? codeSigningToolExeFileNamePath;
+        private object codeSigningToolExeFileNamePathLocker = new object();
+
         /// <summary>
         /// Gets the file name and path for code signing (such as signtool.exe).
         /// </summary>
         /// <returns>File name and path.</returns>
-        private string? GetCodeSigningToolExeFileNamePath()
+        private string? GetCodeSigningToolExeFileNamePathCached()
         {
-            string? path = this.Project.Settings.CodeSigningToolExe;
-
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(this.codeSigningToolExeFileNamePath))
             {
-                const string CODE_SIGNING_TOOL_EXE_NAME = "signtool.exe";
-
-                //
-                // Discover code signing tool location when not specified.
-                //
-                // Selects highest installed version.
-                //
-                string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-
-                string windows10SdkFolder = Path.Combine(programFilesX86Folder, "Windows Kits", "10", "bin");
-
-                string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
-
-                string? highestWindows10KitSignToolExe = windows10KitVersionFolders
-                    .Select(p => Path.Combine(p, "x64", CODE_SIGNING_TOOL_EXE_NAME))
-                    .Where(File.Exists)
-                    .OrderByDescending(x => x)
-                    .FirstOrDefault()
-                    ;
-
-                if (!string.IsNullOrEmpty(highestWindows10KitSignToolExe))
+                lock (this.codeSigningToolExeFileNamePathLocker)
                 {
-                    Log.OutputLine(MessageCodes.dbr173, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr173_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
-                }
-                else
-                {
-                    Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, programFilesX86Folder));
-                }
+                    if (string.IsNullOrEmpty(this.codeSigningToolExeFileNamePath))
+                    {
+                        string? path = this.Project.Settings.CodeSigningToolExe;
 
-                path = highestWindows10KitSignToolExe;
+                        if (string.IsNullOrEmpty(path))
+                        {
+                            const string CODE_SIGNING_TOOL_EXE_NAME = "signtool.exe";
+
+                            //
+                            // Discover code signing tool location when not specified.
+                            //
+                            // Selects highest installed version.
+                            //
+                            string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+                            string windows10SdkFolder = Path.Combine(programFilesX86Folder, "Windows Kits", "10", "bin");
+
+                            string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkFolder, "10.*");
+
+                            string? highestWindows10KitSignToolExe = windows10KitVersionFolders
+                                .Select(p => Path.Combine(p, "x64", CODE_SIGNING_TOOL_EXE_NAME))
+                                .Where(File.Exists)
+                                .OrderByDescending(x => x)
+                                .FirstOrDefault()
+                                ;
+
+                            if (!string.IsNullOrEmpty(highestWindows10KitSignToolExe))
+                            {
+                                Log.OutputLine(MessageCodes.dbr173, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr173_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, highestWindows10KitSignToolExe));
+                            }
+                            else
+                            {
+                                Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, programFilesX86Folder));
+                            }
+
+                            path = highestWindows10KitSignToolExe;
+                        }
+
+                        this.codeSigningToolExeFileNamePath = path;
+                    }
+                }
             }
 
-            return path;
+            return this.codeSigningToolExeFileNamePath;
         }
+
+        private string? strongNamingToolExeFileNamePath;
+        private object strongNamingToolExeFileNamePathLocker = new object();
 
         /// <summary>
         /// Gets the file name and path for strong name signing (such as sn.exe).
         /// </summary>
         /// <returns>File name and path.</returns>
-        private string? GetStrongNamingToolExeFileNamePath()
+        private string? GetStrongNamingToolExeFileNamePathCached()
         {
-            string? path = this.Project.Settings.StrongNamingToolExe;
-
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(this.strongNamingToolExeFileNamePath))
             {
-                const string SN_EXE_NAME = "sn.exe";
-
-                //
-                // Discover sn location when not specified.
-                //
-                // Selects highest installed version.
-                //
-                string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-
-                string windows10SdkBinFolder = Path.Combine(programFilesX86Folder, "Microsoft SDKs", "Windows", "v10.0A", "bin");
-
-                string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkBinFolder, "NETFX*Tools");
-
-                string? highestWindows10KitSnExe = windows10KitVersionFolders
-                    .Select(p => Path.Combine(p, SN_EXE_NAME))
-                    .Where(File.Exists)
-                    .OrderByDescending(x => x)
-                    .FirstOrDefault()
-                    ;
-
-                if (!string.IsNullOrEmpty(highestWindows10KitSnExe))
+                lock (this.strongNamingToolExeFileNamePathLocker)
                 {
-                    Log.OutputLine(MessageCodes.dbr173, string.Format("Found installation of {0} at '{1}'.", SN_EXE_NAME, highestWindows10KitSnExe));
-                }
-                else
-                {
-                    Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SN_EXE_NAME, programFilesX86Folder));
-                }
+                    if (string.IsNullOrEmpty(this.strongNamingToolExeFileNamePath))
+                    {
+                        string? path = this.Project.Settings.StrongNamingToolExe;
 
-                path = highestWindows10KitSnExe;
+                        if (string.IsNullOrEmpty(path))
+                        {
+                            const string SN_EXE_NAME = "sn.exe";
+
+                            //
+                            // Discover sn location when not specified.
+                            //
+                            // Selects highest installed version.
+                            //
+                            string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+                            string windows10SdkBinFolder = Path.Combine(programFilesX86Folder, "Microsoft SDKs", "Windows", "v10.0A", "bin");
+
+                            string[] windows10KitVersionFolders = Directory.GetDirectories(windows10SdkBinFolder, "NETFX*Tools");
+
+                            string? highestWindows10KitSnExe = windows10KitVersionFolders
+                                .Select(p => Path.Combine(p, SN_EXE_NAME))
+                                .Where(File.Exists)
+                                .OrderByDescending(x => x)
+                                .FirstOrDefault()
+                                ;
+
+                            if (!string.IsNullOrEmpty(highestWindows10KitSnExe))
+                            {
+                                Log.OutputLine(MessageCodes.dbr173, string.Format("Found installation of {0} at '{1}'.", SN_EXE_NAME, highestWindows10KitSnExe));
+                            }
+                            else
+                            {
+                                Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SN_EXE_NAME, programFilesX86Folder));
+                            }
+
+                            path = highestWindows10KitSnExe;
+                        }
+
+                        this.strongNamingToolExeFileNamePath = path;
+                    }
+                }
             }
 
-            return path;
+            return this.strongNamingToolExeFileNamePath;
         }
 
         private bool IsOnWindows 

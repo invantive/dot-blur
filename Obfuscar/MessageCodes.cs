@@ -217,6 +217,8 @@ namespace Obfuscar
         public const string dbr180 = "dbr180";
         public const string dbr181 = "dbr181";
         public const string dbr182 = "dbr182";
+        public const string dbr183 = "dbr183";
+        public const string dbr184 = "dbr184";
     }
 }
 
