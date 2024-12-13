@@ -37,6 +37,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Obfuscar
@@ -229,347 +230,364 @@ namespace Obfuscar
             Log.OutputLine(MessageCodes.dbr122, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr122_msg_par1), assemblyCount));
 
             //
-            // Save the modified assemblies.
+            // Save the modified assemblies in parallel. Avoid parallelism with sometimes confusing
+            // call stack when degree of parallelism is only 1.
             //
-            foreach (AssemblyInfo info in this.Project.AssemblyList)
+            // Saving and signing an assembly can take up to 10 seconds each.
+            //
+            if (assemblyCount == 1)
             {
-                if (info.Definition == null)
-                {
-                    throw new ObfuscarException(MessageCodes.dbr026, Translations.GetTranslationOfKey(TranslationKeys.db_definition_missing));
-                }
-
-                string? fileName = Path.GetFileName(info.FileName);
-
-                try
-                {
-                    if (string.IsNullOrEmpty(fileName))
-                    {
-                        throw new ObfuscarException(MessageCodes.dbr142, Translations.GetTranslationOfKey(TranslationKeys.db_filename_missing));
-                    }
-
-                    string outName = Path.Combine(outPath, fileName);
-
-                    WriterParameters parameters = new WriterParameters();
-
-                    if (this.Project.Settings.RegenerateDebugInfo)
-                    {
-                        if (this.IsOnWindows)
-                        {
-                            parameters.SymbolWriterProvider = new PortablePdbWriterProvider();
-                        }
-                        else
-                        {
-                            parameters.SymbolWriterProvider = new Mono.Cecil.Pdb.PdbWriterProvider();
-                        }
-                    }
-
-                    if (info.Definition.Name.HasPublicKey)
-                    {
-                        //
-                        // Source assembly was strong-name signed.
-                        //
-                        string? keyFileName = this.Project.Settings.KeyFile;
-                        string? keyFilePassword = this.Project.Settings.KeyFilePassword;
-                        string? keyContainerName = this.Project.Settings.KeyContainer;
-                        string? signingFileDigestAlgorithm = this.Project.Settings.SigningFileDigestAlgorithm;
-                        string? signingTimeStampServerUrl = this.Project.Settings.SigningTimeStampServerUrl;
-                        string? certificateSha1Thumbprint = this.Project.Settings.SigningCertificateSha1Thumbprint;
-
-                        byte[]? keyPair = this.Project.KeyPair;
-
-                        if (keyPair != null)
-                        {
-                            try
-                            {
-                                parameters.StrongNameKeyBlob = keyPair;
-
-                                info.Definition.Write(outName, parameters);
-                                info.OutputFileName = outName;
-
-                                Log.OutputLine(MessageCodes.dbr120, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr120_msg_par1), fileName, outName));
-                            }
-                            catch (Exception ex)
-                            {
-                                parameters.StrongNameKeyBlob = null;
-
-                                if (info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
-                                {
-                                    info.Definition.MainModule.Attributes ^= ModuleAttributes.StrongNameSigned;
-                                }
-
-                                //
-                                // Delay sign.
-                                //
-                                info.Definition.Name.PublicKey = keyPair;
-                                info.Definition.Write(outName, parameters);
-                                info.OutputFileName = outName;
-
-                                Log.OutputLine(MessageCodes.dbr117, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr117_msg_par1), fileName, outName, ex));
-                            }
-                        }
-                        else if (!string.IsNullOrEmpty(keyContainerName))
-                        {
-                            //
-                            // Config file contains key container name.
-                            //
-                            info.Definition.Write(outName, parameters);
-
-                            MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, keyContainerName);
-
-                            Log.OutputLine(MessageCodes.dbr118, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr118_msg_par1), fileName, outName, keyContainerName));
-                        }
-                        else if (!info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
-                        {
-                            //
-                            // When an assembly is "delay signed" and no KeyFile or KeyContainer properties were provided,
-                            // keep the obfuscated assembly "delay signed" too.
-                            //
-                            info.Definition.Write(outName, parameters);
-                            info.OutputFileName = outName;
-
-                            Log.OutputLine(MessageCodes.dbr119, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr119_msg_par1), fileName, outName));
-                        }
-                        else
-                        {
-                            throw new ObfuscarException
-                            ( MessageCodes.dbr015
-                            , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg_par1), info.Name)
-                            , Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg)
-                            );
-                        }
-
-                        if (this.Project.Settings.SignAssembly)
-                        {
-                            string? signToolExePath = this.GetSignToolExeFileNamePath();
-
-                            //
-                            // Defaulting.
-                            //
-                            if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
-                            {
-                                signingFileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
-                            }
-
-                            if (string.IsNullOrEmpty(signingTimeStampServerUrl))
-                            {
-                                signingTimeStampServerUrl = "http://timestamp.digicert.com";
-                            }
-
-                            //
-                            // Various checks.
-                            //
-                            if (string.IsNullOrEmpty(signToolExePath))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr040, Translations.GetTranslationOfKey(TranslationKeys.db_dbr040_msg));
-                            }
-
-                            if (!File.Exists(signToolExePath))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr041, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr041_msg_par1), signToolExePath));
-                            }
-
-                            if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(certificateSha1Thumbprint))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr175, Translations.GetTranslationOfKey(TranslationKeys.db_dbr175_msg));
-                            }
-
-                            //
-                            // When both key file name and certificate SHA1 thumbprint are missing, automatic selection could be used.
-                            // However, that is quite tricky securitwise.
-                            //
-                            if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(certificateSha1Thumbprint))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr176, Translations.GetTranslationOfKey(TranslationKeys.db_dbr176_msg));
-                            }
-
-                            if (string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyFilePassword))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr177, Translations.GetTranslationOfKey(TranslationKeys.db_dbr177_msg));
-                            }
-
-                            //if (string.IsNullOrEmpty(keyFileName))
-                            //{
-                            //    throw new ObfuscarException(MessageCodes.dbr044, Translations.GetTranslationOfKey(TranslationKeys.db_dbr044_msg));
-                            //}
-
-                            //if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
-                            //{
-                            //    throw new ObfuscarException(MessageCodes.dbr045, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr045_msg_par1), keyFileName));
-                            //}
-
-                            List<string> signToolArguments = new List<string>();
-
-                            //
-                            // Command: sign files using an embedded signature.
-                            //
-                            signToolArguments.Add("sign");
-
-                            //
-                            // Specify the signing cert in a file. If this file is a PFX with a password, the password may be
-                            // supplied with the "/p" option. If the file does not contain private keys, use the "/csp" and "/kc"
-                            // options to specify the CSP and container name of the private key.
-                            //
-                            if (!string.IsNullOrEmpty(keyFileName))
-                            {
-                                signToolArguments.Add("/f");
-                                signToolArguments.Add($"\"{keyFileName}\"");
-
-                                if (!string.IsNullOrEmpty(keyFilePassword))
-                                {
-                                    //
-                                    // Specify a password to use when opening the PFX file.
-                                    //
-                                    signToolArguments.Add("/p");
-                                    signToolArguments.Add($"\"{keyFilePassword}\"");
-                                }
-                            }
-
-                            //
-                            // Specify the SHA1 thumbprint of the signing cert.
-                            //
-                            // The list of SHA1 thumbprints of available certificates can be 
-                            // retrieved using:
-                            // 
-                            // signtool.exe sign FILENAME
-                            //
-                            if (!string.IsNullOrEmpty(certificateSha1Thumbprint))
-                            {
-                                signToolArguments.Add("/sha1");
-                                signToolArguments.Add($"\"{certificateSha1Thumbprint}\"");
-                            }
-
-                            //
-                            // Specifies the file digest algorithm to use for creating file signatures. (Default is SHA1)
-                            //
-                            if (!string.IsNullOrEmpty(signingFileDigestAlgorithm))
-                            {
-                                signToolArguments.Add("/fd");
-                                signToolArguments.Add($"\"{signingFileDigestAlgorithm}\"");
-                            }
-
-                            //
-                            // Specify the timestamp server's URL. If this option is not present, the signed file will not
-                            // be timestamped.A warning is generated if timestamping fails.
-                            //
-                            if (!string.IsNullOrEmpty(signingTimeStampServerUrl))
-                            {
-                                signToolArguments.Add("/t");
-                                signToolArguments.Add($"\"{signingTimeStampServerUrl}\"");
-                            }
-
-                            signToolArguments.Add($"\"{outName}\"");
-
-                            string signToolArgumentsTxt = string.Join(" ", signToolArguments);
-
-                            Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, signToolExePath, signToolArgumentsTxt));
-
-                            ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArgumentsTxt)
-                                                        { UseShellExecute = false
-                                                        , RedirectStandardOutput = true
-                                                        , RedirectStandardError = true
-                                                        , CreateNoWindow = true
-                                                        };
-
-                            Process? signProcess = Process.Start(psi);
-
-                            if (signProcess == null)
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr042, Translations.GetTranslationOfKey(TranslationKeys.db_dbr042_msg));
-                            }
-
-                            bool nonEmptyLineSeen;
-
-                            //
-                            // Print stdout without leading empty lines.
-                            //
-                            nonEmptyLineSeen = false;
-                            while (!signProcess.StandardOutput.EndOfStream)
-                            {
-                                string? line = signProcess.StandardOutput.ReadLine();
-
-                                if (!string.IsNullOrEmpty(line))
-                                {
-                                    nonEmptyLineSeen = true;
-                                }
-
-                                if (nonEmptyLineSeen)
-                                {
-                                    Log.OutputLine(MessageCodes.dbr153, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr153_msg_par1), line));
-                                }
-                            }
-
-                            //
-                            // Print stderr without leading empty lines.
-                            //
-                            nonEmptyLineSeen = false;
-                            while (!signProcess.StandardError.EndOfStream)
-                            {
-                                string? line = signProcess.StandardError.ReadLine();
-
-                                if (!string.IsNullOrEmpty(line))
-                                {
-                                    nonEmptyLineSeen = true;
-                                }
-
-                                if (nonEmptyLineSeen)
-                                {
-                                    Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
-                                }
-                            }
-
-                            const int SignTimeOutMs = 60_000;
-
-                            if (!signProcess.WaitForExit(SignTimeOutMs))
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr043, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr043_msg_par1), SignTimeOutMs));
-                            }
-
-                            int exitCode = signProcess.ExitCode;
-
-                            if (exitCode == 0)
-                            {
-                                Log.OutputLine(MessageCodes.dbr123, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr123_msg_par1), fileName));
-                            }
-                            else
-                            {
-                                throw new ObfuscarException(MessageCodes.dbr145, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr145_msg_par1), fileName, exitCode));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Log.OutputLine(MessageCodes.dbr124, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr124_msg_par1), fileName));
-
-                        info.Definition.Write(outName, parameters);
-                        info.OutputFileName = outName;
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (throwException)
-                    {
-                        throw;
-                    }
-
-                    Log.OutputLine(MessageCodes.dbr061, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr061_msg_par1), fileName));
-                    Log.OutputLine(MessageCodes.dbr062, $"{e.GetType().Name}: {e.Message}");
-
-                    Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
-
-                    if (match.Success)
-                    {
-                        string name = match.Groups["name"].Value;
-
-                        Log.OutputLine(MessageCodes.dbr063, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr063_msg_par1), name));
-
-                        this.LogMappings(name);
-
-                        Log.OutputLine(MessageCodes.dbr064, Translations.GetTranslationOfKey(TranslationKeys.db_hint_skiptype));
-                    }
-                }
+                this.SaveAssembly(this.Project.AssemblyList.First(), outPath, throwException);
+            }
+            else
+            {
+                Parallel.ForEach(this.Project.AssemblyList, info => this.SaveAssembly(info, outPath, throwException));
             }
 
             TypeNameCache.nameCache.Clear();
+        }
+
+        private void SaveAssembly(AssemblyInfo info, string? outPath, bool throwException)
+        {
+            if (string.IsNullOrEmpty(outPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr179, "The out path is missing.");
+            }
+
+            if (info.Definition == null)
+            {
+                throw new ObfuscarException(MessageCodes.dbr026, Translations.GetTranslationOfKey(TranslationKeys.db_definition_missing));
+            }
+
+            string? fileName = Path.GetFileName(info.FileName);
+
+            try
+            {
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    throw new ObfuscarException(MessageCodes.dbr142, Translations.GetTranslationOfKey(TranslationKeys.db_filename_missing));
+                }
+
+                string outName = Path.Combine(outPath, fileName);
+
+                WriterParameters parameters = new WriterParameters();
+
+                if (this.Project.Settings.RegenerateDebugInfo)
+                {
+                    if (this.IsOnWindows)
+                    {
+                        parameters.SymbolWriterProvider = new PortablePdbWriterProvider();
+                    }
+                    else
+                    {
+                        parameters.SymbolWriterProvider = new Mono.Cecil.Pdb.PdbWriterProvider();
+                    }
+                }
+
+                if (info.Definition.Name.HasPublicKey)
+                {
+                    //
+                    // Source assembly was strong-name signed.
+                    //
+                    string? keyFileName = this.Project.Settings.KeyFile;
+                    string? keyFilePassword = this.Project.Settings.KeyFilePassword;
+                    string? keyContainerName = this.Project.Settings.KeyContainer;
+                    string? signingFileDigestAlgorithm = this.Project.Settings.SigningFileDigestAlgorithm;
+                    string? signingTimeStampServerUrl = this.Project.Settings.SigningTimeStampServerUrl;
+                    string? certificateSha1Thumbprint = this.Project.Settings.SigningCertificateSha1Thumbprint;
+
+                    byte[]? keyPair = this.Project.KeyPair;
+
+                    if (keyPair != null)
+                    {
+                        try
+                        {
+                            parameters.StrongNameKeyBlob = keyPair;
+
+                            info.Definition.Write(outName, parameters);
+                            info.OutputFileName = outName;
+
+                            Log.OutputLine(MessageCodes.dbr120, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr120_msg_par1), fileName, outName));
+                        }
+                        catch (Exception ex)
+                        {
+                            parameters.StrongNameKeyBlob = null;
+
+                            if (info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
+                            {
+                                info.Definition.MainModule.Attributes ^= ModuleAttributes.StrongNameSigned;
+                            }
+
+                            //
+                            // Delay sign.
+                            //
+                            info.Definition.Name.PublicKey = keyPair;
+                            info.Definition.Write(outName, parameters);
+                            info.OutputFileName = outName;
+
+                            Log.OutputLine(MessageCodes.dbr117, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr117_msg_par1), fileName, outName, ex));
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(keyContainerName))
+                    {
+                        //
+                        // Config file contains key container name.
+                        //
+                        info.Definition.Write(outName, parameters);
+
+                        MsNetSigner.StrongNameSignAssemblyFromKeyContainer(outName, keyContainerName);
+
+                        Log.OutputLine(MessageCodes.dbr118, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr118_msg_par1), fileName, outName, keyContainerName));
+                    }
+                    else if (!info.Definition.MainModule.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
+                    {
+                        //
+                        // When an assembly is "delay signed" and no KeyFile or KeyContainer properties were provided,
+                        // keep the obfuscated assembly "delay signed" too.
+                        //
+                        info.Definition.Write(outName, parameters);
+                        info.OutputFileName = outName;
+
+                        Log.OutputLine(MessageCodes.dbr119, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr119_msg_par1), fileName, outName));
+                    }
+                    else
+                    {
+                        throw new ObfuscarException
+                        (MessageCodes.dbr015
+                        , string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg_par1), info.Name)
+                        , Translations.GetTranslationOfKey(TranslationKeys.db_dbr015_msg)
+                        );
+                    }
+
+                    if (this.Project.Settings.SignAssembly)
+                    {
+                        string? signToolExePath = this.GetSignToolExeFileNamePath();
+
+                        //
+                        // Defaulting.
+                        //
+                        if (string.IsNullOrEmpty(signingFileDigestAlgorithm))
+                        {
+                            signingFileDigestAlgorithm = SignToolFileDigestAlgorithms.SHA256;
+                        }
+
+                        if (string.IsNullOrEmpty(signingTimeStampServerUrl))
+                        {
+                            signingTimeStampServerUrl = "http://timestamp.digicert.com";
+                        }
+
+                        //
+                        // Various checks.
+                        //
+                        if (string.IsNullOrEmpty(signToolExePath))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr040, Translations.GetTranslationOfKey(TranslationKeys.db_dbr040_msg));
+                        }
+
+                        if (!File.Exists(signToolExePath))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr041, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr041_msg_par1), signToolExePath));
+                        }
+
+                        if (!string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(certificateSha1Thumbprint))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr175, "At most one of certificate selection by key file name and SHA1 thumbprint can be used.");
+                        }
+
+                        //
+                        // When both key file name and certificate SHA1 thumbprint are missing, automatic selection could be used.
+                        // However, that is quite tricky securitwise.
+                        //
+                        if (string.IsNullOrEmpty(keyFileName) && string.IsNullOrEmpty(certificateSha1Thumbprint))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr176, "Either certificate selection by key file name or SHA1 thumbprint must be used.");
+                        }
+
+                        if (string.IsNullOrEmpty(keyFileName) && !string.IsNullOrEmpty(keyFilePassword))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr177, "The key file password can only be supplied when the certificate is selected by key file name.");
+                        }
+
+                        //if (string.IsNullOrEmpty(keyFileName))
+                        //{
+                        //    throw new ObfuscarException(MessageCodes.dbr044, Translations.GetTranslationOfKey(TranslationKeys.db_dbr044_msg));
+                        //}
+
+                        //if (!(Path.GetExtension(keyFileName)?.Equals(".pfx", StringComparison.InvariantCultureIgnoreCase) ?? false))
+                        //{
+                        //    throw new ObfuscarException(MessageCodes.dbr045, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr045_msg_par1), keyFileName));
+                        //}
+
+                        List<string> signToolArguments = new List<string>();
+
+                        //
+                        // Command: sign files using an embedded signature.
+                        //
+                        signToolArguments.Add("sign");
+
+                        //
+                        // Specify the signing cert in a file. If this file is a PFX with a password, the password may be
+                        // supplied with the "/p" option. If the file does not contain private keys, use the "/csp" and "/kc"
+                        // options to specify the CSP and container name of the private key.
+                        //
+                        if (!string.IsNullOrEmpty(keyFileName))
+                        {
+                            signToolArguments.Add("/f");
+                            signToolArguments.Add($"\"{keyFileName}\"");
+
+                            if (!string.IsNullOrEmpty(keyFilePassword))
+                            {
+                                //
+                                // Specify a password to use when opening the PFX file.
+                                //
+                                signToolArguments.Add("/p");
+                                signToolArguments.Add($"\"{keyFilePassword}\"");
+                            }
+                        }
+
+                        //
+                        // Specify the SHA1 thumbprint of the signing cert.
+                        //
+                        // The list of SHA1 thumbprints of available certificates can be 
+                        // retrieved using:
+                        // 
+                        // signtool.exe sign FILENAME
+                        //
+                        if (!string.IsNullOrEmpty(certificateSha1Thumbprint))
+                        {
+                            signToolArguments.Add("/sha1");
+                            signToolArguments.Add($"\"{certificateSha1Thumbprint}\"");
+                        }
+
+                        //
+                        // Specifies the file digest algorithm to use for creating file signatures. (Default is SHA1)
+                        //
+                        if (!string.IsNullOrEmpty(signingFileDigestAlgorithm))
+                        {
+                            signToolArguments.Add("/fd");
+                            signToolArguments.Add($"\"{signingFileDigestAlgorithm}\"");
+                        }
+
+                        //
+                        // Specify the timestamp server's URL. If this option is not present, the signed file will not
+                        // be timestamped.A warning is generated if timestamping fails.
+                        //
+                        if (!string.IsNullOrEmpty(signingTimeStampServerUrl))
+                        {
+                            signToolArguments.Add("/t");
+                            signToolArguments.Add($"\"{signingTimeStampServerUrl}\"");
+                        }
+
+                        signToolArguments.Add($"\"{outName}\"");
+
+                        string signToolArgumentsTxt = string.Join(" ", signToolArguments);
+
+                        Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, signToolExePath, signToolArgumentsTxt));
+
+                        ProcessStartInfo psi = new ProcessStartInfo(signToolExePath, signToolArgumentsTxt)
+                        { UseShellExecute = false
+                        , RedirectStandardOutput = true
+                        , RedirectStandardError = true
+                        , CreateNoWindow = true
+                        };
+
+                        Process? signProcess = Process.Start(psi);
+
+                        if (signProcess == null)
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr042, Translations.GetTranslationOfKey(TranslationKeys.db_dbr042_msg));
+                        }
+
+                        bool nonEmptyLineSeen;
+
+                        //
+                        // Print stdout without leading empty lines.
+                        //
+                        nonEmptyLineSeen = false;
+                        while (!signProcess.StandardOutput.EndOfStream)
+                        {
+                            string? line = signProcess.StandardOutput.ReadLine();
+
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                nonEmptyLineSeen = true;
+                            }
+
+                            if (nonEmptyLineSeen)
+                            {
+                                Log.OutputLine(MessageCodes.dbr153, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr153_msg_par1), line));
+                            }
+                        }
+
+                        //
+                        // Print stderr without leading empty lines.
+                        //
+                        nonEmptyLineSeen = false;
+                        while (!signProcess.StandardError.EndOfStream)
+                        {
+                            string? line = signProcess.StandardError.ReadLine();
+
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                nonEmptyLineSeen = true;
+                            }
+
+                            if (nonEmptyLineSeen)
+                            {
+                                Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
+                            }
+                        }
+
+                        const int SignTimeOutMs = 60_000;
+
+                        if (!signProcess.WaitForExit(SignTimeOutMs))
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr043, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr043_msg_par1), SignTimeOutMs));
+                        }
+
+                        int exitCode = signProcess.ExitCode;
+
+                        if (exitCode == 0)
+                        {
+                            Log.OutputLine(MessageCodes.dbr123, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr123_msg_par1), fileName));
+                        }
+                        else
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr145, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr145_msg_par1), fileName, exitCode));
+                        }
+                    }
+                }
+                else
+                {
+                    Log.OutputLine(MessageCodes.dbr124, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr124_msg_par1), fileName));
+
+                    info.Definition.Write(outName, parameters);
+                    info.OutputFileName = outName;
+                }
+            }
+            catch (Exception e)
+            {
+                if (throwException)
+                {
+                    throw;
+                }
+
+                Log.OutputLine(MessageCodes.dbr061, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr061_msg_par1), fileName));
+                Log.OutputLine(MessageCodes.dbr062, $"{e.GetType().Name}: {e.Message}");
+
+                Match match = Regex.Match(e.Message, @"Failed to resolve\s+(?<name>[^\s]+)");
+
+                if (match.Success)
+                {
+                    string name = match.Groups["name"].Value;
+
+                    Log.OutputLine(MessageCodes.dbr063, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr063_msg_par1), name));
+
+                    this.LogMappings(name);
+
+                    Log.OutputLine(MessageCodes.dbr064, Translations.GetTranslationOfKey(TranslationKeys.db_hint_skiptype));
+                }
+            }
         }
 
         /// <summary>

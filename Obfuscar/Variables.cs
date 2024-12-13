@@ -47,6 +47,12 @@ namespace Obfuscar
             this.vars.Remove(name);
         }
 
+        /// <summary>
+        /// Gets value of a variable as a string.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>String (nullable) value.</returns>
         [return: NotNullIfNotNull(nameof(defaultValue))]
         public string? GetStringValue(string name, string? defaultValue)
         {
@@ -60,6 +66,12 @@ namespace Obfuscar
             return this.Replace(stringValue);
         }
 
+        /// <summary>
+        /// Gets value of a variable as a boolean.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>Boolean (nullable) value.</returns>
         [return: NotNullIfNotNull(nameof(defaultValue))]
         public bool? GetBoolValue(string name, bool? defaultValue)
         {
@@ -74,6 +86,7 @@ namespace Obfuscar
             {
                 value = null;
             }
+            else
             {
                 value = XmlConvert.ToBoolean(stringValue);
             }

@@ -24,9 +24,6 @@
 
 #endregion
 
-using System;
-using System.Xml;
-
 namespace Obfuscar
 {
     /// <summary>
@@ -54,10 +51,13 @@ namespace Obfuscar
         internal const string VariableRenameProperties = "RenameProperties";
         internal const string VariableReuseNames = "ReuseNames";
         internal const string VariableSignAssembly = "SignAssembly";
+        internal const string VariableSignatureValidation = "SignatureValidation";
+        internal const string VariableSignInParallel = "SignInParallel";
         internal const string VariableSigningCertificateSha1Thumbprint = "SigningCertificateSha1Thumbprint";
         internal const string VariableSigningFileDigestAlgorithm = "SigningFileDigestAlgorithm";
         internal const string VariableSigningTimeStampServerUrl = "SigningTimeStampServerUrl";
         internal const string VariableSignToolExe = "SignToolExe";
+        internal const string VariableSnExe = "SnExe";
         internal const string VariableSuppressIldasm = "SuppressIldasm";
         internal const string VariableUseKoreanNames = "UseKoreanNames";
         internal const string VariableUseUnicodeNames = "UseUnicodeNames";
@@ -93,151 +93,171 @@ namespace Obfuscar
             this.RenameProperties = vars.EvaluateBoolVariable(VariableRenameProperties, true) ?? true;
             this.ReuseNames = vars.EvaluateBoolVariable(VariableReuseNames, true) ?? true;
             this.SignAssembly = vars.EvaluateBoolVariable(VariableSignAssembly, false) ?? false;
+            this.SignatureValidation = vars.EvaluateBoolVariable(VariableSignatureValidation, true) ?? true;
+            this.SignInParallel = vars.EvaluateBoolVariable(VariableSignInParallel, true) ?? true;
             this.SigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableSigningCertificateSha1Thumbprint, null);
             this.SigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableSigningFileDigestAlgorithm, null);
             this.SigningTimeStampServerUrl = vars.EvaluateStringVariable(VariableSigningTimeStampServerUrl, null);
             this.SignToolExe = vars.EvaluateStringVariable(VariableSignToolExe, null);
+            this.SnExe = vars.EvaluateStringVariable(VariableSnExe, null);
             this.SuppressIldasm = vars.EvaluateBoolVariable(VariableSuppressIldasm, true) ?? true;
             this.UseKoreanNames = vars.EvaluateBoolVariable(VariableUseKoreanNames, false) ?? false;
             this.UseUnicodeNames = vars.EvaluateBoolVariable(VariableUseUnicodeNames, false) ?? false;
             this.XmlMapping = vars.EvaluateBoolVariable(VariableXmlMapping, false) ?? false;
         }
 
-        public bool RegenerateDebugInfo { get; }
+        public bool RegenerateDebugInfo { get; private set; }
 
         /// <summary>
         /// Directory containing the input assemblies, such as c:\\in.
         /// </summary>
-        public string? InPath { get; }
+        public string? InPath { get; private set; }
 
         /// <summary>
         /// Directory to contain the obfuscated assemblies, such as c:\\out.
         /// </summary>
-        public string? OutPath { get; }
+        public string? OutPath { get; private set; }
 
         /// <summary>
         /// Whether to only obfuscate marked items. All items are obfuscated when set to false.
         /// </summary>
-        public bool MarkedOnly { get; }
+        public bool MarkedOnly { get; private set; }
 
         /// <summary>
         /// Obfuscation log file path (mapping.txt).
         /// </summary>
-        public string? LogFilePath { get; }
+        public string? LogFilePath { get; private set; }
 
         /// <summary>
         /// Whether to rename fields.
         /// </summary>
-        public bool RenameFields { get; }
+        public bool RenameFields { get; private set; }
 
         /// <summary>
         /// Whether to rename properties.
         /// </summary>
-        public bool RenameProperties { get; }
+        public bool RenameProperties { get; private set; }
 
         /// <summary>
         /// Whether to rename events.
         /// </summary>
-        public bool RenameEvents { get; }
+        public bool RenameEvents { get; private set; }
 
         /// <summary>
         /// Whether to exclude public types and type members from obfuscation.
         /// </summary>
-        public bool KeepPublicApi { get; }
+        public bool KeepPublicApi { get; private set; }
 
         /// <summary>
         /// Whether to include private types and type members from obfuscation.
         /// </summary>
-        public bool HidePrivateApi { get; }
+        public bool HidePrivateApi { get; private set; }
 
         /// <summary>
         /// Whether to reuse obfuscated names.
         /// </summary>
-        public bool ReuseNames { get; }
+        public bool ReuseNames { get; private set; }
 
         /// <summary>
         /// Whether to hide strings.
         /// </summary>
-        public bool HideStrings { get; }
+        public bool HideStrings { get; private set; }
 
         /// <summary>
         /// Whether to optimize methods.
         /// </summary>
-        public bool OptimizeMethods { get; }
+        public bool OptimizeMethods { get; private set; }
 
         /// <summary>
         /// Whether to include an attribute for ILDASM to indicate that assemblies are obfuscated.
         /// </summary>
-        public bool SuppressIldasm { get; }
+        public bool SuppressIldasm { get; private set; }
 
         /// <summary>
         /// Whether the log file should be of XML format.
         /// </summary>
-        public bool XmlMapping { get; }
+        public bool XmlMapping { get; private set; }
 
         /// <summary>
         /// Whether to use Unicode characters as obfuscated names.
         /// </summary>
-        public bool UseUnicodeNames { get; }
+        public bool UseUnicodeNames { get; private set; }
 
         /// <summary>
         /// Whether to use Korean characters as obfuscated names.
         /// </summary>
-        public bool UseKoreanNames { get; }
+        public bool UseKoreanNames { get; private set; }
 
         /// <summary>
         /// Whether to analyze XAML related metadata for obfuscation.
         /// </summary>
-        public bool AnalyzeXaml { get; }
+        public bool AnalyzeXaml { get; private set; }
 
         /// <summary>
         /// Unique list of characters to use for naming.
         /// </summary>
-        public string? CustomChars { get; }
+        public string? CustomChars { get; private set; }
 
         /// <summary>
         /// List of extra .net framework folders to search, separated by semicolon as path list separator.
         /// </summary>
-        public string? ExtraFrameworkFolders { get; }
+        public string? ExtraFrameworkFolders { get; private set; }
 
         /// <summary>
         /// Key container name.
         /// </summary>
-        public string? KeyContainer { get; }
+        public string? KeyContainer { get; private set; }
 
         /// <summary>
         /// Key file path, such as c:\folder\key.pfx.
         /// </summary>
-        public string? KeyFile { get; }
+        public string? KeyFile { get; private set; }
 
         /// <summary>
         /// Key file password.
         /// </summary>
-        public string? KeyFilePassword { get; }
+        public string? KeyFilePassword { get; private set; }
 
         /// <summary>
         /// The path to signtool.exe.
         /// </summary>
-        public string? SignToolExe { get; }
+        public string? SignToolExe { get; private set; }
+
+        /// <summary>
+        /// The path to sn.exe.
+        /// </summary>
+        public string? SnExe { get; private set; }
 
         /// <summary>
         /// Whether to sign assemblies.
         /// </summary>
-        public bool SignAssembly { get; }
+        public bool SignAssembly { get; private set; }
 
         /// <summary>
         /// Signing file digest algorithm.
         /// </summary>
-        public string? SigningFileDigestAlgorithm { get; }
+        public string? SigningFileDigestAlgorithm { get; private set; }
 
         /// <summary>
         /// Signing time stamp server URL.
         /// </summary>
-        public string? SigningTimeStampServerUrl { get; }
+        public string? SigningTimeStampServerUrl { get; private set; }
 
         /// <summary>
         /// SHA1 thumbprint to select the certificate for signing.
         /// </summary>
-        public string? SigningCertificateSha1Thumbprint { get; internal set; }
+        public string? SigningCertificateSha1Thumbprint { get; private set; }
+
+        /// <summary>
+        /// Whether to perform signing in parallel for the assemblies.
+        /// </summary>
+        /// <remarks>When using a hardware token, depending on configuration the password must be entered on first use. 
+        /// Avoid multiple token password requests by falling back to serial signing on first solution being signed.</remarks>
+        public bool SignInParallel { get; private set; }
+
+        /// <summary>
+        /// Whether to check afterwards that the signature was correctly applied using sn.exe.
+        /// </summary>
+        public bool SignatureValidation { get; private set; }
     }
 }
