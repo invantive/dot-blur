@@ -376,6 +376,8 @@ namespace Obfuscar
                 string? codeSigningFileDigestAlgorithm = this.Project.Settings.CodeSigningFileDigestAlgorithm;
                 string? codeSigningTimeStampServerUrl = this.Project.Settings.CodeSigningTimeStampServerUrl;
                 string? codeSigningCertificateSha1Thumbprint = this.Project.Settings.CodeSigningCertificateSha1Thumbprint;
+                string? codeSigningContentDescription = this.Project.Settings.CodeSigningContentDescription;
+                string? codeSigningContentInformationUrl = this.Project.Settings.CodeSigningContentInformationUrl;
 
                 if (this.Project.Settings.CodeSignAssembly)
                 {
@@ -462,6 +464,24 @@ namespace Obfuscar
                                 cmdArguments.Add("/p");
                                 cmdArguments.Add($"\"{codeSigningKeyFilePassword}\"");
                             }
+                        }
+
+                        //
+                        // Provide a description of the signed content.
+                        //
+                        if (!string.IsNullOrEmpty(codeSigningContentDescription))
+                        {
+                            cmdArguments.Add("/d");
+                            cmdArguments.Add($"\"{codeSigningContentDescription}\"");
+                        }
+
+                        //
+                        // Provide a URL with more information about the signed content.
+                        //
+                        if (!string.IsNullOrEmpty(codeSigningContentInformationUrl))
+                        {
+                            cmdArguments.Add("/du");
+                            cmdArguments.Add($"\"{codeSigningContentInformationUrl}\"");
                         }
 
                         //

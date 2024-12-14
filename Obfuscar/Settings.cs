@@ -34,6 +34,8 @@ namespace Obfuscar
         internal const string VariableAnalyzeXaml = "AnalyzeXaml";
         internal const string VariableCodeSignAssembly = "CodeSignAssembly";
         internal const string VariableCodeSigningCertificateSha1Thumbprint = "CodeSigningCertificateSha1Thumbprint";
+        internal const string VariableCodeSigningContentDescription = "CodeSigningContentDescription";
+        internal const string VariableCodeSigningContentInformationUrl = "CodeSigningContentInformationUrl";
         internal const string VariableCodeSigningFileDigestAlgorithm = "CodeSigningFileDigestAlgorithm";
         internal const string VariableCodeSigningKeyContainer = "CodeSigningKeyContainer";
         internal const string VariableCodeSigningKeyFile = "CodeSigningKeyFile";
@@ -80,6 +82,8 @@ namespace Obfuscar
             this.AnalyzeXaml = vars.EvaluateBoolVariable(VariableAnalyzeXaml, false) ?? false;
             this.CodeSignAssembly = vars.EvaluateBoolVariable(VariableCodeSignAssembly, false) ?? false;
             this.CodeSigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableCodeSigningCertificateSha1Thumbprint, null);
+            this.CodeSigningContentDescription = vars.EvaluateStringVariable(VariableCodeSigningContentDescription, null);
+            this.CodeSigningContentInformationUrl = vars.EvaluateStringVariable(VariableCodeSigningContentInformationUrl, null);
             this.CodeSigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableCodeSigningFileDigestAlgorithm, null);
             this.CodeSigningKeyContainer = vars.EvaluateStringVariable(VariableCodeSigningKeyContainer, null);
             this.CodeSigningKeyFile = vars.EvaluateStringVariable(VariableCodeSigningKeyFile, null);
@@ -270,6 +274,16 @@ namespace Obfuscar
         /// SHA1 thumbprint to select the certificate for code signing.
         /// </summary>
         public string? CodeSigningCertificateSha1Thumbprint { get; private set; }
+
+        /// <summary>
+        /// Description of the signed content.
+        /// </summary>
+        public string? CodeSigningContentDescription { get; private set; }
+
+        /// <summary>
+        /// URL with information on the signed content.
+        /// </summary>
+        public string? CodeSigningContentInformationUrl { get; private set; }
 
         /// <summary>
         /// Whether to perform code signing in parallel for the assemblies.
