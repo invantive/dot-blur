@@ -44,6 +44,29 @@ namespace Obfuscar
 {
     internal class AssemblyInfo
     {
+        private const string MESAGE_FROM_FIELD_RULE_FORCE = "field rule force in configuration";
+        private const string MESAGE_FROM_FIELD_RULE_SKIP = "field rule skip in configuration";
+        private const string MESSAGE_FROM_ATTRIBUTE = "attribute";
+        private const string MESSAGE_FROM_EVENT_RULE_FORCE = "event rule force in configuration";
+        private const string MESSAGE_FROM_EVENT_RULE_SKIP = "event rule skip in configuration";
+        private const string MESSAGE_FROM_FORCE_METHODS = "method rule in configuration";
+        private const string MESSAGE_FROM_FORCE_PROPERTIES = "property rule force in configuration";
+        private const string MESSAGE_FROM_FORCE_TYPES = "type rule in configuration";
+        private const string MESSAGE_FROM_HIDE_PRIVATE_API = "HidePrivateApi option in configuration";
+        private const string MESSAGE_FROM_KEEP_PUBLIC_API = "KeepPublicApi option in configuration";
+        private const string MESSAGE_FROM_MARKED_ONLY = "MarkedOnly option in configuration";
+        private const string MESSAGE_FROM_RUNTIME_METHOD = "runtime method";
+        private const string MESSAGE_FROM_RUNTIME_SPECIAL_NAME = "runtime special name";
+        private const string MESSAGE_FROM_SHOULD_FORCE = "namespace rule to force in configuration";
+        private const string MESSAGE_FROM_SHOULD_SKIP = "namespace rule to skip in configuration";
+        private const string MESSAGE_FROM_SKIP_ENUMERS = "enum rule in configuration";
+        private const string MESSAGE_FROM_SKIP_PROPERTIES = "property rule skip in configuration";
+        private const string MESSAGE_FROM_SKIPPING_EVENTS = "skipping events";
+        private const string MESSAGE_FROM_SKIPPING_PROPERTIES = "skipping properties";
+        private const string MESSAGE_FROM_SPECIAL_NAME = "special name";
+        private const string MESSAGE_FROM_TYPE_ATTRIBUTE = "type attribute";
+        private const string MESSAGE_FROM_XAML_USE = "method used in XAML";
+
         private readonly Project project;
         private readonly PredicateCollection<string> skipNamespaces = new PredicateCollection<string>();
         private readonly PredicateCollection<TypeKey> skipTypes = new PredicateCollection<TypeKey>();
@@ -1111,53 +1134,53 @@ namespace Obfuscar
             bool? attribute = type.TypeDefinition?.MarkedToRename();
             if (attribute != null)
             {
-                message = "attribute";
+                message = MESSAGE_FROM_ATTRIBUTE;
                 return !attribute.Value;
             }
 
             if (markedOnly)
             {
-                message = "MarkedOnly option in configuration";
+                message = MESSAGE_FROM_MARKED_ONLY;
                 return true;
             }
 
             if (this.forceTypes.IsMatch(type, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return false;
             }
 
             if (this.ShouldForce(type.Namespace, map))
             {
-                message = "namespace rule in configuration";
+                message = MESSAGE_FROM_SHOULD_FORCE;
                 return false;
             }
 
             if (this.skipTypes.IsMatch(type, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return true;
             }
 
             if (this.ShouldSkip(type.Namespace, map))
             {
-                message = "namespace rule in configuration";
+                message = MESSAGE_FROM_SHOULD_SKIP;
                 return true;
             }
 
             if ((type.TypeDefinition?.IsEnum ?? false) && this.skipEnums)
             {
-                message = "enum rule in configuration";
+                message = MESSAGE_FROM_SKIP_ENUMERS;
                 return true;
             }
 
             if (type.TypeDefinition?.IsTypePublic() ?? false)
             {
-                message = "KeepPublicApi option in configuration";
+                message = MESSAGE_FROM_KEEP_PUBLIC_API;
                 return keepPublicApi;
             }
 
-            message = "HidePrivateApi option in configuration";
+            message = MESSAGE_FROM_HIDE_PRIVATE_API;
 
             return !hidePrivateApi;
         }
@@ -1166,7 +1189,7 @@ namespace Obfuscar
         {
             if (method.Method.IsRuntime)
             {
-                message = "runtime method";
+                message = MESSAGE_FROM_RUNTIME_METHOD;
                 return true;
             }
 
@@ -1177,18 +1200,18 @@ namespace Obfuscar
                     case MethodSemanticsAttributes.Getter:
                     case MethodSemanticsAttributes.Setter:
                         {
-                            message = "skipping properties";
+                            message = MESSAGE_FROM_SKIPPING_PROPERTIES;
                             return !this.project.Settings.RenameProperties;
                         }
                     case MethodSemanticsAttributes.AddOn:
                     case MethodSemanticsAttributes.RemoveOn:
                         {
-                            message = "skipping events";
+                            message = MESSAGE_FROM_SKIPPING_EVENTS;
                             return !this.project.Settings.RenameEvents;
                         }
                     default:
                         {
-                            message = "special name";
+                            message = MESSAGE_FROM_SPECIAL_NAME;
                             return true;
                         }
                 }
@@ -1206,50 +1229,50 @@ namespace Obfuscar
             //
             if (attribute != null)
             {
-                message = "attribute";
+                message = MESSAGE_FROM_ATTRIBUTE;
                 return !attribute.Value;
             }
 
             bool? parent = method.DeclaringType.MarkedToRename();
             if (parent != null)
             {
-                message = "type attribute";
+                message = MESSAGE_FROM_TYPE_ATTRIBUTE;
                 return !parent.Value;
             }
 
             if (markedOnly)
             {
-                message = "MarkedOnly option in configuration";
+                message = MESSAGE_FROM_MARKED_ONLY;
                 return true;
             }
 
             if (this.ShouldSkipForXaml(method))
             {
-                message = "method used in XAML";
+                message = MESSAGE_FROM_XAML_USE;
                 return true;
             }
 
             if (this.ShouldForce(method.TypeKey, TypeAffectFlags.AffectMethod, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return false;
             }
 
             if (this.forceMethods.IsMatch(method, map))
             {
-                message = "method rule in configuration";
+                message = MESSAGE_FROM_FORCE_METHODS;
                 return false;
             }
 
             if (this.ShouldSkip(method.TypeKey, TypeAffectFlags.AffectMethod, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return true;
             }
 
             if (this.skipMethods.IsMatch(method, map))
             {
-                message = "method rule in configuration";
+                message = MESSAGE_FROM_FORCE_METHODS;
                 return true;
             }
 
@@ -1257,11 +1280,11 @@ namespace Obfuscar
                 && (method.DeclaringType.IsTypePublic() || map?.GetMethodGroup(method)?.Methods.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
                 )
             {
-                message = "KeepPublicApi option in configuration";
+                message = MESSAGE_FROM_KEEP_PUBLIC_API;
                 return keepPublicApi;
             }
 
-            message = "HidePrivateApi option in configuration";
+            message = MESSAGE_FROM_HIDE_PRIVATE_API;
 
             return !hidePrivateApi;
         }
@@ -1328,67 +1351,67 @@ namespace Obfuscar
             //
             if ((field.Field.IsRuntimeSpecialName && field.Field.Name == "value__"))
             {
-                message = "special name";
+                message = MESSAGE_FROM_SPECIAL_NAME;
                 return true;
             }
 
             bool? attribute = field.Field.MarkedToRename();
             if (attribute != null)
             {
-                message = "attribute";
+                message = MESSAGE_FROM_ATTRIBUTE;
                 return !attribute.Value;
             }
 
             bool? parent = field.DeclaringType.MarkedToRename();
             if (parent != null)
             {
-                message = "type attribute";
+                message = MESSAGE_FROM_TYPE_ATTRIBUTE;
                 return !parent.Value;
             }
 
             if (markedOnly)
             {
-                message = "MarkedOnly option in configuration";
+                message = MESSAGE_FROM_MARKED_ONLY;
                 return true;
             }
 
             if (this.ShouldForce(field.TypeKey, TypeAffectFlags.AffectField, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return false;
             }
 
             if (this.forceFields.IsMatch(field, map))
             {
-                message = "field rule in configuration";
+                message = MESAGE_FROM_FIELD_RULE_FORCE;
                 return false;
             }
 
             if (this.ShouldSkip(field.TypeKey, TypeAffectFlags.AffectField, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return true;
             }
 
             if (this.skipFields.IsMatch(field, map))
             {
-                message = "field rule in configuration";
+                message = MESAGE_FROM_FIELD_RULE_SKIP;
                 return true;
             }
 
             if (this.skipEnums && field.DeclaringType.IsEnum)
             {
-                message = "enum rule in configuration";
+                message = MESSAGE_FROM_SKIP_ENUMERS;
                 return true;
             }
 
             if (field.Field.IsPublic() && field.DeclaringType.IsTypePublic())
             {
-                message = "KeepPublicApi option in configuration";
+                message = MESSAGE_FROM_KEEP_PUBLIC_API;
                 return keepPublicApi;
             }
 
-            message = "HidePrivateApi option in configuration";
+            message = MESSAGE_FROM_HIDE_PRIVATE_API;
 
             return !hidePrivateApi;
         }
@@ -1397,61 +1420,66 @@ namespace Obfuscar
         {
             if (prop.Property.IsRuntimeSpecialName)
             {
-                message = "runtime special name";
+                message = MESSAGE_FROM_RUNTIME_SPECIAL_NAME;
                 return true;
             }
 
             bool? attribute = prop.Property.MarkedToRename();
             if (attribute != null)
             {
-                message = "attribute";
+                message = MESSAGE_FROM_ATTRIBUTE;
                 return !attribute.Value;
             }
 
             bool? parent = prop.DeclaringType.MarkedToRename();
             if (parent != null)
             {
-                message = "type attribute";
+                message = MESSAGE_FROM_TYPE_ATTRIBUTE;
                 return !parent.Value;
             }
 
             if (markedOnly)
             {
-                message = "MarkedOnly option in configuration";
+                message = MESSAGE_FROM_MARKED_ONLY;
                 return true;
             }
 
             if (this.ShouldForce(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return false;
             }
 
             if (this.forceProperties.IsMatch(prop, map))
             {
-                message = "property rule in configuration";
+                message = MESSAGE_FROM_FORCE_PROPERTIES;
                 return false;
             }
 
             if (this.ShouldSkip(prop.TypeKey, TypeAffectFlags.AffectProperty, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return true;
             }
 
             if (this.skipProperties.IsMatch(prop, map))
             {
-                message = "property rule in configuration";
+                message = MESSAGE_FROM_SKIP_PROPERTIES;
                 return true;
             }
 
-            if (prop.Property.IsPublic() && (prop.DeclaringType.IsTypePublic() || prop.Property.GetMethod != null && map?.GetMethodGroup(new MethodKey(prop.Property.GetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || prop.Property.SetMethod != null && map?.GetMethodGroup(new MethodKey(prop.Property.SetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null))
+            if (prop.Property.IsPublic() 
+                &&  (   prop.DeclaringType.IsTypePublic() 
+                        || ( prop.Property.GetMethod != null && map?.GetMethodGroup(new MethodKey(prop.Property.GetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
+                        || ( prop.Property.SetMethod != null && map?.GetMethodGroup(new MethodKey(prop.Property.SetMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
+                    )
+                )
             {
-                message = "KeepPublicApi option in configuration";
+                message = MESSAGE_FROM_KEEP_PUBLIC_API;
                 return keepPublicApi;
             }
 
-            message = "HidePrivateApi option in configuration";
+            message = MESSAGE_FROM_HIDE_PRIVATE_API;
             return !hidePrivateApi;
         }
 
@@ -1462,7 +1490,7 @@ namespace Obfuscar
             //
             if (evt.Event.IsRuntimeSpecialName)
             {
-                message = "runtime special name";
+                message = MESSAGE_FROM_RUNTIME_SPECIAL_NAME;
                 return true;
             }
 
@@ -1473,55 +1501,59 @@ namespace Obfuscar
             //
             if (attribute != null)
             {
-                message = "attribute";
+                message = MESSAGE_FROM_ATTRIBUTE;
                 return !attribute.Value;
             }
 
             bool? parent = evt.DeclaringType.MarkedToRename();
             if (parent != null)
             {
-                message = "type attribute";
+                message = MESSAGE_FROM_TYPE_ATTRIBUTE;
                 return !parent.Value;
             }
 
             if (markedOnly)
             {
-                message = "MarkedOnly option in configuration";
+                message = MESSAGE_FROM_MARKED_ONLY;
                 return true;
             }
 
             if (this.ShouldForce(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return false;
             }
 
             if (this.forceEvents.IsMatch(evt, map))
             {
-                message = "event rule in configuration";
+                message = MESSAGE_FROM_EVENT_RULE_FORCE;
                 return false;
             }
 
             if (this.ShouldSkip(evt.TypeKey, TypeAffectFlags.AffectEvent, map))
             {
-                message = "type rule in configuration";
+                message = MESSAGE_FROM_FORCE_TYPES;
                 return true;
             }
 
             if (this.skipEvents.IsMatch(evt, map))
             {
-                message = "event rule in configuration";
+                message = MESSAGE_FROM_EVENT_RULE_SKIP;
                 return true;
             }
 
             if (evt.Event.IsPublic() 
-                && (evt.DeclaringType.IsTypePublic() || evt.Event.AddMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null || evt.Event.RemoveMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null))
+                && (    evt.DeclaringType.IsTypePublic() 
+                        || ( evt.Event.AddMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.AddMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
+                        || ( evt.Event.RemoveMethod != null && map?.GetMethodGroup(new MethodKey(evt.Event.RemoveMethod))?.Methods?.FirstOrDefault(m => m.DeclaringType.IsTypePublic()) != null )
+                    )
+                )
             {
-                message = "KeepPublicApi option in configuration";
+                message = MESSAGE_FROM_KEEP_PUBLIC_API;
                 return keepPublicApi;
             }
 
-            message = "HidePrivateApi option in configuration";
+            message = MESSAGE_FROM_HIDE_PRIVATE_API;
             return !hidePrivateApi;
         }
 
