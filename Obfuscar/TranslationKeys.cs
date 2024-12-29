@@ -92,6 +92,7 @@ namespace Obfuscar
         public const string db_dbr109_msg_par1 = nameof(db_dbr109_msg_par1);
         public const string db_dbr110_msg = nameof(db_dbr110_msg);
         public const string db_dbr111_msg = nameof(db_dbr111_msg);
+        public const string db_dbr112_msg = nameof(db_dbr112_msg);
         public const string db_dbr112_msg_par1 = nameof(db_dbr112_msg_par1);
         public const string db_dbr113_msg_par1 = nameof(db_dbr113_msg_par1);
         public const string db_dbr116_msg = nameof(db_dbr116_msg);

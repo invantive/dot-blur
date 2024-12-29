@@ -88,7 +88,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "فشل في حفظ '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "قد يكون {0} واحدًا من:" }
           , { TranslationKeys.db_dbr069_msg_par1, "لا تقم بإنشاء زوج مفاتيح من '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "لم يتم تعيين \"{0}\"." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "تم الانتهاء بنجاح في {0:N0} ثانية." }
           , { TranslationKeys.db_dbr079_msg_par1, "إنشاء قيمة مفتاح RSA من '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "تم الانتهاء بنجاح في {0:N0} ثانية." }
@@ -96,6 +96,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "إنشاء زوج مفاتيح من {0} باستخدام كلمة المرور." }
           , { TranslationKeys.db_dbr110_msg, "لا يوجد ملف مفتاح ولا حاوية مفتاح تم تكوينها. لا تستخدم أي زوج مفاتيح." }
           , { TranslationKeys.db_dbr111_msg, "لا يوجد ملف مفتاح ولا حاوية مفتاح تم تكوينها. لا تستخدم أي قيمة مفتاح RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "لا تنشئ قيمة مفتاح RSA من '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "ابدأ بالتوقيع '{0}' باستخدام أداة التوقيع '{1}' مع الوسائط '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "تحميل التجميعات." }
@@ -226,7 +227,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Nepodařilo se uložit '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} může být jedním z:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Nevytvořte žádný pár klíčů z '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' není nastaven." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Úspěšně dokončeno za {0:N0} sekund." }
           , { TranslationKeys.db_dbr079_msg_par1, "Vytvoření hodnoty klíče RSA z '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Úspěšně dokončeno za {0:N0} sekund." }
@@ -234,6 +235,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Vytvoření páru klíčů z {0} s heslem." }
           , { TranslationKeys.db_dbr110_msg, "Není nakonfigurován žádný soubor klíčů ani kontejner klíčů. Nepoužívejte žádný pár klíčů." }
           , { TranslationKeys.db_dbr111_msg, "Není nakonfigurován žádný soubor s klíčem ani kontejner s klíčem. Nepoužívejte žádnou hodnotu klíče RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Nevytvořte žádnou hodnotu klíče RSA z '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Spusťte podepisování '{0}' pomocí podepisovacího nástroje '{1}' s argumenty '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Nakládání sestav." }
@@ -364,7 +366,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Det lykkedes ikke at gemme '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} kan være en af:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Opret ikke noget nøglepar fra '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' er ikke indstillet." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Afsluttet med succes på {0:N0} sekunder." }
           , { TranslationKeys.db_dbr079_msg_par1, "Opret RSA-nøgleværdi fra '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Afsluttet med succes på {0:N0} sekunder." }
@@ -372,6 +374,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Opret nøglepar fra {0} med adgangskode." }
           , { TranslationKeys.db_dbr110_msg, "Ingen nøglefil og ingen nøglebeholder konfigureret. Brug ikke noget nøglepar." }
           , { TranslationKeys.db_dbr111_msg, "Ingen nøglefil og ingen nøglebeholder konfigureret. Brug ingen RSA-nøgleværdi." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Opret ingen RSA-nøgleværdi fra '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Start signering af '{0}' ved hjælp af signeringsværktøjet '{1}' med argumenterne '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Indlæsning af samlinger." }
@@ -451,139 +454,140 @@ namespace Obfuscar
         , { Languages.de, new Dictionary<string, string>()
           { { "placeholder", "placeholder" }
           , { TranslationKeys.db_callstack, "Aufrufstapel" }
-          , { TranslationKeys.db_check_project_settings, "Überprüfen Sie die Projekteinstellungen." }
+          , { TranslationKeys.db_check_project_settings, "Überprüfen der Projekteinstellungen." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console ist ein Fork von Obfuscar (https://www.obfuscar.com)" }
-          , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Optionen] [project_file] [project_file]" }
+          , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Optionen] [Projektdatei] [Projektdatei]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) am {1} (UTC) ***" }
-          , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams und andere Mitwirkende." }
+          , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams und andere Beiträger." }
           , { TranslationKeys.db_dbr002_msg_par1, "Die Variablen '{0}' und '{1}' können nicht zusammen gesetzt werden." }
           , { TranslationKeys.db_dbr004_2_msg_par1, "Bitte korrigieren Sie den Inhalt der Datei '{0}'." }
-          , { TranslationKeys.db_dbr004_msg_par1, "Die XML-Konfigurationsdatei sollte einen <{0}> Root-Tag haben." }
-          , { TranslationKeys.db_dbr005_msg_par1, "Der durch OutPath angegebene Pfad '{0}' konnte nicht erstellt werden." }
-          , { TranslationKeys.db_dbr006_msg_par1, "Der in der Variable InPath angegebene Pfad '{0}' muss existieren," }
-          , { TranslationKeys.db_dbr007_msg_par1, "Laden der Schlüsseldatei '{0}' fehlgeschlagen." }
+          , { TranslationKeys.db_dbr004_msg_par1, "XML-Konfigurationsdatei sollte ein <{0}> root-Tag haben." }
+          , { TranslationKeys.db_dbr005_msg_par1, "Der von OutPath angegebene Pfad '{0}' konnte nicht erstellt werden." }
+          , { TranslationKeys.db_dbr006_msg_par1, "Der von der InPath-Variablen angegebene Pfad '{0}' muss vorhanden sein," }
+          , { TranslationKeys.db_dbr007_msg_par1, "Fehler beim Laden der Schlüsseldatei '{0}'." }
           , { TranslationKeys.db_dbr008_msg, "Schlüsselcontainer werden für Mono nicht unterstützt." }
           , { TranslationKeys.db_dbr009_msg_par1, "Die Abhängigkeit '{0}' kann nicht aufgelöst werden." }
-          , { TranslationKeys.db_dbr010_msg, "Verwenden Sie \"öffentlich\"." }
+          , { TranslationKeys.db_dbr010_msg, "Verwenden Sie 'public'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' ist für den 'typeattrib'-Wert von Skip-Elementen nicht gültig." }
-          , { TranslationKeys.db_dbr011_msg, "Verwenden Sie \"öffentlich\"." }
+          , { TranslationKeys.db_dbr011_msg, "Verwenden Sie 'public'." }
           , { TranslationKeys.db_dbr011_msg_par1, "{0}\" ist für den \"attrib\"-Wert des SkipType-Elements nicht gültig." }
           , { TranslationKeys.db_dbr012_msg_par1, "Die Variable '{0}' kann nicht ersetzt werden." }
-          , { TranslationKeys.db_dbr013_msg, "Verwenden Sie \"öffentlich\" oder \"geschützt\"." }
+          , { TranslationKeys.db_dbr013_msg, "Verwenden Sie 'public' oder 'protected'." }
           , { TranslationKeys.db_dbr013_msg_par1, "{0}\" ist für den \"attrib\"-Wert von \"Skip\"-Elementen nicht gültig." }
           , { TranslationKeys.db_dbr014_msg_par1, "Die angegebene Projektdatei '{0}' kann nicht gelesen werden." }
-          , { TranslationKeys.db_dbr015_msg, "Verwenden Sie die Eigenschaft KeyFile oder KeyContainer, um einen zu verwendenden Schlüssel festzulegen." }
-          , { TranslationKeys.db_dbr015_msg_par1, "Die Verschleierung der signierten Assembly '{0}' würde zu einer ungültigen Assembly führen." }
-          , { TranslationKeys.db_dbr017_msg_par1, "Die Baugruppe kann nicht mit dem Schlüssel aus dem Schlüsselcontainer '{0}' signiert werden." }
+          , { TranslationKeys.db_dbr015_msg, "Verwende die Eigenschaft 'KeyFile' oder 'KeyContainer' um einen zu verwendenden Schlüssel festzulegen." }
+          , { TranslationKeys.db_dbr015_msg_par1, "Das Verschleiern der signierten Assembly '{0}' würde zu einer ungültigen Assembly führen." }
+          , { TranslationKeys.db_dbr017_msg_par1, "Assembly kann nicht signiert werden mit dem Schlüssel aus dem Schlüsselcontainer '{0}'." }
           , { TranslationKeys.db_dbr018_msg_par1, "{0} ist keine gültige XML-Datei." }
-          , { TranslationKeys.db_dbr020_2_msg_par1, "Baugruppe '{0}' kann nicht gefunden werden." }
-          , { TranslationKeys.db_dbr020_msg_par1, "Es konnten keine Typdefinitionen für {0} abgerufen werden." }
-          , { TranslationKeys.db_dbr024_msg_par1, "Schlüsselpaar von '{0}' ohne Passwort erstellen." }
+          , { TranslationKeys.db_dbr020_2_msg_par1, "Assembly '{0}' kann nicht gefunden werden." }
+          , { TranslationKeys.db_dbr020_msg_par1, "Fehler beim Abrufen von Typdefinitionen für {0}." }
+          , { TranslationKeys.db_dbr024_msg_par1, "Schlüsselpaar erstellen aus '{0}' ohne Passwort." }
           , { TranslationKeys.db_dbr027_msg, "Name muss einen Wert haben." }
-          , { TranslationKeys.db_dbr028_msg, "Name und regulärer Ausdruck für den Namen müssen festgelegt worden sein." }
+          , { TranslationKeys.db_dbr028_msg, "Name und regulärer Ausdruck für Name müssen festgelegt worden sein." }
           , { TranslationKeys.db_dbr029_msg, "AssemblyInfo.LoadAssembly muss vor der Verwendung aufgerufen werden." }
           , { TranslationKeys.db_dbr031_msg, "AssemblyInfo.Init muss vor der Verwendung aufgerufen werden." }
-          , { TranslationKeys.db_dbr034_msg, "Benötigt ein gültiges Dateiattribut." }
+          , { TranslationKeys.db_dbr034_msg, "Gültiges Dateiattribut erforderlich." }
           , { TranslationKeys.db_dbr035_msg_par1, "Die Typnamen '{0}' und '{1}' müssen gleich sein." }
-          , { TranslationKeys.db_dbr036_msg, "Name und regulärer Ausdruck für den Namen sind nicht festgelegt." }
-          , { TranslationKeys.db_dbr038_msg, "Kodierungstyp-Definition nicht gesetzt." }
-          , { TranslationKeys.db_dbr039_msg, "Die letzten Daten sind nicht festgelegt." }
-          , { TranslationKeys.db_dbr040_msg, "Assembly konnte nicht signiert werden, da signtool.exe nicht gefunden werden konnte." }
-          , { TranslationKeys.db_dbr041_msg_par1, "Die Assembly konnte nicht signiert werden, da signtool.exe am angegebenen Ort '{0}' nicht gefunden werden konnte." }
-          , { TranslationKeys.db_dbr042_msg, "Der Signiervorgang konnte nicht gestartet werden, da signtool.exe kein Prozess ist." }
-          , { TranslationKeys.db_dbr043_msg_par1, "Der Signiervorgang wurde nicht innerhalb der vorgesehenen Zeit von {0:N0} ms beendet." }
-          , { TranslationKeys.db_dbr044_msg, "Die Baugruppe konnte nicht signiert werden, da der Name der Schlüsseldatei nicht festgelegt ist." }
-          , { TranslationKeys.db_dbr045_msg_par1, "Die Assembly konnte nicht signiert werden, da der Schlüsseldateiname '{0}' keine PFX-Zertifikatsdatei ist." }
-          , { TranslationKeys.db_dbr054_msg_par1, "Umbenennen von Typen in {0:N0}-Assemblies." }
-          , { TranslationKeys.db_dbr055_msg_par1, "Nachbearbeitung von {0:N0} Baugruppen." }
-          , { TranslationKeys.db_dbr056_msg_par1, "Baugruppen in '{0}' speichern." }
-          , { TranslationKeys.db_dbr057_msg_par1, "Speichern Sie die Zuordnung in der Datei '{0}'." }
-          , { TranslationKeys.db_dbr059_msg, "Zusätzliche Rahmenordner:" }
-          , { TranslationKeys.db_dbr061_msg_par1, "Speichern von '{0}' fehlgeschlagen." }
-          , { TranslationKeys.db_dbr063_msg_par1, "{0} könnte eines von sein:" }
-          , { TranslationKeys.db_dbr069_msg_par1, "Kein Schlüsselpaar von '{0}' erstellen." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' ist nicht gesetzt." }
+          , { TranslationKeys.db_dbr036_msg, "Name und regulärer Ausdruckname sind nicht festgelegt." }
+          , { TranslationKeys.db_dbr038_msg, "Definition des Codierungstyps nicht festgelegt." }
+          , { TranslationKeys.db_dbr039_msg, "Neuste Daten nicht festgelegt." }
+          , { TranslationKeys.db_dbr040_msg, "Assembly konnte nicht signiert werden da signtool.exe nicht gefunden werden konnte." }
+          , { TranslationKeys.db_dbr041_msg_par1, "Assembly konnte nicht signiert werden da signtool.exe am angegebenen Speicherort '{0}' nicht gefunden werden konnte." }
+          , { TranslationKeys.db_dbr042_msg, "Signiervorgang mit signtool.exe konnte nicht gestartet werden. Kein Prozess." }
+          , { TranslationKeys.db_dbr043_msg_par1, "Signieren der Assembly wurde nicht innerhalb der zugewiesenen Zeit von {0:N0} ms beendet." }
+          , { TranslationKeys.db_dbr044_msg, "Assembly konnte nicht signiert werden da der Name der Schlüsseldatei nicht festgelegt ist." }
+          , { TranslationKeys.db_dbr045_msg_par1, "Assembly konnte nicht signiert werden da es sich bei dem Schlüsseldateinamen '{0}' nicht um eine PFX-Zertifikatdatei handelt." }
+          , { TranslationKeys.db_dbr054_msg_par1, "Umbenennen von Typen in {0:N0} Assemblies." }
+          , { TranslationKeys.db_dbr055_msg_par1, "Nachbearbeitung von {0:N0} Assemblies." }
+          , { TranslationKeys.db_dbr056_msg_par1, "Assemblys speichern in '{0}'." }
+          , { TranslationKeys.db_dbr057_msg_par1, "Zuordnung speichern in Dateil '{0}'." }
+          , { TranslationKeys.db_dbr059_msg, "Zusätzliche Framework-Ordner:" }
+          , { TranslationKeys.db_dbr061_msg_par1, "Fehler beim Speichern von '{0}'." }
+          , { TranslationKeys.db_dbr063_msg_par1, "{0} könnte eines der folgenden sein:" }
+          , { TranslationKeys.db_dbr069_msg_par1, "Erzeugt kein Schlüsselpaar aus '{0}'." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Erfolgreich abgeschlossen in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr079_msg_par1, "RSA-Schlüsselwert aus '{0}' erzeugen." }
+          , { TranslationKeys.db_dbr079_msg_par1, "RSA-Schlüsselwert erstellen aus '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Erfolgreich abgeschlossen in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr108_msg_par1, "Baugruppe '{0}' verarbeiten." }
-          , { TranslationKeys.db_dbr109_msg_par1, "Schlüsselpaar aus {0} mit Passwort erzeugen." }
-          , { TranslationKeys.db_dbr110_msg, "Keine Schlüsseldatei und kein Schlüsselcontainer konfiguriert, kein Schlüsselpaar verwenden." }
-          , { TranslationKeys.db_dbr111_msg, "Keine Schlüsseldatei und kein Schlüsselcontainer konfiguriert. Keinen RSA-Schlüsselwert verwenden." }
-          , { TranslationKeys.db_dbr112_msg_par1, "Erzeugen Sie keinen RSA-Schlüsselwert von '{0}'." }
-          , { TranslationKeys.db_dbr113_msg_par1, "Starten Sie das Signieren von '{0}' mit dem Signierwerkzeug '{1}' mit den Argumenten '{2}'." }
-          , { TranslationKeys.db_dbr116_msg, "Laden von Baugruppen." }
-          , { TranslationKeys.db_dbr117_msg_par1, "Baugruppe '{0}' kann nicht mit Projektschlüsselpaar zu '{1}' gespeichert werden aufgrund von {2}." }
+          , { TranslationKeys.db_dbr108_msg_par1, "Assembly '{0}' verarbeiten." }
+          , { TranslationKeys.db_dbr109_msg_par1, "Schlüsselpaar erstellen aus {0} mit Passwort." }
+          , { TranslationKeys.db_dbr110_msg, "Keine Schlüsseldatei und kein Schlüsselcontainer konfiguriert. Kein Schlüsselpaar verwenden." }
+          , { TranslationKeys.db_dbr111_msg, "Keine Schlüsseldatei und kein Schlüsselcontainer konfiguriert. Kein RSA-Schlüsselwert verwenden." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
+          , { TranslationKeys.db_dbr112_msg_par1, "Keinen RSA-Schlüsselwert erstellen aus '{0}'." }
+          , { TranslationKeys.db_dbr113_msg_par1, "Starten mit Signieren von '{0}' mit dem Signierwerkzeug '{1}' mit Argument '{2}'." }
+          , { TranslationKeys.db_dbr116_msg, "Assemblies laden." }
+          , { TranslationKeys.db_dbr117_msg_par1, "Assembly '{0}' kann nicht mit Projektschlüsselpaar zu '{1}' gespeichert werden aufgrund von {2}." }
           , { TranslationKeys.db_dbr118_msg_par1, "Signiert '{0}' als '{1}' unter Verwendung des Containers '{2}'." }
-          , { TranslationKeys.db_dbr119_msg_par1, "'{0}' unverändert in '{1}' gespeichert; war ursprünglich nicht mit einem starken Namen signiert." }
-          , { TranslationKeys.db_dbr120_msg_par1, "Speichern Sie '{0}' unter Verwendung des Projektschlüsselpaars auf '{1}'." }
-          , { TranslationKeys.db_dbr122_msg_par1, "Es gibt {0:N0} Baugruppen in dem zu speichernden Projekt." }
-          , { TranslationKeys.db_dbr123_msg_par1, "Unterzeichnet '{0}'." }
-          , { TranslationKeys.db_dbr124_msg_par1, "Baugruppe '{0}' hat keinen öffentlichen Schlüssel; unverändert speichern." }
+          , { TranslationKeys.db_dbr119_msg_par1, "'{0}' wie-es-ist gespeichert in '{1}'; war ursprünglich nicht mit starkem Namen signiert." }
+          , { TranslationKeys.db_dbr120_msg_par1, "'{0}' speichern mit dem Projektschlüsselpaar in '{1}'." }
+          , { TranslationKeys.db_dbr122_msg_par1, "Es gibt {0:N0} Assemblies im Projekt die gespeichert werden müssen." }
+          , { TranslationKeys.db_dbr123_msg_par1, "'{0}' signiert." }
+          , { TranslationKeys.db_dbr124_msg_par1, "Assembly '{0}' hat keinen öffentlichen Schlüssel; so speichern wie es ist." }
           , { TranslationKeys.db_dbr125_msg_par1, "Stderr-Kanal: {0}" }
-          , { TranslationKeys.db_dbr130_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr131_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr132_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr133_par1, "Beendet mit Fehler in {0:N0} Sekunden." }
-          , { TranslationKeys.db_dbr135_msg, "Es wird erwartet, dass der Status entweder \"Umbenannt\" oder \"Übersprungen\" lautet." }
-          , { TranslationKeys.db_dbr139_msg_par1, "Es wird erwartet, dass der Status entweder \"Umbenannt\" oder \"Übersprungen\" anstelle von {0} oder \"{1}\" lautet." }
+          , { TranslationKeys.db_dbr130_par1, "Abgeschlossen mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr131_par1, "Abgeschlossen mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr132_par1, "Abgeschlossen mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr133_par1, "Abgeschlossen mit Fehler in {0:N0} Sekunden." }
+          , { TranslationKeys.db_dbr135_msg, "Der Status sollte entweder 'Renamed' oder 'Skipped' sein." }
+          , { TranslationKeys.db_dbr139_msg_par1, "Der Status sollte entweder 'Renamed' oder 'Skipped' sein statt {0} von '{1}'." }
           , { TranslationKeys.db_dbr141_msg, "Fehlender Dateiname." }
-          , { TranslationKeys.db_dbr143_msg, "Das externe Flag der Gruppe sollte bereits bei der Erstellung der Gruppe behandelt worden sein und alle Methoden der Gruppe sollten bereits als übersprungen markiert sein." }
-          , { TranslationKeys.db_dbr144_msg, "Die Methode muss einen Namen haben, wenn die Methode nicht übersprungen wird und die Gruppe einen Namen hat." }
+          , { TranslationKeys.db_dbr143_msg, "Das externe Flag der Gruppe sollte beim Erstellen der Gruppe behandelt worden sein und alle Methoden in der Gruppe sollten bereits als übersprungen markiert sein." }
+          , { TranslationKeys.db_dbr144_msg, "Die Methode muss einen Namen haben wenn die Methode nicht übersprungen wird und die Gruppe einen Namen hat." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' wurde aufgrund von Fehlercode {1} NICHT signiert." }
-          , { TranslationKeys.db_dbr149_msg_par1, "Der Status muss 'Umbenannt' oder 'Übersprungen' anstelle von '{0}' sein." }
+          , { TranslationKeys.db_dbr149_msg_par1, "Der Status sollte entweder 'Renamed' oder 'Skipped' sein statt '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-Kanal: {0}" }
           , { TranslationKeys.db_dbr154_msg, "Keine zusätzlichen Framework-Ordner:" }
-          , { TranslationKeys.db_dbr155_msg, "Typname kann nicht extrahiert werden." }
-          , { TranslationKeys.db_dbr156_msg_par1, "XML-Projektdefinition aus '{0}' laden." }
+          , { TranslationKeys.db_dbr155_msg, "Der Typname kann nicht extrahiert werden." }
+          , { TranslationKeys.db_dbr156_msg_par1, "XML-Projektdefinition laden von '{0}'." }
           , { TranslationKeys.db_dbr157_msg_par1, "Verarbeitete {0} Variablen." }
           , { TranslationKeys.db_dbr158_msg_par1, "Verarbeitete {0} Include-Tags." }
-          , { TranslationKeys.db_dbr159_msg_par1, "Verarbeitete {0} Baugruppen-Suchpfade." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Verarbeitete {0} Assembly-Suchpfade." }
           , { TranslationKeys.db_dbr160_msg_par1, "Verarbeitete {0} Module." }
           , { TranslationKeys.db_dbr161_msg_par1, "Verarbeitete {0} Modulgruppen." }
-          , { TranslationKeys.db_dbr162_msg, "Initialisieren von Einstellungen aus Variablen." }
+          , { TranslationKeys.db_dbr162_msg, "Initialisieren Einstellungen aus Variablen." }
           , { TranslationKeys.db_dbr166_msg_par1, "Die Zertifikatsdatei '{0}' muss mindestens ein Zertifikat enthalten." }
           , { TranslationKeys.db_dbr167_msg_par1, "Die Zertifikatsdatei '{0}' hat ein ungültiges Format." }
-          , { TranslationKeys.db_dbr169_msg, "Bestimmen Sie Zeichen für die Namensgenerierung." }
-          , { TranslationKeys.db_dbr173_msg_par1, "Installation von {0} bei '{1}' gefunden." }
+          , { TranslationKeys.db_dbr169_msg, "Zeichen für die Namensgenerierung festlegen." }
+          , { TranslationKeys.db_dbr173_msg_par1, "Installation von {0} gefunden bei '{1}'." }
           , { TranslationKeys.db_dbr174_msg_par1, "Keine Installation von {0} in '{1}' gefunden." }
-          , { TranslationKeys.db_dbr175_msg, "Es kann höchstens ein Zertifikat nach Schlüsseldateiname und SHA1-Thumbprint verwendet werden." }
-          , { TranslationKeys.db_dbr176_msg, "Es muss entweder die Zertifikatsauswahl über den Namen der Schlüsseldatei oder der SHA1-Thumbprint verwendet werden." }
-          , { TranslationKeys.db_dbr177_msg, "Das Passwort für die Schlüsseldatei kann nur angegeben werden, wenn das Zertifikat über den Namen der Schlüsseldatei ausgewählt wurde." }
-          , { TranslationKeys.db_definition_missing, "Es fehlt eine Definition." }
+          , { TranslationKeys.db_dbr175_msg, "Es kann höchstens eine der Zertifikatsauswahl nach Schlüssel, Dateiname und SHA1-Fingerabdruck verwendet werden." }
+          , { TranslationKeys.db_dbr176_msg, "Es muss entweder die Zertifikatsauswahl nach Schlüsseldateiname oder SHA1-Fingerabdruck verwendet werden." }
+          , { TranslationKeys.db_dbr177_msg, "Das Kennwort für die Schlüsseldatei kann nur angegeben werden wenn das Zertifikat über den Namen der Schlüsseldatei ausgewählt wird." }
+          , { TranslationKeys.db_definition_missing, "Definition fehlt." }
           , { TranslationKeys.db_display_version, "Versionsnummer dieser Anwendung anzeigen." }
           , { TranslationKeys.db_duplicate_character, "Doppeltes Zeichen." }
-          , { TranslationKeys.db_error_processing_colon, "Bei der Verarbeitung ist ein Fehler aufgetreten:" }
+          , { TranslationKeys.db_error_processing_colon, "Während der Verarbeitung ist ein Fehler aufgetreten:" }
           , { TranslationKeys.db_filename_missing, "Fehlender Dateiname." }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur ist ein Fork von Obfuscar (https://www.obfuscar.com)" }
-          , { TranslationKeys.db_full_name_missing, "Es fehlt der vollständige Name." }
+          , { TranslationKeys.db_full_name_missing, "Der vollständige Name fehlt." }
           , { TranslationKeys.db_gt_title_par2, "*** DotBlur Global Tool ({0}) am {1} (UTC) ***" }
           , { TranslationKeys.db_help_info, "Drucken Sie diese Hilfeinformationen aus." }
-          , { TranslationKeys.db_hide_strings, "Strings ausblenden." }
+          , { TranslationKeys.db_hide_strings, "Zeichenfolgen ausblenden." }
           , { TranslationKeys.db_hint_colon_par1, "Hinweis: {0}" }
-          , { TranslationKeys.db_hint_skiptype, "Hinweis: Möglicherweise müssen Sie oben einen SkipType für eine Aufzählung hinzufügen." }
+          , { TranslationKeys.db_hint_skiptype, "Hinweis: Möglicherweise müssen Sie oben einen SkipType für eine Enum hinzufügen." }
           , { TranslationKeys.db_inner_exception_par1, "Innere Ausnahme: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Projekt '{0}' wird geladen." }
           , { TranslationKeys.db_missing_group, "Fehlende Gruppe." }
           , { TranslationKeys.db_missing_parent_reader, "Fehlender elterlicher Leser." }
           , { TranslationKeys.db_missing_parts, "Fehlende Teile." }
           , { TranslationKeys.db_missing_path_value, "Fehlender Wert für Pfad." }
-          , { TranslationKeys.db_missing_read_action, "Missing read action." }
-          , { TranslationKeys.db_missing_setting_name, "Der Name der Einstellung fehlt." }
-          , { TranslationKeys.db_not_hide_strings, "Keine versteckten Fäden." }
-          , { TranslationKeys.db_not_rename_events, "Benennen Sie Ereignisse nicht um." }
-          , { TranslationKeys.db_not_rename_fields, "Benennen Sie keine Felder um." }
-          , { TranslationKeys.db_not_rename_properties, "Benennen Sie Eigenschaften nicht um." }
+          , { TranslationKeys.db_missing_read_action, "Fehlende Leseaktion." }
+          , { TranslationKeys.db_missing_setting_name, "Fehlender Einstellungsname." }
+          , { TranslationKeys.db_not_hide_strings, "Keine Strings ausblenden." }
+          , { TranslationKeys.db_not_rename_events, "Ereignisse nicht umbennen." }
+          , { TranslationKeys.db_not_rename_fields, "Felder nicht umbennen." }
+          , { TranslationKeys.db_not_rename_properties, "Eigenschaften nicht umbennen." }
           , { TranslationKeys.db_options_colon, "Optionen:" }
-          , { TranslationKeys.db_pool_clean, "Kann den Pool nicht reinigen." }
+          , { TranslationKeys.db_pool_clean, "Pool kann nicht geledigt werden." }
           , { TranslationKeys.db_pool_still, "Noch im Pool:" }
           , { TranslationKeys.db_rename_events, "Ereignisse umbenennen." }
           , { TranslationKeys.db_rename_fields, "Felder umbenennen." }
           , { TranslationKeys.db_rename_methods, "Methoden umbenennen." }
           , { TranslationKeys.db_rename_parameters, "Parameter umbenennen." }
           , { TranslationKeys.db_rename_properties, "Eigenschaften umbenennen." }
-          , { TranslationKeys.db_settings_not_initialized, "Die Einstellungen sind noch nicht initialisiert." }
-          , { TranslationKeys.db_syntax, "DotBlur.exe [Optionen] [project_file] [project_file]" }
+          , { TranslationKeys.db_settings_not_initialized, "Einstellungen noch nicht initialisiert." }
+          , { TranslationKeys.db_syntax, "DotBlur.exe [Optionen] [Projektdatei] [Projektdatei]" }
           }
         }
         , { Languages.en, new Dictionary<string, string>()
@@ -640,7 +644,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Failed to save '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} might be one of:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Create no key pair from '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' is not set." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Completed successfully in {0:N0} seconds." }
           , { TranslationKeys.db_dbr079_msg_par1, "Create RSA key value from '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Completed successfully in {0:N0} seconds." }
@@ -648,6 +652,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Create key pair from {0} with password." }
           , { TranslationKeys.db_dbr110_msg, "No key file and no key container configured. Use no key pair." }
           , { TranslationKeys.db_dbr111_msg, "No key file and no key container configured. Use no RSA key value." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Create no RSA key value from '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Start signing '{0}' using sign tool '{1}' with arguments '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Loading assemblies." }
@@ -778,7 +783,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Error al guardar '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} podría ser uno de:" }
           , { TranslationKeys.db_dbr069_msg_par1, "No se ha creado ningún par de claves de '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' no está configurado." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Completado con éxito en {0:N0} segundos." }
           , { TranslationKeys.db_dbr079_msg_par1, "Crear valor de clave RSA de '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Completado con éxito en {0:N0} segundos." }
@@ -786,6 +791,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Crear par de claves de {0} con contraseña." }
           , { TranslationKeys.db_dbr110_msg, "No hay archivo de claves ni contenedor de claves configurado. No utilice ningún par de claves." }
           , { TranslationKeys.db_dbr111_msg, "No hay archivo de claves ni contenedor de claves configurado. No utiliza ningún valor de clave RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "No se ha creado ningún valor de clave RSA a partir de '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Empieza a firmar '{0}' usando la herramienta de firma '{1}' con argumentos '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Carga de conjuntos." }
@@ -916,7 +922,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Tallennus '{0}' epäonnistui." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} saattaa olla yksi seuraavista:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Luo avainparia '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' ei ole asetettu." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Suoritettu onnistuneesti {0:N0} sekunnissa." }
           , { TranslationKeys.db_dbr079_msg_par1, "Luo RSA-avaimen arvo arvosta '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Suoritettu onnistuneesti {0:N0} sekunnissa." }
@@ -924,6 +930,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Luo avainparin {0} ja salasanan avulla." }
           , { TranslationKeys.db_dbr110_msg, "Ei avaintiedostoa eikä avainsäiliötä määritetty. Älä käytä avainparia." }
           , { TranslationKeys.db_dbr111_msg, "Ei avaintiedostoa eikä avainsäiliötä määritetty. Älä käytä RSA-avainarvoa." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Luo RSA-avainta arvosta '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Aloita allekirjoitus '{0}' käyttäen allekirjoitustyökalua '{1}' argumenteilla '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Kokoonpanojen lataaminen." }
@@ -1054,7 +1061,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Échec de l'enregistrement de '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} peut être l'un d'entre eux :" }
           , { TranslationKeys.db_dbr069_msg_par1, "Aucune paire de clés n'a été créée à partir de '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}\" n'est pas défini." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Terminé avec succès en {0:N0} secondes." }
           , { TranslationKeys.db_dbr079_msg_par1, "Créer une valeur de clé RSA à partir de \"{0}\"." }
           , { TranslationKeys.db_dbr082_par1, "Terminé avec succès en {0:N0} secondes." }
@@ -1062,6 +1069,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Créer une paire de clés à partir de {0} avec le mot de passe." }
           , { TranslationKeys.db_dbr110_msg, "Aucun fichier de clés ni conteneur de clés n'est configuré. Utiliser aucune paire de clés." }
           , { TranslationKeys.db_dbr111_msg, "Aucun fichier de clés et aucun conteneur de clés n'est configuré. Ne pas utiliser de valeur de clé RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Ne crée pas de valeur de clé RSA à partir de \"{0}\"." }
           , { TranslationKeys.db_dbr113_msg_par1, "Commencez à signer '{0}' en utilisant l'outil de signature '{1}' avec les arguments '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Chargement des assemblages." }
@@ -1192,7 +1200,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Impossibile salvare '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} potrebbe essere uno dei seguenti:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Non è stata creata una coppia di chiavi da '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}\" non è impostato." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Completato con successo in {0:N0} secondi." }
           , { TranslationKeys.db_dbr079_msg_par1, "Creare il valore della chiave RSA da '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Completato con successo in {0:N0} secondi." }
@@ -1200,6 +1208,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Crea una coppia di chiavi da {0} con password." }
           , { TranslationKeys.db_dbr110_msg, "Nessun file di chiavi e nessun contenitore di chiavi configurato. Utilizzare nessuna coppia di chiavi." }
           , { TranslationKeys.db_dbr111_msg, "Nessun file di chiavi e nessun contenitore di chiavi configurato. Non utilizzare il valore della chiave RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Non è stato creato alcun valore di chiave RSA da '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Iniziare a firmare '{0}' usando lo strumento di firma '{1}' con argomenti '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Caricamento degli assiemi." }
@@ -1330,7 +1339,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "0}'の保存に失敗しました。" }
           , { TranslationKeys.db_dbr063_msg_par1, "{0}のいずれかかもしれない：" }
           , { TranslationKeys.db_dbr069_msg_par1, "0}」からキー・ペアを作成しません。" }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}'がセットされていない。" }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "0:N0}秒で正常に完了しました。" }
           , { TranslationKeys.db_dbr079_msg_par1, "0}」からRSAキー値を作成する。" }
           , { TranslationKeys.db_dbr082_par1, "0:N0}秒で正常に完了しました。" }
@@ -1338,6 +1347,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "0}とパスワードからキー・ペアを作成する。" }
           , { TranslationKeys.db_dbr110_msg, "鍵ファイルと鍵コンテナが設定されていない。 鍵ペアを使用しない。" }
           , { TranslationKeys.db_dbr111_msg, "鍵ファイルおよび鍵コンテナが設定されていない。 RSA 鍵が設定されていない。" }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "0}」からRSAキー値を作成しません。" }
           , { TranslationKeys.db_dbr113_msg_par1, "引数 '{2}' を持つ署名ツール '{1}' を使って '{0}' の署名を開始する。" }
           , { TranslationKeys.db_dbr116_msg, "アセンブリをロードする。" }
@@ -1468,7 +1478,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "'{0}'을(를) 저장하지 못했습니다." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0}은 다음 중 하나일 수 있습니다." }
           , { TranslationKeys.db_dbr069_msg_par1, "'{0}'에서 키 쌍을 생성하지 마십시오." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}'이 설정되지 않았습니다." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "{0:N0}초 만에 성공적으로 완료되었습니다." }
           , { TranslationKeys.db_dbr079_msg_par1, "'{0}'에서 RSA 키 값을 생성합니다." }
           , { TranslationKeys.db_dbr082_par1, "{0:N0}초 만에 성공적으로 완료되었습니다." }
@@ -1476,6 +1486,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "비밀번호로 {0}에서 키 쌍을 생성합니다." }
           , { TranslationKeys.db_dbr110_msg, "키 파일과 키 컨테이너가 구성되지 않았습니다. 키 쌍을 사용하지 마십시오." }
           , { TranslationKeys.db_dbr111_msg, "키 파일과 키 컨테이너가 구성되지 않았습니다. RSA 키 값을 사용하지 마십시오." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "'{0}'에서 RSA 키 값을 생성하지 마십시오." }
           , { TranslationKeys.db_dbr113_msg_par1, "인수 '{2}'와 함께 서명 도구 '{1}'을 사용하여 '{0}' 서명을 시작합니다." }
           , { TranslationKeys.db_dbr116_msg, "조립품을 로딩합니다." }
@@ -1606,7 +1617,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Kunne ikke lagre '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} kan være en av:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Opprett ingen nøkkelpar fra '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' er ikke angitt." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Fullført på {0:N0} sekunder." }
           , { TranslationKeys.db_dbr079_msg_par1, "Opprett RSA-nøkkelverdi fra '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Fullført på {0:N0} sekunder." }
@@ -1614,6 +1625,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Opprett nøkkelpar fra {0} med passord." }
           , { TranslationKeys.db_dbr110_msg, "Ingen nøkkelfil og ingen nøkkelbeholder konfigurert. Bruk ikke nøkkelpar." }
           , { TranslationKeys.db_dbr111_msg, "Ingen nøkkelfil og ingen nøkkelbeholder konfigurert. Bruk ingen RSA-nøkkelverdi." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Opprett ingen RSA-nøkkelverdi fra '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Begynn å signere '{0}' ved å bruke signeringsverktøyet '{1}' med argumentene '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Laster sammenstillinger." }
@@ -1695,137 +1707,138 @@ namespace Obfuscar
           , { TranslationKeys.db_callstack, "Callstack" }
           , { TranslationKeys.db_check_project_settings, "Controleer de projectinstellingen." }
           , { TranslationKeys.db_con_fork_obfuscar, "DotBlur Console is een fork van Obfuscar (https://www.obfuscar.com)" }
-          , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Opties] [project_bestand] [project_bestand]." }
+          , { TranslationKeys.db_con_syntax, "DotBlur.Console.exe [Opties] [projectbestand] [projectbestand]" }
           , { TranslationKeys.db_con_title_par2, "*** DotBlur Console ({0}) op {1} (UTC) ***" }
-          , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams en andere medewerkers." }
+          , { TranslationKeys.db_copyright_par1, "(C) 2007-{0}, Ryan Williams en andere bijdragers." }
           , { TranslationKeys.db_dbr002_msg_par1, "{0}' en '{1}' variabelen kunnen niet samen worden ingesteld." }
           , { TranslationKeys.db_dbr004_2_msg_par1, "Corrigeer de inhoud van het bestand '{0}'." }
-          , { TranslationKeys.db_dbr004_msg_par1, "Het XML-configuratiebestand moet een <{0}> root tag hebben." }
-          , { TranslationKeys.db_dbr005_msg_par1, "Kan het door OutPath opgegeven pad '{0}' niet maken." }
+          , { TranslationKeys.db_dbr004_msg_par1, "Het XML-configuratiebestand moet een <{0}> root-tag hebben." }
+          , { TranslationKeys.db_dbr005_msg_par1, "Het door OutPath opgegeven pad '{0}' kon niet worden aangemaakt." }
           , { TranslationKeys.db_dbr006_msg_par1, "Pad '{0}' gespecificeerd door InPath variabele moet bestaan," }
-          , { TranslationKeys.db_dbr007_msg_par1, "Fout bij laden van sleutelbestand '{0}'." }
+          , { TranslationKeys.db_dbr007_msg_par1, "Fout bij laden van het sleutelbestand '{0}'." }
           , { TranslationKeys.db_dbr008_msg, "Sleutelcontainers worden niet ondersteund voor Mono." }
           , { TranslationKeys.db_dbr009_msg_par1, "Kan afhankelijkheid '{0}' niet oplossen." }
-          , { TranslationKeys.db_dbr010_msg, "Gebruik 'openbaar'." }
+          , { TranslationKeys.db_dbr010_msg, "Gebruik 'public'." }
           , { TranslationKeys.db_dbr010_msg_par1, "{0}' is niet geldig voor de 'typeattrib'-waarde van overgeslagen elementen." }
-          , { TranslationKeys.db_dbr011_msg, "Gebruik 'openbaar'." }
+          , { TranslationKeys.db_dbr011_msg, "Gebruik 'public'." }
           , { TranslationKeys.db_dbr011_msg_par1, "{0}' is niet geldig voor de 'attrib' waarde van het SkipType element." }
-          , { TranslationKeys.db_dbr012_msg_par1, "Variabele '{0}' kan niet worden vervangen." }
-          , { TranslationKeys.db_dbr013_msg, "Gebruik 'openbaar' of 'beschermd'." }
+          , { TranslationKeys.db_dbr012_msg_par1, "Kan variabele '{0}' niet vervangen." }
+          , { TranslationKeys.db_dbr013_msg, "Gebruik 'public' of 'protected'." }
           , { TranslationKeys.db_dbr013_msg_par1, "{0}' is niet geldig voor de 'attrib'-waarde van overgeslagen elementen." }
-          , { TranslationKeys.db_dbr014_msg_par1, "Kan opgegeven projectbestand '{0}' niet lezen." }
-          , { TranslationKeys.db_dbr015_msg, "Gebruik de eigenschap KeyFile of KeyContainer om een sleutel in te stellen om te gebruiken." }
-          , { TranslationKeys.db_dbr015_msg_par1, "Het versleutelen van de ondertekende assembly '{0}' zou resulteren in een ongeldige assembly." }
-          , { TranslationKeys.db_dbr017_msg_par1, "Kan assemblage niet ondertekenen met sleutel uit sleutelcontainer '{0}'." }
+          , { TranslationKeys.db_dbr014_msg_par1, "Kan het opgegeven projectbestand '{0}' niet lezen." }
+          , { TranslationKeys.db_dbr015_msg, "Gebruik de eigenschap KeyFile of KeyContainer om een te gebruiken sleutel in te stellen." }
+          , { TranslationKeys.db_dbr015_msg_par1, "Het versluieren van de ondertekende assembly '{0}' zou resulteren in een ongeldige assembly." }
+          , { TranslationKeys.db_dbr017_msg_par1, "Kan de assembly niet ondertekenen met de sleutel uit de sleutelcontainer '{0}'." }
           , { TranslationKeys.db_dbr018_msg_par1, "{0} is geen geldig XML-bestand." }
-          , { TranslationKeys.db_dbr020_2_msg_par1, "Assemblage '{0}' niet gevonden." }
-          , { TranslationKeys.db_dbr020_msg_par1, "Type definities voor {0} zijn niet verkregen." }
-          , { TranslationKeys.db_dbr024_msg_par1, "Maak sleutelpaar aan van '{0}' zonder wachtwoord." }
+          , { TranslationKeys.db_dbr020_2_msg_par1, "Kan assembly '{0}' niet vinden." }
+          , { TranslationKeys.db_dbr020_msg_par1, "Kan de typedefinities niet ophalen voor {0}." }
+          , { TranslationKeys.db_dbr024_msg_par1, "Maak een sleutelpaar van '{0}' zonder wachtwoord." }
           , { TranslationKeys.db_dbr027_msg, "Naam moet een waarde hebben." }
-          , { TranslationKeys.db_dbr028_msg, "Naam en naam reguliere expressie moeten zijn ingesteld." }
-          , { TranslationKeys.db_dbr029_msg, "AssemblyInfo.LoadAssembly moet worden aangeroepen voor gebruik." }
-          , { TranslationKeys.db_dbr031_msg, "AssemblyInfo.Init moet worden aangeroepen voor gebruik." }
-          , { TranslationKeys.db_dbr034_msg, "Geldig bestandskenmerk nodig." }
+          , { TranslationKeys.db_dbr028_msg, "Naam en reguliere expressie van de naam moeten zijn ingesteld." }
+          , { TranslationKeys.db_dbr029_msg, "AssemblyInfo.LoadAssembly moet voor gebruik worden aangeroepen." }
+          , { TranslationKeys.db_dbr031_msg, "AssemblyInfo.Init moet voor gebruik worden aangeroepen." }
+          , { TranslationKeys.db_dbr034_msg, "Geldig bestandsattribuut nodig." }
           , { TranslationKeys.db_dbr035_msg_par1, "Typenamen '{0}' en '{1}' moeten gelijk zijn." }
-          , { TranslationKeys.db_dbr036_msg, "Naam en naam reguliere expressie zijn niet ingesteld." }
-          , { TranslationKeys.db_dbr038_msg, "Coderingstype definitie niet ingesteld." }
+          , { TranslationKeys.db_dbr036_msg, "Naam en reguliere expressie voor naam zijn niet ingesteld." }
+          , { TranslationKeys.db_dbr038_msg, "Definitie van coderingstype niet ingesteld." }
           , { TranslationKeys.db_dbr039_msg, "Meest recente gegevens niet ingesteld." }
-          , { TranslationKeys.db_dbr040_msg, "Kon assemblage niet ondertekenen omdat signtool.exe niet kon worden gevonden." }
-          , { TranslationKeys.db_dbr041_msg_par1, "Kon assemblage niet ondertekenen omdat signtool.exe niet kon worden gevonden op de opgegeven locatie '{0}'." }
+          , { TranslationKeys.db_dbr040_msg, "Kon assembly niet ondertekenen omdat signtool.exe niet kon worden gevonden." }
+          , { TranslationKeys.db_dbr041_msg_par1, "Kon assembly niet ondertekenen omdat signtool.exe niet op de opgegeven locatie '{0}' kon worden gevonden." }
           , { TranslationKeys.db_dbr042_msg, "Kan ondertekeningsproces niet starten met signtool.exe. Geen proces." }
-          , { TranslationKeys.db_dbr043_msg_par1, "De ondertekeningsassemblage werd niet beëindigd binnen de toegewezen tijd van {0:N0} ms." }
-          , { TranslationKeys.db_dbr044_msg, "Kan assemblage niet ondertekenen omdat de bestandsnaam van de sleutel niet is ingesteld." }
-          , { TranslationKeys.db_dbr045_msg_par1, "Kon assemblage niet ondertekenen omdat de sleutelbestandsnaam '{0}' geen PFX-certificaatbestand is." }
+          , { TranslationKeys.db_dbr043_msg_par1, "De assembly-ondertekening is niet binnen de toegestane tijd van {0:N0} ms beëindigd." }
+          , { TranslationKeys.db_dbr044_msg, "Kon assembly niet ondertekenen omdat de sleutelbestandsnaam niet is ingesteld." }
+          , { TranslationKeys.db_dbr045_msg_par1, "Kon assembly niet ondertekenen omdat de sleutelbestandsnaam '{0}' geen PFX-certificaatbestand is." }
           , { TranslationKeys.db_dbr054_msg_par1, "Hernoem types in {0:N0} assemblies." }
-          , { TranslationKeys.db_dbr055_msg_par1, "Nabewerking van {0:N0} assemblages." }
+          , { TranslationKeys.db_dbr055_msg_par1, "Nabewerking van {0:N0} assemblies." }
           , { TranslationKeys.db_dbr056_msg_par1, "Sla assemblies op in '{0}'." }
-          , { TranslationKeys.db_dbr057_msg_par1, "Sla de toewijzing op in bestand '{0}'." }
-          , { TranslationKeys.db_dbr059_msg, "Extra kadermappen:" }
-          , { TranslationKeys.db_dbr061_msg_par1, "Opslaan van '{0}' mislukt." }
-          , { TranslationKeys.db_dbr063_msg_par1, "{0} kan een van zijn:" }
-          , { TranslationKeys.db_dbr069_msg_par1, "Maak geen sleutelpaar van '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' is niet ingesteld." }
+          , { TranslationKeys.db_dbr057_msg_par1, "Sla de vertaalslag op in het bestand '{0}'." }
+          , { TranslationKeys.db_dbr059_msg, "Extra framework-mappen:" }
+          , { TranslationKeys.db_dbr061_msg_par1, "Opslaan van '{0}' is mislukt." }
+          , { TranslationKeys.db_dbr063_msg_par1, "{0} zou een van de volgende kunnen zijn:" }
+          , { TranslationKeys.db_dbr069_msg_par1, "Maak geen sleutelpaar aan van '{0}'." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Succesvol afgerond in {0:N0} seconden." }
-          , { TranslationKeys.db_dbr079_msg_par1, "Creëer RSA-sleutelwaarde van '{0}'." }
+          , { TranslationKeys.db_dbr079_msg_par1, "Maak een RSA-sleutelwaarde op basis van '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Succesvol afgerond in {0:N0} seconden." }
-          , { TranslationKeys.db_dbr108_msg_par1, "Verwerk assemblage '{0}'." }
+          , { TranslationKeys.db_dbr108_msg_par1, "Verwerk assembly '{0}'." }
           , { TranslationKeys.db_dbr109_msg_par1, "Maak sleutelpaar van {0} met wachtwoord." }
           , { TranslationKeys.db_dbr110_msg, "Geen sleutelbestand en geen sleutelcontainer geconfigureerd. Gebruik geen sleutelpaar." }
           , { TranslationKeys.db_dbr111_msg, "Geen sleutelbestand en geen sleutelcontainer geconfigureerd. Gebruik geen RSA-sleutelwaarde." }
-          , { TranslationKeys.db_dbr112_msg_par1, "Geen RSA-sleutelwaarde van '{0}' aanmaken." }
-          , { TranslationKeys.db_dbr113_msg_par1, "Begin met het ondertekenen van '{0}' met ondertekengereedschap '{1}' met argumenten '{2}'." }
-          , { TranslationKeys.db_dbr116_msg, "Laden van assemblages." }
-          , { TranslationKeys.db_dbr117_msg_par1, "Assemblage '{0}' niet opgeslagen met project sleutelpaar naar '{1}' vanwege {2}." }
-          , { TranslationKeys.db_dbr118_msg_par1, "Ondertekend '{0}' als '{1}' met gebruik van container '{2}'." }
-          , { TranslationKeys.db_dbr119_msg_par1, "Bewaarde '{0}' als-is in '{1}'; was oorspronkelijk niet sterk naam ondertekend." }
-          , { TranslationKeys.db_dbr120_msg_par1, "Sla '{0}' op met behulp van projectsleutelpaar op '{1}'." }
-          , { TranslationKeys.db_dbr122_msg_par1, "Er zijn {0:N0} assemblies in het project om op te slaan." }
-          , { TranslationKeys.db_dbr123_msg_par1, "Getekend '{0}'." }
-          , { TranslationKeys.db_dbr124_msg_par1, "Assemblage '{0}' heeft geen publieke sleutel; opslaan zoals het is." }
-          , { TranslationKeys.db_dbr125_msg_par1, "Stderr kanaal: {0}" }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
+          , { TranslationKeys.db_dbr112_msg_par1, "Maak geen RSA-sleutelwaarde van '{0}'." }
+          , { TranslationKeys.db_dbr113_msg_par1, "Begin met ondertekenen van '{0}' met ondertekentool '{1}' en argumenten '{2}'." }
+          , { TranslationKeys.db_dbr116_msg, "Laden van assemblies." }
+          , { TranslationKeys.db_dbr117_msg_par1, "Assembly '{0}' niet opgeslagen met projectsleutelpaar als '{1}' vanwege {2}." }
+          , { TranslationKeys.db_dbr118_msg_par1, "'{0}' ondertekend als '{1}' met container '{2}'." }
+          , { TranslationKeys.db_dbr119_msg_par1, "'{0}' bewaard as-is als '{1}; was oorspronkelijk niet ondertekend met een sterke naam." }
+          , { TranslationKeys.db_dbr120_msg_par1, "Sla '{0}' op met projectsleutelpaar als '{1}'." }
+          , { TranslationKeys.db_dbr122_msg_par1, "Er zijn {0:N0} assemblies om op te slaan in het project." }
+          , { TranslationKeys.db_dbr123_msg_par1, "'{0}' ondertekend." }
+          , { TranslationKeys.db_dbr124_msg_par1, "Assembly '{0}' heeft geen publieke sleutel; opslaan zoals het is." }
+          , { TranslationKeys.db_dbr125_msg_par1, "Stderr-kanaal: {0}" }
           , { TranslationKeys.db_dbr130_par1, "Voltooid met een foutmelding in {0:N0} seconden." }
           , { TranslationKeys.db_dbr131_par1, "Voltooid met een foutmelding in {0:N0} seconden." }
           , { TranslationKeys.db_dbr132_par1, "Voltooid met een foutmelding in {0:N0} seconden." }
           , { TranslationKeys.db_dbr133_par1, "Voltooid met een foutmelding in {0:N0} seconden." }
-          , { TranslationKeys.db_dbr135_msg, "De status is naar verwachting 'Hernoemd' of 'Overgeslagen'." }
-          , { TranslationKeys.db_dbr139_msg_par1, "De status wordt verwacht als 'Hernoemd' of 'Overgeslagen' in plaats van {0} of '{1}'." }
-          , { TranslationKeys.db_dbr141_msg, "Ontbrekende bestandsnaam." }
-          , { TranslationKeys.db_dbr143_msg, "De externe vlag van de groep moet zijn behandeld toen de groep werd gemaakt en alle methoden in de groep moeten al zijn gemarkeerd als overgeslagen." }
+          , { TranslationKeys.db_dbr135_msg, "De status werd verwacht als 'Renamed' of 'Skipped'." }
+          , { TranslationKeys.db_dbr139_msg_par1, "De status werd verwacht als hetzij 'Renamed' of 'Skipped' in plaats van {0} van '{1}'." }
+          , { TranslationKeys.db_dbr141_msg, "Bestandsnaam ontbreekt." }
+          , { TranslationKeys.db_dbr143_msg, "De externe vlag van de groep had verwerkt moeten worden toen de groep werd aangemaakt en alle methoden in de groep hadden al als overgeslagen moeten zijn gemarkeerd." }
           , { TranslationKeys.db_dbr144_msg, "De methode moet een naam hebben als de methode niet wordt overgeslagen en de groep een naam heeft." }
           , { TranslationKeys.db_dbr145_msg_par1, "{0}' was NIET ondertekend vanwege foutcode {1}." }
-          , { TranslationKeys.db_dbr149_msg_par1, "Status moet 'Hernoemd' of 'Overgeslagen' zijn in plaats van '{0}'." }
+          , { TranslationKeys.db_dbr149_msg_par1, "Status moet 'Renamed' of 'Skipped' zijn in plaats van '{0}'." }
           , { TranslationKeys.db_dbr153_msg_par1, "Stdout-kanaal: {0}" }
-          , { TranslationKeys.db_dbr154_msg, "Geen extra frameworkmappen:" }
+          , { TranslationKeys.db_dbr154_msg, "Geen extra framework-mappen:" }
           , { TranslationKeys.db_dbr155_msg, "Kan typenaam niet extraheren." }
-          , { TranslationKeys.db_dbr156_msg_par1, "XML-projectdefinitie laden van '{0}'." }
-          , { TranslationKeys.db_dbr157_msg_par1, "{0} variabelen verwerkt." }
-          , { TranslationKeys.db_dbr158_msg_par1, "Verwerkt {0} inclusief tags." }
-          , { TranslationKeys.db_dbr159_msg_par1, "{0} assemblage zoekpaden verwerkt." }
-          , { TranslationKeys.db_dbr160_msg_par1, "{0} modules verwerkt." }
-          , { TranslationKeys.db_dbr161_msg_par1, "{0} modulegroepen verwerkt." }
-          , { TranslationKeys.db_dbr162_msg, "Instellingen initialiseren vanuit variabelen." }
-          , { TranslationKeys.db_dbr166_msg_par1, "Het certificaatbestand '{0}' moet minstens één certificaat bevatten." }
+          , { TranslationKeys.db_dbr156_msg_par1, "Laad de XML-projectdefinitie uit '{0}'." }
+          , { TranslationKeys.db_dbr157_msg_par1, "Verwerkte {0} variabelen." }
+          , { TranslationKeys.db_dbr158_msg_par1, "Verwerkte {0} include-tags." }
+          , { TranslationKeys.db_dbr159_msg_par1, "Verwerkte {0} assembly-zoekpaden." }
+          , { TranslationKeys.db_dbr160_msg_par1, "Verwerkte {0} modules." }
+          , { TranslationKeys.db_dbr161_msg_par1, "Verwerkte {0} modulegroepen." }
+          , { TranslationKeys.db_dbr162_msg, "Initialiseer instellingen van variabelen." }
+          , { TranslationKeys.db_dbr166_msg_par1, "Het certificaatbestand '{0}' moet ten minste één certificaat bevatten." }
           , { TranslationKeys.db_dbr167_msg_par1, "Het certificaatbestand '{0}' heeft een ongeldig formaat." }
-          , { TranslationKeys.db_dbr169_msg, "Karakters bepalen voor het genereren van namen." }
+          , { TranslationKeys.db_dbr169_msg, "Bepaal tekens voor het genereren van namen." }
           , { TranslationKeys.db_dbr173_msg_par1, "Installatie van {0} gevonden op '{1}'." }
-          , { TranslationKeys.db_dbr174_msg_par1, "Geen installatie van {0} gevonden in '{1}'." }
-          , { TranslationKeys.db_dbr175_msg, "Er kan maximaal één certificaatselectie op basis van sleutelbestandsnaam en SHA1-miniatuurafdruk worden gebruikt." }
-          , { TranslationKeys.db_dbr176_msg, "Er moet een certificaatselectie op basis van de bestandsnaam of een SHA1-miniatuurafdruk worden gebruikt." }
-          , { TranslationKeys.db_dbr177_msg, "Het wachtwoord van het sleutelbestand kan alleen worden opgegeven als het certificaat is geselecteerd op sleutelbestandsnaam." }
+          , { TranslationKeys.db_dbr174_msg_par1, "Geen installatie gevonden van {0} op '{1}'." }
+          , { TranslationKeys.db_dbr175_msg, "Er kan maximaal één certificaat geselecteerd op basis van sleutelbestandsnaam en SHA1-vingerafdruk worden gebruikt." }
+          , { TranslationKeys.db_dbr176_msg, "Certificaatselectie op basis van de naam van het sleutelbestand of de SHA1-vingerafdruk moet worden gebruikt." }
+          , { TranslationKeys.db_dbr177_msg, "Het wachtwoord van het sleutelbestand kan alleen worden opgegeven als het certificaat is geselecteerd op de naam van het sleutelbestand." }
           , { TranslationKeys.db_definition_missing, "Definitie ontbreekt." }
           , { TranslationKeys.db_display_version, "Geef versienummer van deze applicatie weer." }
-          , { TranslationKeys.db_duplicate_character, "Duplicaat karakter." }
+          , { TranslationKeys.db_duplicate_character, "Dubbel karakter." }
           , { TranslationKeys.db_error_processing_colon, "Er is een fout opgetreden tijdens de verwerking:" }
-          , { TranslationKeys.db_filename_missing, "Ontbrekende bestandsnaam." }
+          , { TranslationKeys.db_filename_missing, "Bestandsnaam ontbreekt." }
           , { TranslationKeys.db_fork_obfuscar, "DotBlur is een fork van Obfuscar (https://www.obfuscar.com)" }
           , { TranslationKeys.db_full_name_missing, "Volledige naam ontbreekt." }
           , { TranslationKeys.db_gt_title_par2, "*** DotBlur Global Tool ({0}) op {1} (UTC) ***" }
           , { TranslationKeys.db_help_info, "Druk deze helpinformatie af." }
-          , { TranslationKeys.db_hide_strings, "Touwtjes verbergen." }
+          , { TranslationKeys.db_hide_strings, "Verberg teksten." }
           , { TranslationKeys.db_hint_colon_par1, "Tip: {0}" }
-          , { TranslationKeys.db_hint_skiptype, "Tip: misschien moet je hierboven een SkipType voor een enum toevoegen." }
+          , { TranslationKeys.db_hint_skiptype, "Tip: het kan nodig zijn om een SkipType toe te voegen voor een enum hierboven." }
           , { TranslationKeys.db_inner_exception_par1, "Binnengelegen uitzondering: {0}" }
           , { TranslationKeys.db_loading_pjt_par1, "Project '{0}' wordt geladen." }
-          , { TranslationKeys.db_missing_group, "Ontbrekende groep." }
-          , { TranslationKeys.db_missing_parent_reader, "Ontbrekende ouderlezer." }
-          , { TranslationKeys.db_missing_parts, "Ontbrekende onderdelen." }
-          , { TranslationKeys.db_missing_path_value, "Ontbrekende waarde voor pad." }
-          , { TranslationKeys.db_missing_read_action, "Ontbrekende actie." }
+          , { TranslationKeys.db_missing_group, "Groep ontbreekt." }
+          , { TranslationKeys.db_missing_parent_reader, "Ontbrekende bovenliggende lezer." }
+          , { TranslationKeys.db_missing_parts, "Onderdelen ontbreken." }
+          , { TranslationKeys.db_missing_path_value, "Waarde voor pad ontbreekt." }
+          , { TranslationKeys.db_missing_read_action, "Ontbrekende leesactie." }
           , { TranslationKeys.db_missing_setting_name, "Ontbrekende instellingsnaam." }
-          , { TranslationKeys.db_not_hide_strings, "Geen touwtjes verbergen." }
-          , { TranslationKeys.db_not_rename_events, "Geef gebeurtenissen geen andere naam." }
-          , { TranslationKeys.db_not_rename_fields, "Hernoem velden niet." }
-          , { TranslationKeys.db_not_rename_properties, "Hernoem eigenschappen niet." }
+          , { TranslationKeys.db_not_hide_strings, "Teksten niet verbergen." }
+          , { TranslationKeys.db_not_rename_events, "Wijzig naam van gebeurtenissen niet." }
+          , { TranslationKeys.db_not_rename_fields, "Wijzig naam van velden niet." }
+          , { TranslationKeys.db_not_rename_properties, "Wijzig naam van eigenschappen niet." }
           , { TranslationKeys.db_options_colon, "Opties:" }
-          , { TranslationKeys.db_pool_clean, "Kan zwembad niet schoonmaken." }
-          , { TranslationKeys.db_pool_still, "Nog steeds in het zwembad:" }
-          , { TranslationKeys.db_rename_events, "Gebeurtenissen hernoemen." }
-          , { TranslationKeys.db_rename_fields, "Hernoem velden." }
-          , { TranslationKeys.db_rename_methods, "Methoden hernoemen." }
-          , { TranslationKeys.db_rename_parameters, "Hernoem parameters." }
-          , { TranslationKeys.db_rename_properties, "Eigenschappen hernoemen." }
+          , { TranslationKeys.db_pool_clean, "Kan pool niet legen." }
+          , { TranslationKeys.db_pool_still, "Nog in pool:" }
+          , { TranslationKeys.db_rename_events, "Wijzig naam van gebeurtenissen." }
+          , { TranslationKeys.db_rename_fields, "Wijzig naam van velden." }
+          , { TranslationKeys.db_rename_methods, "Wijzig naam van methodes." }
+          , { TranslationKeys.db_rename_parameters, "Wijzig naam van parameters." }
+          , { TranslationKeys.db_rename_properties, "Wijzig naam van eigenschappen." }
           , { TranslationKeys.db_settings_not_initialized, "Instellingen nog niet geïnitialiseerd." }
-          , { TranslationKeys.db_syntax, "DotBlur.exe [Opties] [project_bestand] [project_bestand]." }
+          , { TranslationKeys.db_syntax, "DotBlur.exe [Opties] [projectbestand] [projectbestand]" }
           }
         }
         , { Languages.pl, new Dictionary<string, string>()
@@ -1882,7 +1895,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Nie udało się zapisać '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} może być jednym z nich:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Nie utworzono pary kluczy z \"{0}\"." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}\" nie jest ustawione." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Zakończono pomyślnie w ciągu {0:N0} sekund." }
           , { TranslationKeys.db_dbr079_msg_par1, "Utwórz wartość klucza RSA z \"{0}\"." }
           , { TranslationKeys.db_dbr082_par1, "Zakończono pomyślnie w ciągu {0:N0} sekund." }
@@ -1890,6 +1903,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Utwórz parę kluczy z {0} z hasłem." }
           , { TranslationKeys.db_dbr110_msg, "Nie skonfigurowano pliku kluczy ani kontenera kluczy. Nie użyto pary kluczy." }
           , { TranslationKeys.db_dbr111_msg, "Nie skonfigurowano pliku klucza ani kontenera klucza. Nie użyto wartości klucza RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Nie utworzono wartości klucza RSA z \"{0}\"." }
           , { TranslationKeys.db_dbr113_msg_par1, "Rozpocznij podpisywanie \"{0}\" za pomocą narzędzia do podpisywania \"{1}\" z argumentami \"{2}\"." }
           , { TranslationKeys.db_dbr116_msg, "Ładowanie zespołów." }
@@ -2020,7 +2034,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Falha ao guardar '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} pode ser um de:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Não criar nenhum par de chaves de '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}\" não está definido." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Concluído com êxito em {0:N0} segundos." }
           , { TranslationKeys.db_dbr079_msg_par1, "Criar valor de chave RSA a partir de '{0}'." }
           , { TranslationKeys.db_dbr082_par1, "Concluído com êxito em {0:N0} segundos." }
@@ -2028,6 +2042,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Criar um par de chaves de {0} com a palavra-passe." }
           , { TranslationKeys.db_dbr110_msg, "Nenhum ficheiro de chaves e nenhum contentor de chaves configurado. Não utilizar nenhum par de chaves." }
           , { TranslationKeys.db_dbr111_msg, "Nenhum ficheiro de chaves e nenhum contentor de chaves configurado. Não utilizar nenhum valor de chave RSA." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Não criar nenhum valor de chave RSA a partir de '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Iniciar a assinatura de '{0}' utilizando a ferramenta de assinatura '{1}' com argumentos '{2}'." }
           , { TranslationKeys.db_dbr116_msg, "Carregamento de conjuntos." }
@@ -2158,7 +2173,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr061_msg_par1, "Misslyckades med att spara '{0}'." }
           , { TranslationKeys.db_dbr063_msg_par1, "{0} kan vara en av:" }
           , { TranslationKeys.db_dbr069_msg_par1, "Skapa inget nyckelpar från '{0}'." }
-          , { TranslationKeys.db_dbr070_msg_par1, "{0}' är inte inställd." }
+          , { TranslationKeys.db_dbr070_msg_par1, "The strong signing keypair is taken from '{0}'." }
           , { TranslationKeys.db_dbr071_par1, "Avslutades framgångsrikt inom {0:N0} sekunder." }
           , { TranslationKeys.db_dbr079_msg_par1, "Skapa RSA-nyckelvärde från \"{0}\"." }
           , { TranslationKeys.db_dbr082_par1, "Avslutades framgångsrikt inom {0:N0} sekunder." }
@@ -2166,6 +2181,7 @@ namespace Obfuscar
           , { TranslationKeys.db_dbr109_msg_par1, "Skapa nyckelpar från {0} med lösenord." }
           , { TranslationKeys.db_dbr110_msg, "Ingen nyckelfil och ingen nyckelbehållare konfigurerad. Använd inget nyckelpar." }
           , { TranslationKeys.db_dbr111_msg, "Ingen nyckelfil och ingen nyckelbehållare konfigurerad. Använd inget RSA-nyckelvärde." }
+          , { TranslationKeys.db_dbr112_msg, "There is no strong naming key container name to generate a RSA-keypair from." }
           , { TranslationKeys.db_dbr112_msg_par1, "Skapa inget RSA-nyckelvärde från '{0}'." }
           , { TranslationKeys.db_dbr113_msg_par1, "Börja signera \"{0}\" med hjälp av signeringsverktyget \"{1}\" med argumenten \"{2}\"." }
           , { TranslationKeys.db_dbr116_msg, "Lastning av enheter." }
