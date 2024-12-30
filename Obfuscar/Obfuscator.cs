@@ -167,6 +167,9 @@ namespace Obfuscar
 
             if (this.Project.ExtraFrameworkPaths?.Any() ?? false)
             {
+                //
+                // Log the extra framework folders available.
+                //
                 Log.OutputLine(MessageCodes.dbr059, Translations.GetTranslationOfKey(TranslationKeys.db_dbr059_msg));
 
                 foreach (string extraPath in this.Project.ExtraFrameworkPaths)
@@ -176,10 +179,13 @@ namespace Obfuscar
             }
             else
             {
+                //
+                // No extra framework folders.
+                //
                 Log.OutputLine(MessageCodes.dbr154, Translations.GetTranslationOfKey(TranslationKeys.db_dbr154_msg));
             }
 
-            Log.OutputLine(MessageCodes.dbr060, null);
+            // Log.OutputLine(MessageCodes.dbr060, null);
 
             this.Project.LoadAssemblies();
         }

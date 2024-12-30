@@ -162,7 +162,7 @@ namespace Obfuscar
                     }
                     else
                     {
-                        Log.OutputLine(MessageCodes.dbr112, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr112_msg_par1), strongNameSigningKeyContainerName));
+                        Log.OutputLine(MessageCodes.dbr112, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr112_msg), strongNameSigningKeyContainerName));
                     }
                 }
             }

@@ -657,28 +657,48 @@ namespace Obfuscar
             return result;
         }
 
+        /// <summary>
+        /// Gets the first not-null full name of the type of the children that are a TypeInfoRecord.
+        /// </summary>
+        /// <param name="bamlDocument">BAML document.</param>
+        /// <returns>Full name of the type.</returns>
         private string GetTypeName(BamlDocument bamlDocument)
         {
+            int childCount = 0;
+
             foreach (BamlRecord child in bamlDocument)
             {
                 switch (child)
                 {
                     case TypeInfoRecord classAttribute:
                         {
+                            //
+                            // Skip when there is not type specified.
+                            // Otherwise return full name of type.
+                            //
                             if (string.IsNullOrEmpty(classAttribute.TypeFullName))
                             {
                                 continue;
                             }
-
-                            return classAttribute.TypeFullName;
+                            else
+                            {
+                                return classAttribute.TypeFullName;
+                            }
                         }
                     default:
                         {
                             break;
                         }
                 }
+
+                childCount++;
             }
 
+            //
+            // Raise can not extract type name error.
+            //
+#warning I18N
+            throw new ObfuscarException(MessageCodes.dbr155, $"The name of the type of the first child can not be established for the BAML document '{bamlDocument.DocumentName}' with {childCount:N0} children.");
             throw new ObfuscarException(MessageCodes.dbr155, Translations.GetTranslationOfKey(TranslationKeys.db_dbr155_msg));
         }
 
