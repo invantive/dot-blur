@@ -663,13 +663,12 @@ namespace Obfuscar
             return result;
         }
 
-        private string? GetTypeName(BamlDocument bamlDocument)
         /// <summary>
         /// Gets the first not-null full name of the type of the children that are a TypeInfoRecord.
         /// </summary>
         /// <param name="bamlDocument">BAML document.</param>
         /// <returns>Full name of the type.</returns>
-        private string GetTypeName(BamlDocument bamlDocument)
+        private string? GetTypeName(BamlDocument bamlDocument)
         {
             int childCount = 0;
 
