@@ -10,7 +10,7 @@
     <RootNamespace>Obfuscar</RootNamespace>
     <TargetFramework>net48</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <WarningsAsErrors>1591;1570;1573;8600</WarningsAsErrors>
+    <WarningsAsErrors>1591;1570;1573;8600;1416</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -596,7 +596,10 @@ namespace Obfuscar
                                 BamlDocument document = BamlReader.ReadDocument(stream, CancellationToken.None);
                                 string? typeName = this.GetTypeName(document);
 
+                                if (!string.IsNullOrEmpty(typeName))
+                                {
                                 result.Add(typeName, document);
+                            }
                             }
                             catch (ArgumentException)
                             {
@@ -637,7 +640,10 @@ namespace Obfuscar
                                 BamlDocument document = BamlReader.ReadDocument(stream, CancellationToken.None);
                                 string? typeName = this.GetTypeName(document);
 
+                                if (!string.IsNullOrEmpty(typeName))
+                                {
                                 result.Add(typeName, document);
+                            }
                             }
                             catch (ArgumentException)
                             {
@@ -657,6 +663,7 @@ namespace Obfuscar
             return result;
         }
 
+        private string? GetTypeName(BamlDocument bamlDocument)
         /// <summary>
         /// Gets the first not-null full name of the type of the children that are a TypeInfoRecord.
         /// </summary>
@@ -695,11 +702,9 @@ namespace Obfuscar
             }
 
             //
-            // Raise can not extract type name error.
+            // Type name could not be extracted, maybe this is a ResourceDictionary or else.
             //
-#warning I18N
-            throw new ObfuscarException(MessageCodes.dbr155, $"The name of the type of the first child can not be established for the BAML document '{bamlDocument.DocumentName}' with {childCount:N0} children.");
-            throw new ObfuscarException(MessageCodes.dbr155, Translations.GetTranslationOfKey(TranslationKeys.db_dbr155_msg));
+            return null;
         }
 
         private class Graph
