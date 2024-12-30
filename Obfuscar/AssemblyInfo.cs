@@ -596,7 +596,10 @@ namespace Obfuscar
                                 BamlDocument document = BamlReader.ReadDocument(stream, CancellationToken.None);
                                 string? typeName = this.GetTypeName(document);
 
-                                result.Add(typeName, document);
+                                if (!string.IsNullOrEmpty(typeName))
+                                {
+                                    result.Add(typeName, document);
+                                }
                             }
                             catch (ArgumentException)
                             {
@@ -637,7 +640,10 @@ namespace Obfuscar
                                 BamlDocument document = BamlReader.ReadDocument(stream, CancellationToken.None);
                                 string? typeName = this.GetTypeName(document);
 
-                                result.Add(typeName, document);
+                                if (!string.IsNullOrEmpty(typeName))
+                                {
+                                    result.Add(typeName, document);
+                                }
                             }
                             catch (ArgumentException)
                             {
@@ -657,7 +663,7 @@ namespace Obfuscar
             return result;
         }
 
-        private string GetTypeName(BamlDocument bamlDocument)
+        private string? GetTypeName(BamlDocument bamlDocument)
         {
             foreach (BamlRecord child in bamlDocument)
             {
@@ -679,7 +685,10 @@ namespace Obfuscar
                 }
             }
 
-            throw new ObfuscarException(MessageCodes.dbr155, Translations.GetTranslationOfKey(TranslationKeys.db_dbr155_msg));
+            //
+            // Type name could not be extracted, maybe this is a ResourceDictionary or else.
+            //
+            return null;
         }
 
         private class Graph
