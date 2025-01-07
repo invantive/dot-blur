@@ -66,10 +66,16 @@ namespace Obfuscar
         {
             get
             {
-                return (this.ExtraFrameworkPaths ?? Enumerable.Empty<string>())
-                        .Concat(this.assemblySearchPaths)
-                        .Concat([this.Settings.InPath])
-                        ;
+                IEnumerable<string>? result = this.ExtraFrameworkPaths ?? Enumerable.Empty<string>();
+
+                result = result.Concat(this.assemblySearchPaths);
+
+                if (!string.IsNullOrEmpty(this.Settings.InPath))
+                {
+                    result = result.Append(this.Settings.InPath);
+                }
+
+                return result;
             }
         }
 
@@ -387,6 +393,11 @@ namespace Obfuscar
         /// <param name="project">Project</param>
         private static void ReadModuleGroups(XElement reader, Project project)
         {
+            if (string.IsNullOrEmpty(project.Settings.InPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr187, "The project has no InPath set.");
+            }
+
             IEnumerable<XElement> modules = reader.Elements("Modules");
 
             int moduleGroupCnt = 0;
@@ -536,6 +547,16 @@ namespace Obfuscar
         /// </summary>
         public void CheckSettings()
         {
+            if (string.IsNullOrEmpty(this.Settings.InPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr190, "The project has no InPath set.");
+            }
+
+            if (string.IsNullOrEmpty(this.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr191, "The project has no OutPath set.");
+            }
+
             Log.OutputLine(MessageCodes.dbr168, Translations.GetTranslationOfKey(TranslationKeys.db_check_project_settings));
 
             for (int i = 0; i < this.assemblySearchPaths.Count; i++)

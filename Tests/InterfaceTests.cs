@@ -78,11 +78,14 @@ namespace ObfuscarTests
 
             string assmName = "AssemblyWithInterfaces.dll";
 
-            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(TestHelper.InputPath, assmName));
+            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(TestHelper.InputPath, assmName));
 
-            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(item.Project.Settings.OutPath, assmName));
+            if (string.IsNullOrEmpty(item.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr199, "Missing OutPath.");
+            }
+
+            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.C");
                 MethodDefinition method = this.FindMethodByName(classCType, "Method");
@@ -107,11 +110,14 @@ namespace ObfuscarTests
 
             string assmName = "AssemblyWithInterfaces2.dll";
 
-            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(TestHelper.InputPath, assmName));
+            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(TestHelper.InputPath, assmName));
 
-            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(item.Project.Settings.OutPath, assmName));
+            if (string.IsNullOrEmpty(item.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr198, "Missing OutPath.");
+            }
+
+            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classCType = inAssmDef.MainModule.GetType("TestClasses.C");
                 MethodDefinition method = this.FindMethodByName(classCType, "Method");

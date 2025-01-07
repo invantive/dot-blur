@@ -66,11 +66,14 @@ namespace ObfuscarTests
 
             string assmName = "AssemblyWithSpecializedGenerics.dll";
 
-            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(TestHelper.InputPath, assmName));
+            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(TestHelper.InputPath, assmName));
 
-            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(item.Project.Settings.OutPath, assmName));
+            if (string.IsNullOrEmpty(item.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr197, "Missing OutPath.");
+            }
+
+            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(item.Project.Settings.OutPath, assmName));
 
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.ClassA`1");

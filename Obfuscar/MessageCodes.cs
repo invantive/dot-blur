@@ -219,6 +219,22 @@ namespace Obfuscar
         public const string dbr182 = "dbr182";
         public const string dbr183 = "dbr183";
         public const string dbr184 = "dbr184";
+        public const string dbr185 = "dbr185";
+        public const string dbr186 = "dbr186";
+        public const string dbr187 = "dbr187";
+        public const string dbr188 = "dbr188";
+        public const string dbr189 = "dbr189";
+        public const string dbr190 = "dbr190";
+        public const string dbr191 = "dbr191";
+        public const string dbr192 = "dbr192";
+        public const string dbr193 = "dbr193";
+        public const string dbr194 = "dbr194";
+        public const string dbr195 = "dbr195";
+        public const string dbr196 = "dbr196";
+        public const string dbr197 = "dbr197";
+        public const string dbr198 = "dbr198";
+        public const string dbr199 = "dbr199";
+        public const string dbr200 = "dbr200";
     }
 }
 

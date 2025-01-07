@@ -195,7 +195,12 @@ namespace Obfuscar
         /// </summary>
         private void SaveAssemblies(bool throwException = true)
         {
-            string? outPath = this.Project.Settings.OutPath;
+            if (string.IsNullOrEmpty(this.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr188, "The project has no OutPath set.");
+            }
+
+            string outPath = this.Project.Settings.OutPath;
 
             Log.OutputLine(MessageCodes.dbr056, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr056_msg_par1), outPath));
 
@@ -259,6 +264,8 @@ namespace Obfuscar
 
             TypeNameCache.nameCache.Clear();
         }
+
+        private static Random randomGenerator = new Random();
 
         private void SaveAssembly(AssemblyInfo info, string? outPath, bool throwException)
         {
@@ -380,15 +387,17 @@ namespace Obfuscar
                 string? codeSigningKeyFilePassword = this.Project.Settings.CodeSigningKeyFilePassword;
                 string? codeSigningKeyContainerName = this.Project.Settings.CodeSigningKeyContainer;
                 string? codeSigningFileDigestAlgorithm = this.Project.Settings.CodeSigningFileDigestAlgorithm;
-                string? codeSigningTimeStampServerUrl = this.Project.Settings.CodeSigningTimeStampServerUrl;
+                List<string>? codeSigningTimeStampServerUrls = this.Project.Settings.CodeSigningTimeStampServerUrls;
                 string? codeSigningCertificateSha1Thumbprint = this.Project.Settings.CodeSigningCertificateSha1Thumbprint;
                 string? codeSigningContentDescription = this.Project.Settings.CodeSigningContentDescription;
                 string? codeSigningContentInformationUrl = this.Project.Settings.CodeSigningContentInformationUrl;
+                bool codeSigningVerbose = this.Project.Settings.CodeSigningVerbose;
+                bool codeSigningDebug = this.Project.Settings.CodeSigningDebug;
 
                 if (this.Project.Settings.CodeSignAssembly)
                 {
                     {
-                        string? exePath = this.GetCodeSigningToolExeFileNamePathCached();
+                        string exePath = this.GetCodeSigningToolExeFileNamePathCached();
 
                         //
                         // Defaulting.
@@ -398,9 +407,9 @@ namespace Obfuscar
                             codeSigningFileDigestAlgorithm = CodeSigningToolFileDigestAlgorithms.SHA256;
                         }
 
-                        if (string.IsNullOrEmpty(codeSigningTimeStampServerUrl))
+                        if (!(codeSigningTimeStampServerUrls?.Any() ?? false))
                         {
-                            codeSigningTimeStampServerUrl = "http://timestamp.digicert.com";
+                            throw new ObfuscarException(MessageCodes.dbr193, "No timestamp server is specified.", "Please always specify at least one timestamp server.");
                         }
 
                         //
@@ -472,6 +481,16 @@ namespace Obfuscar
                             }
                         }
 
+                        if (codeSigningVerbose)
+                        {
+                            cmdArguments.Add("/v");
+                        }
+
+                        if (codeSigningDebug)
+                        {
+                            cmdArguments.Add("/debug");
+                        }
+
                         //
                         // Provide a description of the signed content.
                         //
@@ -517,11 +536,47 @@ namespace Obfuscar
                         // Specify the timestamp server's URL. If this option is not present, the code signed file will not
                         // be timestamped. A warning is generated if timestamping fails.
                         //
-                        if (!string.IsNullOrEmpty(codeSigningTimeStampServerUrl))
+
+                        //
+                        // Pick a random timestamp server URL.
+                        // Random picking increases likelihood that no rate limiting is applied.
+                        //
+                        string codeSigningTimeStampServerUrl = codeSigningTimeStampServerUrls
+                            .OrderBy(x => randomGenerator.Next(0, 1))
+                            .First()
+                            ;
+
+                        Log.OutputLine(MessageCodes.dbr194, string.Format("Choose the timestamp server '{0}' from a list of {1} available timestamp servers: {2}.", codeSigningTimeStampServerUrl, codeSigningTimeStampServerUrls.Count, string.Join(", ", codeSigningTimeStampServerUrls)));
+
+                        //
+                        // SignTool.exe does not support https, so rewrite all https to http (which also typically work).
+                        // 
+                        string codeSigningTimeStampServerUrlHttp;
+
+                        Uri codeSigningTimestampServerUri;
+
+                        try
                         {
-                            cmdArguments.Add("/t");
-                            cmdArguments.Add($"\"{codeSigningTimeStampServerUrl}\"");
+                            codeSigningTimestampServerUri = new Uri(codeSigningTimeStampServerUrl);
                         }
+                        catch (UriFormatException)
+                        {
+                            throw new ObfuscarException(MessageCodes.dbr195, string.Format("The timestamp server URL '{0}' is not a valid URI.", codeSigningTimeStampServerUrl));
+                        }
+
+                        if (codeSigningTimestampServerUri.Scheme == "https")
+                        {
+                            UriBuilder uriBuilder = new UriBuilder(codeSigningTimestampServerUri);
+                            uriBuilder.Scheme = "http";
+                            codeSigningTimeStampServerUrlHttp = uriBuilder.ToString();
+                        }
+                        else
+                        {
+                            codeSigningTimeStampServerUrlHttp = codeSigningTimeStampServerUrl;
+                        }
+
+                        cmdArguments.Add("/t");
+                        cmdArguments.Add($"\"{codeSigningTimeStampServerUrlHttp}\"");
 
                         cmdArguments.Add($"\"{outName}\"");
 
@@ -611,7 +666,7 @@ namespace Obfuscar
                         //
                         // Check code signing signature afterwards when requested to.
                         //
-                        string? exePath = this.GetCodeSigningToolExeFileNamePathCached();
+                        string exePath = this.GetCodeSigningToolExeFileNamePathCached();
 
                         List<string> cmdArguments = new List<string>();
 
@@ -630,7 +685,6 @@ namespace Obfuscar
 
                         string cmdArgumentsTxt = string.Join(" ", cmdArguments);
 
-                        // TODO
                         Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, exePath, cmdArgumentsTxt));
 
                         ProcessStartInfo processStartInfo = new ProcessStartInfo(exePath, cmdArgumentsTxt)
@@ -648,7 +702,6 @@ namespace Obfuscar
 
                         if (process == null)
                         {
-                            // TODO
                             throw new ObfuscarException(MessageCodes.dbr042, Translations.GetTranslationOfKey(TranslationKeys.db_dbr042_msg));
                         }
 
@@ -669,7 +722,6 @@ namespace Obfuscar
 
                             if (nonEmptyLineSeen)
                             {
-                                // TODO
                                 Log.OutputLine(MessageCodes.dbr153, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr153_msg_par1), line));
                             }
                         }
@@ -689,7 +741,6 @@ namespace Obfuscar
 
                             if (nonEmptyLineSeen)
                             {
-                                // TODO
                                 Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
                             }
                         }
@@ -698,7 +749,6 @@ namespace Obfuscar
 
                         if (!process.WaitForExit(timeOutMs))
                         {
-                            // TODO
                             throw new ObfuscarException(MessageCodes.dbr043, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr043_msg_par1), timeOutMs));
                         }
 
@@ -706,12 +756,10 @@ namespace Obfuscar
 
                         if (snExitCode == 0)
                         {
-                            // TODO
                             Log.OutputLine(MessageCodes.dbr123, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr123_msg_par1), fileName));
                         }
                         else
                         {
-                            // TODO
                             throw new ObfuscarException(MessageCodes.dbr145, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr145_msg_par1), fileName, snExitCode));
                         }
                     }
@@ -738,7 +786,7 @@ namespace Obfuscar
                     //
                     // Check strong name signature afterwards when requested to.
                     //
-                    string? exePath = this.GetStrongNamingToolExeFileNamePathCached();
+                    string exePath = this.GetStrongNamingToolExeFileNamePathCached();
 
                     List<string> cmdArguments = new List<string>();
 
@@ -751,7 +799,6 @@ namespace Obfuscar
 
                     string cmdArgumentsTxt = string.Join(" ", cmdArguments);
 
-                    // TODO
                     Log.OutputLine(MessageCodes.dbr113, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr113_msg_par1), fileName, exePath, cmdArgumentsTxt));
 
                     ProcessStartInfo processStartInfo = new ProcessStartInfo(exePath, cmdArgumentsTxt)
@@ -765,7 +812,6 @@ namespace Obfuscar
 
                     if (process == null)
                     {
-                        // TODO
                         throw new ObfuscarException(MessageCodes.dbr042, Translations.GetTranslationOfKey(TranslationKeys.db_dbr042_msg));
                     }
 
@@ -786,7 +832,6 @@ namespace Obfuscar
 
                         if (nonEmptyLineSeen)
                         {
-                            // TODO
                             Log.OutputLine(MessageCodes.dbr153, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr153_msg_par1), line));
                         }
                     }
@@ -806,7 +851,6 @@ namespace Obfuscar
 
                         if (nonEmptyLineSeen)
                         {
-                            // TODO
                             Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
                         }
                     }
@@ -815,7 +859,6 @@ namespace Obfuscar
 
                     if (!process.WaitForExit(timeOutMs))
                     {
-                        // TODO
                         throw new ObfuscarException(MessageCodes.dbr043, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr043_msg_par1), timeOutMs));
                     }
 
@@ -823,12 +866,10 @@ namespace Obfuscar
 
                     if (snExitCode == 0)
                     {
-                        // TODO
                         Log.OutputLine(MessageCodes.dbr123, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr123_msg_par1), fileName));
                     }
                     else
                     {
-                        // TODO
                         throw new ObfuscarException(MessageCodes.dbr145, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr145_msg_par1), fileName, snExitCode));
                     }
                 }
@@ -871,13 +912,13 @@ namespace Obfuscar
         }
 
         private string? codeSigningToolExeFileNamePath;
-        private object codeSigningToolExeFileNamePathLocker = new object();
+        private readonly object codeSigningToolExeFileNamePathLocker = new object();
 
         /// <summary>
         /// Gets the file name and path for code signing (such as signtool.exe).
         /// </summary>
         /// <returns>File name and path.</returns>
-        private string? GetCodeSigningToolExeFileNamePathCached()
+        private string GetCodeSigningToolExeFileNamePathCached()
         {
             if (string.IsNullOrEmpty(this.codeSigningToolExeFileNamePath))
             {
@@ -915,7 +956,9 @@ namespace Obfuscar
                             }
                             else
                             {
-                                Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, programFilesX86Folder));
+                                throw new ObfuscarException(MessageCodes.dbr185, string.Format("The code signing tool '{0}' could not be found in the SDK path '{1}'.", CODE_SIGNING_TOOL_EXE_NAME, windows10SdkFolder));
+                                
+                                //Log.OutputLine(MessageCodes.dbr174, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr174_msg_par1), CODE_SIGNING_TOOL_EXE_NAME, programFilesX86Folder));
                             }
 
                             path = highestWindows10KitSignToolExe;
@@ -930,13 +973,13 @@ namespace Obfuscar
         }
 
         private string? strongNamingToolExeFileNamePath;
-        private object strongNamingToolExeFileNamePathLocker = new object();
+        private readonly object strongNamingToolExeFileNamePathLocker = new object();
 
         /// <summary>
         /// Gets the file name and path for strong name signing (such as sn.exe).
         /// </summary>
         /// <returns>File name and path.</returns>
-        private string? GetStrongNamingToolExeFileNamePathCached()
+        private string GetStrongNamingToolExeFileNamePathCached()
         {
             if (string.IsNullOrEmpty(this.strongNamingToolExeFileNamePath))
             {
@@ -974,7 +1017,9 @@ namespace Obfuscar
                             }
                             else
                             {
-                                Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SN_EXE_NAME, programFilesX86Folder));
+                                throw new ObfuscarException(MessageCodes.dbr186, string.Format("The strong naming tool '{0}' could not be found in the SDK path '{1}'.", SN_EXE_NAME, windows10SdkBinFolder));
+
+                                //Log.OutputLine(MessageCodes.dbr174, string.Format("Found no installation of {0} in '{1}'.", SN_EXE_NAME, programFilesX86Folder));
                             }
 
                             path = highestWindows10KitSnExe;
@@ -1011,6 +1056,11 @@ namespace Obfuscar
         /// </summary>
         private void SaveMapping()
         {
+            if (string.IsNullOrEmpty(this.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr189, "The project has no OutPath set.");
+            }
+
             string filename = this.Project.Settings.XmlMapping ? "Mapping.xml" : "Mapping.txt";
 
             string logFilePath = Path.Combine(this.Project.Settings.OutPath, filename);

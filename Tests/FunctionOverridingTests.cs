@@ -70,11 +70,14 @@ namespace ObfuscarTests
 
             string assmName = "AssemblyWithOverrides.dll";
 
-            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(TestHelper.InputPath, assmName));
+            AssemblyDefinition inAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(TestHelper.InputPath, assmName));
 
-            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(
-                Path.Combine(item.Project.Settings.OutPath, assmName));
+            if (string.IsNullOrEmpty(item.Project.Settings.OutPath))
+            {
+                throw new ObfuscarException(MessageCodes.dbr200, "Missing OutPath.");
+            }
+
+            AssemblyDefinition outAssmDef = AssemblyDefinition.ReadAssembly(Path.Combine(item.Project.Settings.OutPath, assmName));
             {
                 TypeDefinition classAType = inAssmDef.MainModule.GetType("TestClasses.ClassA");
                 MethodDefinition classAmethod2 = this.FindByName(classAType, "Method2");

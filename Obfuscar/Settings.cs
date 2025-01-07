@@ -24,6 +24,8 @@
 
 #endregion
 
+using System.Collections.Generic;
+
 namespace Obfuscar
 {
     /// <summary>
@@ -36,13 +38,15 @@ namespace Obfuscar
         internal const string VariableCodeSigningCertificateSha1Thumbprint = "CodeSigningCertificateSha1Thumbprint";
         internal const string VariableCodeSigningContentDescription = "CodeSigningContentDescription";
         internal const string VariableCodeSigningContentInformationUrl = "CodeSigningContentInformationUrl";
+        internal const string VariableCodeSigningDebug = "CodeSigningDebug";
         internal const string VariableCodeSigningFileDigestAlgorithm = "CodeSigningFileDigestAlgorithm";
         internal const string VariableCodeSigningKeyContainer = "CodeSigningKeyContainer";
         internal const string VariableCodeSigningKeyFile = "CodeSigningKeyFile";
         internal const string VariableCodeSigningKeyFilePassword = "CodeSigningKeyFilePassword";
-        internal const string VariableCodeSigningTimeStampServerUrl = "CodeSigningTimeStampServerUrl";
+        internal const string VariableCodeSigningTimeStampServerUrls = "CodeSigningTimeStampServerUrls";
         internal const string VariableCodeSigningToolExe = "CodeSigningToolExe";
         internal const string VariableCodeSigningValidation = "CodeSigningValidation";
+        internal const string VariableCodeSigningVerbose = "CodeSigningVerbose";
         internal const string VariableCodeSignInParallel = "CodeSignInParallel";
         internal const string VariableCustomChars = "CustomChars";
         internal const string VariableExtraFrameworkFolders = "ExtraFrameworkFolders";
@@ -84,13 +88,15 @@ namespace Obfuscar
             this.CodeSigningCertificateSha1Thumbprint = vars.EvaluateStringVariable(VariableCodeSigningCertificateSha1Thumbprint, null);
             this.CodeSigningContentDescription = vars.EvaluateStringVariable(VariableCodeSigningContentDescription, null);
             this.CodeSigningContentInformationUrl = vars.EvaluateStringVariable(VariableCodeSigningContentInformationUrl, null);
+            this.CodeSigningDebug = vars.EvaluateBoolVariable(VariableCodeSigningDebug, false) ?? false;
             this.CodeSigningFileDigestAlgorithm = vars.EvaluateStringVariable(VariableCodeSigningFileDigestAlgorithm, null);
             this.CodeSigningKeyContainer = vars.EvaluateStringVariable(VariableCodeSigningKeyContainer, null);
             this.CodeSigningKeyFile = vars.EvaluateStringVariable(VariableCodeSigningKeyFile, null);
             this.CodeSigningKeyFilePassword = vars.EvaluateStringVariable(VariableCodeSigningKeyFilePassword, null);
-            this.CodeSigningTimeStampServerUrl = vars.EvaluateStringVariable(VariableCodeSigningTimeStampServerUrl, null);
+            this.CodeSigningTimeStampServerUrls = vars.EvaluateListOfStringVariable(VariableCodeSigningTimeStampServerUrls, null);
             this.CodeSigningToolExe = vars.EvaluateStringVariable(VariableCodeSigningToolExe, null);
             this.CodeSigningValidation = vars.EvaluateBoolVariable(VariableCodeSigningValidation, true) ?? true;
+            this.CodeSigningVerbose = vars.EvaluateBoolVariable(VariableCodeSigningVerbose, false) ?? false;
             this.CodeSignInParallel = vars.EvaluateBoolVariable(VariableCodeSignInParallel, true) ?? true;
             this.CustomChars = vars.EvaluateStringVariable(VariableCustomChars, "");
             this.ExtraFrameworkFolders = vars.EvaluateStringVariable(VariableExtraFrameworkFolders, null);
@@ -201,6 +207,16 @@ namespace Obfuscar
         public bool UseKoreanNames { get; private set; }
 
         /// <summary>
+        /// Whether to include verbose logging on signtool.exe during code signing.
+        /// </summary>
+        public bool CodeSigningVerbose { get; private set; }
+
+        /// <summary>
+        /// Whether to include debugging information on signtool.exe during code signing.
+        /// </summary>
+        public bool CodeSigningDebug { get; private set; }
+
+        /// <summary>
         /// Whether to analyze XAML related metadata for obfuscation.
         /// </summary>
         public bool AnalyzeXaml { get; private set; }
@@ -266,9 +282,9 @@ namespace Obfuscar
         public string? CodeSigningFileDigestAlgorithm { get; private set; }
 
         /// <summary>
-        /// Time stamp server URL for code signing.
+        /// Time stamp server URLs for code signing.
         /// </summary>
-        public string? CodeSigningTimeStampServerUrl { get; private set; }
+        public List<string>? CodeSigningTimeStampServerUrls { get; private set; }
 
         /// <summary>
         /// SHA1 thumbprint to select the certificate for code signing.

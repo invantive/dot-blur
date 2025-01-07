@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Xml;
 
 namespace Obfuscar
@@ -45,6 +46,28 @@ namespace Obfuscar
         public void Remove(string name)
         {
             this.vars.Remove(name);
+        }
+
+        /// <summary>
+        /// Gets value of a variable as a list of strings.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>String (nullable) value.</returns>
+        [return: NotNullIfNotNull(nameof(defaultValue))]
+        public List<string>? GetListOfStringValue(string name, string? defaultValue)
+        {
+            List<string>? listOfString = this.vars.Where(x => x.Key == name).Select(x => this.Replace(x.Value)).ToList();
+
+            if (!string.IsNullOrEmpty(defaultValue))
+            {
+                if (!listOfString.Any())
+                {
+                    listOfString = new List<string>() { defaultValue };
+                }
+            }
+
+            return listOfString;
         }
 
         /// <summary>
@@ -147,6 +170,26 @@ namespace Obfuscar
             else
             {
                 return Environment.ExpandEnvironmentVariables(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list with expanded string value of a variable by name.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="defaultValue">Default value.</param>
+        /// <returns>Value of variable, after expansion for environment variables.</returns>
+        public List<string>? EvaluateListOfStringVariable(string name, string? defaultValue)
+        {
+            List<string>? value = this.GetListOfStringValue(name, defaultValue);
+
+            if (!(value?.Any() ?? false))
+            {
+                return value;
+            }
+            else
+            {
+                return value.Select(x => Environment.ExpandEnvironmentVariables(x)).ToList();
             }
         }
 
