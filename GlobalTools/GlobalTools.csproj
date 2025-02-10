@@ -21,7 +21,8 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/obfuscar/obfuscar</RepositoryUrl>
     <ToolCommandName>dotblur.console</ToolCommandName>
-    <WarningsAsErrors>1591;1570;1573;8600;8601;8602;8603;8604;8618;8619;8620;8622;8625;1416</WarningsAsErrors>
+    <WarningsAsErrors>8981;105;1591;1570;1573;8600;8601;8602;8603;8604;8618;8619;8620;8622;8625;1416</WarningsAsErrors>
+    <WarningLevel>8</WarningLevel>
 
     <ParsedSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*', ''))</ParsedSdkVersion>
     <IsNet80Supported Condition="'$(ParsedSdkVersion)' &gt;= '8.0'">true</IsNet80Supported>

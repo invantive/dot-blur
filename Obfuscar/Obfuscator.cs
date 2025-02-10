@@ -641,8 +641,28 @@ namespace Obfuscar
                                 Log.OutputLine(MessageCodes.dbr125, string.Format(Translations.GetTranslationOfKey(TranslationKeys.db_dbr125_msg_par1), line));
                             }
                         }
-
                         const int timeOutMs = 60_000;
+
+                        //
+                        // Output will resemble:
+                        //
+                        // After EKU filter, 2 certs were left.
+                        // After expiry filter, 1 certs were left.
+                        // After Hash filter, 1 certs were left.
+                        // After Private Key filter, 1 certs were left.
+                        // The following certificate was selected:
+                        // Issued to: ACME Corp.
+                        // Issued by: GlobalSign GCC R45 EV CodeSigning CA 2020
+                        // Expires:   Sat Nov 08 16:37:44 2025
+                        // SHA1 hash: 6679F6C1883D6E5EAB99C99282C2AFABCDEF0123
+                        //
+                        // Done Adding Additional Store
+                        // Successfully signed: test.dll
+                        //
+                        // Number of files successfully Signed: 1
+                        // Number of warnings: 0
+                        // Number of errors: 0
+                        //
 
                         if (!process.WaitForExit(timeOutMs))
                         {

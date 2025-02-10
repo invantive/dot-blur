@@ -13,7 +13,8 @@
     <TargetFrameworks Condition="'$(IsNet80Supported)' == 'true'">$(TargetFrameworks);net8.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsNet90Supported)' == 'true'">$(TargetFrameworks);net9.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows'">$(TargetFrameworks);net48</TargetFrameworks>
-    <WarningsAsErrors>1570;1573;8600;8601;8602;8603;8604;8618;8619;8620;8622;8625;1416</WarningsAsErrors>
+    <WarningsAsErrors>8981;105;1570;1573;8600;8601;8602;8603;8604;8618;8619;8620;8622;8625;1416</WarningsAsErrors>
+    <WarningLevel>8</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup>
