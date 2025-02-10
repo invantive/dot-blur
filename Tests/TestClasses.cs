@@ -24,6 +24,7 @@
 
 #endregion
 
+#pragma warning disable 1591
 namespace ObfuscarTests
 {
 #pragma warning disable 618
@@ -105,3 +106,4 @@ namespace ObfuscarTests
         }
     }
 }
+#pragma warning restore 1591

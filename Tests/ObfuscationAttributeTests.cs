@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using Mono.Cecil;
 using Obfuscar;
 using System.IO;
@@ -315,3 +316,4 @@ namespace ObfuscarTests
         }
     }
 }
+#pragma warning restore 1591

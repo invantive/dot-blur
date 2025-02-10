@@ -24,6 +24,7 @@
 
 #endregion
 
+#pragma warning disable 1591
 using Xunit;
 
 namespace ObfuscarTests
@@ -75,3 +76,4 @@ namespace ObfuscarTests
         }
     }
 }
+#pragma warning restore 1591

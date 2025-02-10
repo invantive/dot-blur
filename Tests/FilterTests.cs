@@ -1,4 +1,5 @@
-﻿using Obfuscar;
+﻿#pragma warning disable 1591
+using Obfuscar;
 using System;
 using System.IO;
 using System.Linq;
@@ -66,3 +67,4 @@ namespace ObfuscarTests
         }
     }
 }
+#pragma warning restore 1591

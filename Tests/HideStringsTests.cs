@@ -24,6 +24,7 @@
 
 #endregion
 
+#pragma warning disable 1591
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
@@ -288,3 +289,4 @@ namespace ObfuscarTests
 
     }
 }
+#pragma warning restore 1591

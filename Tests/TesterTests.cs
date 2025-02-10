@@ -24,6 +24,7 @@
 
 #endregion
 
+#pragma warning disable 1591
 using Mono.Cecil;
 using System.Text.RegularExpressions;
 using Xunit;
@@ -162,3 +163,4 @@ namespace ObfuscarTests
         }
     }
 }
+#pragma warning restore 1591
