@@ -26,6 +26,9 @@
 
 namespace Obfuscar
 {
+    /// <summary>
+    /// Obfuscation status.
+    /// </summary>
     internal enum ObfuscationStatus
     {
         Unknown,

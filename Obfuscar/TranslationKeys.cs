@@ -56,6 +56,9 @@ namespace Obfuscar
         public const string db_dbr014_msg_par1 = nameof(db_dbr014_msg_par1);
         public const string db_dbr015_msg = nameof(db_dbr015_msg);
         public const string db_dbr015_msg_par1 = nameof(db_dbr015_msg_par1);
+        public const string db_dbr016_hint1 = nameof(db_dbr016_hint1);
+        public const string db_dbr016_hint2_par3 = nameof(db_dbr016_hint2_par3);
+        public const string db_dbr016_msg = nameof(db_dbr016_msg);
         public const string db_dbr017_msg_par1 = nameof(db_dbr017_msg_par1);
         public const string db_dbr018_msg_par1 = nameof(db_dbr018_msg_par1);
         public const string db_dbr020_2_msg_par1 = nameof(db_dbr020_2_msg_par1);

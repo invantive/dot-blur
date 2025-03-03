@@ -2056,11 +2056,16 @@ namespace Obfuscar
 
                 this.Mapping.UpdateMethod(methodKey, ObfuscationStatus.Skipped, skipRename);
 
-                StringBuilder message = new StringBuilder("Inconsistent virtual method obfuscation state detected. Abort. Please review the following methods,").AppendLine();
+                StringBuilder message = new StringBuilder(512);
+                
+                message.AppendLine(Translations.GetTranslationOfKey(TranslationKeys.db_dbr016_msg));
+                message.AppendLine(Translations.GetTranslationOfKey(TranslationKeys.db_dbr016_hint1));
+
                 foreach (MethodKey item in group.Methods)
                 {
                     ObfuscatedThing state = this.Mapping.GetMethod(item);
-                    message.AppendFormat("{0}->{1}:{2}", item, state.Status, state.StatusText).AppendLine();
+                    message.AppendFormat(Translations.GetTranslationOfKey(TranslationKeys.db_dbr016_hint2_par3), item, state.Status, state.StatusText);
+                    message.AppendLine();
                 }
 
                 throw new ObfuscarException(MessageCodes.dbr016, message.ToString());
